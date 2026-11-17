@@ -591,7 +591,10 @@ const TEX=[['plain','Plain'],['lined','Lined'],['grid','Grid'],['dots','Dots'],[
 const FONTS=[['kalam','Haath','"Kalam",cursive',1],['caveat','Ghaseet','"Caveat",cursive',1.22],['marker','Marker','"Permanent Marker",cursive',.95],['pacifico','Retro','"Pacifico",cursive',.95],['elite','Typewriter','"Special Elite",monospace',.9],['outfit','Saaf','"Outfit",sans-serif',.9],['unbounded','Mota','"Unbounded",sans-serif',.76],['pixel','Arcade','"Press Start 2P",monospace',.52]];
 const fontOf=k=>FONTS.find(f=>f[0]===k)||FONTS[0];
 const INKS=['','#1b1430','#ffffff','#e11d48','#1d3fbf','#0f8a5f','#7c3aed','#ff8a3d','#ffc93c'];
-const VIBES=[['Classic','#ffc93c','plain','kalam',''],['School copy','#fff4d6','lined','caveat','#1d3fbf'],['Neon raat','#5ef2c0','neon','unbounded',''],['Love letter','#ff6f9c','sunset','pacifico',''],['Boss mode','#15121f','grain','unbounded','#ffc93c'],['Typewriter','#e8e4f5','grain','elite',''],['Holo party','#bda4ff','holo','marker',''],['Glass','#74ccff','glass','outfit',''],['Arcade','#3d7bff','grid','pixel','#ffffff']];
+const VIBES=[['Classic','#ffc93c','plain','kalam',''],['School copy','#fff4d6','lined','caveat','#1d3fbf'],['Neon raat','#5ef2c0','neon','unbounded',''],['Love letter','#ff6f9c','sunset','pacifico',''],['Boss mode','#15121f','grain','unbounded','#ffc93c'],['Typewriter','#e8e4f5','grain','elite',''],['Holo party','#bda4ff','holo','marker',''],['Glass','#74ccff','glass','outfit',''],['Arcade','#3d7bff','grid','pixel','#ffffff'],
+ ['Blueprint','#2f6fed','blueprint','outfit',''],['Picnic','#ffc93c','gingham','caveat',''],['Road trip','#5ef2c0','map','kalam',''],['Game day','#c6f432','track','marker',''],['Ledger','#fff4d6','ledger','elite',''],
+ ['Pinboard','#e8b77a','cork','kalam',''],['Heads up','#ff6f9c','hazard','outfit',''],['Midnight','#bda4ff','night','caveat',''],['Official','#f3efff','letter','outfit',''],['Study card','#fff4d6','index','kalam','#1d3fbf'],
+ ['Calm','#74ccff','plain','outfit',''],['Sunny','#ffd765','sunset','pacifico',''],['Chalk','#1f3b33','plain','caveat','#ffffff'],['Candy','#f472d0','dots','marker',''],['Mint fresh','#5ef2c0','lined','outfit','']];
 const AVS=[['classic','Zett'],['cyclops','Ek-aankh'],['cat','Billi'],['robot','Robot'],['cool','Cool'],['love','Pyaar'],['sleepy','Neend'],['alien','Alien'],['none','Bina chehra'],['boss','Boss'],['homey','Homey'],['pilot','Pilot'],['sporty','Sporty'],['sparky','Sparky'],['coin','Coin eyes'],['tunes','Tunes'],['ringer','Ringer'],['dreamer','Dreamer'],['grad','Graduate'],['owl','Owl']];
 /* each category suggests a face and a paper for new notes made in it */
 const PACK={work:['boss','blueprint'],home:['homey','gingham'],travel:['pilot','map'],activity:['sporty','track'],ideas:['sparky','dots'],money:['coin','ledger'],hobbies:['tunes','cork'],reminders:['ringer','hazard'],dreams:['dreamer','night'],career:['grad','letter'],knowledge:['owl','index']};
@@ -651,6 +654,38 @@ const CATS=[
  ['Quote','Words worth keeping',()=>({text:'"..."\n- who said it'})],
  ['Flashcard','Question and answer',()=>({text:'Q: \nA: '})]]]
 ];
+{const X=(text,o)=>()=>Object.assign({text},o),TD=(text,items,o)=>()=>Object.assign({type:'todo',text,items:items.map(t=>({t,d:false}))},o),FL=(text,data,o)=>()=>Object.assign({type:'flow',text,data},o),
+  CH=(kind,text,data,o)=>()=>Object.assign({type:'chart',kind,text,data},o),GO=(text,cur,total,o)=>()=>Object.assign({type:'goal',text,cur,total},o),TM=(text,min,o)=>()=>Object.assign({type:'timer',text,end:Date.now()+min*6e4,total:min*6e4},o);
+const MORE={
+work:[['Standup','Yesterday, today, blocked',X('Yesterday: \nToday: \nBlocked by: ')],['One-on-one','Wins, stuck, ask',X('Wins: \nStuck on: \nI need: ')],['Weekly goals','Three things that matter',TD('This week',['Goal one','Goal two','Goal three'])],
+  ['Decision log','What we decided and why',X('Decision: \nWhy: \nOwner: \nDate: ')],['Focus 25','25 minutes, one task',TM('Focus',25,{anim:'pulse'})],['Project budget','Where the money goes',CH('bar','Project budget','People 50, Tools 20, Travel 15, Other 15')],
+  ['Meeting agenda','Before you walk in',TD('Agenda',['Goal of the meeting','Topics','Decisions needed'])],['Handover','So nothing is lost',X('What is done: \nWhat is open: \nWho to ask: ')]],
+home:[['Meal plan','The week on a plate',X('Mon: \nTue: \nWed: \nThu: \nFri: ')],['Home repairs','Fix-it list',TD('To fix',['Leaking tap','Door handle','Light bulb'])],['Weekly budget','Pie of the week',CH('pie','This week','Groceries 45, Transport 20, Eating out 20, Other 15')],
+  ['Guests coming','Get the house ready',TD('Before guests arrive',['Tidy the living room','Fresh towels','Snacks and drinks'])],['Plant care','Who needs water',TD('Plants',['Water the balcony plants','Feed the big one','Turn the pots'],{mood:'leaves'})],['Pet care','Today for your pet',TD('Pet care',['Food','Walk','Fresh water'])]],
+travel:[['Day trip','A plan for one day',FL('Day trip','Leave home > Main stop > Lunch > One more stop > Back')],['Documents','Papers to carry',TD('Documents',['Tickets','ID','Hotel booking','Insurance'])],['Places to eat','Do not miss these',X('Breakfast: \nLunch: \nDinner: \nMust try: ')],
+  ['Travel fund','Save for the trip',GO('Travel fund',200,1000)],['Weather and clothes','Pack for the sky',X('Weather: \nWear: \nCarry: ',{mood:'clouds'})]],
+activity:[['Run plan','From warm up to stretch',FL('Run','Warm up > Run > Cool down > Stretch')],['Water today','Glasses so far',GO('Water',0,8,{mood:'bubbles'})],['Sleep log','Hours each night',CH('bar','Sleep','Mon 7, Tue 6, Wed 8, Thu 7')],
+  ['Stretch break','Ten minutes away',TM('Stretch',10)],['Step goal','Steps today',GO('Steps',0,10000)]],
+ideas:[['Brain dump','Empty your head',X('Everything on my mind:\n- \n- \n- ')],['Name ideas','Pick the best later',TD('Names',['Name one','Name two','Name three'])],['What if','A question worth asking',X('What if \nThen \nSo I could ')],
+  ['Mind map','From problem to test',FL('Mind map','Problem > Who has it > Idea > First test')],['Doodle board','Think with a pen',()=>({type:'doodle',text:''})],['Vote','Count the hands',CH('bar','Vote','Option A 3, Option B 5, Option C 2')]],
+money:[['Split the bill','Who pays what',CH('pie','Split','Me 40, Friend one 30, Friend two 30')],['Wishlist','Want, not need',TD('Wishlist',['Thing one','Thing two'])],['No-spend streak','Days without buying',GO('No-spend days',0,7)],
+  ['Subscriptions','What you pay every month',TD('Subscriptions',['Music','Video','Storage'])],['Emergency fund','A cushion',GO('Emergency fund',1000,6000)],['Weekly spend','Compare your days',CH('bar','Spend','Mon 20, Tue 35, Wed 10, Thu 45')]],
+hobbies:[['Game backlog','Next to play',TD('To play',['Game one','Game two'])],['Playlist ideas','Songs for a mood',X('Mood: \nSongs:\n- \n- ')],['Garden log','What grew',X('Planted: \nWatered: \nNoticed: ',{mood:'leaves'})],
+  ['Photo walk','Shots to get',TD('Photo walk',['A doorway','Something red','A stranger smiling'])],['Reading goal','Books this year',GO('Books read',2,12)],['Practice timer','20 minutes of practice',TM('Practice',20)]],
+reminders:[['In 1 minute','Right away',TM('Reminder',1)],['In 10 minutes','Ten minutes',TM('Reminder',10)],['In 2 hours','Later today',TM('Reminder',120)],['Drink water','Every 45 minutes',TM('Drink water',45,{mood:'bubbles'})],
+  ['Take medicine','So you do not skip it',X('Medicine: \nWhen: \nWith food: ')],['Call back','Someone is waiting',X('Call back: \nAbout: \nBy: ')]],
+dreams:[['Vision','Picture it',X('In five years I am \nI live in \nI spend my days ',{mood:'stars'})],['One-year plan','Now to one year',FL('One year','Now > 3 months > 6 months > 1 year')],['Places to live','Somewhere new',TD('Places to live',['A city by the sea','Somewhere with mountains'])],
+  ['Dream fund','Money toward the dream',GO('Dream fund',500,20000)],['Why it matters','The reason behind it',X('I want this because \nIt will change ')]],
+career:[['Learning plan','From basics to proof',FL('Learning','Basics > Practice > Project > Show it')],['Raise case','Make it easy to say yes',X('What I delivered: \nWhat it changed: \nMy ask: ')],['Network list','People to reach',TD('Reach out to',['Old manager','A peer in another team','Someone I admire'])],
+  ['Applications','Track each one',TD('Applications',['Company one: applied','Company two: reply pending'])],['Courses','Finish what you start',GO('Courses done',1,5)],['Feedback received','Keep it in one place',X('From: \nWhat they said: \nWhat I will do: ')]],
+knowledge:[['Word of the day','One new word',X('Word: \nMeans: \nIn a sentence: ')],['Formula','Write it once, remember it',X('Formula: \nUse it when: \nExample: ')],['Compare','Two things side by side',CH('bar','Compare','Option A 6, Option B 8')],
+  ['Timeline','What happened when',FL('Timeline','First > Then > After that > Now')],['Study timer','25 minutes of study',TM('Study',25)],['Quiz list','Test yourself later',TD('Quiz me on',['Topic one','Topic two','Topic three'])]]};
+CATS.forEach(c=>{if(MORE[c[0]])c[3].push(...MORE[c[0]])});
+CATS.push(['mood','Feelings','#ff9db8',[
+  ['Gratitude','Three good things',TD('Grateful for',['One','Two','Three'],{mood:'hearts'})],['Vent it out','Say it, then let it go',X('What is bothering me: \n',{mood:'rain',song:'rain'})],['Pep talk','A note that backs you',X('You have done hard things before.\nToday I will: ',{mood:'sun',anim:'float'})],
+  ['Breathe','One calm minute',TM('Breathe in, breathe out',1,{mood:'clouds',song:'pad',anim:'pulse'})],['Mood today','Out of ten',GO('Mood today',5,10)],['Tiny win','It still counts',X('Today I managed to: ',{mood:'party'})],
+  ['Letter to future me','Open it later',X('Dear future me,\n',{mood:'stars',song:'bells'})],['Not-to-do list','Things to drop',TD('Not doing',['Checking email at night','Saying yes to everything'])],['Good things jar','Fill it over a month',GO('Good things',0,30,{mood:'bubbles'})],
+  ['Worry, then plan','From worry to one step',FL('Worry','Worry > What I control > One small step')]]]);}
 let activeCat='';
 const SONGS=[['','Koi nahi'],['rain','Baarish'],['sea','Samundar'],['pad','Sukoon'],['bells','Taare']];
 const def={color:COLORS[0],tex:'plain',font:'kalam',size:1,ink:'',face:'classic',anim:'still',song:'',mood:'',cat:''};
@@ -707,7 +742,6 @@ function add(n,fresh){
   const ac=CATS.find(c=>c[0]===activeCat),given=n;
   n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,rot:+(Math.random()*8-4).toFixed(1),z:++zTop},place(),n);
   if(!('agent' in given)&&WS.agent)n.agent=true;if(!('space' in given)&&WS.space)n.space=WS.space;
-  {const pk2=PACK[n.cat];if(pk2){if(!('face' in given))n.face=pk2[0];if(!('tex' in given))n.tex=pk2[1]}}
   n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();return n;
 }
 

@@ -264,6 +264,19 @@ footer .fl a:hover{color:var(--mango)}
   footer .fl{margin-left:0;gap:10px 24px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+.rainfx{position:absolute;inset:0;background:repeating-linear-gradient(100deg,transparent 0 14px,rgba(40,90,220,.5) 14px 15.5px,transparent 15.5px 30px);background-size:60px 60px;animation:fall .7s linear infinite;pointer-events:none}
+@keyframes fall{to{background-position:-10px 60px}}
+.eq{display:flex;gap:6px;align-items:flex-end;height:44px;justify-content:center;margin-top:6px}
+.eq i{width:8px;height:8px;border-radius:4px;background:var(--ink);animation:eq .6s ease-in-out infinite alternate}
+.eq i:nth-child(2){animation-delay:.15s}.eq i:nth-child(3){animation-delay:.3s}.eq i:nth-child(4){animation-delay:.45s}.eq i:nth-child(5){animation-delay:.2s}
+@keyframes eq{to{height:44px}}
+.mini .duo{display:flex;gap:14px;align-items:center}
+.mini .pie{margin:0;width:54px;height:54px}
+.mini .flow{font-size:11px}
+.mini .flow span:last-of-type{color:#fff0b8}
+.float{animation:floaty 4s ease-in-out infinite}
+@keyframes floaty{50%{translate:0 -8px}}
+.say2{position:absolute;right:14px;top:12px;background:#fff;color:var(--ink);border-radius:12px 12px 12px 3px;padding:5px 10px;font:500 12.5px var(--ui);box-shadow:0 8px 18px -10px rgba(0,0,0,.5)}
 </style>
 </head>
 <body>
@@ -340,10 +353,29 @@ footer .fl a:hover{color:var(--mango)}
   <div class="cards">
     <article class="card">
       <div class="art dotbg" style="--a:#f9c84a">
-        <div class="mini" data-say="Time for a stretch break."><button type="button" class="fc" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><p class="hw">Time for a stretch break</p></div>
+        <div class="mini" data-say="Time for a stretch break."><button type="button" class="fc talking" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><p class="hw">Time for a stretch break</p></div>
+        <span class="say2" aria-hidden="true">Stretch break!</span>
         <span class="hint">Press the face</span>
       </div>
       <div class="txt"><h3>Hear your reminders</h3><p>Press a note's face to hear it read aloud. Add a countdown when you want a reminder at a specific time.</p></div>
+    </article>
+    <article class="card">
+      <div class="art" style="--a:#8fd0ff">
+        <div class="mini" style="--c:#cfe6ff;--r:2deg;position:relative;overflow:hidden"><div class="rainfx" aria-hidden="true"></div><p class="hw" style="position:relative">Rainy day,<br>stay in.</p></div>
+      </div>
+      <div class="txt"><h3>Set the mood</h3><p>Pick from 12 animated backgrounds, from falling rain to a burst of confetti. Notes can float, wiggle or swing.</p></div>
+    </article>
+    <article class="card">
+      <div class="art" style="--a:#ff9db8">
+        <div class="mini float" style="--c:#ffd0dd;--r:-2deg"><p class="hw" style="font-size:19px">Ocean sounds</p><div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div></div>
+      </div>
+      <div class="txt"><h3>Give it a sound</h3><p>Give a note its own sound, or put on background music while you work.</p></div>
+    </article>
+    <article class="card">
+      <div class="art" style="--a:#fff0b8">
+        <div class="mini" style="--c:#fffaf0;--r:-2deg"><div class="duo"><div class="pie" aria-hidden="true"></div><div class="flow"><span>Idea</span>&rarr;<span>Build</span>&rarr;<span>Launch</span></div></div></div>
+      </div>
+      <div class="txt"><h3>Turn a line into a visual</h3><p>Type "chart: Flights 45, Hotel 35, Food 20" for a pie chart, or "flow: Idea &gt; Build &gt; Launch" for a diagram.</p></div>
     </article>
     <article class="card">
       <div class="art" style="--a:#c9b5ff">
@@ -356,7 +388,7 @@ footer .fl a:hover{color:var(--mango)}
         <div class="mini" id="moodnote" style="--r:-3deg;translate:0 -10px"><p class="hw">Keep the good<br>ideas.</p></div>
         <div class="sw" id="sw"><button type="button" style="--k:#fff0b8" aria-pressed="true" aria-label="Yellow paper"></button><button type="button" style="--k:#cfe6ff" aria-pressed="false" aria-label="Blue paper"></button><button type="button" style="--k:#ff9db8" aria-pressed="false" aria-label="Pink paper"></button></div>
       </div>
-      <div class="txt"><h3>Make the mood yours</h3><p>Choose a face, font, paper texture, animated background, or a sound of its own.</p></div>
+      <div class="txt"><h3>Make it yours</h3><p>Choose a face, font, paper texture and colour for every note, or start from a one-tap look.</p></div>
     </article>
   </div>
 </div></section>
@@ -364,7 +396,7 @@ footer .fl a:hover{color:var(--mango)}
 <section class="band dark" id="templates"><div class="wrap tpl">
   <div>
     <h2>Start with a template</h2>
-    <p class="lede">Explore 40+ ready-to-use templates across work, home, travel, and the things you do for yourself.</p>
+    <p class="lede">Explore 100+ ready-to-use templates across work, home, travel, feelings, and the things you do for yourself.</p>
     <div class="chips" id="chips"></div>
   </div>
   <div class="panel" aria-live="polite">
@@ -472,7 +504,8 @@ const CATS=[
 ['Reminders','#ff6f9c',[['In 5 minutes','Quick nudge',R(5)],['In 30 minutes','Half an hour',R(30)],['In 1 hour','One hour from now',R(60)],['Do not forget','A plain reminder',T('Do not forget:')]]],
 ['Dreams','#f472d0',[['My dream','Write it down',T('My dream:\nBy when:\nFirst small step:')],['Bucket list','Things to do in life',L('Bucket list',['A place to see','A thing to learn'])],['Dream progress','Steps taken so far',G('Dream progress',1,10)]]],
 ['Career','#3d7bff',[['Career goal','Where you are heading',G('Career goal',2,10)],['Skills to learn','Next on your list',L('Skills to learn',['Skill one','Skill two'])],['Interview prep','Be ready',L('Interview prep',['Research the company','Practise answers','Prepare questions'])],['Wins','What went well',T('Wins this week:')]]],
-['Knowledge','#fff4d6',[['Learning note','Key points of a topic',T('Topic:\nKey points:\n1.\n2.\n3.')],['Book notes','Big idea and a quote',T('Book:\nBig idea:\nQuote:')],['Quote','Words worth keeping',T('"..."\n- who said it')],['Flashcard','Question and answer',T('Q:\nA:')]]]];
+['Knowledge','#fff4d6',[['Learning note','Key points of a topic',T('Topic:\nKey points:\n1.\n2.\n3.')],['Book notes','Big idea and a quote',T('Book:\nBig idea:\nQuote:')],['Quote','Words worth keeping',T('"..."\n- who said it')],['Flashcard','Question and answer',T('Q:\nA:')]]],
+['Feelings','#ff9db8',[['Gratitude','Three good things',L('Grateful for',['One','Two','Three'])],['Pep talk','A note that backs you',T('You have done hard things before.\nToday I will:')],['Mood today','Out of ten',G('Mood today',5,10)],['Worry, then plan','From worry to one step',F('Worry > What I control > One small step')]]]];
 const PIE=['#ff4d6d','#3d7bff','#22c58b','#ff9f1c'],TINT=['#ffc93c','#bda4ff','#5ef2c0','#ff6f9c','#74ccff'];
 const rows=d=>d.split(',').map(p=>{const m=p.trim().match(/^(.*?)\s+(\d+)$/);return{l:m[1],v:+m[2]}});
 function body(n){
