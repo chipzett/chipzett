@@ -331,6 +331,69 @@ body .pal{bottom:22px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
+
+/* ---- category packs: more avatars ---- */
+.av-boss .eye{background:rgba(255,255,255,.6);box-shadow:0 0 0 2px var(--ink);overflow:visible;margin:0 2px}
+.av-boss .eye+.eye::before{content:"";position:absolute;left:-9px;top:5.5px;width:7px;height:2px;background:var(--ink)}
+.av-homey::before{content:"";position:absolute;left:2px;top:-8px;border:18px solid transparent;border-top:0;border-bottom:9px solid var(--ink)}
+.av-pilot .eye{background:#cfefff;box-shadow:0 0 0 2.5px var(--ink);margin:0 2px}
+.av-pilot::before{content:"";position:absolute;left:5px;top:-5px;width:38px;height:6px;border-radius:6px 6px 0 0;background:var(--ink)}
+.av-sporty::before{content:"";position:absolute;left:4px;top:-2px;width:36px;height:5px;border-radius:3px;background:#ff4d6d}
+.av-sporty .mouth{height:9px;border-radius:2px 2px 12px 12px}
+.av-sparky::before{content:"";position:absolute;left:17px;top:-11px;width:7px;height:7px;background:#fff;transform:rotate(45deg);box-shadow:-8px 3px 0 -2px #fff,3px -8px 0 -2px #fff,8px 9px 0 -2px #fff;animation:spark 1.6s ease-in-out infinite}
+@keyframes spark{50%{opacity:.35;transform:rotate(45deg) scale(.7)}}
+.av-coin .eye{background:#ffd54a;box-shadow:0 0 0 2px #b07d00;margin:0 2px}
+.av-coin .eye::after{width:2.5px;height:7px;left:5.2px;top:3px;border-radius:1px;background:#7a5a00}
+.av-tunes::before{content:"";position:absolute;left:2px;top:-8px;width:40px;height:17px;box-sizing:border-box;border:3px solid var(--ink);border-bottom:0;border-radius:20px 20px 0 0}
+.av-tunes::after{content:"";position:absolute;left:0;top:8px;width:5px;height:11px;border-radius:3px;background:var(--ink);box-shadow:39px 0 0 var(--ink)}
+.av-ringer::before{content:"";position:absolute;left:6px;top:-5px;width:9px;height:9px;border-radius:50%;background:var(--ink);box-shadow:18px 0 0 var(--ink);animation:ringa .5s ease-in-out infinite alternate}
+@keyframes ringa{to{transform:translateY(-2px)}}
+.av-dreamer .eye{background:transparent;height:7px;border-radius:0 0 13px 13px;border-bottom:2.5px solid var(--ink);overflow:visible;animation:none}
+.av-dreamer .eye::after{display:none}
+.av-dreamer .mouth{width:7px;height:7px;border-radius:50%}
+.av-dreamer::before{content:"";position:absolute;right:-6px;top:-10px;width:12px;height:12px;background:#ffd54a;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:spark 2.4s ease-in-out infinite}
+.av-grad::before{content:"";position:absolute;left:2px;top:-8px;width:40px;height:6px;background:var(--ink);transform:skewX(-24deg);border-radius:1px}
+.av-grad::after{content:"";position:absolute;left:41px;top:-5px;width:2px;height:12px;background:#ffc93c}
+.av-owl{gap:2px}
+.av-owl .eye{width:18px;height:18px;background:#fff8d6;box-shadow:inset 0 0 0 2.5px var(--ink)}
+.av-owl .eye::after{width:7px;height:7px;left:5.5px;top:5.5px}
+.av-owl .mouth{width:0;height:0;background:transparent;border-radius:0;border:5px solid transparent;border-top:7px solid #ff8a3d;border-bottom:0;margin:8px 0 0 -14px;position:relative;z-index:1}
+/* ---- category packs: more textures ---- */
+.tx-blueprint{background-image:linear-gradient(color-mix(in srgb,var(--ink) 26%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ink) 26%,transparent) 1px,transparent 1px),linear-gradient(color-mix(in srgb,var(--ink) 10%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ink) 10%,transparent) 1px,transparent 1px);background-size:64px 64px,64px 64px,16px 16px,16px 16px}
+.tx-gingham{background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.38) 0 14px,transparent 14px 28px),repeating-linear-gradient(90deg,rgba(255,255,255,.38) 0 14px,transparent 14px 28px)}
+.tx-map{background-image:repeating-radial-gradient(circle at 82% 16%,transparent 0 15px,color-mix(in srgb,var(--ink) 15%,transparent) 15px 16px),repeating-radial-gradient(circle at 10% 96%,transparent 0 19px,color-mix(in srgb,var(--ink) 11%,transparent) 19px 20px)}
+.tx-track{background-image:repeating-linear-gradient(90deg,transparent 0 40px,rgba(255,255,255,.7) 40px 43px)}
+.tx-ledger{background-image:linear-gradient(90deg,transparent 0 72%,rgba(225,29,72,.55) 72% calc(72% + 1.5px),transparent 0),repeating-linear-gradient(transparent 0 24px,color-mix(in srgb,var(--ink) 20%,transparent) 24px 25px);background-position:0 0,0 12px}
+.tx-cork{background-image:radial-gradient(rgba(110,60,15,.35) 1px,transparent 1.7px),radial-gradient(rgba(255,255,255,.35) 1px,transparent 1.7px);background-size:9px 9px,13px 13px;background-position:0 0,5px 6px}
+.tx-hazard{background-image:repeating-linear-gradient(-45deg,#1b1430 0 9px,#ffc93c 9px 18px);background-size:100% 9px;background-repeat:no-repeat}
+.paper.tx-hazard{padding-top:19px}
+.tx-night{background-image:radial-gradient(#fff 1px,transparent 1.5px),radial-gradient(rgba(255,255,255,.6) 1px,transparent 1.5px),linear-gradient(160deg,color-mix(in srgb,var(--c) 22%,#14123a),color-mix(in srgb,var(--c) 34%,#2c1a5e));background-size:47px 53px,29px 31px,100% 100%;background-position:8px 12px,20px 4px,0 0}
+.tx-letter{background-image:linear-gradient(var(--ink),var(--ink)),linear-gradient(color-mix(in srgb,var(--ink) 45%,transparent),color-mix(in srgb,var(--ink) 45%,transparent));background-size:100% 7px,34% 3px;background-position:0 0,14px 13px;background-repeat:no-repeat}
+.paper.tx-letter{padding-top:22px}
+.tx-index{background-image:linear-gradient(transparent 0 44px,rgba(225,29,72,.6) 44px 45.5px,transparent 0),repeating-linear-gradient(transparent 0 24px,rgba(29,63,191,.28) 24px 25px);background-position:0 0,0 14px}
+/* ---- agent preview: Ask and Do on every note ---- */
+.agb{display:flex;gap:6px;margin-top:10px;opacity:.6;transition:opacity .2s}
+.note:hover .agb,.note:focus-within .agb,.note.ag-open .agb{opacity:1}
+@media (max-width:640px){.agb{opacity:1}}
+.agb button{flex:1;min-height:30px;border-radius:10px;font:700 13px var(--ui);display:flex;align-items:center;justify-content:center;gap:6px;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.agb button svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.agb button[aria-pressed=true]{background:var(--ink);color:var(--tk,var(--c))}
+.agb i{font:700 10px/15px var(--ui);font-style:normal;min-width:15px;height:15px;border-radius:8px;background:#e11d48;color:#fff;text-align:center}
+.agc{display:none;flex-direction:column;gap:7px;margin-top:8px}
+.note.ag-open .agc{display:flex}
+.agl{display:flex;flex-direction:column;gap:6px;max-height:210px;overflow:auto}
+.agm{font:500 13.5px/1.38 var(--ui);padding:7px 10px;max-width:92%;white-space:pre-wrap;overflow-wrap:anywhere}
+.agm.u{align-self:flex-end;background:color-mix(in srgb,var(--ink) 16%,transparent);color:var(--ink);border-radius:12px 12px 3px 12px}
+.agm.a{align-self:flex-start;background:#fff;color:#1b1430;border-radius:12px 12px 12px 3px;box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+.agq{display:flex;flex-wrap:wrap;gap:4px}
+.agq button{font:600 11.5px var(--ui);padding:5px 9px;border-radius:99px;background:color-mix(in srgb,var(--ink) 13%,transparent);color:var(--ink)}
+.agq button:hover{background:color-mix(in srgb,var(--ink) 24%,transparent)}
+.agf{display:flex;gap:6px}
+.agf input{flex:1;min-width:0;border:0;border-radius:9px;padding:8px 9px;font:500 13.5px var(--ui);background:color-mix(in srgb,var(--ink) 11%,transparent);color:var(--ink)}
+.agf input::placeholder{color:color-mix(in srgb,var(--ink) 55%,transparent)}
+.agf button{border-radius:9px;padding:0 12px;font:700 13px var(--ui);background:var(--ink);color:var(--tk,var(--c))}
+.agn{font:500 11px/1.3 var(--ui);color:var(--ink);opacity:.62}
+.mailb{margin-top:8px;border-radius:10px;padding:8px 12px;font:700 13px var(--ui);background:var(--ink);color:var(--tk,var(--c))}
 </style>
 </head>
 <body>
@@ -378,12 +441,14 @@ const L=(en,hi)=>LANG==='hi'?hi:en;
   root.querySelectorAll('[placeholder],[title],[aria-label]').forEach(e=>['placeholder','title','aria-label'].forEach(a=>{if(e.hasAttribute(a))e.setAttribute(a,e.getAttribute(a))}))})(document.body);
 document.documentElement.lang=LANG==='hi'?'hi-Latn':'en';document.documentElement.style.setProperty('--ph',JSON.stringify(L('write...','likho...')));
 const COLORS=['#ffc93c','#ff6f9c','#5ef2c0','#74ccff','#bda4ff','#ff8a3d','#ff4d4d','#c6f432','#22d3a6','#3d7bff','#8b5cf6','#f472d0','#fff4d6','#e8e4f5','#3a3357','#15121f'];
-const TEX=[['plain','Plain'],['lined','Lined'],['grid','Grid'],['dots','Dots'],['grain','Paper'],['sunset','Sunset'],['holo','Holo'],['glass','Glass'],['neon','Neon']];
+const TEX=[['plain','Plain'],['lined','Lined'],['grid','Grid'],['dots','Dots'],['grain','Paper'],['sunset','Sunset'],['holo','Holo'],['glass','Glass'],['neon','Neon'],['blueprint','Blueprint'],['gingham','Gingham'],['map','Map'],['track','Track'],['ledger','Ledger'],['cork','Cork'],['hazard','Stripe'],['night','Night sky'],['letter','Letterhead'],['index','Index card']];
 const FONTS=[['kalam','Haath','"Kalam",cursive',1],['caveat','Ghaseet','"Caveat",cursive',1.22],['marker','Marker','"Permanent Marker",cursive',.95],['pacifico','Retro','"Pacifico",cursive',.95],['elite','Typewriter','"Special Elite",monospace',.9],['outfit','Saaf','"Outfit",sans-serif',.9],['unbounded','Mota','"Unbounded",sans-serif',.76],['pixel','Arcade','"Press Start 2P",monospace',.52]];
 const fontOf=k=>FONTS.find(f=>f[0]===k)||FONTS[0];
 const INKS=['','#1b1430','#ffffff','#e11d48','#1d3fbf','#0f8a5f','#7c3aed','#ff8a3d','#ffc93c'];
 const VIBES=[['Classic','#ffc93c','plain','kalam',''],['School copy','#fff4d6','lined','caveat','#1d3fbf'],['Neon raat','#5ef2c0','neon','unbounded',''],['Love letter','#ff6f9c','sunset','pacifico',''],['Boss mode','#15121f','grain','unbounded','#ffc93c'],['Typewriter','#e8e4f5','grain','elite',''],['Holo party','#bda4ff','holo','marker',''],['Glass','#74ccff','glass','outfit',''],['Arcade','#3d7bff','grid','pixel','#ffffff']];
-const AVS=[['classic','Zett'],['cyclops','Ek-aankh'],['cat','Billi'],['robot','Robot'],['cool','Cool'],['love','Pyaar'],['sleepy','Neend'],['alien','Alien'],['none','Bina chehra']];
+const AVS=[['classic','Zett'],['cyclops','Ek-aankh'],['cat','Billi'],['robot','Robot'],['cool','Cool'],['love','Pyaar'],['sleepy','Neend'],['alien','Alien'],['none','Bina chehra'],['boss','Boss'],['homey','Homey'],['pilot','Pilot'],['sporty','Sporty'],['sparky','Sparky'],['coin','Coin eyes'],['tunes','Tunes'],['ringer','Ringer'],['dreamer','Dreamer'],['grad','Graduate'],['owl','Owl']];
+/* each category suggests a face and a paper for new notes made in it */
+const PACK={work:['boss','blueprint'],home:['homey','gingham'],travel:['pilot','map'],activity:['sporty','track'],ideas:['sparky','dots'],money:['coin','ledger'],hobbies:['tunes','cork'],reminders:['ringer','hazard'],dreams:['dreamer','night'],career:['grad','letter'],knowledge:['owl','index']};
 const ANIMS=[['still','Shaant'],['float','Tairna'],['wiggle','Hilna'],['pulse','Dhadkan'],['swing','Jhoola']];
 const MOODS=[['','Kuch nahi'],['rain','Baarish'],['sun','Dhoop'],['wind','Hawa'],['snow','Barf'],['stars','Taare'],['hearts','Dil'],['bubbles','Bulbule'],['party','Party'],['embers','Aag'],['leaves','Patte'],['clouds','Baadal'],['aurora','Aurora']];
 const CATS=[
@@ -443,8 +508,8 @@ const CATS=[
 let activeCat='';
 const SONGS=[['','Koi nahi'],['rain','Baarish'],['sea','Samundar'],['pad','Sukoon'],['bells','Taare']];
 const def={color:COLORS[0],tex:'plain',font:'kalam',size:1,ink:'',face:'classic',anim:'still',song:'',mood:'',cat:''};
-function inkFor(c,t){if(t==='glass')return'#f3efff';if(t==='neon')return c;const h=c.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return .299*r+.587*g+.114*b>150?'#1b1430':'#fdfbff'}
-const tickFor=(c,t)=>t==='neon'?'#120e24':t==='glass'?'#1a1436':c;
+function inkFor(c,t){if(t==='glass'||t==='night')return'#f3efff';if(t==='neon')return c;const h=c.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return .299*r+.587*g+.114*b>150?'#1b1430':'#fdfbff'}
+const tickFor=(c,t)=>t==='night'?'#1c1b4b':t==='neon'?'#120e24':t==='glass'?'#1a1436':c;
 const KEY='chipku-v1', $=s=>document.querySelector(s), board=$('#board');
 let notes=[], sound=true, zTop=10;
 const isPhone=()=>matchMedia('(max-width:640px)').matches;
@@ -488,9 +553,72 @@ function noteSays(n){
 const dom=n=>board.querySelector(`[data-id="${n.id}"]`);
 function place(){const w=board.clientWidth,h=board.clientHeight;return{x:Math.max(10,Math.random()*(w-260)),y:Math.max(10,Math.random()*(h-240))}}
 function add(n,fresh){
-  const ac=CATS.find(c=>c[0]===activeCat);
+  const ac=CATS.find(c=>c[0]===activeCat),given=n;
   n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,rot:+(Math.random()*8-4).toFixed(1),z:++zTop},place(),n);
+  {const pk2=PACK[n.cat];if(pk2){if(!('face' in given))n.face=pk2[0];if(!('tex' in given))n.tex=pk2[1]}}
   n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();return n;
+}
+
+/* ---------- agent preview ----------
+   Ask and Do on every note. This build has NO AI connected: answers are worked out on the device
+   from the note's own words, so people can try the flow. The real version sends the note to a server. */
+const AG_ICON={ask:'<svg viewBox="0 0 16 16"><path d="M2.5 3h11v7.5H7.5L4.500 13v-2.500h-2z"/></svg>',act:'<svg viewBox="0 0 16 16"><path d="M9 1.500L3.500 9H8l-1 5.500L12.500 7H8z"/></svg>'};
+const AG_STOP=new Set('the a an and or of to in on at by for with is are was were be do does did what who when where which how we they it this that have has i you our my me us them their there'.split(' '));
+const agWords=t=>(t.toLowerCase().match(/[a-z0-9]+/g)||[]).filter(w=>!AG_STOP.has(w));
+function agText(n){let t=n.text||'';if(n.items)t+='. '+n.items.map(i=>i.t+(i.d?' (done)':'')).join('. ');if(n.data)t+='. '+n.data;return t}
+const agSents=t=>t.split(/\n+|(?<=[.!?])\s+/).map(x=>x.trim()).filter(x=>x.length>2);
+function agAsk(n,q){
+  const ss=agSents(agText(n)),qw=agWords(q);if(!ss.length)return L('This note is empty, so I have nothing to answer from.','Yeh note khaali hai, jawab dene ko kuch nahi hai.');
+  const sc=ss.map(x=>{const w=new Set(agWords(x));return qw.filter(k=>w.has(k)||[...w].some(v=>v.length>3&&k.length>3&&(v.startsWith(k.slice(0,4))))).length});
+  const best=Math.max(...sc);if(!best)return L('I could not find that in this note.','Yeh is note mein nahi mila.');
+  return ss.filter((x,i)=>sc[i]===best).slice(0,2).join(' ');
+}
+function agItems(n){
+  if(n.items&&n.items.length)return n.items.filter(i=>!i.d).map(i=>i.t);
+  const ss=agSents(n.text||''),body=ss.length>1?ss.slice(1):ss,TR=/\b(want|wants|need|needs|must|should|have to|has to|deliver|send|bring|buy|get|chahiye|karna hai|lana hai|bhejna hai)\b/i;
+  const asks=body.filter(x=>TR.test(x)),cap=x=>x[0].toUpperCase()+x.slice(1);
+  const split=x=>x.split(/[.;\n]|,| and | aur /).map(y=>y.trim().replace(/^(the|a|an)\s+/i,'')).filter(y=>y.length>2&&y.length<70);
+  if(asks.length)return asks.flatMap(x=>split(x.replace(/^.*?\b(want|wants|need|needs|must|should|have to|has to)\b\s*(to\s+)?/i,'').replace(/\s*\b(chahiye|karna hai|lana hai|bhejna hai)\b.*$/i,'').replace(/^(unhe|humein|mujhe)\s+/i,''))).slice(0,6).map(cap);
+  return body.flatMap(split).slice(0,6).map(cap);
+}
+function agBeside(n){return{x:Math.min((n.x||0)+((n.w||232)+26),Math.max(10,board.clientWidth-250)),y:(n.y||0)+18,cat:n.cat,color:n.color}}
+function agDo(n,cmd){
+  const c=cmd.toLowerCase(),title=(agSents(n.text||'')[0]||L('Note','Note')).slice(0,40),out=[];
+  if(/check|list|action|task|todo|kaam/.test(c)){const it=agItems(n);
+    if(it.length){add({type:'todo',text:title+': '+L('action items','kaam'),items:it.map(t=>({t,d:false})),...agBeside(n)},true);out.push(L(`I made a checklist with ${it.length} items, next to me.`,`Maine ${it.length} kaam ki checklist bana di, mere bagal mein.`))}
+    else out.push(L('I found nothing here to turn into tasks.','Yahan kaam banane layak kuch nahi mila.'))}
+  if(/mail|email|follow/.test(c)){const pts=agItems(n);
+    const b=L('Hello,\nThank you for your time. Here is where things stand:\n','Namaste,\nAapke samay ke liye dhanyavaad. Abhi ki sthiti:\n')+pts.map(x=>'- '+x).join('\n')+L('\nI will follow up soon.\nRegards','\nMain jald update dunga.\nDhanyavaad');
+    const pos=agBeside(n);if((n.x||0)>336)pos.x=n.x-326;else pos.y+=260;add({type:'text',text:L('Email draft: ','Email draft: ')+title+'\n'+b,mail:{s:L('Follow-up: ','Follow-up: ')+title,b},tex:'lined',face:'boss',...pos,color:'#fff4d6',w:300},true);
+    out.push(L('The email draft is a new note. Nothing is sent until you send it.','Email draft ek naya note hai. Jab tak tum na bhejo, kuch nahi jayega.'))}
+  if(/total|sum|add up|jod/.test(c)){const nums=(agText(n).match(/\d+(?:\.\d+)?/g)||[]).map(Number);
+    out.push(nums.length?L(`I found ${nums.length} numbers. The total is ${+nums.reduce((a,b)=>a+b,0).toFixed(2)}.`,`${nums.length} numbers mile. Total ${+nums.reduce((a,b)=>a+b,0).toFixed(2)} hai.`):L('I found no numbers in this note.','Is note mein koi number nahi mila.'))}
+  if(/summar|short|saar/.test(c)){const ss=agSents(agText(n));out.push(ss.length?ss[0]+(ss.length>1?L(` (and ${ss.length-1} more lines)`,` (aur ${ss.length-1} line)`):''):L('This note is empty.','Yeh note khaali hai.'))}
+  if(/grow|expand|step|plan|badha/.test(c)){add({type:'flow',text:title,data:L('Write it down > Find 3 people who need it > Build the smallest version > Ask what they think','Likh lo > 3 log dhundo jinhe chahiye > Sabse chhota version banao > Unse poochho'),...agBeside(n)},true);
+    out.push(L('I laid out first steps as a flow note. These steps are a sample in this preview.','Pehle kadam ek flow note mein rakh diye. Is preview mein yeh kadam namoona hain.'))}
+  return out.length?out.join(' '):L('In this preview I can: make a checklist, draft an email, total the numbers, summarise, or grow an idea into steps.','Is preview mein main yeh kar sakta hoon: checklist, email draft, numbers ka total, saar, ya idea ke kadam.');
+}
+const AG_QUICK={work:[['Checklist of action items','Kaam ki checklist'],['Draft a follow-up email','Follow-up email draft']],ideas:[['Grow this idea into steps','Idea ke kadam banao']],money:[['Total the numbers','Numbers ka total']],travel:[['Make a packing checklist','Packing checklist']],'':[['Make a checklist','Checklist banao'],['Summarise this note','Is note ka saar']]};
+function agentUI(n,p,d){
+  const bar=el('div','agb'),box=el('div','agc'),list=el('div','agl'),quick=el('div','agq'),form=document.createElement('form'),inp=document.createElement('input'),go=el('button',null,'');
+  let mode='ask';n.chat=n.chat||[];
+  const mk=(k,label)=>{const b=el('button');b.type='button';b.innerHTML=AG_ICON[k];b.append(document.createTextNode(label));bar.append(b);return b};
+  const bAsk=mk('ask',L('Ask','Poochho')),bDo=mk('act',L('Do','Karo')),cnt=el('i');
+  const draw=()=>{list.textContent='';n.chat.forEach(m=>list.append(el('div','agm '+m.r,m.t)));list.scrollTop=list.scrollHeight;
+    if(n.chat.length){cnt.textContent=Math.ceil(n.chat.length/2);bAsk.append(cnt)}else cnt.remove()};
+  const setMode=m=>{mode=m;const open=d.classList.contains('ag-open');bAsk.setAttribute('aria-pressed',open&&m==='ask');bDo.setAttribute('aria-pressed',open&&m==='act');
+    inp.placeholder=m==='ask'?L('Ask this note','Is note se poochho'):L('Tell this note what to do','Is note ko kaam do');go.textContent=m==='ask'?L('Ask','Poochho'):L('Do','Karo');
+    quick.textContent='';if(m==='act')(AG_QUICK[n.cat]||AG_QUICK['']).forEach(([en,hi])=>{const b=el('button',null,L(en,hi));b.type='button';b.onclick=()=>run(L(en,hi));quick.append(b)})};
+  const toggle=m=>{const open=d.classList.contains('ag-open');if(open&&mode===m){d.classList.remove('ag-open');setMode(m);return}
+    d.classList.add('ag-open');if((n.w||232)<300){n.w=300;d.style.setProperty('--w','300px')}n.z=++zTop;d.style.zIndex=n.z;setMode(m);draw();inp.focus({preventScroll:true})};
+  const run=q=>{q=q.trim();if(!q)return;const a=mode==='ask'?agAsk(n,q):agDo(n,q);n.chat.push({r:'u',t:q},{r:'a',t:a});if(n.chat.length>40)n.chat.splice(0,n.chat.length-40);
+    draw();save();bubble(d,a);speak(a,.8+(Math.max(0,COLORS.indexOf(n.color))%5)*.25)};
+  bAsk.onclick=()=>toggle('ask');bDo.onclick=()=>toggle('act');
+  form.className='agf';inp.type='text';inp.id='ag-'+n.id;inp.setAttribute('aria-label','Ask this note');go.type='submit';form.append(inp,go);
+  form.onsubmit=e=>{e.preventDefault();run(inp.value);inp.value=''};
+  box.append(list,quick,form,el('div','agn',L('Preview: a sample agent that reads only this note. No AI is connected yet.','Preview: namoona agent jo sirf yeh note padhta hai. AI abhi juda nahi hai.')));
+  if(n.mail){const m=el('button','mailb',L('Open in mail','Mail mein kholo'));m.type='button';m.onclick=()=>{location.href='mailto:?subject='+encodeURIComponent(n.mail.s)+'&body='+encodeURIComponent(n.mail.b)};p.append(m)}
+  p.append(bar,box);setMode('ask');draw();
 }
 function render(n,fresh){
   const d=el('div','note');d.dataset.id=n.id;
@@ -521,6 +649,7 @@ function render(n,fresh){
   }else if(n.type==='timer'){
     const w=el('div','timer'),r=el('div','ringc'),s=el('span');r.append(s);const b=el('div','body',n.text);edit(b,n);w.append(r,b);p.append(w);
   }else if(EXTRA[n.type]){EXTRA[n.type](n,p,d)}else{const b=el('div','body',n.text);edit(b,n);p.append(b)}
+  agentUI(n,p,d);
   const rz=el('div','rz');rz.setAttribute('title','Size badlo');p.append(rz);
   rz.addEventListener('pointerdown',e=>{if(isPhone())return;e.preventDefault();e.stopPropagation();rz.setPointerCapture(e.pointerId);const sx=e.clientX,sy=e.clientY,sw=d.offsetWidth,sh=p.offsetHeight;
     const mv=ev=>{n.w=Math.round(Math.max(150,Math.min(640,sw+ev.clientX-sx)));n.mh=Math.round(Math.max(0,sh+ev.clientY-sy));d.style.setProperty('--w',n.w+'px');d.style.setProperty('--mh',n.mh+'px')};
@@ -846,6 +975,8 @@ function start(state){
      {type:'text',text:'Rent 5 tareekh ko',cat:'money',color:COLORS[3],tex:'neon',font:'unbounded',face:'alien',mood:'rain',...at(.12,.52)},
      {type:'chart',kind:'pie',text:'Mahine ka kharcha',data:'Rent 40, Khana 25, Masti 15, Bachat 20',cat:'money',color:'#fff4d6',tex:'grid',font:'outfit',...at(.5,.42)}].forEach(n=>add(n));
     setTimeout(()=>pal('Yeh sample notes hain. Mujhe dabao aur apne notes banao.',true),900)}
+  try{if(!DESK&&!localStorage.getItem('chipzett-agent-seed')){localStorage.setItem('chipzett-agent-seed','1');
+    add({type:'text',text:L('Client meeting\nMet Tuesday. They want the revised quote, sample board photos and a signed timeline by Friday. Budget is fixed. Riya owns the photos.','Client meeting\nMangal ko mile. Unhe Friday tak revised quote, sample board photos aur signed timeline chahiye. Budget fix hai. Photos Riya ke paas hain.'),cat:'work',color:'#ffc93c',tex:'lined',face:'boss',w:300,rot:-2,x:Math.max(10,board.clientWidth*.36),y:Math.max(10,board.clientHeight*.14)},true)}}catch(e){}
   $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
   applyFilter();
 }
