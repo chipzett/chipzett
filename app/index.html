@@ -394,6 +394,87 @@ body .pal{bottom:22px}
 .agf button{border-radius:9px;padding:0 12px;font:700 13px var(--ui);background:var(--ink);color:var(--tk,var(--c))}
 .agn{font:500 11px/1.3 var(--ui);color:var(--ink);opacity:.62}
 .mailb{margin-top:8px;border-radius:10px;padding:8px 12px;font:700 13px var(--ui);background:var(--ink);color:var(--tk,var(--c))}
+
+/* ---- the wall: everything on screen is paper. Tape for today, a name tag for the profile,
+   folder tabs for desks, index tabs for categories, tear-off pads for new notes. ---- */
+body.ws .board{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
+body.v-tidy .board{overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:42px 30px;padding:124px 40px 180px 112px;align-content:start;align-items:start}
+body.v-tidy .note{position:relative;left:auto!important;top:auto!important;width:100%;max-width:340px;justify-self:center;touch-action:auto}
+body.v-tidy .rz{display:none}
+body.v-tidy .head{cursor:default}
+.wtape{position:fixed;left:112px;top:20px;z-index:5;max-width:calc(100% - 350px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:700 17px var(--hand);color:#1b1430;padding:8px 24px 6px;transform:rotate(-1.2deg);background:repeating-linear-gradient(45deg,#ffc93c 0 12px,#ffd765 12px 24px);clip-path:polygon(0 0,100% 0,calc(100% - 7px) 25%,100% 50%,calc(100% - 7px) 75%,100% 100%,0 100%,7px 75%,0 50%,7px 25%);transition:transform .2s cubic-bezier(.3,1.8,.5,1)}
+.wtape:hover{transform:rotate(0deg) scale(1.02)}
+.wtape[aria-pressed=true]{background:repeating-linear-gradient(45deg,#5ef2c0 0 12px,#8ff7d6 12px 24px)}
+.wtag{position:fixed;right:20px;top:14px;z-index:6;width:186px;border-radius:10px;overflow:hidden;transform:rotate(2deg);box-shadow:0 14px 30px -12px #000;background:#fffaf0;color:#1b1430;--ink:#1b1430}
+.wth{background:var(--pink);font:800 10.5px var(--display);letter-spacing:.04em;text-align:center;padding:6px 4px 5px}
+.wtb{display:flex;align-items:center;gap:6px;padding:9px 10px 2px}
+.wtb .face{background:var(--mango);flex:none}
+.wtb input{flex:1;min-width:0;border:0;border-bottom:2px dashed rgba(27,20,48,.3);background:none;font:700 19px var(--hand);color:#1b1430;padding:2px 2px 0;outline:none}
+.wtb input::placeholder{color:rgba(27,20,48,.45);font-weight:400}
+.wtb input:focus{border-bottom-color:#1b1430}
+.wts{font:500 10.5px var(--ui);color:#5b5273;text-align:center;padding:3px 6px 7px}
+.wdesks{position:fixed;right:228px;top:0;z-index:5;display:flex;gap:6px;align-items:flex-start}
+body.has-profile .wtape{max-width:calc(100% - 850px)}
+.wdesks button{font:600 13px var(--ui);padding:9px 14px 8px;border-radius:0 0 12px 12px;background:#fff4d6;color:#1b1430;box-shadow:0 8px 18px -8px #000;white-space:nowrap;transition:padding .2s cubic-bezier(.3,1.6,.5,1)}
+.wdesks button:hover{padding-top:14px}
+.wdesks button[aria-pressed=true]{background:var(--mango);padding-top:19px}
+.wdesks .spark{background:#17122e;color:var(--mint);box-shadow:inset 0 0 0 1.5px var(--mint),0 8px 18px -8px #000;display:flex;align-items:center;gap:6px;margin-left:8px}
+.wdesks .spark svg,.spk svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linejoin:round}
+.wdesks .spark[aria-pressed=true]{background:var(--mint);color:#1b1430}
+.wtabs{position:fixed;left:0;top:108px;bottom:112px;z-index:5;display:flex;flex-direction:column;gap:5px;overflow:auto;scrollbar-width:none;padding:2px 10px 2px 0}
+.wtabs::-webkit-scrollbar{display:none}
+.wtabs button{flex:none;text-align:left;font:700 12px var(--ui);padding:7px 11px 7px 15px;border-radius:0 10px 10px 0;background:var(--k);margin-left:-9px;display:flex;gap:6px;align-items:center;box-shadow:0 6px 14px -8px #000;transition:margin .2s cubic-bezier(.3,1.6,.5,1),opacity .2s;opacity:.8;width:max-content}
+.wtabs button b{font-weight:600;opacity:.6}
+.wtabs button:hover{margin-left:-3px;opacity:1}
+.wtabs button[aria-pressed=true]{margin-left:0;opacity:1;padding-right:20px;box-shadow:0 0 0 2px #fff,0 6px 14px -8px #000}
+.wpads{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:6;display:flex;gap:22px;align-items:flex-end}
+.wpad{width:116px;min-height:80px;border-radius:5px 14px 5px 14px;padding:10px 8px 8px;display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;color:#1b1430;background:var(--pc);box-shadow:0 4px 0 var(--ps),0 8px 0 var(--pt),0 24px 30px -10px #000;transition:transform .2s cubic-bezier(.3,1.8,.5,1)}
+.wpad span{font:700 20px var(--hand);line-height:1.1}
+.wpad small{font:500 11px var(--ui);opacity:.72}
+.wpad.y{--pc:#ffc93c;--ps:#e9b32a;--pt:#cf9a18;transform:rotate(-3deg)}
+.wpad.m{--pc:#5ef2c0;--ps:#3fd6a5;--pt:#2bb98a;transform:rotate(2deg)}
+.wpad.c{--pc:#fff4d6;--ps:#e9dcb6;--pt:#d3c499;transform:rotate(-1deg);width:108px;min-height:68px}
+.wpad:hover{transform:translateY(-7px) rotate(0deg)}
+.wpad:active{transform:translateY(3px)}
+.wmode{position:fixed;left:16px;bottom:20px;z-index:6;font:600 12.5px var(--ui);padding:8px 13px;border-radius:999px;background:var(--glass);border:1px solid var(--line);color:var(--text);backdrop-filter:blur(14px)}
+.wmode:hover{background:rgba(255,255,255,.14)}
+.wempty{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:2;font:700 24px var(--hand);color:var(--muted);text-align:center;pointer-events:none;width:min(80%,520px)}
+.spk{position:absolute;top:-12px;right:14px;width:24px;height:24px;border-radius:50%;background:var(--mint);color:#1b1430;display:none;place-items:center;box-shadow:0 0 0 2px #0e0b1d,0 0 16px rgba(94,242,192,.8);z-index:2}
+.note.is-agent .spk{display:grid}
+.note:not(.is-agent) .agb,.note:not(.is-agent) .agc{display:none!important}
+.note.is-agent .paper{box-shadow:0 0 0 2px var(--mint),0 0 34px -6px rgba(94,242,192,.75),0 18px 40px -12px rgba(0,0,0,.65)}
+body.d-work::before{background:linear-gradient(rgba(116,204,255,.07) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(116,204,255,.07) 1px,transparent 1px) 0 0/44px 44px,radial-gradient(45% 40% at 78% 18%,rgba(61,123,255,.3),transparent 70%),radial-gradient(40% 36% at 14% 80%,rgba(116,204,255,.16),transparent 70%)}
+body.d-personal::before{background:radial-gradient(42% 38% at 16% 20%,rgba(255,201,60,.2),transparent 70%),radial-gradient(38% 34% at 84% 16%,rgba(255,111,156,.22),transparent 70%),radial-gradient(46% 40% at 56% 96%,rgba(189,164,255,.2),transparent 70%)}
+@media (min-width:721px) and (max-width:1180px){body.has-profile .wtape{max-width:calc(100% - 350px)}.wdesks{top:auto;bottom:118px;right:auto;left:50%;transform:translateX(-50%)}.wdesks button{border-radius:12px;padding:7px 11px!important}}
+@media (max-width:720px){
+  .wtape{left:12px;top:10px;max-width:calc(100% - 24px);font-size:15px}
+  .wtag{top:52px;right:12px;width:156px;transform:rotate(1deg)}
+  .wth,.wts{display:none}
+  .wtb{padding:6px 8px}
+  .wtb input{font-size:16px}
+  .wdesks{top:auto;bottom:108px;right:auto;left:50%;transform:translateX(-50%)}
+  body.has-profile .wtape{max-width:calc(100% - 24px)}
+  .wdesks button{border-radius:12px;padding:7px 10px!important;font-size:12px}
+  .wtabs{top:104px;bottom:auto;left:0;right:0;flex-direction:row;padding:2px 12px 6px}
+  .wtabs button{margin-left:0!important;border-radius:999px;padding:6px 11px}
+  body.ws .board{padding:152px 14px 200px!important}
+  body.ws.v-tidy .board{grid-template-columns:minmax(0,1fr)}
+  .wpads{gap:12px;bottom:14px}
+  .wpad{width:96px;min-height:66px}
+  .wpad.c{width:88px;min-height:58px}
+  .wmode{display:none}
+  body.ws .pal{bottom:96px}
+}
+
+/* ---- pen writing: a pen follows the caret while you write on a note ---- */
+.wpen{position:fixed;left:0;top:0;z-index:30;pointer-events:none;opacity:0;transition:opacity .4s,transform .1s ease-out;will-change:transform}
+.wpen.on{opacity:1}
+.wpen svg{position:absolute;left:-8px;bottom:-1px;width:16px;height:110px;transform-origin:50% 100%;transform:rotate(34deg);filter:drop-shadow(5px 9px 6px rgba(0,0,0,.45))}
+.wpen.jot svg{animation:jot .16s ease-out}
+@keyframes jot{45%{transform:rotate(30deg) translateY(-2.5px)}}
+.wpenb{left:122px}
+.wpenb[aria-pressed=true]{background:var(--mango);color:#1b1430;border-color:var(--mango)}
+@media (max-width:720px){.wpenb{display:block;left:12px;bottom:100px}}
 </style>
 </head>
 <body>
@@ -512,7 +593,12 @@ function inkFor(c,t){if(t==='glass'||t==='night')return'#f3efff';if(t==='neon')r
 const tickFor=(c,t)=>t==='night'?'#1c1b4b':t==='neon'?'#120e24':t==='glass'?'#1a1436':c;
 const KEY='chipku-v1', $=s=>document.querySelector(s), board=$('#board');
 let notes=[], sound=true, zTop=10;
-const isPhone=()=>matchMedia('(max-width:640px)').matches;
+let VIEW='tidy',PROFILE=null;const WS={space:'',agent:false,daily:false},DAILY=new Set(['todo','timer','goal']);
+try{VIEW=localStorage.getItem('chipzett-view')==='free'?'free':'tidy';PROFILE=JSON.parse(localStorage.getItem('chipzett-profile')||'null')}catch(e){}
+if(DESK)VIEW='free';
+const spaceOf=n=>n.space||((n.cat==='work'||n.cat==='career')?'work':'personal');
+const isHid=n=>(!!activeCat&&n.cat!==activeCat)||(!!WS.space&&spaceOf(n)!==WS.space)||(WS.agent&&!n.agent)||(WS.daily&&!DAILY.has(n.type));
+const isPhone=()=>VIEW==='tidy'||matchMedia('(max-width:640px)').matches;
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const uid=()=>Math.random().toString(36).slice(2,9);
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=tr(x);return e};
@@ -555,6 +641,7 @@ function place(){const w=board.clientWidth,h=board.clientHeight;return{x:Math.ma
 function add(n,fresh){
   const ac=CATS.find(c=>c[0]===activeCat),given=n;
   n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,rot:+(Math.random()*8-4).toFixed(1),z:++zTop},place(),n);
+  if(!('agent' in given)&&WS.agent)n.agent=true;if(!('space' in given)&&WS.space)n.space=WS.space;
   {const pk2=PACK[n.cat];if(pk2){if(!('face' in given))n.face=pk2[0];if(!('tex' in given))n.tex=pk2[1]}}
   n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();return n;
 }
@@ -581,7 +668,7 @@ function agItems(n){
   if(asks.length)return asks.flatMap(x=>split(x.replace(/^.*?\b(want|wants|need|needs|must|should|have to|has to)\b\s*(to\s+)?/i,'').replace(/\s*\b(chahiye|karna hai|lana hai|bhejna hai)\b.*$/i,'').replace(/^(unhe|humein|mujhe)\s+/i,''))).slice(0,6).map(cap);
   return body.flatMap(split).slice(0,6).map(cap);
 }
-function agBeside(n){return{x:Math.min((n.x||0)+((n.w||232)+26),Math.max(10,board.clientWidth-250)),y:(n.y||0)+18,cat:n.cat,color:n.color}}
+function agBeside(n){return{x:Math.min((n.x||0)+((n.w||232)+26),Math.max(10,board.clientWidth-250)),y:(n.y||0)+18,cat:n.cat,color:n.color,space:spaceOf(n),agent:false}}
 function agDo(n,cmd){
   const c=cmd.toLowerCase(),title=(agSents(n.text||'')[0]||L('Note','Note')).slice(0,40),out=[];
   if(/check|list|action|task|todo|kaam/.test(c)){const it=agItems(n);
@@ -618,6 +705,7 @@ function agentUI(n,p,d){
   form.onsubmit=e=>{e.preventDefault();run(inp.value);inp.value=''};
   box.append(list,quick,form,el('div','agn',L('Preview: a sample agent that reads only this note. No AI is connected yet.','Preview: namoona agent jo sirf yeh note padhta hai. AI abhi juda nahi hai.')));
   if(n.mail){const m=el('button','mailb',L('Open in mail','Mail mein kholo'));m.type='button';m.onclick=()=>{location.href='mailto:?subject='+encodeURIComponent(n.mail.s)+'&body='+encodeURIComponent(n.mail.b)};p.append(m)}
+  {const sp=el('span','spk');sp.innerHTML=AG_ICON.act;sp.title=L('Agentic note','Agentic note');queueMicrotask(()=>d.append(sp))}
   p.append(bar,box);setMode('ask');draw();
 }
 function render(n,fresh){
@@ -661,7 +749,7 @@ function render(n,fresh){
 }
 function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${n.y}px;z-index:${n.z};--r:${n.rot}deg;--c:${n.color};--w:${n.w||232}px;--mh:${n.mh||0}px;--ink:${n.ink||inkFor(n.color,t)};--tk:${tickFor(n.color,t)};--f:${fontOf(n.font)[2]};--fs:${(n.size||1)*fontOf(n.font)[3]};animation-delay:-${((n.rot||0)+4)/2}s`;
   const f=d.querySelector('.face');if(f)f.className='face av-'+(n.face||'classic');
-  d.classList.toggle('has-song',!!n.song);d.classList.toggle('hid',!!activeCat&&n.cat!==activeCat);
+  d.style.order=-(n.z||0);d.classList.toggle('has-song',!!n.song);d.classList.toggle('hid',isHid(n));d.classList.toggle('is-agent',!!n.agent);
   {const pp=d.firstChild;if(pp){let tg=pp.querySelector('.tag');const c=CATS.find(x=>x[0]===n.cat);if(c){if(!tg){tg=el('span','tag');pp.append(tg)}tg.textContent=c[1]}else if(tg)tg.remove()}}
   setSky(d,n);ANIMS.forEach(a=>d.classList.remove('an-'+a[0]));d.classList.add('an-'+(n.anim||'still'));
   const p=d.firstChild;if(p){TEX.forEach(x=>p.classList.remove('tx-'+x[0]));p.classList.add('tx-'+t)}}
@@ -670,7 +758,7 @@ function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${
 let pk=null,lastTab='Vibe';
 function closePicker(){if(pk)stopNote();pk?.remove();pk=null}
 function openPicker(anchor,cur,apply){
-  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||''};
+  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||''};if(PROFILE&&cur.id){st.space=spaceOf(cur);st.agent=!!cur.agent}
   const p=el('div','pick');pk=p;const groups=[];let ci;
   const sync=()=>{groups.forEach(([g,key])=>[...g.children].forEach(b=>b.setAttribute('aria-pressed',b._v===st[key])));
     p.querySelectorAll('.pt .mini').forEach(m=>{m.style.cssText=`display:block;--c:${st.color};--ink:${inkFor(st.color,m.parentElement._v)}`});
@@ -683,6 +771,8 @@ function openPicker(anchor,cur,apply){
   const dice=el('button','pill','Surprise me');dice.type='button';dice.onclick=()=>{Object.assign(st,{color:rnd(COLORS),tex:rnd(TEX)[0],font:rnd(FONTS)[0],ink:'',face:rnd(AVS.slice(0,8))[0],anim:rnd(ANIMS)[0],mood:rnd(MOODS)[0]});sync()};
   p.append(el('h4',null,'Ek tap vibe'),vg,dice);
   grp('Category','pms',[['','None'],...CATS],'cat',(b,it)=>{b.className='ps';b.textContent=it[1]});
+  if('space' in st){grp('Desk','pms',[['personal',L('Home desk','Ghar ka desk')],['work',L('Work desk','Kaam ka desk')]],'space',(b,it)=>{b.className='ps';b.textContent=it[1]});
+    grp('Agentic note','pms',[[false,L('Off','Band')],[true,L('On','Chalu')]],'agent',(b,it)=>{b.className='ps';b.textContent=it[1]})}
   grp('Avatar','pas',AVS,'face',(b,it)=>{b.className='pa';const f=el('span','face av-'+it[0]);f.append(el('span','eye'),el('span','eye'),el('span','mouth'));b.append(f,document.createTextNode(tr(it[1])))});
   grp('Harkat','pss',ANIMS,'anim',(b,it)=>{b.className='ps';b.textContent=tr(it[1]);b.style.fontSize='11.5px';b.style.padding='6px 2px'});
   grp('Mood (peeche chalta animation)','pms',MOODS,'mood',(b,it)=>{b.className='ps';b.textContent=tr(it[1])});
@@ -694,7 +784,7 @@ function openPicker(anchor,cur,apply){
   grp('Size','pss',[[.85,'S'],[1,'M'],[1.25,'L'],[1.55,'XL']],'size',(b,it)=>{b.className='ps';b.textContent=tr(it[1])});
   grp('Likhai ka rang','pcs',INKS,'ink',(b,c)=>{b.className='pc';if(c)b.style.setProperty('--c',c);else{b.textContent=tr('A');b.classList.add('auto')}b.setAttribute('aria-label',c?'Ink '+c:'Auto ink')});
   /* tabs keep the picker short: one group of options at a time */
-  const TABS=['Vibe','Rang','Likhai','Avatar','Mood'],tabOf={'Ek tap vibe':'Vibe','Category':'Vibe','Avatar':'Avatar','Harkat':'Avatar','Mood (peeche chalta animation)':'Mood','Gaana (note pe aate hi bajega)':'Mood','Rang':'Rang','Texture':'Rang','Font':'Likhai','Size':'Likhai','Likhai ka rang':'Likhai'};
+  const TABS=['Vibe','Rang','Likhai','Avatar','Mood'],tabOf={'Ek tap vibe':'Vibe','Category':'Vibe','Desk':'Vibe','Agentic note':'Vibe','Avatar':'Avatar','Harkat':'Avatar','Mood (peeche chalta animation)':'Mood','Gaana (note pe aate hi bajega)':'Mood','Rang':'Rang','Texture':'Rang','Font':'Likhai','Size':'Likhai','Likhai ka rang':'Likhai'};
   const tabT={};for(const k in tabOf)tabT[tr(k)]=tabOf[k];let ct='Vibe';[...p.children].forEach(c=>{if(c.tagName==='H4')ct=tabT[c.textContent]||ct;c.dataset.tab=ct});
   const bar=el('div','tabs');p.prepend(bar);
   const place=()=>{const r=anchor.getBoundingClientRect(),h=p.offsetHeight;
@@ -890,7 +980,7 @@ $('#pal').onclick=()=>{hub.classList.toggle('off');if(!hub.classList.contains('o
 $('#hubx').onclick=()=>hub.classList.add('off');
 $('#tip').onclick=()=>pal(TIPS[tip++%TIPS.length]);
 addEventListener('pointerdown',e=>{if(!hub.classList.contains('off')&&!e.target.closest('.hub,.pal,.pick,.seltool'))hub.classList.add('off')});
-function renderCats(){const box=$('#cats');if(!box)return;box.textContent='';
+function renderCats(){wsRender();const box=$('#cats');if(!box)return;box.textContent='';
   const mk=(key,name,col,count)=>{const b=el('button','cat');b.type='button';b.style.setProperty('--k',col);b.setAttribute('aria-pressed',activeCat===key);b.append(el('i'),el('span',null,name),el('b',null,String(count)));
     b.onclick=()=>{activeCat=key;applyFilter();save()};box.append(b)};
   mk('',L('All','Sab'),'#ffffff',notes.length);CATS.forEach(c=>mk(c[0],c[1],c[2],notes.filter(n=>n.cat===c[0]).length));
@@ -898,7 +988,7 @@ function renderCats(){const box=$('#cats');if(!box)return;box.textContent='';
   $('#tplh').textContent=c?L('Ready-made '+c[1]+' notes',c[1]+' ke ready-made notes'):L('Pick a category to see ready-made notes','Category chuno, ready-made notes dikhenge');
   if(c)c[3].forEach(([name,hint,make])=>{const b=el('button','mi',name);b.type='button';b.append(el('small',null,hint));
     b.onclick=()=>{add(Object.assign({color:c[2]},make(),{cat:c[0]}),true);pal(L(name+' note added.',name+' note chipka diya.'),true)};tp.append(b)})}
-function applyFilter(){notes.forEach(n=>{const d=dom(n);if(d)d.classList.toggle('hid',!!activeCat&&n.cat!==activeCat)});renderCats()}
+function applyFilter(){notes.forEach(n=>{const d=dom(n);if(d)d.classList.toggle('hid',isHid(n))});renderCats()}
 
 
 
@@ -962,6 +1052,75 @@ function tick(){cx.clearRect(0,0,fx.width,fx.height);bits=bits.filter(p=>p.l-->0
   if(bits.length)requestAnimationFrame(tick);else run=false}
 
 /* ---------- boot ---------- */
+
+/* ---------- the wall ---------- */
+let wsEls=null;
+function wsBuild(){
+  const B=document.body;B.classList.add('ws','v-'+VIEW);
+  const tape=el('button','wtape'),tag=el('div','wtag'),tb=el('div','wtb'),tf=el('button','face av-'+((PROFILE&&PROFILE.face)||'classic')),ti=document.createElement('input');
+  tape.type='button';tf.type='button';tf.setAttribute('aria-label','Change avatar');tf.append(el('span','eye'),el('span','eye'),el('span','mouth'));
+  ti.id='wname';ti.maxLength=18;ti.autocomplete='off';ti.placeholder=L('write your name','apna naam likho');ti.setAttribute('aria-label','Your name');ti.value=PROFILE?PROFILE.name:'';
+  tb.append(tf,ti);tag.append(el('div','wth',L("HELLO, I'M","HELLO, MAIN HOON")),tb,el('div','wts',L('Saved on this device only','Sirf is device pe save')));
+  const desks=el('div','wdesks'),tabs=el('div','wtabs'),pads=el('div','wpads'),mode=el('button','wmode'),empty=el('div','wempty');mode.type='button';
+  const penB=el('button','wmode wpenb');penB.type='button';penB.onclick=()=>{PEN=!PEN;try{localStorage.setItem('chipzett-pen',PEN?'1':'0')}catch(e){}wsRender();if(PEN)pal(L('Pen is on. Write on any note and watch.','Pen chalu hai. Kisi bhi note pe likho aur dekho.'),true)};
+  B.append(tape,tag,desks,tabs,pads,mode,penB,empty);wsEls={tape,tf,ti,desks,tabs,pads,mode,empty,penB};
+  const FACES=AVS.map(a=>a[0]).filter(k=>k!=='none');
+  const saveP=()=>{try{PROFILE?localStorage.setItem('chipzett-profile',JSON.stringify(PROFILE)):localStorage.removeItem('chipzett-profile')}catch(e){}};
+  ti.onchange=()=>{const v=ti.value.trim(),had=!!PROFILE;
+    if(v){PROFILE={name:v,face:(PROFILE&&PROFILE.face)||tf.dataset.f||'classic'};saveP();
+      if(!had){pal(L(`Nice to meet you, ${v}. You now have a Home desk, a Work desk and agentic notes.`,`Milke achha laga, ${v}. Ab tumhare paas Home desk, Work desk aur agentic notes hain.`));
+        let seeded=false;try{seeded=!!localStorage.getItem('chipzett-agent-seed');localStorage.setItem('chipzett-agent-seed','1')}catch(e){}
+        if(!seeded)add({type:'text',text:L('Client meeting\nMet Tuesday. They want the revised quote, sample board photos and a signed timeline by Friday. Budget is fixed. Riya owns the photos.','Client meeting\nMangal ko mile. Unhe Friday tak revised quote, sample board photos aur signed timeline chahiye. Budget fix hai. Photos Riya ke paas hain.'),cat:'work',space:'work',agent:true,color:'#ffc93c',tex:'lined',face:'boss',w:300,rot:-2},true)}}
+    else if(had){PROFILE=null;saveP();WS.space='';WS.agent=false}
+    applyFilter()};
+  ti.onkeydown=e=>{if(e.key==='Enter')ti.blur()};
+  tf.onclick=()=>{const cur=(PROFILE&&PROFILE.face)||tf.dataset.f||'classic',nx=FACES[(FACES.indexOf(cur)+1)%FACES.length];tf.dataset.f=nx;tf.className='face av-'+nx;if(PROFILE){PROFILE.face=nx;saveP()}};
+  tape.onclick=()=>{WS.daily=!WS.daily;applyFilter()};
+  mode.onclick=()=>{B.classList.remove('v-'+VIEW);VIEW=VIEW==='tidy'?'free':'tidy';B.classList.add('v-'+VIEW);try{localStorage.setItem('chipzett-view',VIEW)}catch(e){}board.scrollTop=0;
+    if(VIEW==='free')for(const n of notes){const d=dom(n);if(d){n.x=Math.max(10,Math.min(n.x,board.clientWidth-250));n.y=Math.max(10,Math.min(n.y,board.clientHeight-200));d.style.left=n.x+'px';d.style.top=n.y+'px'}}
+    wsRender()};
+}
+function wsRender(){
+  if(!wsEls)return;const{tape,ti,desks,tabs,pads,mode,empty,penB}=wsEls,B=document.body;
+  penB.textContent=PEN?L('Pen writing: on','Pen se likhna: chalu'):L('Pen writing: off','Pen se likhna: band');penB.setAttribute('aria-pressed',PEN);
+  const h=new Date().getHours(),hello=h<12?L('Good morning','Suprabhat'):h<17?L('Good afternoon','Namaste'):L('Good evening','Shubh sandhya');
+  const left=notes.filter(n=>n.type==='todo').reduce((a,n)=>a+n.items.filter(i=>!i.d).length,0),run=notes.filter(n=>n.type==='timer'&&n.end>Date.now()).length,goals=notes.filter(n=>n.type==='goal'&&n.total>0);
+  const bits=[PROFILE?hello+', '+PROFILE.name:new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})];
+  if(left)bits.push(L(`${left} task${left>1?'s':''} left`,`${left} kaam baaki`));
+  if(run)bits.push(L(`${run} reminder${run>1?'s':''} running`,`${run} reminder chalu`));
+  if(goals.length)bits.push(L('goals ','goals ')+Math.round(goals.reduce((a,g)=>a+g.cur/g.total,0)/goals.length*100)+'%');
+  if(bits.length===1)bits.push(L(`${notes.length} notes on your wall`,`deewar pe ${notes.length} notes`));
+  tape.textContent=bits.join('  ·  ');tape.setAttribute('aria-pressed',WS.daily);tape.title=L('Show only today\'s lists, reminders and goals','Sirf aaj ki lists, reminders aur goals dikhao');
+  desks.textContent='';
+  if(PROFILE){[['',L('Everything','Sab kuch')],['personal',L('Home desk','Ghar ka desk')],['work',L('Work desk','Kaam ka desk')]].forEach(([k,t])=>{const b=el('button',null,t);b.type='button';b.setAttribute('aria-pressed',WS.space===k);b.onclick=()=>{WS.space=k;applyFilter()};desks.append(b)});
+    const sp=el('button','spark');sp.type='button';sp.innerHTML=AG_ICON.act;sp.append(document.createTextNode(L('Agentic only','Sirf agentic')));sp.setAttribute('aria-pressed',WS.agent);sp.onclick=()=>{WS.agent=!WS.agent;applyFilter()};desks.append(sp)}
+  B.classList.toggle('has-profile',!!PROFILE);B.classList.toggle('d-work',WS.space==='work');B.classList.toggle('d-personal',WS.space==='personal');
+  tabs.textContent='';const pool=notes.filter(n=>(!WS.space||spaceOf(n)===WS.space)&&(!WS.agent||n.agent)&&(!WS.daily||DAILY.has(n.type)));
+  const tab=(k,name,col,c)=>{const b=el('button',null,name);b.type='button';b.style.setProperty('--k',col);b.style.color=inkFor(col,'plain');b.setAttribute('aria-pressed',activeCat===k);if(c)b.append(el('b',null,String(c)));b.onclick=()=>{activeCat=k;applyFilter();save()};tabs.append(b)};
+  tab('',L('All','Sab'),'#f3efff',pool.length);CATS.forEach(c=>tab(c[0],c[1],c[2],pool.filter(n=>n.cat===c[0]).length));
+  pads.textContent='';
+  const pad=(cls,label,sub,fn)=>{const b=el('button','wpad '+cls);b.type='button';b.append(el('span',null,label),el('small',null,sub));b.onclick=fn;pads.append(b)};
+  const fresh=o=>{const n=add(Object.assign({type:'text',text:''},o),true),d=dom(n);if(d){if(VIEW==='tidy')board.scrollTo({top:0,behavior:'smooth'});const bd=d.querySelector('.body');if(bd)setTimeout(()=>bd.focus(),450)}};
+  pad('y',L('+ Note','+ Note'),L('tear one off','ek phaad lo'),()=>fresh({}));
+  pad('m',L('+ Agentic','+ Agentic'),PROFILE?L('it can Ask and Do','Ask aur Do karta hai'):L('name tag first','pehle naam likho'),()=>{if(!PROFILE){ti.focus();pal(L('Write your name on the tag first. Agentic notes come with a profile.','Pehle tag pe apna naam likho. Agentic notes profile ke saath aate hain.'),true);return}fresh({agent:true})});
+  pad('c',L('Templates','Templates'),L('lists, charts, timers','lists, charts, timers'),()=>openHub(true));
+  mode.textContent=VIEW==='tidy'?L('Wall: tidy','Deewar: saaf'):L('Wall: free','Deewar: khuli');mode.title=L('Switch between a tidy wall and a free desk you can drag notes on','Saaf deewar aur khule desk ke beech badlo');
+  empty.textContent=notes.some(n=>!isHid(n))?'':L('Nothing here yet. Tear a note off the pad below.','Yahan abhi kuch nahi. Neeche pad se ek note phaad lo.');
+}
+if(!DESK)wsBuild();
+/* pen writing: while you type on a note, a pen sits at the caret and jots with each letter */
+let PEN=false;try{PEN=localStorage.getItem('chipzett-pen')==='1'}catch(e){}
+{const pen=document.createElement('div');pen.className='wpen';pen.setAttribute('aria-hidden','true');
+  pen.innerHTML='<svg viewBox="0 0 16 110"><polygon points="8,110 3.500,93 12.500,93" fill="#f3d27a"/><path d="M8 110V99" stroke="#1b1430" stroke-width=".8"/><rect x="3" y="70" width="10" height="23" rx="2" fill="#1b1430"/><rect x="2.500" y="65" width="11" height="5" rx="1" fill="#ffc93c"/><rect x="3" y="12" width="10" height="53" rx="3" fill="#2b2350"/><rect x="11" y="16" width="2.200" height="30" rx="1" fill="#ffc93c"/><rect x="4" y="4" width="8" height="10" rx="3" fill="#ffc93c"/></svg>';
+  document.body.append(pen);let pt=0;
+  document.addEventListener('input',e=>{if(!PEN)return;const t=e.target;if(!t.closest||!t.closest('.note'))return;let x,y;
+    const sel=getSelection();
+    if(t.isContentEditable&&sel.rangeCount){const rg=sel.getRangeAt(0).cloneRange();rg.collapse(true);let r=rg.getClientRects()[0];
+      if(!r){const b=(sel.anchorNode&&sel.anchorNode.nodeType===1?sel.anchorNode:t).getBoundingClientRect();r={left:b.left+4,bottom:b.top+26}}x=r.left;y=r.bottom}
+    else{const b=t.getBoundingClientRect();x=b.left+Math.min(b.width-12,10+(t.value||'').length*7.500);y=b.bottom-5}
+    pen.style.transform='translate('+x+'px,'+y+'px)';pen.classList.add('on');pen.classList.remove('jot');void pen.offsetWidth;pen.classList.add('jot');
+    clearTimeout(pt);pt=setTimeout(()=>pen.classList.remove('on'),1300)})}
+
 function start(state){
   const s=(state&&state.notes)?state:load();
   if(s&&s.cat&&CATS.some(c=>c[0]===s.cat))activeCat=s.cat;
@@ -975,8 +1134,6 @@ function start(state){
      {type:'text',text:'Rent 5 tareekh ko',cat:'money',color:COLORS[3],tex:'neon',font:'unbounded',face:'alien',mood:'rain',...at(.12,.52)},
      {type:'chart',kind:'pie',text:'Mahine ka kharcha',data:'Rent 40, Khana 25, Masti 15, Bachat 20',cat:'money',color:'#fff4d6',tex:'grid',font:'outfit',...at(.5,.42)}].forEach(n=>add(n));
     setTimeout(()=>pal('Yeh sample notes hain. Mujhe dabao aur apne notes banao.',true),900)}
-  try{if(!DESK&&!localStorage.getItem('chipzett-agent-seed')){localStorage.setItem('chipzett-agent-seed','1');
-    add({type:'text',text:L('Client meeting\nMet Tuesday. They want the revised quote, sample board photos and a signed timeline by Friday. Budget is fixed. Riya owns the photos.','Client meeting\nMangal ko mile. Unhe Friday tak revised quote, sample board photos aur signed timeline chahiye. Budget fix hai. Photos Riya ke paas hain.'),cat:'work',color:'#ffc93c',tex:'lined',face:'boss',w:300,rot:-2,x:Math.max(10,board.clientWidth*.36),y:Math.max(10,board.clientHeight*.14)},true)}}catch(e){}
   $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
   applyFilter();
 }
