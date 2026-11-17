@@ -8,319 +8,489 @@
 <link rel="canonical" href="https://www.chipzett.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ChipZett">
-<meta property="og:title" content="ChipZett: sticky notes, finally alive">
-<meta property="og:description" content="Notes that talk, change their mood, play their own song and turn a line of text into a chart. Free, no account.">
+<meta property="og:title" content="ChipZett: make a note, make it yours">
+<meta property="og:description" content="Sticky notes for ideas, checklists, and reminders that speak up. Give each one its own look and sound. Free, no account.">
 <meta property="og:url" content="https://www.chipzett.com/">
 <meta property="og:image" content="https://www.chipzett.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ChipZett: sticky notes, finally alive</title>
-<meta name="description" content="ChipZett: sticky notes that talk, feel and sing. Free on your desktop and in your browser.">
+<title>ChipZett: make a note, make it yours</title>
+<meta name="description" content="ChipZett: sticky notes for ideas, checklists, and reminders that speak up. Free in your browser, no account needed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Outfit:wght@400;500;600&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Outfit:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* Layout idea: a night desk. Type sits hard left, the living product sits right and spills past the frame.
-   Sections are sticky notes pinned to the desk, never generic cards. One world, single theme. */
+/* Layout idea: full-width bands that alternate night desk and paper (cream, lilac, mango),
+   each with one job. Type sits left, a real-looking note or board sits right. Single theme by choice. */
 :root{
-  --desk:#0e0b1d; --desk-2:#17122e; --line:rgba(255,255,255,.13); --text:#f3efff; --muted:#a9a1c9; --ink:#1b1430;
+  --night:#17122a; --night-2:#211a3a; --line:rgba(255,255,255,.14); --text:#f6f2ff; --muted:#b9b0d6; --ink:#1b1430; --ink-2:#5b5273;
   --mango:#ffc93c; --pink:#ff6f9c; --mint:#5ef2c0; --sky:#74ccff; --lilac:#bda4ff; --cream:#fff4d6;
+  --paper:#fff6e4; --paper-lilac:#eedcf8;
   --display:"Unbounded",system-ui,sans-serif; --ui:"Outfit",system-ui,sans-serif; --hand:"Kalam","Comic Sans MS",cursive;
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth}
-body{background:var(--desk);color:var(--text);font:400 17px/1.55 var(--ui);overflow-x:hidden}
-body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;
-  background:radial-gradient(38% 32% at 12% 18%,rgba(189,164,255,.2),transparent 70%),radial-gradient(34% 30% at 88% 12%,rgba(255,111,156,.14),transparent 70%),radial-gradient(45% 38% at 55% 95%,rgba(94,242,192,.1),transparent 70%)}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--night);color:var(--text);font:400 17px/1.55 var(--ui);overflow-x:hidden}
 a{color:inherit}
+button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:6px}
-.wrap{width:min(1180px,100% - 40px);margin-inline:auto}
-h1,h2,h3{font-family:var(--display);letter-spacing:-.03em;text-wrap:balance;line-height:1.05}
-h2{font-size:clamp(28px,4.2vw,46px);font-weight:700}
-.kicker{font:600 12px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
-.lede{color:var(--muted);max-width:56ch}
+[hidden]{display:none!important}
+.wrap{width:min(1240px,100% - 40px);margin-inline:auto}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.045em;text-wrap:balance;line-height:1.02;font-weight:800}
+h2{font-size:clamp(30px,5vw,60px)}
+.lede{font-size:18px;max-width:46ch;margin-top:16px}
+.band{padding:88px 0}
+.dark{background:radial-gradient(60% 90% at 85% 60%,rgba(120,70,190,.28),transparent 70%),var(--night)}
+.dark .lede{color:var(--muted)}
+.paper{background:var(--paper);color:var(--ink)}
+.paper .lede,.plilac .lede{color:var(--ink-2)}
+.plilac{background:var(--paper-lilac);color:var(--ink)}
 
-nav{display:flex;align-items:center;gap:22px;padding:20px 0;flex-wrap:wrap}
-.logo{font:800 22px var(--display);letter-spacing:-.03em;display:flex;align-items:center;gap:10px;text-decoration:none}
+/* nav */
+.top{position:sticky;top:0;z-index:30;background:rgba(23,18,42,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav{display:flex;align-items:center;gap:20px;height:76px}
+.logo{font:800 22px var(--display);letter-spacing:-.04em;display:flex;align-items:center;gap:10px;text-decoration:none}
 .logo i{width:22px;height:22px;border-radius:6px 6px 6px 2px;background:var(--mango);transform:rotate(-8deg);box-shadow:4px 4px 0 var(--pink)}
-nav .links{display:flex;gap:20px;margin-left:auto;flex-wrap:wrap}
-nav .links a{text-decoration:none;color:var(--muted);font-size:15px}
-nav .links a:hover{color:var(--text)}
-.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font:600 16px var(--ui);padding:13px 22px;border-radius:16px;transition:transform .18s cubic-bezier(.3,1.8,.5,1)}
-.btn:hover{transform:translateY(-2px) rotate(-1deg)}
-.btn.go{background:var(--mango);color:var(--ink);box-shadow:5px 5px 0 var(--pink)}
-.btn.ghost{border:1px solid var(--line);background:rgba(255,255,255,.05)}
-.btn.soon{border:1px dashed var(--line);color:var(--muted);cursor:default}
-.btn.soon:hover{transform:none}
-.btn.sm{padding:9px 16px;font-size:14px;border-radius:12px;box-shadow:3px 3px 0 var(--pink)}
+nav .links{display:flex;gap:34px;margin-inline:auto}
+nav .links a{text-decoration:none;font-size:15.5px;font-weight:500}
+nav .links a:hover{color:var(--mango)}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:600 15.5px var(--ui);padding:13px 20px;border-radius:10px;border:0;cursor:pointer;transition:transform .15s,box-shadow .15s;white-space:nowrap}
+.btn svg{width:16px;height:16px;flex:none}
+.btn.go{background:var(--mango);color:var(--ink);box-shadow:4px 4px 0 var(--pink)}
+.btn.go:hover{transform:translate(-1px,-1px);box-shadow:6px 6px 0 var(--pink)}
+.btn.line{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
+.btn.line:hover{background:rgba(255,255,255,.1)}
+.btn.inkbtn{background:var(--ink);color:#fff;box-shadow:4px 4px 0 var(--pink)}
+.btn.inkbtn:hover{transform:translate(-1px,-1px);box-shadow:6px 6px 0 var(--pink)}
 
-.hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:center;padding:34px 0 70px}
-h1{font-size:clamp(40px,6.4vw,84px);font-weight:800}
-h1 em{font-style:normal;color:var(--mango);position:relative;white-space:nowrap}
-h1 .eyes{display:inline-flex;gap:.08em;vertical-align:.5em;margin-left:.12em}
-h1 .eyes b{width:.2em;height:.2em;border-radius:50%;background:#fff;position:relative;animation:blink 5s infinite}
-h1 .eyes b::after{content:"";position:absolute;inset:26%;border-radius:50%;background:var(--ink)}
-@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
-.hero p{margin:22px 0 28px;font-size:19px}
-.cta{display:flex;gap:12px;flex-wrap:wrap}
-.facts{display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:22px;color:var(--muted);font-size:14px}
-.facts span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:2px;background:var(--mint);margin-right:8px}
+/* hero */
+.hero{position:relative;background:radial-gradient(70% 90% at 80% 40%,rgba(125,72,200,.42),transparent 70%),var(--night);padding:74px 0 96px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:center}
+h1{font-size:clamp(44px,6.1vw,82px);line-height:.98}
+h1 em{font-style:normal;color:var(--mango)}
+.hero .lede{color:#ddd5f3;font-size:21px;line-height:1.5;max-width:22em;margin-top:26px}
+.cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.facts{display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:26px;font-size:13.5px;color:#ddd5f3}
+.facts span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:2px;background:var(--mint);margin-right:8px;vertical-align:2px}
 
+/* preview board */
 .stage{position:relative}
-.screen{border-radius:20px;border:1px solid var(--line);background:#120e24;overflow:hidden;box-shadow:0 50px 100px -40px #000,0 0 0 8px rgba(255,255,255,.03);transform:rotate(1.2deg)}
-.screen .bar{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--muted)}
-.screen .bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
-.screen .bar span{margin-left:8px}
-.screen iframe{display:block;width:100%;aspect-ratio:16/10.5;border:0;background:var(--desk)}
-.spill{position:absolute;width:150px;padding:12px 14px;border-radius:5px 16px 5px 16px;color:var(--ink);font:400 17px/1.25 var(--hand);box-shadow:0 20px 40px -14px rgba(0,0,0,.7);animation:floaty 5s ease-in-out infinite}
-.spill.a{background:var(--pink);left:-34px;bottom:-30px;rotate:-7deg}
-.spill.b{background:var(--mint);right:-18px;top:-34px;rotate:6deg;animation-delay:-2.4s}
-@keyframes floaty{50%{translate:0 -10px}}
+.board{border-radius:18px;border:1px solid rgba(255,255,255,.2);background:rgba(18,13,36,.72);box-shadow:0 50px 100px -40px #000}
+.board .bar{display:flex;align-items:center;gap:6px;padding:12px 16px;border-bottom:1px solid var(--line);font-size:12.5px}
+.board .bar i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.35)}
+.board .bar b{margin-left:8px;font-weight:600}
+.board .bar span{margin-left:auto;color:var(--muted)}
+.grid{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 16px;padding:30px 14px 26px;align-items:start}
+.n{position:relative;background:var(--c);color:var(--ink);border-radius:5px 16px 5px 16px;padding:22px 12px 12px;rotate:var(--r,0deg);box-shadow:0 18px 34px -14px rgba(0,0,0,.75),0 0 46px -22px var(--c);font-size:13.5px;min-width:0}
+.n.lined{background-image:repeating-linear-gradient(transparent 0 23px,rgba(27,20,48,.12) 23px 24px)}
+.n.sq{background-image:linear-gradient(rgba(27,20,48,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(27,20,48,.08) 1px,transparent 1px);background-size:16px 16px}
+.n.dots{background-image:radial-gradient(rgba(27,20,48,.16) 1px,transparent 1.5px);background-size:12px 12px}
+.tag{position:absolute;top:-11px;left:12px;background:var(--ink);color:var(--c);font:600 10.5px var(--ui);padding:3px 9px;border-radius:99px}
+.nt{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.fc{position:relative;display:flex;align-items:center;gap:4px;background:none;border:0;padding:3px 4px;border-radius:99px;cursor:pointer}
+.fc:hover{background:rgba(27,20,48,.1)}
+.eye{width:13px;height:13px;border-radius:50%;background:#fff;position:relative;overflow:hidden;animation:blink 5s infinite}
+.eye::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:var(--ink);left:3.5px;top:3.5px;transform:translate(var(--ex,0px),var(--ey,0px))}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.mo{width:12px;height:6px;border-radius:0 0 12px 12px;background:var(--ink)}
+.talking .mo{animation:talk .22s infinite alternate}
+@keyframes talk{to{height:11px;border-radius:6px}}
+.f-cool .eye{background:var(--ink);border-radius:3px 3px 8px 8px;animation:none}.f-cool .eye::after{display:none}.f-cool .mo{height:3px;width:10px}
+.f-robot .eye{border-radius:3px;background:#7df9ff;box-shadow:0 0 6px #7df9ff;animation:none}.f-robot .eye::after{width:13px;height:2px;left:0;top:5.5px;border-radius:0;background:rgba(0,0,0,.55);transform:none}.f-robot .mo{height:3px;border-radius:1px}
+.f-cat .eye{background:#d9ff66}.f-cat .eye::after{width:3px;height:10px;left:5px;top:1.5px}
+.f-cat::before,.f-cat::after{content:"";position:absolute;top:-3px;border:4px solid transparent;border-bottom:7px solid var(--ink);border-top:0}
+.f-cat::before{left:6px;transform:rotate(-14deg)}.f-cat::after{left:22px;transform:rotate(14deg)}
+.f-one .eye+.eye{display:none}.f-one .eye{width:17px;height:17px}.f-one .eye::after{width:8px;height:8px;left:4.5px;top:4.5px}
+.tools{display:flex;gap:7px;margin-left:auto;opacity:.38}
+.tools i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--ink)}
+.tools i:last-child{border-radius:2px}
+.n h4{font:700 14px var(--ui);margin-bottom:5px}
+.n p.hw{font:400 15.5px/1.35 var(--hand)}
+.n ul{list-style:none;padding:0;display:grid;gap:3px}
+.n li label{display:flex;gap:7px;align-items:center;cursor:pointer;line-height:1.5}
+.n li input{appearance:none;-webkit-appearance:none;width:14px;height:14px;flex:none;border:2px solid var(--ink);border-radius:3px;background:transparent;cursor:pointer;display:grid;place-items:center;margin:0}
+.n li input:checked{background:var(--ink)}
+.n li input:checked::after{content:"";width:7px;height:4px;border:2px solid var(--c,#fff);border-top:0;border-right:0;rotate:-45deg;translate:0 -1px}
+.n li input:checked + span{text-decoration:line-through;opacity:.55}
+.more{font:400 12.5px var(--hand);opacity:.55;background:rgba(27,20,48,.08);border-radius:5px;padding:2px 8px;margin-top:6px}
+.tm{display:flex;gap:10px;align-items:center}
+.ring{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;flex:none;background:conic-gradient(var(--ink) 0 var(--p,96%),rgba(27,20,48,.16) 0)}
+.ring span{width:38px;height:38px;border-radius:50%;background:var(--c);display:grid;place-items:center;font:700 11px var(--ui);font-variant-numeric:tabular-nums}
+.gb{height:11px;border-radius:99px;background:rgba(27,20,48,.16);overflow:hidden;margin:6px 0 7px}
+.gb i{display:block;height:100%;width:60%;background:var(--ink);border-radius:99px;transition:width .25s}
+.pm{display:flex;align-items:center;justify-content:space-between;font:600 12px var(--ui);font-variant-numeric:tabular-nums}
+.pm button{width:22px;height:22px;border-radius:6px;border:0;background:rgba(27,20,48,.14);font:700 13px var(--ui);cursor:pointer;color:var(--ink);line-height:1}
+.pm button:hover{background:rgba(27,20,48,.26)}
+.pie{width:58px;height:58px;border-radius:50%;margin:4px auto 8px;background:conic-gradient(#ff4d6d 0 45%,#3d7bff 0 80%,#22c58b 0);-webkit-mask:radial-gradient(circle,transparent 36%,#000 37%);mask:radial-gradient(circle,transparent 36%,#000 37%)}
+.leg{display:flex;flex-wrap:wrap;gap:2px 8px;font-size:10.5px;font-weight:500;justify-content:center}
+.leg i{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:4px}
+.says{position:absolute;left:10px;right:10px;top:-14px;translate:0 -100%;background:#fff;color:var(--ink);border-radius:12px 12px 12px 3px;padding:7px 10px;font:500 12.5px/1.3 var(--ui);box-shadow:0 10px 24px -8px rgba(0,0,0,.6);z-index:3}
+.zb{position:absolute;right:18px;bottom:16px;width:54px;height:54px;border-radius:50%;background:var(--mint);box-shadow:0 12px 26px -8px rgba(94,242,192,.6);display:grid;place-items:center}
+.zb .fc{pointer-events:none;gap:7px}.zb .eye{width:11px;height:11px}.zb .eye::after{width:5px;height:5px;left:3px;top:3px}
+.zb .mo{position:absolute;left:50%;bottom:-9px;translate:-50% 0;width:3px;height:6px;border-radius:2px}
+.spill{position:absolute;padding:9px 16px;border-radius:4px 14px 4px 14px;color:var(--ink);font:700 17px/1.2 var(--hand);box-shadow:0 18px 34px -12px rgba(0,0,0,.7);z-index:2;white-space:nowrap}
+.spill.a{background:var(--pink);left:-16px;bottom:-22px;rotate:-6deg}
+.spill.b{background:var(--mint);right:-12px;top:-36px;rotate:6deg}
 
-section{padding:74px 0}
-.head{display:grid;gap:12px;margin-bottom:38px}
+/* features */
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:44px}
+.card{background:#fffaf0;border:1px solid rgba(27,20,48,.16);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.card .art{position:relative;height:190px;display:grid;place-items:center;background:var(--a)}
+.card .art.dotbg{background-image:radial-gradient(rgba(27,20,48,.13) 1px,transparent 1.5px);background-size:14px 14px;background-color:var(--a)}
+.card .txt{padding:24px 24px 30px}
+.card h3{font-size:21px;letter-spacing:-.05em}
+.card p{color:var(--ink-2);font-size:15.5px;margin-top:12px}
+.mini{background:var(--c,#fff0b8);color:var(--ink);border-radius:5px 16px 5px 16px;padding:16px 22px;box-shadow:5px 6px 0 rgba(27,20,48,.14);rotate:var(--r,-4deg);transition:background .25s}
+.mini .fc{margin:0 auto 6px;padding:6px 10px;background:rgba(27,20,48,.08)}
+.mini .eye{width:17px;height:17px}.mini .eye::after{width:8px;height:8px;left:4.5px;top:4.5px}.mini .mo{width:15px;height:8px}
+.mini .talking .mo{animation-name:talk2}
+@keyframes talk2{to{height:13px;border-radius:7px}}
+.mini p.hw{font:700 23px/1.2 var(--hand);color:var(--ink);margin:0;text-align:center}
+.hint{position:absolute;right:12px;bottom:10px;font:600 12px var(--ui);color:var(--ink)}
+.mini.list{rotate:3deg;background:#f1e9ff;min-width:230px;padding:16px 18px;font-size:14.5px}
+.mini.list h4{font:700 14.5px var(--ui);margin-bottom:8px}
+.mini.list ul{list-style:none;padding:0;display:grid;gap:6px}
+.mini.list label{display:flex;gap:10px;align-items:center;cursor:pointer}
+.mini.list input{width:15px;height:15px;accent-color:#6b3fd4;margin:0;color-scheme:light}
+.mini.list input:checked + span{text-decoration:line-through;opacity:.55}
+.sw{position:absolute;bottom:12px;left:50%;translate:-50% 0;display:flex;gap:8px}
+.sw button{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--ink);background:var(--k);cursor:pointer;padding:0}
+.sw button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--a),0 0 0 3.5px var(--ink)}
 
-/* features as real sticky notes */
-.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
-.note{background:var(--c);color:var(--ink);border-radius:6px 20px 6px 20px;padding:18px 20px 22px;rotate:var(--r);box-shadow:0 22px 44px -16px rgba(0,0,0,.7),0 0 70px -30px var(--c);transition:rotate .3s cubic-bezier(.3,1.8,.5,1),translate .3s;display:flex;flex-direction:column;gap:10px}
-.note:hover{rotate:0deg;translate:0 -6px}
-.note h3{font-size:19px;font-weight:700}
-.note p{font-size:15.5px;line-height:1.45}
-.art{height:86px;border-radius:10px;background:rgba(27,20,48,.09);display:grid;place-items:center;position:relative;overflow:hidden}
-.face{display:flex;gap:6px;align-items:center}
-.face b{width:20px;height:20px;border-radius:50%;background:#fff;position:relative;animation:blink 5s infinite}
-.face b::after{content:"";position:absolute;inset:28%;border-radius:50%;background:var(--ink)}
-.face u{width:18px;height:9px;border-radius:0 0 18px 18px;background:var(--ink);animation:talk .25s infinite alternate}
-@keyframes talk{to{height:15px;border-radius:9px}}
-.bub{position:absolute;right:10px;top:10px;background:#fff;border-radius:12px 12px 12px 3px;padding:4px 9px;font:500 12px var(--ui)}
-.rain{position:absolute;inset:0;background:repeating-linear-gradient(100deg,transparent 0 14px,rgba(40,90,220,.55) 14px 15.5px,transparent 15.5px 30px);background-size:60px 60px;animation:fall .7s linear infinite}
-@keyframes fall{to{background-position:-10px 60px}}
-.sun{width:38px;height:38px;border-radius:50%;background:#ff9f1c;border:3px solid #fff;position:relative;z-index:1}
-.eq{display:flex;gap:5px;align-items:flex-end;height:46px}
-.eq i{width:8px;height:8px;border-radius:4px;background:var(--ink);animation:eq .6s ease-in-out infinite alternate}
-.eq i:nth-child(2){animation-delay:.15s}.eq i:nth-child(3){animation-delay:.3s}.eq i:nth-child(4){animation-delay:.45s}.eq i:nth-child(5){animation-delay:.2s}
-@keyframes eq{to{height:46px}}
-.pie{width:62px;height:62px;border-radius:50%;background:conic-gradient(#ff4d6d 0 40%,#3d7bff 0 65%,#22c58b 0 80%,#ff9f1c 0);-webkit-mask:radial-gradient(circle,transparent 34%,#000 35%);mask:radial-gradient(circle,transparent 34%,#000 35%)}
-.duo{display:flex;gap:16px;align-items:center}
-.flow{display:flex;gap:5px;align-items:center;font:600 11px var(--ui)}
-.flow span{border:2px solid var(--ink);border-radius:8px;padding:2px 7px}
-.flow span:last-child{background:var(--ink);color:var(--c)}
-.ring{width:60px;height:60px;border-radius:50%;background:conic-gradient(var(--ink) 0 68%,rgba(27,20,48,.16) 0);display:grid;place-items:center}
-.ring span{width:46px;height:46px;border-radius:50%;background:var(--c);display:grid;place-items:center;font:600 12px var(--ui);font-variant-numeric:tabular-nums}
-.gbar{width:110px;height:13px;border-radius:99px;background:rgba(27,20,48,.16);overflow:hidden}
-.gbar i{display:block;height:100%;width:62%;background:var(--ink);border-radius:99px}
-.chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;padding:0 8px}
-.chips span{font:600 11px var(--ui);padding:3px 8px;border-radius:99px;background:var(--ink);color:var(--c)}
+/* templates */
+.tpl{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:start}
+.tpl > div:first-child{padding-top:26px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;max-width:470px}
+.chips button{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.03);border-radius:8px;padding:8px 12px;font:600 14px var(--ui);cursor:pointer}
+.chips button:hover{background:rgba(255,255,255,.1)}
+.chips button[aria-pressed="true"]{background:var(--mint);border-color:var(--mint);color:var(--ink)}
+.panel{border:1px solid rgba(255,255,255,.16);border-radius:18px;background:#0f0b20;padding:22px;box-shadow:0 40px 80px -40px #000;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.5px);background-size:18px 18px;min-height:268px}
+.panel header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px}
+.panel header b{font:800 21px var(--display);letter-spacing:-.05em}
+.panel header span{font-size:13px;color:var(--muted)}
+.samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.s{background:var(--c);color:var(--ink);border-radius:5px 16px 5px 16px;padding:14px 16px 16px;min-height:150px;font-size:14.5px}
+.s:nth-child(2n){rotate:1deg}
+.s h4{font:700 16px var(--ui)}
+.s small{display:block;font-size:12.5px;opacity:.65;margin-bottom:8px}
+.s .hw{font:400 15.5px/1.4 var(--hand);white-space:pre-line}
+.s ul{list-style:none;padding:0;display:grid;gap:2px}
+.s li::before{content:"";display:inline-block;width:11px;height:11px;border:2px solid var(--ink);border-radius:3px;margin-right:8px;vertical-align:-1px}
+.flow{display:flex;flex-wrap:wrap;gap:5px;align-items:center;font:600 12px var(--ui)}
+.flow span{border:2px solid var(--ink);border-radius:7px;padding:2px 7px}
+.flow span:last-of-type{background:var(--ink);color:var(--c)}
+.bars{display:grid;gap:4px;font:500 12px var(--ui);font-variant-numeric:tabular-nums}
+.bars div{display:grid;grid-template-columns:4.4em 1fr;gap:6px;align-items:center}
+.bars b{height:9px;border-radius:99px;background:var(--ink);display:block}
+.s .pie{margin:0 0 6px;width:52px;height:52px}
+.s .leg{justify-content:flex-start;font-size:11.5px}
 
-/* categories */
-.cats{display:flex;flex-wrap:wrap;gap:10px}
-.cat{display:flex;align-items:center;gap:9px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);font-weight:500}
-.cat i{width:12px;height:12px;border-radius:4px;background:var(--k)}
-.cat small{color:var(--muted);font-size:13px}
+/* roadmap */
+.road{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:64px;align-items:center}
+.rows{margin-top:34px;border-top:1px solid rgba(27,20,48,.22)}
+.rows div{display:grid;grid-template-columns:9.5em minmax(0,1fr);gap:16px;padding:18px 0;border-bottom:1px solid rgba(27,20,48,.22)}
+.rows dt{font-weight:700;font-size:14.5px}
+.rows dd{color:var(--ink-2);font-size:16px}
+.concept{background:#fff0a8;border:1.5px solid var(--ink);border-radius:6px 22px 6px 22px;padding:20px 22px 22px;rotate:2deg;box-shadow:8px 9px 0 #c9a6ea;max-width:480px;justify-self:center;width:100%}
+.concept header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.concept h3{font-size:20px;letter-spacing:-.05em}
+.badge{background:var(--ink);color:#fff;font:600 11.5px var(--ui);padding:4px 9px;border-radius:5px;white-space:nowrap}
+.concept p{border-radius:6px;padding:10px 12px;font-size:14.5px;line-height:1.45}
+.concept .ask{background:rgba(255,255,255,.55)}
+.concept .ans{background:#dff5d2;margin-top:10px}
+.concept small{display:block;margin-top:12px;font-weight:700;font-size:12.5px;color:#1d5b2c}
 
-/* numbers */
-.nums{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-top:34px}
-.num{border-top:2px solid var(--k,var(--mint));padding-top:12px}
-.num b{font:800 34px var(--display);letter-spacing:-.04em;display:block;font-variant-numeric:tabular-nums}
-.num span{color:var(--muted);font-size:14px}
-
-/* vision */
-.road{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;counter-reset:s}
-.step{position:relative;padding:22px 26px 22px 0;border-top:2px solid var(--line)}
-.step::before{content:"";position:absolute;top:-8px;left:0;width:14px;height:14px;border-radius:50%;background:var(--k);box-shadow:0 0 0 5px var(--desk)}
-.step.now{border-top-color:var(--mint)}
-.step em{font:600 12px var(--ui);font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--k)}
-.step h3{font-size:21px;margin:8px 0 8px}
-.step p{color:var(--muted);font-size:15.5px;max-width:34ch}
-
-.get{background:var(--mango);color:var(--ink);border-radius:8px 34px 8px 34px;padding:44px clamp(22px,5vw,56px);display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:30px;align-items:center;rotate:-.6deg;box-shadow:10px 10px 0 var(--pink)}
-.get h2{font-size:clamp(28px,4vw,44px)}
-.get p{margin-top:12px;max-width:44ch}
-.get .cta{justify-content:flex-end}
-.get .btn.go{background:var(--ink);color:#fff;box-shadow:5px 5px 0 var(--pink)}
-.get .btn.soon{border-color:rgba(27,20,48,.45);color:var(--ink)}
-footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14px;justify-content:space-between;flex-wrap:wrap}
-
-
-.start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:8px}
-.go1{border:1px solid var(--line);border-radius:18px;padding:18px 20px;background:rgba(255,255,255,.04)}
-.go1 b{font:800 15px var(--display);color:var(--k);display:block;margin-bottom:6px}
-.go1 p{color:var(--muted);font-size:15.5px}
-.faq{display:grid;gap:10px;max-width:780px}
-.faq details{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.04);padding:0 20px}
-.faq summary{cursor:pointer;list-style:none;padding:16px 0;font-weight:600;display:flex;justify-content:space-between;gap:16px;align-items:center}
+/* faq */
+.faqg{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:start}
+.faq{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:19px 0;font:700 16.5px var(--ui);display:flex;justify-content:space-between;gap:16px;align-items:center}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font:500 22px var(--ui);color:var(--mint);transition:rotate .2s}
+.faq summary::after{content:"+";font:600 22px var(--ui);color:var(--mint);transition:rotate .2s}
 .faq details[open] summary::after{rotate:45deg}
-.faq p{color:var(--muted);padding:0 0 18px;max-width:62ch}
-@media (max-width:920px){.start{grid-template-columns:1fr}.screen{transform:none}.screen iframe{aspect-ratio:4/5}}
-@media (max-width:920px){
-  .hero{grid-template-columns:1fr;padding-bottom:50px}
-  .notes{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .nums{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .road{grid-template-columns:1fr}.step{padding-right:0}
-  .get{grid-template-columns:1fr}.get .cta{justify-content:flex-start}
-  .spill{display:none}
-}
-@media (max-width:560px){.notes{grid-template-columns:1fr}.nums{grid-template-columns:repeat(2,minmax(0,1fr))}nav .links{display:none}section{padding:54px 0}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+.faq p{color:var(--muted);padding:0 0 20px;max-width:60ch}
 
+/* cta + footer */
+.get{background-color:var(--mango);background-image:radial-gradient(rgba(27,20,48,.13) 1px,transparent 1.5px);background-size:16px 16px;color:var(--ink);padding:72px 0}
+.get .wrap{display:flex;gap:28px 40px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.get h2{font-size:clamp(28px,4.4vw,52px)}
+.get p{margin-top:12px;color:#4a3d1a;font-size:17px}
+.get .acts{display:flex;gap:14px;flex-wrap:wrap}
+footer{padding:26px 0 30px}
+footer .wrap{display:flex;gap:16px 34px;align-items:center;flex-wrap:wrap}
+footer .logo{font-size:19px}
+footer .logo i{width:18px;height:18px;box-shadow:3px 3px 0 var(--pink)}
+footer .fl{display:flex;gap:10px 34px;margin-left:auto;flex-wrap:wrap}
+footer .fl a{text-decoration:none;font-size:15px;font-weight:500}
+footer .fl a:hover{color:var(--mango)}
+
+@media (max-width:980px){
+  nav .links{display:none}
+  nav{justify-content:space-between;height:66px}
+  html{scroll-padding-top:74px}
+  .band{padding:60px 0}
+  .hero{padding:44px 0 60px}
+  .hero .wrap,.tpl,.road,.faqg{grid-template-columns:minmax(0,1fr);gap:36px}
+  .tpl > div:first-child{padding-top:0}
+  .hero .lede{font-size:19px}
+  .cards{grid-template-columns:minmax(0,1fr);max-width:520px}
+  .spill{display:none}
+  .concept{justify-self:start}
+}
+@media (max-width:620px){
+  body{font-size:16px}
+  .wrap{width:calc(100% - 36px)}
+  .band{padding:48px 0}
+  .hero{padding:32px 0 46px}
+  .cta .btn{flex:1 1 auto;justify-content:center}
+  .board .bar span{display:none}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 12px;padding:26px 12px 76px}
+  .n{rotate:0deg}
+  .n.wide-only{display:none}
+  .cards{margin-top:30px}
+  .card .art{height:170px}
+  .samples{grid-template-columns:minmax(0,1fr)}
+  .s{min-height:0}.s:nth-child(2n){rotate:0deg}.s:nth-child(n+4){display:none}
+  .panel{padding:18px;min-height:0}
+  .rows div{grid-template-columns:minmax(0,1fr);gap:4px;padding:15px 0}
+  .concept{rotate:1deg}
+  .get{padding:52px 0}
+  .get .acts,.get .acts .btn{width:100%;justify-content:center}
+  footer .fl{margin-left:0;gap:10px 24px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="top"><div class="wrap">
   <nav>
     <a class="logo" href="#top"><i></i>ChipZett</a>
-    <div class="links"><a href="#notes">What notes can do</a><a href="#categories">Categories</a><a href="#vision">Vision</a><a href="#faq">Questions</a><a href="#get">Get it</a></div>
-    <a class="btn go sm" href="app/index.html">Open ChipZett</a>
+    <div class="links"><a href="#features">Features</a><a href="#templates">Templates</a><a href="#roadmap">Roadmap</a><a href="#faq">FAQ</a></div>
+    <a class="btn go" href="app/index.html">Open ChipZett <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
   </nav>
+</div></div>
 
-  <header class="hero" id="top">
-    <div>
-      <h1>Sticky notes, finally <em>alive<span class="eyes" aria-hidden="true"><b></b><b></b></span></em></h1>
-      <p class="lede">ChipZett notes talk to you, change their mood, play their own song and turn a line of text into a chart. They float on your desktop and work in your browser.</p>
-      <div class="cta">
-        <a class="btn go" href="app/index.html">Use it online</a>
-        <span class="btn soon" id="dl-top">Windows app: coming soon</span>
-      </div>
-      <div class="facts"><span>Free</span><span>No account</span><span>Notes stay on your device</span></div>
+<header class="hero" id="top"><div class="wrap">
+  <div>
+    <h1>Make a note.<br>Make it <em>yours.</em></h1>
+    <p class="lede">Sticky notes for ideas, checklists, and reminders that speak up. Give each one its own look and sound.</p>
+    <div class="cta">
+      <a class="btn go" href="app/index.html">Open ChipZett <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+      <a class="btn line" href="#templates">Explore templates</a>
+      <a class="btn line" id="dl-top" hidden>Download for Windows</a>
     </div>
-    <div class="stage">
-      <div class="spill b" aria-hidden="true">Call mom at 6</div>
-      <div class="screen">
-        <div class="bar"><i></i><i></i><i></i><span>This is the real app. Try it: drag a note, click a face.</span></div>
-        <iframe src="app/index.html" title="ChipZett Notes live demo" loading="lazy"></iframe>
-      </div>
-      <div class="spill a" aria-hidden="true">Rent due on the 5th</div>
-    </div>
-  </header>
-
-
-  <section id="start" style="padding-top:0">
-    <div class="head">
-      <span class="kicker">Start in ten seconds</span>
-      <h2>No download. No sign-up.</h2>
-    </div>
-    <div class="start">
-      <div class="go1" style="--k:var(--mango)"><b>1. Open it</b><p>Press "Use it online". ChipZett opens right in your browser.</p></div>
-      <div class="go1" style="--k:var(--mint)"><b>2. Press Zett</b><p>Zett is the green helper in the corner. Press it to write a note or pick a ready-made one.</p></div>
-      <div class="go1" style="--k:var(--pink)"><b>3. Make it yours</b><p>Give the note a face, a mood and a song. It stays there until you tick it off.</p></div>
-    </div>
-  </section>
-  <section id="notes">
-    <div class="head">
-      <span class="kicker">What a note can do</span>
-      <h2>Not a yellow square.<br>A small helper with a face.</h2>
-      <p class="lede">Every note is its own little character. You choose how it looks, how it moves and what it sounds like.</p>
-    </div>
-    <div class="notes">
-      <article class="note" style="--c:var(--mango);--r:-2deg">
-        <div class="art"><div class="face"><b></b><b></b><u></u></div><div class="bub">Rent is due!</div></div>
-        <h3>It talks</h3><p>Click a note's face and it reads itself out loud. Pick from 9 avatars: cat, robot, alien and more.</p>
-      </article>
-      <article class="note" style="--c:var(--sky);--r:1.5deg">
-        <div class="art"><div class="rain"></div><div class="sun"></div></div>
-        <h3>It has moods</h3><p>Rain, sun, snow, stars, confetti. 12 living backgrounds that play behind your words.</p>
-      </article>
-      <article class="note" style="--c:var(--pink);--r:-1deg">
-        <div class="art"><div class="eq"><i></i><i></i><i></i><i></i><i></i></div></div>
-        <h3>It sings</h3><p>Give a note its own sound. It plays when you hover and stops when you leave. Calm music can run behind everything.</p>
-      </article>
-      <article class="note" style="--c:var(--cream);--r:2deg">
-        <div class="art"><div class="duo"><div class="pie"></div><div class="flow"><span>Idea</span>&rarr;<span>Build</span>&rarr;<span>Launch</span></div></div></div>
-        <h3>It shows</h3><p>Type "Rent 40, Food 25" and get a pie chart. Type "Idea &gt; Build &gt; Launch" and get a flow diagram. Draw or drop in a photo too.</p>
-      </article>
-      <article class="note" style="--c:var(--mint);--r:-1.5deg">
-        <div class="art"><div class="duo"><div class="ring"><span>2:58</span></div><div class="gbar"><i></i></div></div></div>
-        <h3>It remembers</h3><p>Write "remind me in 10 min" and the note counts down, then calls you. Goal notes track progress and celebrate when you finish.</p>
-      </article>
-      <article class="note" style="--c:var(--lilac);--r:1deg">
-        <div class="art"><div class="chips"><span>Work</span><span>Home</span><span>Travel</span><span>Money</span><span>Ideas</span><span>Career</span></div></div>
-        <h3>It stays organised</h3><p>11 categories and 40+ ready-made notes: meeting notes, shopping lists, trip budgets, interview prep. One click each.</p>
-      </article>
-    </div>
-    <div class="nums">
-      <div class="num" style="--k:var(--mango)"><b>9</b><span>avatars</span></div>
-      <div class="num" style="--k:var(--sky)"><b>12</b><span>moods</span></div>
-      <div class="num" style="--k:var(--pink)"><b>9</b><span>paper textures</span></div>
-      <div class="num" style="--k:var(--cream)"><b>8</b><span>fonts</span></div>
-      <div class="num" style="--k:var(--mint)"><b>11</b><span>categories</span></div>
-      <div class="num" style="--k:var(--lilac)"><b>40+</b><span>ready-made notes</span></div>
-    </div>
-  </section>
-
-  <section id="categories">
-    <div class="head">
-      <span class="kicker">Built around a real day</span>
-      <h2>One place for every kind of note in your life.</h2>
-      <p class="lede">Pick a category and see only those notes. Each one comes with notes that are already set up, so you never start from a blank square.</p>
-    </div>
-    <div class="cats">
-      <div class="cat" style="--k:#74ccff"><i></i>Work <small>email replies, meetings, tasks</small></div>
-      <div class="cat" style="--k:#ffc93c"><i></i>Home <small>shopping, chores, bills</small></div>
-      <div class="cat" style="--k:#5ef2c0"><i></i>Travel <small>packing, itinerary, budget</small></div>
-      <div class="cat" style="--k:#c6f432"><i></i>Activity <small>workouts, habits</small></div>
-      <div class="cat" style="--k:#bda4ff"><i></i>Ideas <small>sketches, pros and cons</small></div>
-      <div class="cat" style="--k:#22d3a6"><i></i>Money <small>spending, savings</small></div>
-      <div class="cat" style="--k:#ff8a3d"><i></i>Hobbies <small>lists, recipes</small></div>
-      <div class="cat" style="--k:#ff6f9c"><i></i>Reminders <small>timers</small></div>
-      <div class="cat" style="--k:#f472d0"><i></i>Dreams <small>bucket list</small></div>
-      <div class="cat" style="--k:#3d7bff"><i></i>Career <small>goals, interview prep</small></div>
-      <div class="cat" style="--k:#fff4d6"><i></i>Knowledge <small>book notes, flashcards</small></div>
-    </div>
-  </section>
-
-  <section id="vision">
-    <div class="head">
-      <span class="kicker">Where this is going</span>
-      <h2>Today a note listens. Soon it helps. Later it does the work.</h2>
-      <p class="lede">This is our plan, not a promise of dates. We are building it in the open, one step at a time.</p>
-    </div>
-    <div class="road">
-      <div class="step now" style="--k:var(--mint)"><em>Now</em><h3>Notes that are alive</h3><p>Free in your browser today, with faces, moods, songs, charts, reminders and categories. The Windows app is being finished.</p></div>
-      <div class="step" style="--k:var(--sky)"><em>Next</em><h3>Notes in your pocket</h3><p>ChipZett on your phone, with the same notes wherever you are.</p></div>
-      <div class="step" style="--k:var(--lilac)"><em>Later</em><h3>Notes that do the work</h3><p>Write a task on a note and the note becomes a helper that gets it done, and shows you its progress right on your desktop.</p></div>
-    </div>
-  </section>
-
-
-  <section id="faq">
-    <div class="head">
-      <span class="kicker">Good to know</span>
-      <h2>Questions people ask first.</h2>
-    </div>
-    <div class="faq">
-      <details><summary>Is ChipZett really free?</summary><p>Yes. There is no payment, no trial and no account. You open it and use it.</p></details>
-      <details><summary>Where are my notes saved?</summary><p>On your own device, inside the browser you are using. They are not sent to us. If you clear your browser data, the notes go with it.</p></details>
-      <details><summary>Can anyone else see my notes?</summary><p>No. Your notes never leave your device, so nobody else can open them, including us.</p></details>
-      <details><summary>Will my notes show up on my other devices?</summary><p>Not yet. A note written on your laptop stays on your laptop. Sign-in and sync across devices are planned.</p></details>
-      <details><summary>Does it work on a phone?</summary><p>It opens in a phone browser, where notes appear as a list. Dragging notes around and resizing them works best on a computer for now.</p></details>
-      <details><summary>Do the notes really talk?</summary><p>Yes. They use the voice built into your browser or computer. You can turn Sound off in the menu at any time.</p></details>
-      <details><summary>When is the Windows app coming?</summary><p>It is being finished. When it is ready, a download button will appear on this page.</p></details>
-    </div>
-  </section>
-  <section id="get">
-    <div class="get">
-      <div>
-        <h2>Try ChipZett now. It is free.</h2>
-        <p>Open it in your browser and start writing. No sign-up, no payment. Your notes are saved on your own device.</p>
-      </div>
-      <div class="cta">
-        <a class="btn go" href="app/index.html">Use it online</a>
-        <span class="btn soon" id="dl-bottom">Windows app: coming soon</span>
+    <div class="facts"><span>Free to use</span><span>No account needed</span><span>Notes saved on your device</span></div>
+  </div>
+  <div class="stage">
+    <div class="spill b" aria-hidden="true">Pick up fresh flowers</div>
+    <div class="board">
+      <div class="bar"><i></i><i></i><i></i><b>ChipZett preview</b><span>Tick a task or press a face.</span></div>
+      <div class="grid" id="board">
+        <div class="n lined" style="--c:#ffc93c;--r:-1.5deg" data-say="Launch checklist. 1 of 3 done. Left: Approve launch copy, Share the update.">
+          <span class="tag">Work</span>
+          <div class="nt"><button type="button" class="fc" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <h4>Launch checklist</h4>
+          <ul><li><label><input type="checkbox" checked><span>Review homepage</span></label></li><li><label><input type="checkbox"><span>Approve launch copy</span></label></li><li><label><input type="checkbox"><span>Share the update</span></label></li></ul>
+          <div class="more">+ one more task</div>
+        </div>
+        <div class="n" style="--c:#bda4ff;--r:1.5deg" data-say="Remember: Weekend idea. A photo walk at sunrise. Pick a route and bring the camera.">
+          <span class="tag">Ideas</span>
+          <div class="nt"><button type="button" class="fc f-cool" aria-label="Hear this note"><span class="eye"></span><span class="eye"></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <p class="hw">Weekend idea<br>A photo walk at sunrise. Pick a route and bring the camera.</p>
+        </div>
+        <div class="n" style="--c:#ff6f9c;--r:-1deg" id="timer" data-say="Stretch break.">
+          <span class="tag">Reminders</span>
+          <div class="nt"><button type="button" class="fc f-robot" aria-label="Hear this note"><span class="eye"></span><span class="eye"></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="tm"><div class="ring" id="ring"><span id="clock">9:58</span></div><b>Stretch break</b></div>
+        </div>
+        <div class="n dots wide-only" style="--c:#5ef2c0;--r:1deg" id="goal" data-say="">
+          <span class="tag">Activity</span>
+          <div class="nt"><button type="button" class="fc f-cat" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <h4>Move 5 days this week</h4>
+          <div class="gb"><i id="gbar"></i></div>
+          <div class="pm"><button type="button" id="gm" aria-label="One less">−</button><span id="gtxt">3 / 5 (60%)</span><button type="button" id="gp" aria-label="One more">+</button></div>
+        </div>
+        <div class="n sq" style="--c:#fff4d6;--r:-1deg" data-say="Trip budget. The biggest share is Flights, 45 percent.">
+          <span class="tag">Travel</span>
+          <div class="nt"><button type="button" class="fc f-one" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye"></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <h4>Trip budget</h4>
+          <div class="pie"></div>
+          <div class="leg"><span><i style="background:#ff4d6d"></i>Flights 45%</span><span><i style="background:#3d7bff"></i>Hotel 35%</span><span><i style="background:#22c58b"></i>Food 20%</span></div>
+        </div>
+        <div class="n wide-only" style="--c:#74ccff;--r:2deg" data-say="Remember: Book takeaway. Build the habit around something you already do.">
+          <span class="tag">Knowledge</span>
+          <div class="nt"><button type="button" class="fc" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <p class="hw">Book takeaway<br>Build the habit around something you already do.</p>
+        </div>
+        <div class="zb" aria-hidden="true"><span class="fc"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></span></div>
       </div>
     </div>
-  </section>
+    <div class="spill a" aria-hidden="true">Practice guitar at 7</div>
+  </div>
+</div></header>
 
-  <footer><span>ChipZett Notes &middot; <a href="privacy.html">Privacy</a></span><span>Made for people who forget things and like a little fun.</span></footer>
-</div>
+<section class="band paper" id="features"><div class="wrap">
+  <h2>What can a sticky note do?</h2>
+  <p class="lede">Read something back to you, turn plans into checklists, or change its mood to match yours.</p>
+  <div class="cards">
+    <article class="card">
+      <div class="art dotbg" style="--a:#f9c84a">
+        <div class="mini" data-say="Time for a stretch break."><button type="button" class="fc" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><p class="hw">Time for a stretch break</p></div>
+        <span class="hint">Press the face</span>
+      </div>
+      <div class="txt"><h3>Hear your reminders</h3><p>Press a note's face to hear it read aloud. Add a countdown when you want a reminder at a specific time.</p></div>
+    </article>
+    <article class="card">
+      <div class="art" style="--a:#c9b5ff">
+        <div class="mini list"><h4>Weekend packing</h4><ul><li><label><input type="checkbox" checked><span>Charge the camera</span></label></li><li><label><input type="checkbox"><span>Pack a rain jacket</span></label></li><li><label><input type="checkbox"><span>Save the map</span></label></li></ul></div>
+      </div>
+      <div class="txt"><h3>Give your plans a shape</h3><p>Make a checklist, track a goal, plot a budget, or map out the steps of a project.</p></div>
+    </article>
+    <article class="card">
+      <div class="art" style="--a:#a5ecd4">
+        <div class="mini" id="moodnote" style="--r:-3deg;translate:0 -10px"><p class="hw">Keep the good<br>ideas.</p></div>
+        <div class="sw" id="sw"><button type="button" style="--k:#fff0b8" aria-pressed="true" aria-label="Yellow paper"></button><button type="button" style="--k:#cfe6ff" aria-pressed="false" aria-label="Blue paper"></button><button type="button" style="--k:#ff9db8" aria-pressed="false" aria-label="Pink paper"></button></div>
+      </div>
+      <div class="txt"><h3>Make the mood yours</h3><p>Choose a face, font, paper texture, animated background, or a sound of its own.</p></div>
+    </article>
+  </div>
+</div></section>
+
+<section class="band dark" id="templates"><div class="wrap tpl">
+  <div>
+    <h2>Start with a template</h2>
+    <p class="lede">Explore 40+ ready-to-use templates across work, home, travel, and the things you do for yourself.</p>
+    <div class="chips" id="chips"></div>
+  </div>
+  <div class="panel" aria-live="polite">
+    <header><b id="pname"></b><span>Sample notes</span></header>
+    <div class="samples" id="samples"></div>
+  </div>
+</div></section>
+
+<section class="band plilac" id="roadmap"><div class="wrap road">
+  <div>
+    <h2>What's next for ChipZett</h2>
+    <dl class="rows">
+      <div><dt>Available now</dt><dd>Sticky notes, checklists, charts, and speaking reminders in your browser.</dd></div>
+      <div><dt>In development</dt><dd>A Windows app to keep your notes nearby while you work.</dd></div>
+      <div><dt>On the roadmap</dt><dd>Mobile apps, optional sync, and notes that help with a task.</dd></div>
+    </dl>
+  </div>
+  <div class="concept">
+    <header><h3>Meeting notes</h3><span class="badge">Concept preview</span></header>
+    <p class="ask">"Draft a follow-up with the decisions and next steps."</p>
+    <p class="ans">I grouped the decisions and added the owner and deadline for each action item.</p>
+    <small>Draft ready for review</small>
+  </div>
+</div></section>
+
+<section class="band dark" id="faq"><div class="wrap faqg">
+  <h2>Good to know</h2>
+  <div class="faq">
+    <details><summary>Is ChipZett free to use?</summary><p>Yes. There is no payment, no trial and no account. You open it and use it.</p></details>
+    <details><summary>Where are my notes saved?</summary><p>On your own device, inside the browser you are using. They are not sent to us. If you clear your browser data, the notes go with it.</p></details>
+    <details><summary>Who can see my notes?</summary><p>Only you. Your notes never leave your device, so nobody else can open them, including us.</p></details>
+    <details><summary>Can I use it on my phone?</summary><p>Yes. It opens in a phone browser, where notes appear as a list. Moving notes around and resizing them is for computers.</p></details>
+    <details><summary>Can I sync notes across devices?</summary><p>Not yet. A note written on your laptop stays on your laptop. Optional sync is on the roadmap.</p></details>
+    <details><summary>How do I make a note speak?</summary><p>Press its face. The note uses the voice built into your browser or device. You can turn Sound off in the menu at any time.</p></details>
+    <details><summary>Can I download the Windows app?</summary><p>Not yet. It is in development. When it is ready, a download button will appear on this page.</p></details>
+    <details><summary>How do I send feedback?</summary><p>Write to <a href="mailto:chipzett.official@gmail.com?subject=ChipZett%20feedback">chipzett.official@gmail.com</a>. Tell us what felt wrong or what you missed.</p></details>
+  </div>
+</div></section>
+
+<section class="get" id="get"><div class="wrap">
+  <div>
+    <h2>What's on your mind?</h2>
+    <p>Open ChipZett and give it a note of its own.</p>
+  </div>
+  <div class="acts">
+    <a class="btn inkbtn" href="app/index.html">Open ChipZett <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+    <a class="btn inkbtn" id="dl-bottom" hidden>Download for Windows</a>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <a class="logo" href="#top"><i></i>ChipZett</a>
+  <div class="fl"><a href="#roadmap">Roadmap</a><a href="#faq">FAQ</a><a href="privacy.html">Privacy</a><a href="mailto:chipzett.official@gmail.com?subject=ChipZett%20feedback">Feedback</a></div>
+</div></footer>
+
 <script>
-/* When the Windows installer is ready, put its link here and both buttons turn into real downloads. */
+/* When the Windows installer is ready, put its link here and a "Download for Windows" button appears in both places. */
 const DOWNLOAD_URL='';
-if(DOWNLOAD_URL)for(const id of['dl-top','dl-bottom']){const s=document.getElementById(id),a=document.createElement('a');a.className='btn ghost';a.href=DOWNLOAD_URL;a.textContent='Download for Windows';
-  if(id==='dl-bottom'){a.style.borderColor='rgba(27,20,48,.5)';a.style.background='transparent'}s.replaceWith(a)}
+if(DOWNLOAD_URL)for(const id of['dl-top','dl-bottom']){const a=document.getElementById(id);a.href=DOWNLOAD_URL;a.hidden=false}
+
+const $=s=>document.querySelector(s);
+const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+
+/* Eyes follow the pointer, like notes in the app. */
+addEventListener('pointermove',e=>{for(const x of document.querySelectorAll('[data-look]')){
+  const r=x.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=Math.hypot(dx,dy)||1,k=Math.min(1,d/140)*r.width*.2;
+  x.style.setProperty('--ex',(dx/d*k).toFixed(1)+'px');x.style.setProperty('--ey',(dy/d*k).toFixed(1)+'px')}},{passive:true});
+
+/* Press a face: the note says its line, in a bubble and with the device voice. */
+let bub=null,bubT=0;
+function speak(note,face,text){
+  if(bub)bub.remove();document.querySelectorAll('.talking').forEach(f=>f.classList.remove('talking'));clearTimeout(bubT);
+  if(note.classList.contains('n')){bub=el('div','says',text);note.append(bub)}
+  face.classList.add('talking');
+  const done=()=>{face.classList.remove('talking');if(bub){bub.remove();bub=null}};
+  bubT=setTimeout(done,Math.min(9000,1400+text.length*65));
+  try{if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-US';speechSynthesis.speak(u)}}catch(e){}
+}
+document.addEventListener('click',e=>{const f=e.target.closest('button.fc');if(!f)return;const n=f.closest('[data-say]');if(!n)return;
+  let t=n.dataset.say;
+  if(n.id==='goal')t='Move 5 days this week: '+goal+' of 5 done. '+goal*20+' percent.';
+  if(n.id==='timer')t='Stretch break. '+$('#clock').textContent+' left.';
+  const boxes=n.querySelectorAll('input[type=checkbox]');
+  if(boxes.length){const left=[...boxes].filter(b=>!b.checked).map(b=>b.nextElementSibling.textContent);t=left.length?(boxes.length-left.length)+' of '+boxes.length+' done. Left: '+left.join(', ')+'.':'All done, boss.'}
+  speak(n,f,t)});
+
+/* Preview board: a goal you can move and a countdown that runs. */
+let goal=3;const gset=()=>{$('#gbar').style.width=goal*20+'%';$('#gtxt').textContent=goal+' / 5 ('+goal*20+'%)'};
+$('#gm').onclick=()=>{goal=Math.max(0,goal-1);gset()};$('#gp').onclick=()=>{goal=Math.min(5,goal+1);gset()};
+let left=598;if(!matchMedia('(prefers-reduced-motion:reduce)').matches)setInterval(()=>{left=left>0?left-1:600;$('#clock').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');$('#ring').style.setProperty('--p',left/6+'%')},1000);
+
+/* Paper colour dots on the third feature card. */
+$('#sw').onclick=e=>{const b=e.target.closest('button');if(!b)return;for(const x of $('#sw').children)x.setAttribute('aria-pressed',x===b);$('#moodnote').style.setProperty('--c',getComputedStyle(b).getPropertyValue('--k'))};
+
+/* Templates: the same ready-made notes the app ships with. Keep in step with CATS in app/index.html. */
+const T=(text)=>({text}),L=(text,items)=>({type:'todo',text,items}),F=(data)=>({type:'flow',data}),C=(kind,data)=>({type:'chart',kind,data}),G=(text,cur,total)=>({type:'goal',text,cur,total}),R=(mins)=>({type:'timer',mins});
+const CATS=[
+['Work','#74ccff',[['Email reply','Points before you reply',T('Reply to:\nKey points:\nSend by:')],['Meeting notes','Decisions and actions',T('Meeting:\nWith:\nDecisions:\nAction items:')],['Tasks today','Tick them off',L('Today at work',['Top priority','Second task','Follow up'])],['Project steps','Flow of the work',F('Plan > Build > Review > Deliver')],['Deadline','1 hour countdown',R(60)]]],
+['Home','#ffc93c',[['Shopping list','Things to buy',L('Shopping',['Milk','Vegetables','Eggs'])],['Chores','Around the house',L('Chores',['Laundry','Clean the kitchen'])],['Bills to pay','Do not miss a date',L('Bills',['Electricity','Internet','Rent'])],['Family note','A message for home',T('For the family:')]]],
+['Travel','#5ef2c0',[['Trip plan','Steps of the trip',F('Book tickets > Pack > Travel > Explore > Return')],['Packing list','Nothing left behind',L('Packing',['Passport or ID','Charger','Clothes','Medicines'])],['Itinerary','Day by day',T('Day 1:\nDay 2:\nDay 3:')],['Trip budget','Where the money goes',C('bar','Flights 300, Hotel 250, Food 120, Fun 80')]]],
+['Activity','#c6f432',[['Workout',"Today's session",L('Workout',['Warm up','Main workout','Stretch'])],['Habit streak','Days done this month',G('Habit streak',0,30)],['Weekly steps','Compare your days',C('bar','Mon 6000, Tue 8000, Wed 5000, Thu 9000')]]],
+['Ideas','#bda4ff',[['Idea','Catch it before it goes',T('Idea:\nWhy it matters:\nFirst step:')],['Sketch','Draw it out',{type:'doodle'}],['Pros and cons','Think it through',T('Pros:\n+\n+\nCons:\n-\n-')]]],
+['Money','#22d3a6',[['Monthly spending','Pie chart of costs',C('pie','Rent 40, Food 25, Fun 15, Savings 20')],['Savings goal','Track your progress',G('Savings',2500,10000)],['Expense log','What you spent today',T('Today I spent:')],['Payments due','Tick when paid',L('Payments due',['Credit card','Subscription'])]]],
+['Hobbies','#ff8a3d',[['Watch or read list','For your free time',L('To watch or read',['A movie','A book','A show'])],['Practice goal','Hours you put in',G('Practice hours',3,20)],['Recipe','Ingredients and steps',T('Recipe:\nIngredients:\nSteps:')]]],
+['Reminders','#ff6f9c',[['In 5 minutes','Quick nudge',R(5)],['In 30 minutes','Half an hour',R(30)],['In 1 hour','One hour from now',R(60)],['Do not forget','A plain reminder',T('Do not forget:')]]],
+['Dreams','#f472d0',[['My dream','Write it down',T('My dream:\nBy when:\nFirst small step:')],['Bucket list','Things to do in life',L('Bucket list',['A place to see','A thing to learn'])],['Dream progress','Steps taken so far',G('Dream progress',1,10)]]],
+['Career','#3d7bff',[['Career goal','Where you are heading',G('Career goal',2,10)],['Skills to learn','Next on your list',L('Skills to learn',['Skill one','Skill two'])],['Interview prep','Be ready',L('Interview prep',['Research the company','Practise answers','Prepare questions'])],['Wins','What went well',T('Wins this week:')]]],
+['Knowledge','#fff4d6',[['Learning note','Key points of a topic',T('Topic:\nKey points:\n1.\n2.\n3.')],['Book notes','Big idea and a quote',T('Book:\nBig idea:\nQuote:')],['Quote','Words worth keeping',T('"..."\n- who said it')],['Flashcard','Question and answer',T('Q:\nA:')]]]];
+const PIE=['#ff4d6d','#3d7bff','#22c58b','#ff9f1c'],TINT=['#ffc93c','#bda4ff','#5ef2c0','#ff6f9c','#74ccff'];
+const rows=d=>d.split(',').map(p=>{const m=p.trim().match(/^(.*?)\s+(\d+)$/);return{l:m[1],v:+m[2]}});
+function body(n){
+  if(n.type==='todo'){const u=el('ul');n.items.forEach(t=>u.append(el('li','',t)));return u}
+  if(n.type==='flow'){const f=el('div','flow');n.data.split(' > ').forEach((s,i)=>{if(i)f.append('→');f.append(el('span','',s))});return f}
+  if(n.type==='chart'){const r=rows(n.data);
+    if(n.kind==='bar'){const b=el('div','bars'),mx=Math.max(...r.map(x=>x.v));r.forEach(x=>{const d=el('div'),bar=el('b');bar.style.width=x.v/mx*100+'%';d.append(el('span','',x.l),bar);b.append(d)});return b}
+    const w=el('div'),p=el('div','pie'),lg=el('div','leg'),tot=r.reduce((a,x)=>a+x.v,0);let a=0;
+    p.style.background='conic-gradient('+r.map((x,i)=>{const s=a;a+=x.v/tot*100;return PIE[i]+' '+s+'% '+a+'%'}).join(',')+')';
+    r.forEach((x,i)=>{const s=el('span'),sw=el('i');sw.style.background=PIE[i];s.append(sw,x.l+' '+Math.round(x.v/tot*100)+'%');lg.append(s)});w.append(p,lg);return w}
+  if(n.type==='goal'){const w=el('div'),g=el('div','gb'),i=el('i');i.style.width=n.cur/n.total*100+'%';g.append(i);w.append(g,el('div','pm',n.cur+' / '+n.total));return w}
+  if(n.type==='timer'){const w=el('div','tm'),r=el('div','ring'),s=el('span','',n.mins+':00');r.style.setProperty('--p','100%');r.append(s);w.append(r,el('b','','Counts down, then calls you'));return w}
+  if(n.type==='doodle')return el('p','hw','A blank note to draw on by hand.');
+  return el('p','hw',n.text);
+}
+const chips=$('#chips'),samples=$('#samples');
+function show(i){const[name,,list]=CATS[i];[...chips.children].forEach((b,j)=>b.setAttribute('aria-pressed',i===j));$('#pname').textContent=name;samples.textContent='';
+  list.slice(0,4).forEach(([title,sub,n],j)=>{const s=el('div','s');s.style.setProperty('--c',TINT[(i+j)%TINT.length]);s.append(el('h4','',title),el('small','',sub),body(n));samples.append(s)})}
+CATS.forEach(([name],i)=>{const b=el('button','',name);b.type='button';b.onclick=()=>show(i);chips.append(b)});
+show(0);
 </script>
 </body>
 </html>
