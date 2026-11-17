@@ -518,6 +518,28 @@ body.w-light.ws .board{scrollbar-color:rgba(27,20,48,.3) transparent}
 body.w-light .wtabs .more{background:rgba(27,20,48,.75)}
 body.v-tidy .board{gap:48px 34px;padding:128px 56px 190px 124px}
 @media (max-width:720px){.wset{left:10px;right:10px;width:auto;bottom:10px;transform:none;z-index:12}.wmode{display:flex;left:12px;bottom:auto;top:54px;padding:7px 11px}body.ws.v-tidy .board{gap:34px}}
+
+/* ---- profile card: the desks live inside the name tag, so the top of the wall stays clear ---- */
+.wtag{width:214px}
+.wtag .wdesks{position:static;transform:none;display:flex;flex-wrap:wrap;gap:4px;padding:7px 10px 2px}
+.wtag .wdesks:empty{display:none}
+.wtag .wdesks button{flex:1 1 auto;font:600 11.5px var(--ui);padding:6px 6px!important;border-radius:8px;background:rgba(27,20,48,.08);color:#1b1430;box-shadow:none}
+.wtag .wdesks button:hover{background:rgba(27,20,48,.16)}
+.wtag .wdesks button[aria-pressed=true]{background:#1b1430;color:#fff4d6}
+.wtag .wdesks .spark{flex-basis:100%;margin-left:0;justify-content:center;background:transparent;color:#0b6f52;box-shadow:inset 0 0 0 1.5px #12a67a}
+.wtag .wdesks .spark[aria-pressed=true]{background:var(--mint);color:#1b1430;box-shadow:none}
+@media (min-width:721px){body.has-profile .wtape{max-width:calc(100% - 380px)!important}body.has-profile.v-tidy .board{padding-top:192px}}
+@media (max-width:720px){.wtag{width:176px}body.has-profile .wtabs{top:166px}body.has-profile.ws .board{padding-top:214px!important}}
+/* ---- Work desk: same notes, a calmer and straighter look for the office ---- */
+body.d-pro .note{transform:none;animation:none}
+body.d-pro .paper{box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 10px 22px -12px rgba(0,0,0,.6)}
+body.d-pro .note.is-agent .paper{box-shadow:0 0 0 2px var(--mint),0 10px 22px -12px rgba(0,0,0,.6)}
+body.d-pro .wtape{transform:none;clip-path:none;border-radius:9px;background:#f3efff;font:600 14px var(--ui);padding:9px 16px}
+body.d-pro .wtape[aria-pressed=true]{background:var(--mint)}
+body.d-pro .wtag,body.d-pro .wpad,body.d-pro .wset{transform:none}
+body.d-pro .wpad:hover{transform:translateY(-5px)}
+body.d-pro .wpad span{font:700 15px var(--ui)}
+body.d-pro.v-tidy .board{gap:34px 26px}
 </style>
 </head>
 <body>
@@ -1120,7 +1142,7 @@ function wsBuild(){
   ti.id='wname';ti.maxLength=18;ti.autocomplete='off';ti.placeholder=L('write your name','apna naam likho');ti.setAttribute('aria-label','Your name');ti.value=PROFILE?PROFILE.name:'';
   tb.append(tf,ti);tag.append(el('div','wth',L("HELLO, I'M","HELLO, MAIN HOON")),tb,el('div','wts',L('Saved on this device only','Sirf is device pe save')));
   const desks=el('div','wdesks'),tabs=el('div','wtabs'),pads=el('div','wpads'),mode=el('button','wmode'),empty=el('div','wempty');mode.type='button';
-  B.append(tape,tag,desks,tabs,pads,mode,empty);wsEls={tape,tf,ti,desks,tabs,pads,mode,empty};
+  tag.append(desks);B.append(tape,tag,tabs,pads,mode,empty);wsEls={tape,tf,ti,desks,tabs,pads,mode,empty};
   const FACES=AVS.map(a=>a[0]).filter(k=>k!=='none');
   const saveP=()=>{try{PROFILE?localStorage.setItem('chipzett-profile',JSON.stringify(PROFILE)):localStorage.removeItem('chipzett-profile')}catch(e){}};
   ti.onchange=()=>{const v=ti.value.trim(),had=!!PROFILE;
@@ -1163,9 +1185,9 @@ function wsRender(){
   if(bits.length===1)bits.push(L(`${notes.length} notes on your wall`,`deewar pe ${notes.length} notes`));
   tape.textContent=bits.join('  ·  ');tape.setAttribute('aria-pressed',WS.daily);tape.title=L('Show only today\'s lists, reminders and goals','Sirf aaj ki lists, reminders aur goals dikhao');
   desks.textContent='';
-  if(PROFILE){[['',L('Everything','Sab kuch')],['personal',L('Home desk','Ghar ka desk')],['work',L('Work desk','Kaam ka desk')]].forEach(([k,t])=>{const b=el('button',null,t);b.type='button';b.setAttribute('aria-pressed',WS.space===k);b.onclick=()=>{WS.space=k;applyFilter()};desks.append(b)});
+  if(PROFILE){[['',L('All','Sab'),L('Every note','Saare notes')],['personal',L('Home','Ghar'),L('Home desk: personal notes','Ghar ka desk: personal notes')],['work',L('Work','Kaam'),L('Work desk: a calmer look for the office','Kaam ka desk: office ke liye shaant look')]].forEach(([k,t,tip])=>{const b=el('button',null,t);b.type='button';b.title=tip;b.setAttribute('aria-pressed',WS.space===k);b.onclick=()=>{WS.space=k;applyFilter()};desks.append(b)});
     const sp=el('button','spark');sp.type='button';sp.innerHTML=AG_ICON.act;sp.append(document.createTextNode(L('Agentic only','Sirf agentic')));sp.setAttribute('aria-pressed',WS.agent);sp.onclick=()=>{WS.agent=!WS.agent;applyFilter()};desks.append(sp)}
-  B.classList.toggle('has-profile',!!PROFILE);B.classList.toggle('d-work',WS.space==='work'&&BG==='night');B.classList.toggle('d-personal',WS.space==='personal'&&BG==='night');
+  B.classList.toggle('has-profile',!!PROFILE);B.classList.toggle('d-pro',WS.space==='work');B.classList.toggle('d-work',WS.space==='work'&&BG==='night');B.classList.toggle('d-personal',WS.space==='personal'&&BG==='night');
   tabs.textContent='';const pool=notes.filter(n=>(!WS.space||spaceOf(n)===WS.space)&&(!WS.agent||n.agent)&&(!WS.daily||DAILY.has(n.type)));
   const tab=(k,name,col,c)=>{const b=el('button',null,name);b.type='button';b.style.setProperty('--k',col);b.style.color=inkFor(col,'plain');b.setAttribute('aria-pressed',activeCat===k);if(c)b.append(el('b',null,String(c)));b.onclick=()=>{activeCat=k;applyFilter();save()};tabs.append(b)};
   tab('',L('All','Sab'),'#f3efff',pool.length);let hiddenTabs=0;
