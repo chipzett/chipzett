@@ -267,12 +267,12 @@ footer .fl a:hover{color:var(--mango)}
 .pie.draw{background:conic-gradient(#ff4d6d 0 min(162deg,var(--sw)),#3d7bff 0 min(288deg,var(--sw)),#22c58b 0 var(--sw),transparent 0);animation:sweep 1.400s .5s cubic-bezier(.3,.7,.2,1) backwards}
 @keyframes sweep{from{--sw:0deg}}
 /* agentic note */
-.n.agn{box-shadow:0 0 0 1.500px var(--mint),0 0 34px -6px rgba(94,242,192,.55),0 20px 36px -20px rgba(0,0,0,.8)}
-.agb{position:absolute;top:-10px;left:12px;background:var(--mint);color:var(--ink);font:700 10px var(--ui);letter-spacing:.03em;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.stage .n.agn{box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 0 40px -8px rgba(94,242,192,.6),0 20px 36px -20px rgba(0,0,0,.8)}
+.agb{position:absolute;top:-10px;left:12px;background:var(--ink);color:var(--mint);font:700 10px var(--ui);letter-spacing:.03em;padding:3px 9px;border-radius:99px;white-space:nowrap}
 .agseg{display:flex;gap:6px;margin:11px 0 9px}
 .agseg span{flex:1;text-align:center;font:600 12px var(--ui);padding:5px 0;border-radius:8px;box-shadow:inset 0 0 0 1.500px rgba(27,20,48,.35);transition:background .2s,color .2s}
-.agseg .on{background:var(--ink);color:#ffe08a;box-shadow:none}
-.agchat{display:flex;flex-direction:column;justify-content:flex-end;gap:6px;flex:1 1 150px;min-height:150px;overflow:hidden;font:500 12.500px/1.35 var(--ui)}
+.agseg .on{background:var(--ink);color:var(--mint);box-shadow:none}
+.agchat{display:flex;flex-direction:column;justify-content:flex-end;gap:6px;flex:1 1 132px;min-height:132px;overflow:hidden;font:500 12.500px/1.35 var(--ui)}
 .agchat .q{align-self:flex-end;max-width:88%;background:var(--ink);color:#f3eeff;border-radius:11px 11px 3px 11px;padding:6px 10px;animation:up .28s cubic-bezier(.2,.8,.2,1)}
 .agchat .a{align-self:flex-start;max-width:94%;background:#fff;border-radius:11px 11px 11px 3px;padding:6px 10px;box-shadow:0 8px 16px -10px rgba(0,0,0,.5);min-height:29px}
 .agchat .dots3{display:flex;gap:4px;align-items:center}
@@ -290,27 +290,32 @@ footer .fl a:hover{color:var(--mango)}
 @keyframes caret{50%{opacity:0}}
 .agin b{width:24px;height:24px;border-radius:7px;background:var(--ink);color:var(--mint);display:grid;place-items:center;flex:none}
 .agin b svg{width:12px;height:12px}
+.agsug{display:flex;flex-wrap:wrap;gap:5px}
+.agsug span{font:500 11.5px var(--ui);padding:3px 9px;border-radius:99px;background:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(27,20,48,.12)}
 /* little skies */
 .stage .n.day,.stage .n.night{padding-top:0;overflow:visible}
 .scene{position:relative;height:84px;margin:0 -14px 12px;border-radius:12px 12px 0 0;overflow:hidden}
 .scene i{position:absolute;display:block}
-.sky{background:linear-gradient(#8fd3ff,#ffe9b0 78%)}
+.sky{background:linear-gradient(#3f9ef5,#9bdcff 85%)}
 .sky .sun{left:50%;bottom:-6px;width:38px;height:38px;margin-left:-19px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff6c7,#ffc021 62%,#ff9d1c);box-shadow:0 0 22px 6px rgba(255,205,70,.75);animation:rise 9s ease-in-out infinite alternate}
 .sky .rays{left:50%;bottom:-36px;width:110px;height:110px;margin-left:-55px;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.55) 0 7deg,transparent 0 24deg);-webkit-mask:radial-gradient(circle,transparent 24px,#000 25px,transparent 55px);mask:radial-gradient(circle,transparent 24px,#000 25px,transparent 55px);animation:rise 9s ease-in-out infinite alternate,turn 26s linear infinite}
-@keyframes rise{from{translate:0 6px}to{translate:0 -26px}}
+@keyframes rise{from{translate:0 -4px}to{translate:0 -28px}}
 @keyframes turn{to{rotate:360deg}}
 .sky .cloud{top:14px;left:-60px;width:44px;height:13px;border-radius:99px;background:#fff;opacity:.92;box-shadow:13px -6px 0 2px #fff,26px 1px 0 -1px #fff;animation:drift 24s linear infinite}
 .sky .cloud.c2{top:34px;scale:.7;opacity:.75;animation-duration:34s;animation-delay:-15s}
 @keyframes drift{to{translate:420px 0}}
-.sky .hill{left:-10%;right:-10%;bottom:-22px;height:34px;border-radius:50%;background:color-mix(in srgb,var(--c) 84%,#fffaf0)}
+.sky .hill{left:-10%;right:-10%;bottom:-24px;height:36px;border-radius:50%;background:color-mix(in srgb,var(--c) 84%,#fffaf0)}
 .sched{display:grid;gap:3px}
 .sched span{display:flex;gap:9px}
 .sched b{font-weight:700;min-width:2.700em;font-variant-numeric:tabular-nums}
-.stage .n.night{background-color:#2a2356;color:#efeaff;box-shadow:0 1px 0 rgba(255,255,255,.12) inset,0 20px 36px -20px rgba(0,0,0,.8)}
-.n.night .tag{background:#efeaff;color:#2a2356}
+.stage .n.night{background-color:#2f2766;color:#efeaff;box-shadow:0 1px 0 rgba(255,255,255,.12) inset,0 20px 36px -20px rgba(0,0,0,.8)}
+.n.night .tag{background:var(--lilac,#bda4ff);color:var(--ink)}
+.n.night .gb{background:rgba(255,255,255,.16);margin-top:11px}
+.n.night .gb i{background:#bda4ff}
+.n.night .sched b{color:#ffe08a}
 .n.night .tools i{border-color:#efeaff}
 .n.night .fc:hover{background:rgba(255,255,255,.12)}
-.scene.dark{flex:1 1 62px;min-height:62px;background:linear-gradient(#141033,#2a2356)}
+.scene.dark{flex:1 1 60px;min-height:60px;background:linear-gradient(#17123d,#2f2766)}
 .dark .moon{right:22px;top:12px;width:26px;height:26px;border-radius:50%;background:#fff3c4;box-shadow:inset -7px -3px 0 0 #e3d38f,0 0 18px 2px rgba(255,243,196,.5);animation:floaty 6s ease-in-out infinite}
 @keyframes floaty{50%{translate:0 -4px}}
 .dark .st{width:3px;height:3px;border-radius:50%;background:#fff;animation:twk 2.400s ease-in-out infinite}
@@ -330,10 +335,17 @@ footer .fl a:hover{color:var(--mango)}
 @media (min-width:981px){
   .top .wrap,.hero .wrap{width:min(1640px,100% - 2*clamp(28px,5vw,110px))}
   .hero{min-height:min(100svh,900px);display:grid;align-items:center;padding:96px 0 36px}
-  .hero .wrap{grid-template-columns:minmax(0,6fr) minmax(0,7fr);gap:clamp(40px,4.5vw,88px)}
-  h1{font-size:clamp(36px,3.75vw,74px);line-height:1.06;text-wrap:initial}
-  .hero .lede{font-size:clamp(18px,1.2vw,21.5px);max-width:27em;margin-top:28px}
-  .hero .cta{margin-top:34px}
+  .hero .wrap{grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:clamp(36px,4vw,76px)}
+  h1{font-size:clamp(40px,4.2vw,78px);line-height:1.05;text-wrap:initial}
+  .hero .lede{font-size:clamp(18.5px,1.3vw,23px);max-width:25em;margin-top:30px}
+  .hero .cta{margin-top:36px;gap:14px}
+  .hero .cta .btn{padding:17px 28px;font-size:17px;border-radius:12px}
+  .hero .facts{margin-top:30px;font-size:15px}
+  .newpill{margin-bottom:30px;font-size:14.5px}
+}
+/* mid-size screens: the preview is drawn a little smaller so three columns still fit one screen */
+@media (min-width:1181px) and (max-width:1560px){
+  .board{zoom:.86}
 }
 @media (min-width:981px) and (max-width:1180px){
   .hero{min-height:0;padding:112px 0 64px}
@@ -447,29 +459,33 @@ footer .fl a:hover{color:var(--mango)}
           </div>
         </div>
         <div class="bcol">
-          <div class="n agn" style="--c:#cdbcff" data-say="Client meeting. They want the revised quote and a signed timeline by Friday. Budget is fixed.">
+          <div class="n agn" style="--c:#5ef2c0" data-say="Client meeting. They want the revised quote and a signed timeline by Friday. Budget is fixed.">
             <span class="agb">Agentic · Preview</span>
             <div class="nt"><button type="button" class="fc" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
             <h4>Client meeting</h4>
             <p>They want the revised quote and a signed timeline by Friday. Budget is fixed.</p>
             <div class="agseg" id="agseg" aria-hidden="true"><span data-m="ask" class="on">Ask</span><span data-m="do">Do</span></div>
+            <div class="agsug" aria-hidden="true"><span>Summarise</span><span>What is next?</span><span>Draft a reply</span></div>
             <div class="agchat" id="agchat" aria-hidden="true"></div>
             <div class="agin" aria-hidden="true"><span id="agin"></span><b><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M3.500 7.500 8 3l4.500 4.500"/></svg></b></div>
           </div>
         </div>
         <div class="bcol">
-          <div class="n day" style="--c:#ffe3a1" data-say="Morning routine. Wake up at 6 30, run at 7, plan the day at 8.">
+          <div class="n day" style="--c:#74ccff" data-say="Morning routine. Wake up at 6 30, run at 7, plan the day at 8.">
             <span class="tag">Home</span>
             <div class="scene sky" aria-hidden="true"><i class="rays"></i><i class="sun"></i><i class="cloud"></i><i class="cloud c2"></i><i class="hill"></i></div>
             <div class="nt"><button type="button" class="fc f-cool" aria-label="Hear this note"><span class="eye"></span><span class="eye"></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
             <h4>Morning routine</h4>
             <div class="sched"><span><b>6:30</b>Wake up</span><span><b>7:00</b>Run</span><span><b>8:00</b>Plan the day</span></div>
           </div>
-          <div class="n night wide-only" style="--c:#2a2356" data-say="Wind down at 10 30. No screens after that.">
+          <div class="n night wide-only" style="--c:#2f2766" data-say="Wind down. Screens off at 10, lights out at 10 30. 5 of 7 nights this week.">
             <span class="tag">Reminders</span>
             <div class="scene dark" aria-hidden="true"><i class="moon"></i><i class="st s1"></i><i class="st s2"></i><i class="st s3"></i><i class="st s4"></i><i class="st s5"></i><i class="shoot"></i></div>
             <div class="nt"><button type="button" class="fc f-cat" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
-            <h4>Wind down at 10:30</h4>
+            <h4>Wind down</h4>
+            <div class="sched"><span><b>10:00</b>Screens off</span><span><b>10:30</b>Lights out</span></div>
+            <div class="gb"><i style="width:71%"></i></div>
+            <div class="pm"><span>Sleep goal</span><span>5 / 7 nights</span></div>
           </div>
         </div>
       </div>
@@ -627,8 +643,8 @@ document.addEventListener('click',e=>{const f=e.target.closest('button.fc');if(!
  const mode=m=>[...seg.children].forEach(b=>b.classList.toggle('on',b.dataset.m===m));
  if(calm)box.append(el('div','q',S[0][1]),el('div','a',S[0][2]));
  else{const type=async(node,t,ms)=>{for(let k=1;k<=t.length;k++){node.textContent=t.slice(0,k);await wait(ms)}};
-  (async()=>{for(let i=0;;i=(i+1)%S.length){const[m,q,a,items]=S[i];mode(m);inp.textContent='';inp.classList.add('typing');
-    await wait(900);await type(inp,q,45);await wait(380);inp.classList.remove('typing');inp.textContent='';box.textContent='';
+  (async()=>{for(let i=0;;i=(i+1)%S.length){const[m,q,a,items]=S[i];inp.textContent='';inp.classList.add('typing');
+    await wait(900);await type(inp,q,45);await wait(380);inp.classList.remove('typing');inp.textContent='';box.textContent='';mode(m);
     box.append(el('div','q',q));await wait(450);
     const d=el('div','a dots3');d.append(el('i'),el('i'),el('i'));box.append(d);await wait(1100);d.remove();
     const an=el('div','a');box.append(an);await type(an,a,22);
