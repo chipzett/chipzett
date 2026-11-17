@@ -395,108 +395,91 @@ body .pal{bottom:22px}
 .agn{font:500 11px/1.3 var(--ui);color:var(--ink);opacity:.62}
 .mailb{margin-top:8px;border-radius:10px;padding:8px 12px;font:700 13px var(--ui);background:var(--ink);color:var(--tk,var(--c))}
 
-/* ---- the wall: everything on screen is paper. Tape for today, a name tag for the profile,
-   folder tabs for desks, index tabs for categories, tear-off pads for new notes. ---- */
-body.ws .board{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
-body.v-tidy .board{overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:42px 30px;padding:124px 40px 180px 112px;align-content:start;align-items:start}
-body.v-tidy .note{position:relative;left:auto!important;top:auto!important;width:100%;max-width:340px;justify-self:center;touch-action:auto}
-body.v-tidy .rz{display:none}
-body.v-tidy .head{cursor:default}
-.wtape{position:fixed;left:112px;top:20px;z-index:5;max-width:calc(100% - 350px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:700 17px var(--hand);color:#1b1430;padding:8px 24px 6px;transform:rotate(-1.2deg);background:repeating-linear-gradient(45deg,#ffc93c 0 12px,#ffd765 12px 24px);clip-path:polygon(0 0,100% 0,calc(100% - 7px) 25%,100% 50%,calc(100% - 7px) 75%,100% 100%,0 100%,7px 75%,0 50%,7px 25%);transition:transform .2s cubic-bezier(.3,1.8,.5,1)}
-.wtape:hover{transform:rotate(0deg) scale(1.02)}
-.wtape[aria-pressed=true]{background:repeating-linear-gradient(45deg,#5ef2c0 0 12px,#8ff7d6 12px 24px)}
-.wtag{position:fixed;right:20px;top:14px;z-index:6;width:186px;border-radius:10px;overflow:hidden;transform:rotate(2deg);box-shadow:0 14px 30px -12px #000;background:#fffaf0;color:#1b1430;--ink:#1b1430}
-.wth{background:var(--pink);font:800 10.5px var(--display);letter-spacing:.04em;text-align:center;padding:6px 4px 5px}
-.wtb{display:flex;align-items:center;gap:6px;padding:9px 10px 2px}
-.wtb .face{background:var(--mango);flex:none}
-.wtb input{flex:1;min-width:0;border:0;border-bottom:2px dashed rgba(27,20,48,.3);background:none;font:700 19px var(--hand);color:#1b1430;padding:2px 2px 0;outline:none}
-.wtb input::placeholder{color:rgba(27,20,48,.45);font-weight:400}
-.wtb input:focus{border-bottom-color:#1b1430}
-.wts{font:500 10.5px var(--ui);color:#5b5273;text-align:center;padding:3px 6px 7px}
-.wdesks{position:fixed;right:228px;top:0;z-index:5;display:flex;gap:6px;align-items:flex-start}
-body.has-profile .wtape{max-width:calc(100% - 850px)}
-.wdesks button{font:600 13px var(--ui);padding:9px 14px 8px;border-radius:0 0 12px 12px;background:#fff4d6;color:#1b1430;box-shadow:0 8px 18px -8px #000;white-space:nowrap;transition:padding .2s cubic-bezier(.3,1.6,.5,1)}
-.wdesks button:hover{padding-top:14px}
-.wdesks button[aria-pressed=true]{background:var(--mango);padding-top:19px}
-.wdesks .spark{background:#17122e;color:var(--mint);box-shadow:inset 0 0 0 1.5px var(--mint),0 8px 18px -8px #000;display:flex;align-items:center;gap:6px;margin-left:8px}
-.wdesks .spark svg,.spk svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linejoin:round}
-.wdesks .spark[aria-pressed=true]{background:var(--mint);color:#1b1430}
-.wtabs{position:fixed;left:0;top:108px;bottom:112px;z-index:5;display:flex;flex-direction:column;gap:5px;overflow:auto;scrollbar-width:none;padding:2px 10px 2px 0}
-.wtabs::-webkit-scrollbar{display:none}
-.wtabs button{flex:none;text-align:left;font:700 12px var(--ui);padding:7px 11px 7px 15px;border-radius:0 10px 10px 0;background:var(--k);margin-left:-9px;display:flex;gap:6px;align-items:center;box-shadow:0 6px 14px -8px #000;transition:margin .2s cubic-bezier(.3,1.6,.5,1),opacity .2s;opacity:.8;width:max-content}
-.wtabs button b{font-weight:600;opacity:.6}
-.wtabs button:hover{margin-left:-3px;opacity:1}
-.wtabs button[aria-pressed=true]{margin-left:0;opacity:1;padding-right:20px;box-shadow:0 0 0 2px #fff,0 6px 14px -8px #000}
-.wpads{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:6;display:flex;gap:22px;align-items:flex-end}
-.wpad{width:116px;min-height:80px;border-radius:5px 14px 5px 14px;padding:10px 8px 8px;display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;color:#1b1430;background:var(--pc);box-shadow:0 4px 0 var(--ps),0 8px 0 var(--pt),0 24px 30px -10px #000;transition:transform .2s cubic-bezier(.3,1.8,.5,1)}
-.wpad span{font:700 20px var(--hand);line-height:1.1}
-.wpad small{font:500 11px var(--ui);opacity:.72}
-.wpad.y{--pc:#ffc93c;--ps:#e9b32a;--pt:#cf9a18;transform:rotate(-3deg)}
-.wpad.m{--pc:#5ef2c0;--ps:#3fd6a5;--pt:#2bb98a;transform:rotate(2deg)}
-.wpad.c{--pc:#fff4d6;--ps:#e9dcb6;--pt:#d3c499;transform:rotate(-1deg);width:108px;min-height:68px}
-.wpad:hover{transform:translateY(-7px) rotate(0deg)}
-.wpad:active{transform:translateY(3px)}
-.wmode{position:fixed;left:16px;bottom:20px;z-index:6;font:600 12.5px var(--ui);padding:8px 13px;border-radius:999px;background:var(--glass);border:1px solid var(--line);color:var(--text);backdrop-filter:blur(14px)}
-.wmode:hover{background:rgba(255,255,255,.14)}
-.wempty{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:2;font:700 24px var(--hand);color:var(--muted);text-align:center;pointer-events:none;width:min(80%,520px)}
-.spk{position:absolute;top:-12px;right:14px;width:24px;height:24px;border-radius:50%;background:var(--mint);color:#1b1430;display:none;place-items:center;box-shadow:0 0 0 2px #0e0b1d,0 0 16px rgba(94,242,192,.8);z-index:2}
-.note.is-agent .spk{display:grid}
-.note:not(.is-agent) .agb,.note:not(.is-agent) .agc{display:none!important}
-.note.is-agent .paper{box-shadow:0 0 0 2px var(--mint),0 0 34px -6px rgba(94,242,192,.75),0 18px 40px -12px rgba(0,0,0,.65)}
-body.d-work::before{background:linear-gradient(rgba(116,204,255,.07) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(116,204,255,.07) 1px,transparent 1px) 0 0/44px 44px,radial-gradient(45% 40% at 78% 18%,rgba(61,123,255,.3),transparent 70%),radial-gradient(40% 36% at 14% 80%,rgba(116,204,255,.16),transparent 70%)}
-body.d-personal::before{background:radial-gradient(42% 38% at 16% 20%,rgba(255,201,60,.2),transparent 70%),radial-gradient(38% 34% at 84% 16%,rgba(255,111,156,.22),transparent 70%),radial-gradient(46% 40% at 56% 96%,rgba(189,164,255,.2),transparent 70%)}
-@media (min-width:721px) and (max-width:1180px){body.has-profile .wtape{max-width:calc(100% - 350px)}.wdesks{top:auto;bottom:118px;right:auto;left:50%;transform:translateX(-50%)}.wdesks button{border-radius:12px;padding:7px 11px!important}}
-@media (max-width:720px){
-  .wtape{left:12px;top:10px;max-width:calc(100% - 24px);font-size:15px}
-  .wtag{top:52px;right:12px;width:156px;transform:rotate(1deg)}
-  .wth,.wts{display:none}
-  .wtb{padding:6px 8px}
-  .wtb input{font-size:16px}
-  .wdesks{top:auto;bottom:108px;right:auto;left:50%;transform:translateX(-50%)}
-  body.has-profile .wtape{max-width:calc(100% - 24px)}
-  .wdesks button{border-radius:12px;padding:7px 10px!important;font-size:12px}
-  .wtabs{top:104px;bottom:auto;left:0;right:0;flex-direction:row;padding:2px 12px 6px}
-  .wtabs button{margin-left:0!important;border-radius:999px;padding:6px 11px}
-  body.ws .board{padding:152px 14px 200px!important}
-  body.ws.v-tidy .board{grid-template-columns:minmax(0,1fr)}
-  .wpads{gap:12px;bottom:14px}
-  .wpad{width:96px;min-height:66px}
-  .wpad.c{width:88px;min-height:58px}
-  .wmode{display:none}
-  body.ws .pal{bottom:96px}
-}
-
-/* ---- pen writing: a pen follows the caret while you write on a note ---- */
-.wpen{position:fixed;left:0;top:0;z-index:30;pointer-events:none;opacity:0;transition:opacity .4s,transform .1s ease-out;will-change:transform}
-.wpen.on{opacity:1}
-.wpen svg{position:absolute;left:-8px;bottom:-1px;width:16px;height:110px;transform-origin:50% 100%;transform:rotate(34deg);filter:drop-shadow(5px 9px 6px rgba(0,0,0,.45))}
-.wpen.jot svg{animation:jot .16s ease-out}
-@keyframes jot{45%{transform:rotate(30deg) translateY(-2.5px)}}
-.wpenb{left:122px}
-.wpenb[aria-pressed=true]{background:var(--mango);color:#1b1430;border-color:var(--mango)}
-@media (max-width:720px){.wpenb{display:block;left:12px;bottom:100px}}
-
-/* ---- wall settings: one paper card for layout, background and writing tool ---- */
-.wset{position:fixed;left:16px;bottom:66px;z-index:9;width:292px;max-height:calc(100% - 90px);overflow:auto;background:#fffaf0;color:#1b1430;border-radius:6px 20px 6px 20px;padding:14px 16px 16px;box-shadow:0 30px 60px -18px #000;transform:rotate(-1deg);transform-origin:0 100%;display:none;flex-direction:column;gap:8px}
-.wset.on{display:flex;animation:pop .22s cubic-bezier(.3,1.5,.5,1)}
-.wset h5{font:700 11px var(--ui);letter-spacing:.09em;text-transform:uppercase;color:#5b5273;margin-top:6px}
-.wset h5:first-child{margin-top:0}
-.wseg{display:flex;gap:6px}
-.wseg button{flex:1;font:600 13px var(--ui);padding:8px 6px;border-radius:10px;color:#1b1430;box-shadow:inset 0 0 0 1.5px rgba(27,20,48,.25)}
-.wseg button[aria-pressed=true]{background:#1b1430;color:#fff4d6;box-shadow:none}
+/* ---- workspace chrome: quiet glass controls. The notes carry the colour, the chrome stays out of the way. ---- */
+body.ws{--g:rgba(22,18,44,.8);--gl:rgba(255,255,255,.13)}
+body.ws .board{overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent}
+.ztop{position:fixed;left:0;right:0;top:0;z-index:6;display:grid;gap:8px;padding:10px 16px 12px;background:linear-gradient(rgba(12,10,26,.86),rgba(12,10,26,.6) 72%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.zrow{display:flex;align-items:center;gap:8px;min-width:0}
+.zbrand{font:800 17px var(--display);letter-spacing:-.03em;display:flex;align-items:center;gap:9px;margin-right:8px;color:#f3efff}
+.zbrand i{width:16px;height:16px;border-radius:5px 5px 5px 2px;background:var(--mango);transform:rotate(-8deg);box-shadow:3px 3px 0 var(--pink);display:block}
+.zsegw{display:flex;gap:8px;align-items:center;min-width:0}
+.zseg{display:flex;padding:3px;border-radius:11px;background:var(--g);border:1px solid var(--gl)}
+.zseg button{font:600 13px var(--ui);padding:6px 13px;border-radius:8px;color:#cfc8ea;white-space:nowrap}
+.zseg button:hover{color:#fff}
+.zseg button[aria-pressed=true]{background:#f3efff;color:#1b1430}
+.zbtn{display:inline-flex;align-items:center;gap:7px;font:600 13px var(--ui);padding:7px 12px;border-radius:10px;background:var(--g);border:1px solid var(--gl);color:#f3efff;white-space:nowrap}
+.zbtn:hover{background:rgba(52,44,96,.92)}
+.zbtn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.zbtn[aria-pressed=true]{background:var(--mint);color:#1b1430;border-color:var(--mint)}
+.zgrow{flex:1}
+.zsearch{width:190px;font:500 13px var(--ui);padding:7px 12px;border-radius:10px;background:var(--g);border:1px solid var(--gl);color:#f3efff;outline:none}
+.zsearch::placeholder{color:#9d95c0}
+.zsearch:focus{border-color:var(--mint)}
+.zme b{width:22px;height:22px;border-radius:50%;background:var(--mango);color:#1b1430;display:grid;place-items:center;font:700 11.5px var(--ui);margin:-2px 0 -2px -4px}
+.zchips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0}
+.zchips::-webkit-scrollbar{display:none}
+.zchips button{flex:none;display:flex;align-items:center;gap:6px;font:600 12.5px var(--ui);padding:5px 10px;border-radius:999px;color:#cfc8ea;border:1px solid var(--gl);background:rgba(22,18,44,.6)}
+.zchips button:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+.zchips button i{width:8px;height:8px;border-radius:3px;background:var(--k)}
+.zchips button b{font-weight:500;opacity:.6}
+.zchips button[aria-pressed=true]{background:#f3efff;color:#1b1430;border-color:#f3efff}
+.ztoday{font:500 13px var(--ui);color:#cfc8ea;white-space:nowrap;margin-left:auto;padding:4px 6px 4px 14px;border-radius:8px}
+.ztoday:hover{color:#fff}
+.ztoday[aria-pressed=true]{color:var(--mint)}
+.zbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:6;width:min(660px,calc(100% - 170px));display:flex;align-items:center;gap:4px;padding:6px;border-radius:16px;background:var(--g);border:1px solid var(--gl);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 24px 50px -20px #000}
+.zbar:focus-within{border-color:var(--mint)}
+.zbar input{flex:1;min-width:0;background:none;border:0;outline:none;color:#f3efff;font:500 15px var(--ui);padding:8px 10px}
+.zbar input::placeholder{color:#9d95c0}
+.zbar .zbtn{background:transparent;border-color:transparent;padding:8px 10px;color:#cfc8ea}
+.zbar .zbtn:hover{background:rgba(255,255,255,.1);color:#fff}
+.zbar .zbtn[aria-pressed=true]{background:var(--mint);color:#1b1430}
+.zbar .zadd{background:var(--mango);color:#1b1430;border-radius:11px;font:700 13.5px var(--ui);padding:9px 16px}
+.zbar .zadd:hover{background:#ffd765;color:#1b1430}
+.zpop{position:fixed;z-index:9;right:16px;top:58px;width:300px;background:rgba(24,19,48,.98);border:1px solid var(--gl);border-radius:16px;padding:16px;display:none;flex-direction:column;gap:10px;box-shadow:0 30px 60px -18px #000;color:#f3efff;max-height:calc(100% - 80px);overflow:auto}
+.zpop.on{display:flex;animation:pop .18s ease-out}
+.zpop h5{font:600 11px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:#9d95c0;margin-top:4px}
+.zpop h5:first-child{margin-top:0}
+.zpop p{font:500 12.5px/1.45 var(--ui);color:#b9b0d6}
+.zpop input[type=text]{font:500 15px var(--ui);padding:9px 11px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid var(--gl);color:#f3efff;outline:none;min-width:0}
+.zpop input[type=text]:focus{border-color:var(--mint)}
+.zpri{background:var(--mango);color:#1b1430;border-color:var(--mango)}
+.zpri:hover{background:#ffd765}
+.zpop .zseg{background:rgba(255,255,255,.06)}
+.zpop .zseg button{flex:1}
 .wbgs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.wbgs button{display:grid;gap:3px;justify-items:center;font:600 10.5px var(--ui);color:#1b1430}
-.wbgs i{display:block;width:100%;height:36px;border-radius:5px 12px 5px 12px;background:var(--sw);box-shadow:inset 0 0 0 1.5px rgba(27,20,48,.2)}
-.wbgs button[aria-pressed=true] i{box-shadow:0 0 0 2px #fffaf0,0 0 0 4px #1b1430}
-.wcust{display:flex;align-items:center;gap:8px;font:600 12.5px var(--ui)}
+.wbgs button{display:grid;gap:4px;justify-items:center;font:500 10.5px var(--ui);color:#cfc8ea}
+.wbgs i{display:block;width:100%;height:34px;border-radius:8px;background:var(--sw);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.wbgs button[aria-pressed=true] i{box-shadow:0 0 0 2px #181330,0 0 0 4px var(--mint)}
+.wcust{display:flex;align-items:center;gap:8px;font:500 12.5px var(--ui);color:#cfc8ea}
 .wcust input{width:34px;height:28px;border:0;padding:0;background:none;cursor:pointer}
 .wtools{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.wtools button{display:grid;gap:2px;justify-items:center;align-content:end;height:74px;padding:4px 2px 5px;border-radius:10px;font:600 10.5px var(--ui);color:#1b1430;box-shadow:inset 0 0 0 1.5px rgba(27,20,48,.2);overflow:hidden}
-.wtools button[aria-pressed=true]{background:#ffc93c;box-shadow:inset 0 0 0 2px #1b1430}
+.wtools button{display:grid;gap:2px;justify-items:center;align-content:end;height:74px;padding:4px 2px 5px;border-radius:10px;font:500 10.5px var(--ui);color:#cfc8ea;background:rgba(255,255,255,.06);overflow:hidden}
+.wtools button[aria-pressed=true]{box-shadow:inset 0 0 0 1.5px var(--mint);color:#fff}
 .wtools svg{width:7px;height:46px;transform:rotate(24deg)}
-.wtools .none{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(27,20,48,.4);margin-bottom:12px;position:relative}
-.wtools .none::after{content:"";position:absolute;left:10px;top:-2px;width:2px;height:26px;background:rgba(27,20,48,.4);transform:rotate(45deg)}
-.wpen svg{left:-5.5px;width:11px;height:74px}
+.wtools .none{width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45);margin-bottom:13px;position:relative}
+.wtools .none::after{content:"";position:absolute;left:9.2px;top:-2px;width:1.5px;height:24px;background:rgba(255,255,255,.45);transform:rotate(45deg)}
+.wempty{position:fixed;left:50%;top:46%;transform:translate(-50%,-50%);z-index:2;font:500 17px var(--ui);color:#9d95c0;text-align:center;pointer-events:none;width:min(80%,460px)}
+body.ws .blob{width:46px;height:43px}
+body.ws .pal{bottom:20px}
+/* agentic notes: a thin mint edge and a small mark */
+.spk{position:absolute;top:-10px;right:12px;width:20px;height:20px;border-radius:50%;background:var(--mint);color:#1b1430;display:none;place-items:center;box-shadow:0 0 0 2px #0e0b1d;z-index:2}
+.spk svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linejoin:round}
+.note.is-agent .spk{display:grid}
+.note:not(.is-agent) .agb,.note:not(.is-agent) .agc{display:none!important}
+.note.is-agent .paper{box-shadow:0 0 0 1.5px var(--mint),0 14px 30px -16px rgba(0,0,0,.75)}
+/* clean note style (default): straight, quiet shadow, a plain typeface. Playful brings the tilt, glow and handwriting back. */
+body.ws:not(.st-play) .note{transform:none}
+body.ws:not(.st-play) .paper{border-radius:12px;--hand:"Outfit",system-ui,sans-serif}
+body.ws:not(.st-play) .note:not(.is-agent) .paper{box-shadow:0 1px 0 rgba(255,255,255,.45) inset,0 14px 30px -16px rgba(0,0,0,.75)}
+body.ws:not(.st-play) .note.fk .body,body.ws:not(.st-play) .note.fk .ttl{font-family:var(--ui);font-size:calc(16px*var(--fs,1));line-height:1.5}
+body.ws:not(.st-play) .tx-lined{background-position:0 10px}
+body.ws:not(.st-play) .note.fk .paper li,body.ws:not(.st-play) .note.fk .paper li span,body.ws:not(.st-play) .note.fk .addi{font-family:var(--ui);font-size:calc(15.5px*var(--fs,1))}
+/* pen writing */
+.wpen{position:fixed;left:0;top:0;z-index:30;pointer-events:none;opacity:0;transition:opacity .4s,transform .1s ease-out;will-change:transform}
+.wpen.on{opacity:1}
+.wpen svg{position:absolute;left:-5.5px;bottom:-1px;width:11px;height:74px;transform-origin:50% 100%;transform:rotate(34deg);filter:drop-shadow(5px 9px 6px rgba(0,0,0,.45))}
+.wpen.jot svg{animation:jot .16s ease-out}
+@keyframes jot{45%{transform:rotate(30deg) translateY(-2.5px)}}
 /* wall backgrounds */
 body[data-bg]{background-color:var(--wb)}
 body[data-bg]::before{background:var(--wg)}
@@ -507,39 +490,23 @@ body[data-bg=aurora]{--wb:#090a1c;--wg:radial-gradient(50% 34% at 24% 20%,rgba(9
 body[data-bg=chalk]{--wb:#1f3b33;--wg:radial-gradient(60% 50% at 30% 30%,rgba(255,255,255,.07),transparent 70%),radial-gradient(50% 44% at 76% 72%,rgba(255,255,255,.05),transparent 70%)}
 body[data-bg=cork]{--wb:#b78a56;--wg:radial-gradient(rgba(90,50,12,.32) 1.2px,transparent 1.8px) 0 0/11px 11px,radial-gradient(rgba(255,255,255,.22) 1.2px,transparent 1.8px) 5px 6px/15px 15px}
 body[data-bg=paper]{--wb:#f1e8d4;--wg:radial-gradient(rgba(27,20,48,.16) 1.2px,transparent 1.7px) 0 0/22px 22px}
-body[data-bg=custom]{--wg:radial-gradient(60% 50% at 20% 15%,rgba(255,255,255,.1),transparent 70%)}
+body[data-bg=slate]{--wb:#1c1f26;--wg:none}
+body[data-bg=custom]{--wg:none}
 body.w-light .wempty{color:#5b5273}
-body.w-light .wmode{background:rgba(27,20,48,.82);color:#f3efff;border-color:transparent}
 body.w-light.ws .board{scrollbar-color:rgba(27,20,48,.3) transparent}
-/* calmer layout: fewer things on screen, more air */
-.wmode{display:flex;align-items:center;gap:7px}
-.wmode svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
-.wtabs .more{background:rgba(255,255,255,.14);color:#f3efff;backdrop-filter:blur(10px)}
-body.w-light .wtabs .more{background:rgba(27,20,48,.75)}
-body.v-tidy .board{gap:48px 34px;padding:128px 56px 190px 124px}
-@media (max-width:720px){.wset{left:10px;right:10px;width:auto;bottom:10px;transform:none;z-index:12}.wmode{display:flex;left:12px;bottom:auto;top:54px;padding:7px 11px}body.ws.v-tidy .board{gap:34px}}
-
-/* ---- profile card: the desks live inside the name tag, so the top of the wall stays clear ---- */
-.wtag{width:214px}
-.wtag .wdesks{position:static;transform:none;display:flex;flex-wrap:wrap;gap:4px;padding:7px 10px 2px}
-.wtag .wdesks:empty{display:none}
-.wtag .wdesks button{flex:1 1 auto;font:600 11.5px var(--ui);padding:6px 6px!important;border-radius:8px;background:rgba(27,20,48,.08);color:#1b1430;box-shadow:none}
-.wtag .wdesks button:hover{background:rgba(27,20,48,.16)}
-.wtag .wdesks button[aria-pressed=true]{background:#1b1430;color:#fff4d6}
-.wtag .wdesks .spark{flex-basis:100%;margin-left:0;justify-content:center;background:transparent;color:#0b6f52;box-shadow:inset 0 0 0 1.5px #12a67a}
-.wtag .wdesks .spark[aria-pressed=true]{background:var(--mint);color:#1b1430;box-shadow:none}
-@media (min-width:721px){body.has-profile .wtape{max-width:calc(100% - 380px)!important}body.has-profile.v-tidy .board{padding-top:192px}}
-@media (max-width:720px){.wtag{width:176px}body.has-profile .wtabs{top:166px}body.has-profile.ws .board{padding-top:214px!important}}
-/* ---- Work desk: same notes, a calmer and straighter look for the office ---- */
-body.d-pro .note{transform:none;animation:none}
-body.d-pro .paper{box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 10px 22px -12px rgba(0,0,0,.6)}
-body.d-pro .note.is-agent .paper{box-shadow:0 0 0 2px var(--mint),0 10px 22px -12px rgba(0,0,0,.6)}
-body.d-pro .wtape{transform:none;clip-path:none;border-radius:9px;background:#f3efff;font:600 14px var(--ui);padding:9px 16px}
-body.d-pro .wtape[aria-pressed=true]{background:var(--mint)}
-body.d-pro .wtag,body.d-pro .wpad,body.d-pro .wset{transform:none}
-body.d-pro .wpad:hover{transform:translateY(-5px)}
-body.d-pro .wpad span{font:700 15px var(--ui)}
-body.d-pro.v-tidy .board{gap:34px 26px}
+@media (max-width:860px){.zsearch{display:none}}
+@media (max-width:720px){
+  .ztop{padding:8px 10px 10px;gap:7px}
+  .zrow.r1{flex-wrap:wrap}
+  .zsegw{order:9;flex-basis:100%;overflow-x:auto;scrollbar-width:none}
+  .ztidy span,.zwall span,.zbar .zbtn span{display:none}
+  .ztoday{display:none}
+  body.ws .board{padding:104px 14px 96px!important}
+  body.ws.has-profile .board{padding-top:150px!important}
+  .zbar{width:calc(100% - 20px);bottom:10px}
+  .zpop{left:10px;right:10px;width:auto;top:52px}
+  body.ws .pal{bottom:74px}
+}
 </style>
 </head>
 <body>
@@ -694,7 +661,7 @@ const tickFor=(c,t)=>t==='night'?'#1c1b4b':t==='neon'?'#120e24':t==='glass'?'#1a
 const KEY='chipku-v1', $=s=>document.querySelector(s), board=$('#board');
 let notes=[], sound=true, zTop=10;
 let VIEW='tidy',PROFILE=null;const WS={space:'',agent:false,daily:false},DAILY=new Set(['todo','timer','goal']);
-try{VIEW=localStorage.getItem('chipzett-view')==='free'?'free':'tidy';PROFILE=JSON.parse(localStorage.getItem('chipzett-profile')||'null')}catch(e){}
+try{VIEW='free';PROFILE=JSON.parse(localStorage.getItem('chipzett-profile')||'null')}catch(e){}
 if(DESK)VIEW='free';
 const spaceOf=n=>n.space||((n.cat==='work'||n.cat==='career')?'work':'personal');
 const isHid=n=>(!!activeCat&&n.cat!==activeCat)||(!!WS.space&&spaceOf(n)!==WS.space)||(WS.agent&&!n.agent)||(WS.daily&&!DAILY.has(n.type));
@@ -737,11 +704,12 @@ function noteSays(n){
 
 /* ---------- notes ---------- */
 const dom=n=>board.querySelector(`[data-id="${n.id}"]`);
-function place(){const w=board.clientWidth,h=board.clientHeight;return{x:Math.max(10,Math.random()*(w-260)),y:Math.max(10,Math.random()*(h-240))}}
+const TOPY=DESK?0:104;
+function place(){const w=board.clientWidth,h=board.clientHeight;return{x:Math.max(10,Math.random()*(w-260)),y:board.scrollTop+TOPY+Math.max(10,Math.random()*(h-TOPY-330))}}
 function add(n,fresh){
   const ac=CATS.find(c=>c[0]===activeCat),given=n;
-  n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,rot:+(Math.random()*8-4).toFixed(1),z:++zTop},place(),n);
-  if(!('agent' in given)&&WS.agent)n.agent=true;if(!('space' in given)&&WS.space)n.space=WS.space;
+  n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,rot:DESK?+(Math.random()*8-4).toFixed(1):0,z:++zTop},place(),n);
+  if(!('agent' in given)&&(WS.agent||wsNext.agent))n.agent=true;if(!('space' in given)&&WS.space)n.space=WS.space;
   n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();return n;
 }
 
@@ -848,7 +816,7 @@ function render(n,fresh){
 }
 function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${n.y}px;z-index:${n.z};--r:${n.rot}deg;--c:${n.color};--w:${n.w||232}px;--mh:${n.mh||0}px;--ink:${n.ink||inkFor(n.color,t)};--tk:${tickFor(n.color,t)};--f:${fontOf(n.font)[2]};--fs:${(n.size||1)*fontOf(n.font)[3]};animation-delay:-${((n.rot||0)+4)/2}s`;
   const f=d.querySelector('.face');if(f)f.className='face av-'+(n.face||'classic');
-  d.style.order=-(n.z||0);d.classList.toggle('has-song',!!n.song);d.classList.toggle('hid',isHid(n));d.classList.toggle('is-agent',!!n.agent);
+  d.style.order=-(n.z||0);d.classList.toggle('has-song',!!n.song);d.classList.toggle('hid',isHid(n));d.classList.toggle('is-agent',!!n.agent);d.classList.toggle('fk',(n.font||'kalam')==='kalam');
   {const pp=d.firstChild;if(pp){let tg=pp.querySelector('.tag');const c=CATS.find(x=>x[0]===n.cat);if(c){if(!tg){tg=el('span','tag');pp.append(tg)}tg.textContent=c[1]}else if(tg)tg.remove()}}
   setSky(d,n);ANIMS.forEach(a=>d.classList.remove('an-'+a[0]));d.classList.add('an-'+(n.anim||'still'));
   const p=d.firstChild;if(p){TEX.forEach(x=>p.classList.remove('tx-'+x[0]));p.classList.add('tx-'+t)}}
@@ -870,7 +838,7 @@ function openPicker(anchor,cur,apply){
   const dice=el('button','pill','Surprise me');dice.type='button';dice.onclick=()=>{Object.assign(st,{color:rnd(COLORS),tex:rnd(TEX)[0],font:rnd(FONTS)[0],ink:'',face:rnd(AVS.slice(0,8))[0],anim:rnd(ANIMS)[0],mood:rnd(MOODS)[0]});sync()};
   p.append(el('h4',null,'Ek tap vibe'),vg,dice);
   grp('Category','pms',[['','None'],...CATS],'cat',(b,it)=>{b.className='ps';b.textContent=it[1]});
-  if('space' in st){grp('Desk','pms',[['personal',L('Home desk','Ghar ka desk')],['work',L('Work desk','Kaam ka desk')]],'space',(b,it)=>{b.className='ps';b.textContent=it[1]});
+  if('space' in st){grp('Desk','pms',[['personal',L('Personal','Personal')],['work',L('Work','Kaam')]],'space',(b,it)=>{b.className='ps';b.textContent=it[1]});
     grp('Agentic note','pms',[[false,L('Off','Band')],[true,L('On','Chalu')]],'agent',(b,it)=>{b.className='ps';b.textContent=it[1]})}
   grp('Avatar','pas',AVS,'face',(b,it)=>{b.className='pa';const f=el('span','face av-'+it[0]);f.append(el('span','eye'),el('span','eye'),el('span','mouth'));b.append(f,document.createTextNode(tr(it[1])))});
   grp('Harkat','pss',ANIMS,'anim',(b,it)=>{b.className='ps';b.textContent=tr(it[1]);b.style.fontSize='11.5px';b.style.padding='6px 2px'});
@@ -930,7 +898,7 @@ function drag(d,n,handle){
   handle.addEventListener('pointerdown',e=>{if(e.target.closest('button')||isPhone())return;on=true;sx=e.clientX;sy=e.clientY;ox=n.x;oy=n.y;lx=e.clientX;
     n.z=++zTop;d.style.zIndex=n.z;d.classList.remove('glide');d.classList.add('drag');handle.setPointerCapture(e.pointerId)});
   handle.addEventListener('pointermove',e=>{if(!on)return;
-    n.x=Math.min(board.clientWidth-60,Math.max(-120,ox+e.clientX-sx));n.y=Math.min(board.clientHeight-50,Math.max(0,oy+e.clientY-sy));
+    n.x=Math.min(board.clientWidth-60,Math.max(-120,ox+e.clientX-sx));n.y=DESK?Math.min(board.clientHeight-50,Math.max(0,oy+e.clientY-sy)):Math.max(TOPY,oy+e.clientY-sy);
     const v=Math.max(-14,Math.min(14,(e.clientX-lx)*1.2));lx=e.clientX;d.style.left=n.x+'px';d.style.top=n.y+'px';d.style.setProperty('--r',(n.rot+v)+'deg')});
   const end=()=>{if(!on)return;on=false;d.classList.remove('drag');d.style.setProperty('--r',n.rot+'deg');save()};
   handle.addEventListener('pointerup',end);handle.addEventListener('pointercancel',end);
@@ -1049,7 +1017,7 @@ function parse(raw){
 }
 $('#capf').onsubmit=e=>{e.preventDefault();const i=$('#cap');if(!i.value.trim())return;
   const n=parse(i.value);i.value='';
-  if(!isPhone()){const w=board.clientWidth,h=board.clientHeight;n.x=w/2-116+(Math.random()*240-120);n.y=Math.max(10,h-300-Math.random()*120)}
+  if(!isPhone()){const w=board.clientWidth,h=board.clientHeight;n.x=w/2-116+(Math.random()*240-120);n.y=board.scrollTop+Math.max(TOPY+10,h-380-Math.random()*120)}
   add(n,true);
   pal(n.type==='timer'?L(`Okay, I will shout in ${fmt(n.total)}.`,`Theek hai, ${fmt(n.total)} baad chillaunga.`):n.type==='todo'?L(`Made a list of ${n.items.length} tasks.`,`${n.items.length} kaam ki list bana di.`):rnd(['Chipka diya!','Note pakad liya, tension mat le.','Likh liya boss.']));
 };
@@ -1068,8 +1036,8 @@ $('#lang').textContent=tr(LANG==='hi'?'Hinglish':'English');$('#lang').setAttrib
 $('#lang').onclick=()=>{try{localStorage.setItem('chipku-lang',LANG==='hi'?'en':'hi')}catch(e){}location.reload()};
 $('#snd').onclick=e=>{sound=!sound;e.target.textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));e.target.setAttribute('aria-pressed',sound);if(!sound)try{speechSynthesis.cancel()}catch(x){}else pal('Main wapas aa gaya.');save()};
 $('#search').oninput=e=>{const q=e.target.value.toLowerCase();for(const n of notes){const s=(n.text+' '+(n.data||'')+' '+(n.items||[]).map(i=>i.t).join(' ')).toLowerCase();dom(n)?.classList.toggle('dim',!!q&&!s.includes(q))}};
-$('#tidy').onclick=()=>{const w=board.clientWidth,cw=Math.max(...notes.map(n=>n.w||232),232)+20,cols=Math.max(1,Math.floor((w-20)/cw)),off=(w-cols*cw)/2+10,hs=Array(cols).fill(14);
-  notes.filter(n=>!activeCat||n.cat===activeCat).forEach((n,i)=>{const c=hs.indexOf(Math.min(...hs)),d=dom(n);n.x=off+c*cw;n.y=hs[c];hs[c]+=d.offsetHeight+18;n.rot=+(Math.random()*4-2).toFixed(1);
+$('#tidy').onclick=()=>{const w=board.clientWidth,cw=Math.max(...notes.map(n=>n.w||232),232)+20,cols=Math.max(1,Math.floor((w-20)/cw)),off=(w-cols*cw)/2+10,hs=Array(cols).fill(TOPY+14);board.scrollTop=0;
+  notes.filter(n=>!isHid(n)).forEach((n,i)=>{const c=hs.indexOf(Math.min(...hs)),d=dom(n);n.x=off+c*cw;n.y=hs[c];hs[c]+=d.offsetHeight+18;n.rot=+(Math.random()*4-2).toFixed(1);
     d.classList.add('glide');d.style.transitionDelay=i*45+'ms';paint(d,n);d.style.transitionDelay=i*45+'ms';setTimeout(()=>{d.classList.remove('glide');d.style.transitionDelay=''},900+i*45)});
   save();pal(rnd(['Lo, sab line mein.','Saaf safai ho gayi.']))};
 const TIPS=['Likho: remind me in 10 min stretch karo. Main yaad dila dunga.','List chahiye? Likho: todo: doodh, bread, anda.','Kisi note ke chehre pe click karo, woh khud bolega.','Kaam ho gaya? Tick dabao aur confetti dekho.','Notes ko pakad ke kahin bhi ghumao.','Text select karo, styling toolbar khud aa jayega.','Note ke neeche-right kone ko kheencho, size badal jayega.','Hara + dabao: pie chart, flow diagram, doodle, photo sab milega.','Photo seedha paste ya drag karke bhi chipka sakte ho.','Note ka rangeen gol button dabao, phir Mood tab: baarish, dhoop, barf, party.','Har note ka apna gaana ho sakta hai. Picker mein Gaana chuno, phir note pe cursor lao.','Upar Music dabao: baarish, samundar ya apna gaana peeche chalao.','Picker mein Avatar chuno: billi, robot, alien, jo mann kare.','Rangeen gol button dabao aur ek tap mein poora vibe badlo.'];
@@ -1154,7 +1122,7 @@ function tick(){cx.clearRect(0,0,fx.width,fx.height);bits=bits.filter(p=>p.l-->0
 
 /* wall backgrounds and writing tools */
 const WBG=[['night',L('Night','Raat'),'linear-gradient(140deg,#2a1f55,#0e0b1d 60%)'],['blue',L('Blueprint','Blueprint'),'linear-gradient(140deg,#1f4fc0,#0b1430 70%)'],['sunset',L('Sunset','Shaam'),'linear-gradient(165deg,#241038,#6a2450 52%,#c85a3c)'],['aurora',L('Aurora','Aurora'),'linear-gradient(120deg,#5ef2c0,#bda4ff 50%,#ff6f9c)'],
-  ['forest',L('Forest','Jungle'),'linear-gradient(140deg,#1d5a48,#0c1f1a 70%)'],['chalk',L('Chalkboard','Blackboard'),'#1f3b33'],['cork',L('Cork','Cork'),'#b78a56'],['paper',L('Paper','Kaagaz'),'#f1e8d4']];
+  ['slate',L('Slate','Slate'),'#1c1f26'],['forest',L('Forest','Jungle'),'linear-gradient(140deg,#1d5a48,#0c1f1a 70%)'],['chalk',L('Chalkboard','Blackboard'),'#1f3b33'],['paper',L('Paper','Kaagaz'),'#f1e8d4']];
 const WTOOLS=[['',L('None','Kuch nahi')],['fountain',L('Fountain','Fountain')],['pencil',L('Pencil','Pencil')],['marker',L('Marker','Marker')],['ball',L('Ballpoint','Ball pen')]];
 const PENSVG={
   fountain:'<svg viewBox="0 0 16 110"><polygon points="8,110 3.500,93 12.500,93" fill="#f3d27a"/><path d="M8 110V99" stroke="#1b1430" stroke-width=".8"/><rect x="3" y="70" width="10" height="23" rx="2" fill="#1b1430"/><rect x="2.500" y="65" width="11" height="5" rx="1" fill="#ffc93c"/><rect x="3" y="12" width="10" height="53" rx="3" fill="#2b2350"/><rect x="11" y="16" width="2.200" height="30" rx="1" fill="#ffc93c"/><rect x="4" y="4" width="8" height="10" rx="3" fill="#ffc93c"/></svg>',
@@ -1167,74 +1135,94 @@ function setBg(v,quiet){BG=v;const B=document.body,hex=/^#[0-9a-f]{6}$/i.test(v)
   else if(hex){B.dataset.bg='custom';B.style.setProperty('--wb',v)}else{B.dataset.bg=v;B.style.removeProperty('--wb')}
   const lum=hex?(c=>.299*parseInt(c.slice(1,3),16)+.587*parseInt(c.slice(3,5),16)+.114*parseInt(c.slice(5,7),16))(v):(v==='paper'||v==='cork'?200:0);
   B.classList.toggle('w-light',lum>150);try{localStorage.setItem('chipzett-bg',BG)}catch(e){}if(!quiet)wsRender()}
-/* ---------- the wall ---------- */
-let wsEls=null;
+/* ---------- workspace chrome ---------- */
+let wsEls=null,STYLE='clean';const wsNext={agent:false};
+try{STYLE=localStorage.getItem('chipzett-style')==='play'?'play':'clean'}catch(e){}
+const ZI={tidy:'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>',
+  wall:'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4.500h7M12.500 4.500H14M2 11.500h1.500M7 11.500h7"/><circle cx="10.700" cy="4.500" r="1.800"/><circle cx="5.200" cy="11.500" r="1.800"/></svg>',
+  bolt:'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1.500L3.500 9H8l-1 5.500L12.500 7H8z"/></svg>',
+  tpl:'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.500" y="2.500" width="11" height="11" rx="2"/><path d="M5.500 6h5M5.500 8.500h5M5.500 11h3"/></svg>',
+  user:'<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.500" r="2.700"/><path d="M2.800 13.500c.8-2.600 2.800-3.800 5.200-3.800s4.400 1.200 5.200 3.800"/></svg>'};
 function wsBuild(){
-  const B=document.body;B.classList.add('ws','v-'+VIEW);
-  const tape=el('button','wtape'),tag=el('div','wtag'),tb=el('div','wtb'),tf=el('button','face av-'+((PROFILE&&PROFILE.face)||'classic')),ti=document.createElement('input');
-  tape.type='button';tf.type='button';tf.setAttribute('aria-label','Change avatar');tf.append(el('span','eye'),el('span','eye'),el('span','mouth'));
-  ti.id='wname';ti.maxLength=18;ti.autocomplete='off';ti.placeholder=L('write your name','apna naam likho');ti.setAttribute('aria-label','Your name');ti.value=PROFILE?PROFILE.name:'';
-  tb.append(tf,ti);tag.append(el('div','wth',L("HELLO, I'M","HELLO, MAIN HOON")),tb,el('div','wts',L('Saved on this device only','Sirf is device pe save')));
-  const desks=el('div','wdesks'),tabs=el('div','wtabs'),pads=el('div','wpads'),mode=el('button','wmode'),empty=el('div','wempty');mode.type='button';
-  tag.append(desks);B.append(tape,tag,tabs,pads,mode,empty);wsEls={tape,tf,ti,desks,tabs,pads,mode,empty};
-  const FACES=AVS.map(a=>a[0]).filter(k=>k!=='none');
+  const B=document.body;B.classList.add('ws');
+  const zb=(cls,icon,label)=>{const b=el('button','zbtn '+cls);b.type='button';b.innerHTML=icon||'';if(label)b.append(el('span',null,label));return b};
+  const top=el('div','ztop'),r1=el('div','zrow r1'),r2=el('div','zrow'),brand=el('div','zbrand'),segw=el('div','zsegw'),seg=el('div','zseg'),ag=zb('zag',ZI.bolt,L('Agentic','Agentic')),
+    search=document.createElement('input'),tidy=zb('ztidy',ZI.tidy,L('Tidy up','Saaf karo')),wall=zb('zwall',ZI.wall,L('Appearance','Roop')),me=zb('zme','',''),chips=el('div','zchips'),today=el('button','ztoday'),empty=el('div','wempty');
+  brand.append(el('i'),document.createTextNode('ChipZett'));today.type='button';
+  search.className='zsearch';search.type='search';search.id='zsearch';search.placeholder=L('Search notes','Notes dhoondo');search.setAttribute('aria-label','Search notes');
+  search.oninput=()=>{const o=$('#search');o.value=search.value;o.dispatchEvent(new Event('input'))};
+  segw.append(seg,ag);r1.append(brand,segw,el('div','zgrow'),search,tidy,wall,me);r2.append(chips,today);top.append(r1,r2);
+  /* command bar */
+  const bar=document.createElement('form'),inp=document.createElement('input'),bAg=zb('zbag',ZI.bolt,L('Agentic','Agentic')),bTp=zb('',ZI.tpl,L('Templates','Templates')),bAdd=el('button','zbtn zadd',L('Add note','Note banao'));
+  bar.className='zbar';bar.autocomplete='off';inp.id='zcap';inp.placeholder=L('Write a note','Note likho');inp.setAttribute('aria-label','New note');
+  bAg.title=L('Make the next note agentic: it can Ask and Do','Agla note agentic banao: Ask aur Do kar sakta hai');bTp.title=L('Ready-made notes','Bane-banaye notes');bAdd.type='submit';
+  bar.append(inp,bAg,bTp,bAdd);
+  /* profile and appearance cards */
+  const prof=el('div','zpop'),card=el('div','zpop');prof.id='zprof';card.id='wset';
+  B.append(top,bar,prof,card,empty);
+  wsEls={seg,ag,chips,today,me,empty,prof,card,bAg,inp,segw};
+  const closePops=()=>{prof.classList.remove('on');card.classList.remove('on')};
   const saveP=()=>{try{PROFILE?localStorage.setItem('chipzett-profile',JSON.stringify(PROFILE)):localStorage.removeItem('chipzett-profile')}catch(e){}};
-  ti.onchange=()=>{const v=ti.value.trim(),had=!!PROFILE;
-    if(v){PROFILE={name:v,face:(PROFILE&&PROFILE.face)||tf.dataset.f||'classic'};saveP();
-      if(!had){pal(L(`Nice to meet you, ${v}. You now have a Home desk, a Work desk and agentic notes.`,`Milke achha laga, ${v}. Ab tumhare paas Home desk, Work desk aur agentic notes hain.`));
-        let seeded=false;try{seeded=!!localStorage.getItem('chipzett-agent-seed');localStorage.setItem('chipzett-agent-seed','1')}catch(e){}
-        if(!seeded)add({type:'text',text:L('Client meeting\nMet Tuesday. They want the revised quote, sample board photos and a signed timeline by Friday. Budget is fixed. Riya owns the photos.','Client meeting\nMangal ko mile. Unhe Friday tak revised quote, sample board photos aur signed timeline chahiye. Budget fix hai. Photos Riya ke paas hain.'),cat:'work',space:'work',agent:true,color:'#ffc93c',tex:'lined',face:'boss',w:300,rot:-2},true)}}
-    else if(had){PROFILE=null;saveP();WS.space='';WS.agent=false}
+  const pn=document.createElement('input'),pSave=zb('zpri','',L('Save','Save')),pOut=zb('','',L('Remove profile','Profile hatao')),pRow=el('div','zrow');
+  pn.type='text';pn.id='zname';pn.maxLength=24;pn.autocomplete='off';pn.placeholder=L('Your name','Aapka naam');pn.setAttribute('aria-label','Your name');
+  pRow.append(pSave,pOut);prof.append(el('h5',null,L('Profile','Profile')),pn,el('p',null,L('A profile gives you Personal and Work spaces and agentic notes. It is saved on this device only. Sign-in and sync are coming.','Profile se Personal aur Work space aur agentic notes milte hain. Yeh sirf is device pe save hota hai. Sign-in aur sync aane wale hain.')),pRow);
+  wsEls.pn=pn;wsEls.pOut=pOut;
+  const setName=()=>{const v=pn.value.trim(),had=!!PROFILE;if(!v){pn.focus();return}
+    PROFILE={name:v,face:(PROFILE&&PROFILE.face)||'classic'};saveP();closePops();
+    if(!had){pal(L(`Welcome, ${v}. Personal and Work spaces and agentic notes are on.`,`Swagat hai, ${v}. Personal aur Work space aur agentic notes chalu hain.`),true);
+      let seeded=false;try{seeded=!!localStorage.getItem('chipzett-agent-seed');localStorage.setItem('chipzett-agent-seed','1')}catch(e){}
+      if(!seeded)add({type:'text',text:L('Client meeting\nMet Tuesday. They want the revised quote, sample board photos and a signed timeline by Friday. Budget is fixed. Riya owns the photos.','Client meeting\nMangal ko mile. Unhe Friday tak revised quote, sample board photos aur signed timeline chahiye. Budget fix hai. Photos Riya ke paas hain.'),cat:'work',space:'work',agent:true,color:'#ffc93c',tex:'lined',face:'boss',w:300},true)}
     applyFilter()};
-  ti.onkeydown=e=>{if(e.key==='Enter')ti.blur()};
-  tf.onclick=()=>{const cur=(PROFILE&&PROFILE.face)||tf.dataset.f||'classic',nx=FACES[(FACES.indexOf(cur)+1)%FACES.length];tf.dataset.f=nx;tf.className='face av-'+nx;if(PROFILE){PROFILE.face=nx;saveP()}};
-  tape.onclick=()=>{WS.daily=!WS.daily;applyFilter()};
-  /* settings card */
-  const setV=v=>{if(v===VIEW)return;B.classList.remove('v-'+VIEW);VIEW=v;B.classList.add('v-'+VIEW);try{localStorage.setItem('chipzett-view',VIEW)}catch(e){}board.scrollTop=0;
-    if(VIEW==='free')for(const n of notes){const d=dom(n);if(d){n.x=Math.max(10,Math.min(n.x,board.clientWidth-250));n.y=Math.max(10,Math.min(n.y,board.clientHeight-200));d.style.left=n.x+'px';d.style.top=n.y+'px'}}
-    wsRender()};
-  const card=el('div','wset');card.id='wset';B.append(card);wsEls.card=card;
-  const seg=el('div','wseg'),bgs=el('div','wbgs'),tools=el('div','wtools'),cust=el('label','wcust'),ci=document.createElement('input');
-  [['tidy',L('Tidy wall','Saaf deewar')],['free',L('Free desk','Khula desk')]].forEach(([k,t])=>{const b=el('button',null,t);b.type='button';b.dataset.v=k;b.onclick=()=>setV(k);seg.append(b)});
+  pSave.onclick=setName;pn.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();setName()}};
+  pOut.onclick=()=>{PROFILE=null;saveP();WS.space='';WS.agent=false;wsNext.agent=false;closePops();applyFilter()};
+  me.onclick=()=>{const on=prof.classList.contains('on');closePops();if(!on){pn.value=PROFILE?PROFILE.name:'';prof.classList.add('on');pn.focus()}};
+  /* appearance */
+  const st=el('div','zseg'),bgs=el('div','wbgs'),tools=el('div','wtools'),cust=el('label','wcust'),ci=document.createElement('input');
+  [['clean',L('Clean','Saaf')],['play',L('Playful','Masti')]].forEach(([k,t])=>{const b=el('button',null,t);b.type='button';b.dataset.v=k;b.onclick=()=>{STYLE=k;try{localStorage.setItem('chipzett-style',k)}catch(e){}wsRender()};st.append(b)});
   WBG.forEach(([k,name,sw])=>{const b=el('button');b.type='button';b.dataset.v=k;const i=el('i');i.style.setProperty('--sw',sw);b.append(i,document.createTextNode(name));b.onclick=()=>setBg(k);bgs.append(b)});
-  ci.type='color';ci.id='wbgc';ci.value=/^#/.test(BG)?BG:'#3a2a6a';ci.oninput=()=>setBg(ci.value);cust.append(ci,document.createTextNode(L('Or pick any colour','Ya koi bhi rang chuno')));
+  ci.type='color';ci.id='wbgc';ci.value=/^#/.test(BG)?BG:'#262a33';ci.oninput=()=>setBg(ci.value);cust.append(ci,document.createTextNode(L('Or pick any colour','Ya koi bhi rang chuno')));
   WTOOLS.forEach(([k,name])=>{const b=el('button');b.type='button';b.dataset.v=k;if(k)b.innerHTML=PENSVG[k];else b.append(el('span','none'));b.append(document.createTextNode(name));
-    b.onclick=()=>{TOOL=k;try{localStorage.setItem('chipzett-pen',k)}catch(e){}setTool();wsRender();if(k)pal(L('Write on any note and watch.','Kisi bhi note pe likho aur dekho.'),true)};tools.append(b)});
-  card.append(el('h5',null,L('Layout','Layout')),seg,el('h5',null,L('Background','Background')),bgs,cust,el('h5',null,L('Writing tool','Likhne ka tool')),tools);
-  wsEls.seg=seg;wsEls.bgs=bgs;wsEls.tools=tools;
-  mode.innerHTML='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4.500h7M12.500 4.500H14M2 11.500h1.500M7 11.500h7"/><circle cx="10.700" cy="4.500" r="1.800"/><circle cx="5.200" cy="11.500" r="1.800"/></svg>';mode.append(document.createTextNode(L('Wall','Deewar')));
-  mode.onclick=()=>card.classList.toggle('on');
-  addEventListener('pointerdown',e=>{if(card.classList.contains('on')&&!e.target.closest('.wset,.wmode'))card.classList.remove('on')});
+    b.onclick=()=>{TOOL=k;try{localStorage.setItem('chipzett-pen',k)}catch(e){}setTool();wsRender()};tools.append(b)});
+  card.append(el('h5',null,L('Note style','Note ka style')),st,el('p',null,L('Clean keeps notes straight and plain. Playful brings back the tilt, glow and handwriting.','Clean mein notes seedhe aur saade. Playful mein tedhapan, chamak aur haath ki likhai wapas.')),el('h5',null,L('Background','Background')),bgs,cust,el('h5',null,L('Writing tool','Likhne ka tool')),tools);
+  wsEls.st=st;wsEls.bgs=bgs;wsEls.tools=tools;
+  wall.onclick=()=>{const on=card.classList.contains('on');closePops();if(!on)card.classList.add('on')};
+  addEventListener('pointerdown',e=>{if(!e.target.closest('.zpop,.zme,.zwall'))closePops()});
+  tidy.onclick=()=>$('#tidy').click();
+  today.onclick=()=>{WS.daily=!WS.daily;applyFilter()};
+  ag.onclick=()=>{WS.agent=!WS.agent;applyFilter()};
+  bAg.onclick=()=>{if(!PROFILE){me.click();return}wsNext.agent=!wsNext.agent;wsRender();inp.focus()};
+  bTp.onclick=()=>openHub(true);
+  bar.onsubmit=e=>{e.preventDefault();const v=inp.value.trim();inp.value='';
+    if(v){$('#cap').value=v;$('#capf').requestSubmit()}
+    else{const n=add({type:'text',text:''},true),d=dom(n);if(d){d.scrollIntoView({block:'nearest',behavior:'smooth'});const bd=d.querySelector('.body');if(bd)setTimeout(()=>bd.focus(),450)}}
+    if(wsNext.agent){wsNext.agent=false;wsRender()}};
   setBg(BG,true);
 }
 function wsRender(){
-  if(!wsEls)return;const{tape,ti,desks,tabs,pads,mode,empty}=wsEls,B=document.body;
-  [[wsEls.seg,VIEW],[wsEls.bgs,/^#/.test(BG)?'custom':BG],[wsEls.tools,TOOL]].forEach(([g,v])=>{for(const b of g.children)b.setAttribute('aria-pressed',b.dataset.v===v)});
+  if(!wsEls)return;const{seg,ag,chips,today,me,empty,bAg,segw,pOut}=wsEls,B=document.body;
+  B.classList.toggle('has-profile',!!PROFILE);B.classList.toggle('st-play',STYLE==='play');
+  B.classList.toggle('d-work',WS.space==='work'&&BG==='night');B.classList.toggle('d-personal',false);
+  /* spaces */
+  seg.textContent='';segw.style.display=PROFILE?'':'none';pOut.style.display=PROFILE?'':'none';
+  if(PROFILE)[['',L('All','Sab')],['personal',L('Personal','Personal')],['work',L('Work','Kaam')]].forEach(([k,t])=>{const b=el('button',null,t);b.type='button';b.setAttribute('aria-pressed',WS.space===k);b.onclick=()=>{WS.space=k;applyFilter()};seg.append(b)});
+  ag.setAttribute('aria-pressed',WS.agent);ag.title=L('Show only agentic notes','Sirf agentic notes dikhao');
+  bAg.setAttribute('aria-pressed',wsNext.agent);
+  /* profile button */
+  me.textContent='';if(PROFILE){me.append(el('b',null,PROFILE.name[0].toUpperCase()),el('span',null,PROFILE.name))}else{me.innerHTML=ZI.user;me.append(el('span',null,L('Create profile','Profile banao')))}
+  /* category chips: only the ones in use, the rest behind More */
+  chips.textContent='';const pool=notes.filter(n=>(!WS.space||spaceOf(n)===WS.space)&&(!WS.agent||n.agent)&&(!WS.daily||DAILY.has(n.type)));let hiddenTabs=0;
+  const chip=(k,name,col,c)=>{const b=el('button');b.type='button';if(col){const i=el('i');i.style.setProperty('--k',col);b.append(i)}b.append(document.createTextNode(name));b.setAttribute('aria-pressed',activeCat===k);b.append(el('b',null,String(c)));b.onclick=()=>{activeCat=k;applyFilter();save()};chips.append(b)};
+  chip('',L('All notes','Saare notes'),'',pool.length);
+  CATS.forEach(c=>{const k=pool.filter(n=>n.cat===c[0]).length;if(k||activeCat===c[0]||wsEls.allTabs)chip(c[0],c[1],c[2],k);else hiddenTabs++});
+  if(hiddenTabs||wsEls.allTabs){const m=el('button',null,wsEls.allTabs?L('Fewer','Kam'):L('More','Aur'));m.type='button';m.onclick=()=>{wsEls.allTabs=!wsEls.allTabs;wsRender()};chips.append(m)}
+  /* today */
   const h=new Date().getHours(),hello=h<12?L('Good morning','Suprabhat'):h<17?L('Good afternoon','Namaste'):L('Good evening','Shubh sandhya');
-  const left=notes.filter(n=>n.type==='todo').reduce((a,n)=>a+n.items.filter(i=>!i.d).length,0),run=notes.filter(n=>n.type==='timer'&&n.end>Date.now()).length,goals=notes.filter(n=>n.type==='goal'&&n.total>0);
+  const left=notes.filter(n=>n.type==='todo').reduce((a,n)=>a+n.items.filter(i=>!i.d).length,0),run=notes.filter(n=>n.type==='timer'&&n.end>Date.now()).length;
   const bits=[PROFILE?hello+', '+PROFILE.name:new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})];
-  if(left)bits.push(L(`${left} task${left>1?'s':''} left`,`${left} kaam baaki`));
-  if(run)bits.push(L(`${run} reminder${run>1?'s':''} running`,`${run} reminder chalu`));
-  if(goals.length)bits.push(L('goals ','goals ')+Math.round(goals.reduce((a,g)=>a+g.cur/g.total,0)/goals.length*100)+'%');
-  if(bits.length===1)bits.push(L(`${notes.length} notes on your wall`,`deewar pe ${notes.length} notes`));
-  tape.textContent=bits.join('  ·  ');tape.setAttribute('aria-pressed',WS.daily);tape.title=L('Show only today\'s lists, reminders and goals','Sirf aaj ki lists, reminders aur goals dikhao');
-  desks.textContent='';
-  if(PROFILE){[['',L('All','Sab'),L('Every note','Saare notes')],['personal',L('Home','Ghar'),L('Home desk: personal notes','Ghar ka desk: personal notes')],['work',L('Work','Kaam'),L('Work desk: a calmer look for the office','Kaam ka desk: office ke liye shaant look')]].forEach(([k,t,tip])=>{const b=el('button',null,t);b.type='button';b.title=tip;b.setAttribute('aria-pressed',WS.space===k);b.onclick=()=>{WS.space=k;applyFilter()};desks.append(b)});
-    const sp=el('button','spark');sp.type='button';sp.innerHTML=AG_ICON.act;sp.append(document.createTextNode(L('Agentic only','Sirf agentic')));sp.setAttribute('aria-pressed',WS.agent);sp.onclick=()=>{WS.agent=!WS.agent;applyFilter()};desks.append(sp)}
-  B.classList.toggle('has-profile',!!PROFILE);B.classList.toggle('d-pro',WS.space==='work');B.classList.toggle('d-work',WS.space==='work'&&BG==='night');B.classList.toggle('d-personal',WS.space==='personal'&&BG==='night');
-  tabs.textContent='';const pool=notes.filter(n=>(!WS.space||spaceOf(n)===WS.space)&&(!WS.agent||n.agent)&&(!WS.daily||DAILY.has(n.type)));
-  const tab=(k,name,col,c)=>{const b=el('button',null,name);b.type='button';b.style.setProperty('--k',col);b.style.color=inkFor(col,'plain');b.setAttribute('aria-pressed',activeCat===k);if(c)b.append(el('b',null,String(c)));b.onclick=()=>{activeCat=k;applyFilter();save()};tabs.append(b)};
-  tab('',L('All','Sab'),'#f3efff',pool.length);let hiddenTabs=0;
-  CATS.forEach(c=>{const k=pool.filter(n=>n.cat===c[0]).length;if(k||activeCat===c[0]||wsEls.allTabs)tab(c[0],c[1],c[2],k);else hiddenTabs++});
-  if(hiddenTabs||wsEls.allTabs){const m=el('button','more',wsEls.allTabs?L('Less','Kam'):L('More','Aur'));m.type='button';if(!wsEls.allTabs)m.append(el('b',null,String(hiddenTabs)));m.onclick=()=>{wsEls.allTabs=!wsEls.allTabs;wsRender()};tabs.append(m)}
-  pads.textContent='';
-  const pad=(cls,label,sub,fn)=>{const b=el('button','wpad '+cls);b.type='button';b.append(el('span',null,label),el('small',null,sub));b.onclick=fn;pads.append(b)};
-  const fresh=o=>{const n=add(Object.assign({type:'text',text:''},o),true),d=dom(n);if(d){if(VIEW==='tidy')board.scrollTo({top:0,behavior:'smooth'});const bd=d.querySelector('.body');if(bd)setTimeout(()=>bd.focus(),450)}};
-  pad('y',L('+ Note','+ Note'),L('tear one off','ek phaad lo'),()=>fresh({}));
-  pad('m',L('+ Agentic','+ Agentic'),PROFILE?L('it can Ask and Do','Ask aur Do karta hai'):L('name tag first','pehle naam likho'),()=>{if(!PROFILE){ti.focus();pal(L('Write your name on the tag first. Agentic notes come with a profile.','Pehle tag pe apna naam likho. Agentic notes profile ke saath aate hain.'),true);return}fresh({agent:true})});
-  pad('c',L('Templates','Templates'),L('lists, charts, timers','lists, charts, timers'),()=>openHub(true));
-  mode.title=L('Layout, background and writing tool','Layout, background aur likhne ka tool');
-  empty.textContent=notes.some(n=>!isHid(n))?'':L('Nothing here yet. Tear a note off the pad below.','Yahan abhi kuch nahi. Neeche pad se ek note phaad lo.');
+  if(left)bits.push(L(`${left} task${left>1?'s':''} left`,`${left} kaam baaki`));if(run)bits.push(L(`${run} reminder${run>1?'s':''} running`,`${run} reminder chalu`));
+  today.textContent=bits.join('  ·  ');today.setAttribute('aria-pressed',WS.daily);today.title=L('Show only lists, reminders and goals','Sirf lists, reminders aur goals dikhao');
+  [[wsEls.st,STYLE],[wsEls.bgs,/^#/.test(BG)?'custom':BG],[wsEls.tools,TOOL]].forEach(([g,v])=>{for(const b of g.children)b.setAttribute('aria-pressed',b.dataset.v===v)});
+  empty.textContent=notes.some(n=>!isHid(n))?'':L('No notes here yet. Write one in the bar below.','Yahan abhi koi note nahi. Neeche bar mein likho.');
 }
 if(!DESK)wsBuild();
 /* pen writing: while you type on a note, a pen sits at the caret and jots with each letter */
@@ -1257,17 +1245,19 @@ function start(state){
   if(s&&s.def){Object.assign(def,s.def);sb.style.setProperty('--c',def.color);$('#pal').className='blob av-'+def.face}
   if(s&&s.notes&&s.notes.length){sound=s.sound!==false;s.notes.forEach(n=>{notes.push(n);zTop=Math.max(zTop,n.z||0);render(n)})}
   else{const w=board.clientWidth,h=board.clientHeight,at=(fx,fy)=>({x:Math.max(10,Math.min(w-242,w*fx)),y:Math.max(10,h*fy)});
-    [{type:'text',text:'ChipZett mein swagat hai!\nKone wale hare ChipZett ko dabao, wahan se notes banao. Mere chehre pe click karo to main bolta hoon.',color:COLORS[0],anim:'float',song:'bells',mood:'sun',...at(.06,.06)},
-     {type:'todo',text:'Weekend plan',items:[{t:'Gym 7 baje',d:true},{t:'Groceries',d:false},{t:'Mummy ko call',d:false}],cat:'home',color:'#fff4d6',tex:'lined',font:'caveat',ink:'#1d3fbf',face:'cat',...at(.3,.2)},
-     {type:'timer',text:'Chai break',end:Date.now()+180000,total:180000,cat:'reminders',color:COLORS[1],face:'robot',...at(.56,.05)},
-     {type:'text',text:'Idea: sticky notes jo boring na ho',cat:'ideas',color:COLORS[4],tex:'holo',font:'marker',face:'cool',mood:'party',...at(.76,.3)},
-     {type:'text',text:'Rent 5 tareekh ko',cat:'money',color:COLORS[3],tex:'neon',font:'unbounded',face:'alien',mood:'rain',...at(.12,.52)},
-     {type:'chart',kind:'pie',text:'Mahine ka kharcha',data:'Rent 40, Khana 25, Masti 15, Bachat 20',cat:'money',color:'#fff4d6',tex:'grid',font:'outfit',...at(.5,.42)}].forEach(n=>add(n));
+    [{type:'text',text:L('Welcome to ChipZett.\nWrite in the bar below to add a note. Press a note\'s face to hear it. Drag notes anywhere.','ChipZett mein swagat hai.\nNeeche bar mein likh kar note banao. Note ka chehra dabao to woh bolta hai. Notes kahin bhi kheencho.'),color:COLORS[0],...at(.05,.05)},
+     {type:'todo',text:L('This week','Is hafte'),items:[{t:L('Send the proposal','Proposal bhejo'),d:true},{t:L('Book the review','Review book karo'),d:false},{t:L('Call the bank','Bank ko call'),d:false}],cat:'work',color:'#74ccff',tex:'lined',...at(.27,.05)},
+     {type:'timer',text:L('Focus','Focus'),end:Date.now()+15e5,total:15e5,cat:'reminders',color:'#ff6f9c',...at(.5,.05)},
+     {type:'chart',kind:'pie',text:L('Monthly spending','Mahine ka kharcha'),data:L('Rent 40, Food 25, Fun 15, Savings 20','Rent 40, Khana 25, Masti 15, Bachat 20'),cat:'money',color:'#fff4d6',tex:'grid',font:'outfit',...at(.72,.05)},
+     {type:'text',text:L('Idea: a weekly review every Friday at 4','Idea: har Friday 4 baje weekly review'),cat:'ideas',color:'#bda4ff',...at(.05,.4)},
+     {type:'goal',text:L('Read 12 books','12 kitaabein padho'),cur:3,total:12,cat:'hobbies',color:'#5ef2c0',...at(.27,.45)}].forEach(n=>add(n));
     setTimeout(()=>pal('Yeh sample notes hain. Mujhe dabao aur apne notes banao.',true),900)}
   $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
   applyFilter();
+  if(!DESK)setTimeout(()=>{notes.forEach(n=>{if(n.y<TOPY){n.y=TOPY+6;const d=dom(n);if(d)d.style.top=n.y+'px'}});
+    try{if(!localStorage.getItem('chipzett-tidy3')){localStorage.setItem('chipzett-tidy3','1');if(!isPhone())$('#tidy').click()}}catch(e){}},600);
 }
-addEventListener('resize',()=>{if(isPhone())return;for(const n of notes){const d=dom(n);if(!d)continue;n.x=Math.min(n.x,board.clientWidth-80);n.y=Math.min(n.y,board.clientHeight-60);d.style.left=n.x+'px';d.style.top=n.y+'px'}});
+addEventListener('resize',()=>{if(isPhone())return;for(const n of notes){const d=dom(n);if(!d)continue;n.x=Math.min(n.x,board.clientWidth-80);if(DESK)n.y=Math.min(n.y,board.clientHeight-60);d.style.left=n.x+'px';d.style.top=n.y+'px'}});
 window.claude?.hot?.snapshot?.(()=>({notes,sound,def,cat:activeCat}));
 if(DESK){
   /* clicks pass through to the desktop unless the pointer is on a note or a control */
