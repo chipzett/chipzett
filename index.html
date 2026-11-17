@@ -325,6 +325,11 @@ footer .fl a:hover{color:var(--mango)}
 @keyframes shoot{0%{opacity:0;translate:0 0}4%{opacity:1}14%{opacity:0;translate:260px 0}100%{opacity:0;translate:260px 0}}
 .n li input.pop{animation:tickpop .4s}
 @keyframes tickpop{50%{scale:1.35}}
+/* the headline's own pair of eyes: they blink and follow the pointer */
+h1 .nb{white-space:nowrap}
+h1 .eyes{display:inline-flex;gap:.07em;vertical-align:.52em;margin-left:.1em}
+h1 .eyes b{width:.25em;height:.25em;border-radius:50%;background:#fff;position:relative;overflow:hidden;animation:blink 5s infinite}
+h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top:27%;border-radius:50%;background:var(--ink);transform:translate(var(--ex,0px),var(--ey,0px))}
 /* eyebrow */
 .newpill{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:500 13.500px var(--ui);color:#ddd5f3;padding:6px 8px 6px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);margin-bottom:26px;transition:background .15s,border-color .15s;max-width:100%}
 .newpill:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3)}
@@ -334,9 +339,9 @@ footer .fl a:hover{color:var(--mango)}
 /* first screen on computers: wide, one screen tall, headline on two lines so the product has room */
 @media (min-width:981px){
   .top .wrap,.hero .wrap{width:min(1640px,100% - 2*clamp(28px,5vw,110px))}
-  .hero{min-height:min(100svh,900px);display:grid;align-items:center;padding:96px 0 36px}
-  .hero .wrap{grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:clamp(36px,4vw,76px)}
-  h1{font-size:clamp(40px,4.2vw,78px);line-height:1.05;text-wrap:initial}
+  .hero{display:grid;align-items:center;padding:calc(72px + clamp(28px,5vh,48px)) 0 clamp(36px,6vh,56px)}
+  .hero .wrap{grid-template-columns:minmax(0,52fr) minmax(0,48fr);gap:clamp(36px,4vw,76px)}
+  h1{font-size:clamp(40px,4.45vw,83px);line-height:1.05;text-wrap:initial}
   .hero .lede{font-size:clamp(18.5px,1.3vw,23px);max-width:25em;margin-top:30px}
   .hero .cta{margin-top:36px;gap:14px}
   .hero .cta .btn{padding:17px 28px;font-size:17px;border-radius:12px}
@@ -345,7 +350,7 @@ footer .fl a:hover{color:var(--mango)}
 }
 /* mid-size screens: the preview is drawn a little smaller so three columns still fit one screen */
 @media (min-width:1181px) and (max-width:1560px){
-  .board{zoom:.86}
+  .board{zoom:.8}
 }
 @media (min-width:981px) and (max-width:1180px){
   .hero{min-height:0;padding:112px 0 64px}
@@ -381,6 +386,7 @@ footer .fl a:hover{color:var(--mango)}
   .bcols{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:28px 14px 20px}
   .bcol:nth-child(3){display:contents}
   .bcols{align-items:start}
+  h1 .nb{white-space:normal}
   .bcol:nth-child(3) .n{grid-column:1;grid-row:2}
   .bcol:nth-child(1){grid-column:1;grid-row:1}
   .bcol:nth-child(2){grid-column:2;grid-row:1/span 2}
@@ -425,7 +431,7 @@ footer .fl a:hover{color:var(--mango)}
 <header class="hero" id="top"><div class="wrap">
   <div>
     <a class="newpill" href="#roadmap"><b>New</b>Agentic notes: ask a note, or tell it what to do<span>Preview</span></a>
-    <h1>Make a note.<br>Make it <em>yours.</em></h1>
+    <h1>Make a note.<br><span class="nb">Make it <em>yours.</em><span class="eyes" aria-hidden="true"><b data-look></b><b data-look></b></span></span></h1>
     <p class="lede">Sticky notes for ideas, checklists, and reminders that speak up. Give each one its own look and sound.</p>
     <div class="cta">
       <a class="btn go" href="app/index.html">Open ChipZett <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
