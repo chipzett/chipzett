@@ -21,8 +21,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Outfit:wght@400;500;600&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* Layout idea: a night desk. Type sits hard left, the living product sits right and spills past the frame.
-   Sections are sticky notes pinned to the desk, never generic cards. One world, single theme. */
+/* Layout idea: a night desk. Type sits hard left, the living product sits right.
+   Phones get one calm column: headline, one button, then a note you can make right on the page. One world, single theme. */
 :root{
   --desk:#0e0b1d; --desk-2:#17122e; --line:rgba(255,255,255,.13); --text:#f3efff; --muted:#a9a1c9; --ink:#1b1430;
   --mango:#ffc93c; --pink:#ff6f9c; --mint:#5ef2c0; --sky:#74ccff; --lilac:#bda4ff; --cream:#fff4d6;
@@ -35,10 +35,12 @@ body{background:var(--desk);color:var(--text);font:400 17px/1.55 var(--ui);overf
 body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;
   background:radial-gradient(38% 32% at 12% 18%,rgba(189,164,255,.2),transparent 70%),radial-gradient(34% 30% at 88% 12%,rgba(255,111,156,.14),transparent 70%),radial-gradient(45% 38% at 55% 95%,rgba(94,242,192,.1),transparent 70%)}
 a{color:inherit}
+button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:6px}
+[hidden]{display:none!important}
 .wrap{width:min(1180px,100% - 40px);margin-inline:auto}
 h1,h2,h3{font-family:var(--display);letter-spacing:-.03em;text-wrap:balance;line-height:1.05}
-h2{font-size:clamp(28px,4.2vw,46px);font-weight:700}
+h2{font-size:clamp(26px,4.2vw,46px);font-weight:700}
 .kicker{font:600 12px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
 .lede{color:var(--muted);max-width:56ch}
 
@@ -48,23 +50,22 @@ nav{display:flex;align-items:center;gap:22px;padding:20px 0;flex-wrap:wrap}
 nav .links{display:flex;gap:20px;margin-left:auto;flex-wrap:wrap}
 nav .links a{text-decoration:none;color:var(--muted);font-size:15px}
 nav .links a:hover{color:var(--text)}
-.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font:600 16px var(--ui);padding:13px 22px;border-radius:16px;transition:transform .18s cubic-bezier(.3,1.8,.5,1)}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font:600 16px var(--ui);padding:13px 22px;border-radius:16px;border:0;cursor:pointer;transition:transform .18s cubic-bezier(.3,1.8,.5,1)}
 .btn:hover{transform:translateY(-2px) rotate(-1deg)}
 .btn.go{background:var(--mango);color:var(--ink);box-shadow:5px 5px 0 var(--pink)}
-.btn.ghost{border:1px solid var(--line);background:rgba(255,255,255,.05)}
-.btn.soon{border:1px dashed var(--line);color:var(--muted);cursor:default}
-.btn.soon:hover{transform:none}
 .btn.sm{padding:9px 16px;font-size:14px;border-radius:12px;box-shadow:3px 3px 0 var(--pink)}
+.win{color:var(--muted);font-size:14.5px}
+.win a{color:var(--text);font-weight:600}
 
-.hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:center;padding:34px 0 70px}
+.hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:center;padding:34px 0 60px}
 h1{font-size:clamp(40px,6.4vw,84px);font-weight:800}
 h1 em{font-style:normal;color:var(--mango);position:relative;white-space:nowrap}
 h1 .eyes{display:inline-flex;gap:.08em;vertical-align:.5em;margin-left:.12em}
 h1 .eyes b{width:.2em;height:.2em;border-radius:50%;background:#fff;position:relative;animation:blink 5s infinite}
-h1 .eyes b::after{content:"";position:absolute;inset:26%;border-radius:50%;background:var(--ink)}
+h1 .eyes b::after{content:"";position:absolute;inset:26%;border-radius:50%;background:var(--ink);transform:translate(var(--ex,0px),var(--ey,0px))}
 @keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
-.hero p{margin:22px 0 28px;font-size:19px}
-.cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero .lede{margin:22px 0 26px;font-size:19px}
+.cta{display:flex;gap:12px 18px;flex-wrap:wrap;align-items:center}
 .facts{display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:22px;color:var(--muted);font-size:14px}
 .facts span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:2px;background:var(--mint);margin-right:8px}
 
@@ -79,8 +80,88 @@ h1 .eyes b::after{content:"";position:absolute;inset:26%;border-radius:50%;backg
 .spill.b{background:var(--mint);right:-18px;top:-34px;rotate:6deg;animation-delay:-2.4s}
 @keyframes floaty{50%{translate:0 -10px}}
 
-section{padding:74px 0}
-.head{display:grid;gap:12px;margin-bottom:38px}
+section{padding:64px 0}
+.head{display:grid;gap:12px;margin-bottom:30px}
+
+/* playground: type a line, get a note */
+.pg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:34px;align-items:start}
+.pg form{display:flex;gap:10px;min-width:0;max-width:100%}
+.pg input{flex:1;min-width:0;width:0;font:500 16px var(--ui);color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:13px 16px}
+.pg input::placeholder{color:var(--muted)}
+.pg input:focus{outline:2px solid var(--mint);outline-offset:1px}
+.pg form .btn{padding:13px 18px;border-radius:14px;box-shadow:3px 3px 0 var(--pink);white-space:nowrap}
+.tryrow{margin-top:18px;display:grid;gap:8px}
+.tryrow > span{font:600 12px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{border:1px solid var(--line);background:rgba(255,255,255,.05);border-radius:999px;padding:7px 13px;font-size:14px;cursor:pointer}
+.pick button:hover{background:rgba(255,255,255,.1)}
+.pick button[aria-pressed="true"]{background:var(--text);color:var(--ink);border-color:var(--text);font-weight:600}
+.pick .sw{width:30px;height:30px;padding:0;border-radius:9px;background:var(--k);border:2px solid transparent}
+.pick .sw[aria-pressed="true"]{background:var(--k);border-color:#fff}
+.pick code{font:500 13.5px ui-monospace,SFMono-Regular,Menlo,monospace}
+.pnwrap{display:grid;gap:14px;margin-top:6px}
+.pnote{position:relative;background:var(--c,var(--mango));color:var(--ink);border-radius:8px 26px 8px 26px;padding:16px 20px 22px;min-height:230px;overflow:hidden;rotate:-1.2deg;box-shadow:0 26px 50px -18px rgba(0,0,0,.75),0 0 80px -30px var(--c,var(--mango));transition:background .25s}
+.pnote canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pnote > div{position:relative}
+.pnote{color-scheme:light}
+.pnote.ring{animation:shake .5s 3}
+@keyframes shake{25%{rotate:-4deg}75%{rotate:2deg}}
+.ptop{display:flex;align-items:center;gap:12px;margin-bottom:10px;min-height:44px}
+.pface{position:relative;display:flex;align-items:center;gap:6px;background:rgba(27,20,48,.08);border:0;border-radius:999px;padding:9px 13px;cursor:pointer}
+.pface:hover{background:rgba(27,20,48,.15)}
+.eye{width:22px;height:22px;border-radius:50%;background:#fff;position:relative;overflow:hidden;animation:blink 5s infinite}
+.eye::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:var(--ink);left:6px;top:6px;transform:translate(var(--ex,0px),var(--ey,0px))}
+.mouth{width:20px;height:10px;border-radius:0 0 20px 20px;background:var(--ink)}
+.talking .mouth{animation:talk .22s infinite alternate}
+@keyframes talk{to{height:17px;border-radius:9px}}
+.f-cyclops .eye+.eye{display:none}
+.f-cyclops .eye{width:30px;height:30px}.f-cyclops .eye::after{width:14px;height:14px;left:8px;top:8px}
+.f-cat .eye{background:#d9ff66}.f-cat .eye::after{width:5px;height:16px;left:8.5px;top:3px}
+.f-cat::before,.f-cat::after{content:"";position:absolute;top:-5px;border:7px solid transparent;border-bottom:11px solid var(--ink);border-top:0}
+.f-cat::before{left:12px;transform:rotate(-14deg)}.f-cat::after{left:40px;transform:rotate(14deg)}
+.f-robot .eye{border-radius:5px;background:#7df9ff;box-shadow:0 0 8px #7df9ff;animation:none}
+.f-robot .eye::after{width:22px;height:3px;left:0;top:9.5px;border-radius:0;background:rgba(0,0,0,.55);transform:translateY(var(--ey,0px))}
+.f-robot .mouth{height:4px;border-radius:2px}
+.f-cool .eye{background:var(--ink);border-radius:5px 5px 12px 12px;animation:none}.f-cool .eye::after{display:none}
+.f-cool .mouth{width:16px;height:5px;border-radius:0 0 10px 10px}
+.f-sleepy .eye{height:5px;margin:8px 0;background:var(--ink);border-radius:3px;animation:none}.f-sleepy .eye::after{display:none}
+.f-sleepy .mouth{width:10px;height:10px;border-radius:50%}
+.say{flex:1;min-width:0;font:500 13.5px/1.3 var(--ui);background:#fff;border-radius:14px 14px 14px 4px;padding:7px 11px}
+.say:empty{visibility:hidden}
+.pbody{font:400 22px/1.3 var(--hand)}
+.pbody h4{font:700 17px var(--ui);margin-bottom:8px}
+.pbody ul{list-style:none;padding:0;display:grid;gap:6px}
+.pbody li label{display:flex;gap:10px;align-items:center;cursor:pointer}
+.pbody li input{width:20px;height:20px;accent-color:var(--ink);flex:none}
+.pbody li input:checked + span{text-decoration:line-through;opacity:.6}
+.pchart{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.ppie{width:112px;height:112px;border-radius:50%;flex:none;-webkit-mask:radial-gradient(circle,transparent 33%,#000 34%);mask:radial-gradient(circle,transparent 33%,#000 34%)}
+.pleg{font:500 14.5px var(--ui);display:grid;gap:4px;font-variant-numeric:tabular-nums}
+.pleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:7px}
+.pbars{display:grid;gap:7px;font:500 14px var(--ui);font-variant-numeric:tabular-nums;width:100%}
+.pbars div{display:grid;grid-template-columns:5.5em 1fr 2.5em;gap:8px;align-items:center}
+.pbars b{height:14px;border-radius:99px;display:block}
+.pflow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font:600 15px var(--ui)}
+.pflow span{border:2px solid var(--ink);border-radius:10px;padding:5px 11px}
+.pflow span:last-of-type{background:var(--ink);color:var(--c,var(--mango))}
+.ptimer{display:flex;gap:16px;align-items:center}
+.pring{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;flex:none}
+.pring span{width:70px;height:70px;border-radius:50%;background:var(--c,var(--mango));display:grid;place-items:center;font:700 17px var(--ui);font-variant-numeric:tabular-nums}
+.pgoal{display:grid;gap:10px;font:500 15px var(--ui);font-variant-numeric:tabular-nums}
+.pgoal .gb{height:16px;border-radius:99px;background:rgba(27,20,48,.16);overflow:hidden}
+.pgoal .gb i{display:block;height:100%;background:var(--ink);border-radius:99px;transition:width .3s}
+.pgoal .pm{display:flex;gap:8px;align-items:center}
+.pgoal button{width:36px;height:36px;border-radius:10px;border:2px solid var(--ink);background:transparent;font:700 18px var(--ui);cursor:pointer;color:var(--ink)}
+.zett{display:flex;gap:12px;align-items:center;color:var(--muted);font-size:15px}
+.zett i{flex:none;width:34px;height:34px;border-radius:50%;background:var(--mint);position:relative}
+.zett i::before,.zett i::after{content:"";position:absolute;top:10px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 60% 55%,var(--ink) 0 38%,#fff 40%)}
+.zett i::before{left:7px}.zett i::after{right:7px}
+
+/* getting started */
+.start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.go1{border:1px solid var(--line);border-radius:18px;padding:18px 20px;background:rgba(255,255,255,.04)}
+.go1 b{font:800 15px var(--display);color:var(--k);display:block;margin-bottom:6px}
+.go1 p{color:var(--muted);font-size:15.5px}
 
 /* features as real sticky notes */
 .notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
@@ -93,11 +174,11 @@ section{padding:74px 0}
 .face b{width:20px;height:20px;border-radius:50%;background:#fff;position:relative;animation:blink 5s infinite}
 .face b::after{content:"";position:absolute;inset:28%;border-radius:50%;background:var(--ink)}
 .face u{width:18px;height:9px;border-radius:0 0 18px 18px;background:var(--ink);animation:talk .25s infinite alternate}
-@keyframes talk{to{height:15px;border-radius:9px}}
 .bub{position:absolute;right:10px;top:10px;background:#fff;border-radius:12px 12px 12px 3px;padding:4px 9px;font:500 12px var(--ui)}
 .rain{position:absolute;inset:0;background:repeating-linear-gradient(100deg,transparent 0 14px,rgba(40,90,220,.55) 14px 15.5px,transparent 15.5px 30px);background-size:60px 60px;animation:fall .7s linear infinite}
 @keyframes fall{to{background-position:-10px 60px}}
-.sun{width:38px;height:38px;border-radius:50%;background:#ff9f1c;border:3px solid #fff;position:relative;z-index:1}
+.cloud{width:46px;height:18px;border-radius:99px;background:#fff;position:relative;z-index:1;translate:0 -14px}
+.cloud::before{content:"";position:absolute;left:8px;top:-10px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:14px 3px 0 -2px #fff}
 .eq{display:flex;gap:5px;align-items:flex-end;height:46px}
 .eq i{width:8px;height:8px;border-radius:4px;background:var(--ink);animation:eq .6s ease-in-out infinite alternate}
 .eq i:nth-child(2){animation-delay:.15s}.eq i:nth-child(3){animation-delay:.3s}.eq i:nth-child(4){animation-delay:.45s}.eq i:nth-child(5){animation-delay:.2s}
@@ -111,14 +192,8 @@ section{padding:74px 0}
 .ring span{width:46px;height:46px;border-radius:50%;background:var(--c);display:grid;place-items:center;font:600 12px var(--ui);font-variant-numeric:tabular-nums}
 .gbar{width:110px;height:13px;border-radius:99px;background:rgba(27,20,48,.16);overflow:hidden}
 .gbar i{display:block;height:100%;width:62%;background:var(--ink);border-radius:99px}
-.chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;padding:0 8px}
-.chips span{font:600 11px var(--ui);padding:3px 8px;border-radius:99px;background:var(--ink);color:var(--c)}
-
-/* categories */
-.cats{display:flex;flex-wrap:wrap;gap:10px}
-.cat{display:flex;align-items:center;gap:9px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);font-weight:500}
-.cat i{width:12px;height:12px;border-radius:4px;background:var(--k)}
-.cat small{color:var(--muted);font-size:13px}
+.minis{display:grid;grid-template-columns:repeat(2,24px);gap:6px}
+.minis i{height:24px;border-radius:3px 8px 3px 8px;background:var(--k);box-shadow:0 0 0 2px var(--ink)}
 
 /* numbers */
 .nums{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-top:34px}
@@ -126,8 +201,20 @@ section{padding:74px 0}
 .num b{font:800 34px var(--display);letter-spacing:-.04em;display:block;font-variant-numeric:tabular-nums}
 .num span{color:var(--muted);font-size:14px}
 
-/* vision */
-.road{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;counter-reset:s}
+/* categories */
+.cats{display:flex;flex-wrap:wrap;gap:8px}
+.cat{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);font-weight:500;font-size:15px;cursor:pointer}
+.cat i{width:11px;height:11px;border-radius:4px;background:var(--k)}
+.cat:hover{background:rgba(255,255,255,.1)}
+.cat[aria-pressed="true"]{background:var(--k);color:var(--ink);border-color:var(--k);font-weight:600}
+.cat[aria-pressed="true"] i{background:var(--ink)}
+.ready{margin-top:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);padding:16px 20px;max-width:780px;min-height:92px}
+.ready b{font:600 12px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--k,var(--mint))}
+.ready ul{list-style:none;padding:0;margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+.ready li{font:400 17px/1.2 var(--hand);color:var(--ink);background:var(--k,var(--mango));padding:7px 12px;border-radius:3px 12px 3px 12px}
+
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
 .step{position:relative;padding:22px 26px 22px 0;border-top:2px solid var(--line)}
 .step::before{content:"";position:absolute;top:-8px;left:0;width:14px;height:14px;border-radius:50%;background:var(--k);box-shadow:0 0 0 5px var(--desk)}
 .step.now{border-top-color:var(--mint)}
@@ -135,19 +222,6 @@ section{padding:74px 0}
 .step h3{font-size:21px;margin:8px 0 8px}
 .step p{color:var(--muted);font-size:15.5px;max-width:34ch}
 
-.get{background:var(--mango);color:var(--ink);border-radius:8px 34px 8px 34px;padding:44px clamp(22px,5vw,56px);display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:30px;align-items:center;rotate:-.6deg;box-shadow:10px 10px 0 var(--pink)}
-.get h2{font-size:clamp(28px,4vw,44px)}
-.get p{margin-top:12px;max-width:44ch}
-.get .cta{justify-content:flex-end}
-.get .btn.go{background:var(--ink);color:#fff;box-shadow:5px 5px 0 var(--pink)}
-.get .btn.soon{border-color:rgba(27,20,48,.45);color:var(--ink)}
-footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14px;justify-content:space-between;flex-wrap:wrap}
-
-
-.start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:8px}
-.go1{border:1px solid var(--line);border-radius:18px;padding:18px 20px;background:rgba(255,255,255,.04)}
-.go1 b{font:800 15px var(--display);color:var(--k);display:block;margin-bottom:6px}
-.go1 p{color:var(--muted);font-size:15.5px}
 .faq{display:grid;gap:10px;max-width:780px}
 .faq details{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.04);padding:0 20px}
 .faq summary{cursor:pointer;list-style:none;padding:16px 0;font-weight:600;display:flex;justify-content:space-between;gap:16px;align-items:center}
@@ -155,90 +229,190 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
 .faq summary::after{content:"+";font:500 22px var(--ui);color:var(--mint);transition:rotate .2s}
 .faq details[open] summary::after{rotate:45deg}
 .faq p{color:var(--muted);padding:0 0 18px;max-width:62ch}
-@media (max-width:920px){.start{grid-template-columns:1fr}.screen{transform:none}.screen iframe{aspect-ratio:4/5}}
+
+.get{background:var(--mango);color:var(--ink);border-radius:8px 34px 8px 34px;padding:44px clamp(22px,5vw,56px);display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:30px;align-items:center;rotate:-.6deg;box-shadow:10px 10px 0 var(--pink)}
+.get h2{font-size:clamp(26px,4vw,44px)}
+.get p{margin-top:12px;max-width:44ch}
+.get .cta{justify-content:flex-end}
+.get .btn.go{background:var(--ink);color:#fff;box-shadow:5px 5px 0 var(--pink)}
+.get .win{color:var(--ink);opacity:.8;margin:0}
+.get .win a{color:var(--ink)}
+footer{padding:40px 0 90px;color:var(--muted);font-size:14px;display:flex;gap:14px;justify-content:space-between;flex-wrap:wrap}
+
+/* phone only: a button that follows you once the first one scrolls away */
+.dock{position:fixed;left:50%;bottom:16px;translate:-50% 0;z-index:20;display:none;box-shadow:5px 5px 0 var(--pink),0 18px 40px -10px #000}
+
 @media (max-width:920px){
-  .hero{grid-template-columns:1fr;padding-bottom:50px}
+  .hero{grid-template-columns:1fr;padding:18px 0 14px}
+  .stage{display:none}
+  .pg{display:flex;flex-direction:column;align-items:stretch;gap:16px}
+  .pg > div:first-child{display:contents}
+  .pg form{order:1}.pnwrap{order:2}.tryrow{order:3;margin-top:0}
+  .start{grid-template-columns:1fr;gap:10px}
   .notes{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nums{grid-template-columns:repeat(3,minmax(0,1fr))}
   .road{grid-template-columns:1fr}.step{padding-right:0}
   .get{grid-template-columns:1fr}.get .cta{justify-content:flex-start}
-  .spill{display:none}
+  .dock.on{display:inline-flex}
 }
-@media (max-width:560px){.notes{grid-template-columns:1fr}.nums{grid-template-columns:repeat(2,minmax(0,1fr))}nav .links{display:none}section{padding:54px 0}}
+@media (max-width:560px){
+  body{font-size:16px}
+  nav .links{display:none}
+  nav{justify-content:space-between}
+  section{padding:40px 0}
+  .head{margin-bottom:22px}
+  .hero .lede{font-size:17.5px;margin:18px 0 22px}
+  .notes{grid-template-columns:1fr;gap:12px}
+  .note{rotate:0deg;display:grid;grid-template-columns:72px minmax(0,1fr);gap:4px 14px;padding:14px 16px;align-items:start;border-radius:6px 18px 6px 18px}
+  .note:hover{translate:none}
+  .note .art{grid-row:1 / span 2;height:72px}
+  .note h3{font-size:16px;align-self:end}
+  .note p{font-size:14.5px}
+  .bub,.flow,.gbar{display:none}
+  .pie{width:50px;height:50px}.ring{width:54px;height:54px}.ring span{width:42px;height:42px}
+  .nums{gap:10px;margin-top:26px}
+  .num b{font-size:26px}.num span{font-size:13px}
+  .pg form .btn{padding:13px 14px}
+  .pnote{min-height:210px}
+  .go1{padding:14px 16px}
+}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
-
 </style>
 </head>
 <body>
 <div class="wrap">
   <nav>
     <a class="logo" href="#top"><i></i>ChipZett</a>
-    <div class="links"><a href="#notes">What notes can do</a><a href="#categories">Categories</a><a href="#vision">Vision</a><a href="#faq">Questions</a><a href="#get">Get it</a></div>
+    <div class="links"><a href="#try">Try it</a><a href="#notes">Features</a><a href="#categories">Categories</a><a href="#roadmap">Roadmap</a><a href="#faq">Questions</a></div>
     <a class="btn go sm" href="app/index.html">Open ChipZett</a>
   </nav>
 
   <header class="hero" id="top">
     <div>
-      <h1>Sticky notes, finally <em>alive<span class="eyes" aria-hidden="true"><b></b><b></b></span></em></h1>
-      <p class="lede">ChipZett notes talk to you, change their mood, play their own song and turn a line of text into a chart. They float on your desktop and work in your browser.</p>
-      <div class="cta">
-        <a class="btn go" href="app/index.html">Use it online</a>
-        <span class="btn soon" id="dl-top">Windows app: coming soon</span>
+      <h1>Sticky notes, finally <em>alive<span class="eyes" aria-hidden="true"><b data-look></b><b data-look></b></span></em></h1>
+      <p class="lede">Notes for ideas, checklists and reminders that speak up. Give each one a face, a mood and its own sound.</p>
+      <div class="cta" id="cta-top">
+        <a class="btn go" href="app/index.html">Open ChipZett</a>
+        <p class="win" id="dl-top">Windows app is coming soon.</p>
       </div>
-      <div class="facts"><span>Free</span><span>No account</span><span>Notes stay on your device</span></div>
+      <div class="facts"><span>Free to use</span><span>No account needed</span><span>Notes saved on this device</span></div>
     </div>
     <div class="stage">
       <div class="spill b" aria-hidden="true">Call mom at 6</div>
       <div class="screen">
-        <div class="bar"><i></i><i></i><i></i><span>This is the real app. Try it: drag a note, click a face.</span></div>
-        <iframe src="app/index.html" title="ChipZett Notes live demo" loading="lazy"></iframe>
+        <div class="bar"><i></i><i></i><i></i><span>This is the real app. Drag a note or press a face.</span></div>
+        <iframe data-src="app/index.html" title="ChipZett Notes live demo"></iframe>
       </div>
       <div class="spill a" aria-hidden="true">Rent due on the 5th</div>
     </div>
   </header>
 
-
-  <section id="start" style="padding-top:0">
+  <section id="try">
     <div class="head">
-      <span class="kicker">Start in ten seconds</span>
-      <h2>No download. No sign-up.</h2>
+      <span class="kicker">Try it here</span>
+      <h2>Type a line. Get a note.</h2>
+      <p class="lede">This is how the write bar in ChipZett works. Pick an example or type your own, then press the note's face to hear it.</p>
     </div>
-    <div class="start">
-      <div class="go1" style="--k:var(--mango)"><b>1. Open it</b><p>Press "Use it online". ChipZett opens right in your browser.</p></div>
-      <div class="go1" style="--k:var(--mint)"><b>2. Press Zett</b><p>Zett is the green helper in the corner. Press it to write a note or pick a ready-made one.</p></div>
-      <div class="go1" style="--k:var(--pink)"><b>3. Make it yours</b><p>Give the note a face, a mood and a song. It stays there until you tick it off.</p></div>
+    <div class="pg">
+      <div>
+        <form id="pg-form" autocomplete="off">
+          <input id="pg-in" type="text" maxlength="140" placeholder="Write a note" aria-label="Write a note">
+          <button class="btn go" type="submit">Make note</button>
+        </form>
+        <div class="tryrow"><span>Examples</span>
+          <div class="pick" id="pg-ex">
+            <button type="button" data-ex="todo: gym, groceries, call mom"><code>todo: gym, groceries, call mom</code></button>
+            <button type="button" data-ex="chart: Flights 45, Hotel 35, Food 20"><code>chart: Flights 45, Hotel 35, Food 20</code></button>
+            <button type="button" data-ex="flow: Idea &gt; Build &gt; Launch"><code>flow: Idea &gt; Build &gt; Launch</code></button>
+            <button type="button" data-ex="remind me in 10 sec stretch"><code>remind me in 10 sec stretch</code></button>
+            <button type="button" data-ex="goal: Book 120/300"><code>goal: Book 120/300</code></button>
+          </div>
+        </div>
+        <div class="tryrow"><span>Face</span>
+          <div class="pick" id="pg-face">
+            <button type="button" data-v="zett" aria-pressed="true">Zett</button>
+            <button type="button" data-v="cyclops" aria-pressed="false">One-eye</button>
+            <button type="button" data-v="cat" aria-pressed="false">Cat</button>
+            <button type="button" data-v="robot" aria-pressed="false">Robot</button>
+            <button type="button" data-v="cool" aria-pressed="false">Cool</button>
+            <button type="button" data-v="sleepy" aria-pressed="false">Sleepy</button>
+          </div>
+        </div>
+        <div class="tryrow"><span>Mood</span>
+          <div class="pick" id="pg-mood">
+            <button type="button" data-v="none" aria-pressed="false">None</button>
+            <button type="button" data-v="rain" aria-pressed="false">Rain</button>
+            <button type="button" data-v="snow" aria-pressed="false">Snow</button>
+            <button type="button" data-v="stars" aria-pressed="true">Stars</button>
+            <button type="button" data-v="party" aria-pressed="false">Party</button>
+          </div>
+        </div>
+        <div class="tryrow"><span>Colour</span>
+          <div class="pick" id="pg-col">
+            <button type="button" class="sw" style="--k:#ffc93c" data-v="#ffc93c" aria-pressed="true" aria-label="Mango"></button>
+            <button type="button" class="sw" style="--k:#ff6f9c" data-v="#ff6f9c" aria-pressed="false" aria-label="Pink"></button>
+            <button type="button" class="sw" style="--k:#5ef2c0" data-v="#5ef2c0" aria-pressed="false" aria-label="Mint"></button>
+            <button type="button" class="sw" style="--k:#74ccff" data-v="#74ccff" aria-pressed="false" aria-label="Sky"></button>
+            <button type="button" class="sw" style="--k:#bda4ff" data-v="#bda4ff" aria-pressed="false" aria-label="Lilac"></button>
+          </div>
+        </div>
+      </div>
+      <div class="pnwrap">
+        <div class="pnote" id="pg-note">
+          <canvas id="pg-sky" aria-hidden="true"></canvas>
+          <div class="ptop">
+            <button type="button" class="pface f-zett" id="pg-facebtn" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mouth"></span></button>
+            <div class="say" id="pg-say" aria-live="polite"></div>
+          </div>
+          <div class="pbody" id="pg-body"></div>
+        </div>
+        <div class="zett"><i aria-hidden="true"></i><span id="pg-zett"></span></div>
+      </div>
     </div>
   </section>
+
+  <section id="start">
+    <div class="head">
+      <span class="kicker">Getting started</span>
+      <h2>Your first note in seconds</h2>
+    </div>
+    <div class="start">
+      <div class="go1" style="--k:var(--mango)"><b>1. Open ChipZett</b><p>It opens in your browser. There is nothing to install.</p></div>
+      <div class="go1" style="--k:var(--mint)"><b>2. Press Zett</b><p>Zett is the green helper in the corner. Use it to write a note or choose a template.</p></div>
+      <div class="go1" style="--k:var(--pink)"><b>3. Make it yours</b><p>Pick a face, a mood and a sound for each note.</p></div>
+    </div>
+  </section>
+
   <section id="notes">
     <div class="head">
-      <span class="kicker">What a note can do</span>
-      <h2>Not a yellow square.<br>A small helper with a face.</h2>
-      <p class="lede">Every note is its own little character. You choose how it looks, how it moves and what it sounds like.</p>
+      <span class="kicker">Features</span>
+      <h2>What your notes can do</h2>
+      <p class="lede">Choose the look and sound of each note, then turn it into a checklist, a reminder or a chart.</p>
     </div>
     <div class="notes">
       <article class="note" style="--c:var(--mango);--r:-2deg">
-        <div class="art"><div class="face"><b></b><b></b><u></u></div><div class="bub">Rent is due!</div></div>
-        <h3>It talks</h3><p>Click a note's face and it reads itself out loud. Pick from 9 avatars: cat, robot, alien and more.</p>
+        <div class="art"><div class="face"><b></b><b></b><u></u></div><div class="bub">Take a stretch break</div></div>
+        <h3>Read notes aloud</h3><p>Press a note's face and it reads itself out loud. Choose from nine avatars, including a cat, a robot and an alien.</p>
       </article>
       <article class="note" style="--c:var(--sky);--r:1.5deg">
-        <div class="art"><div class="rain"></div><div class="sun"></div></div>
-        <h3>It has moods</h3><p>Rain, sun, snow, stars, confetti. 12 living backgrounds that play behind your words.</p>
+        <div class="art"><div class="rain"></div><div class="cloud"></div></div>
+        <h3>Set the mood</h3><p>Pick from 12 animated backgrounds, from falling rain to a burst of confetti.</p>
       </article>
       <article class="note" style="--c:var(--pink);--r:-1deg">
         <div class="art"><div class="eq"><i></i><i></i><i></i><i></i><i></i></div></div>
-        <h3>It sings</h3><p>Give a note its own sound. It plays when you hover and stops when you leave. Calm music can run behind everything.</p>
+        <h3>Add a sound</h3><p>Give a note its own sound, or put on background music while you work.</p>
       </article>
       <article class="note" style="--c:var(--cream);--r:2deg">
         <div class="art"><div class="duo"><div class="pie"></div><div class="flow"><span>Idea</span>&rarr;<span>Build</span>&rarr;<span>Launch</span></div></div></div>
-        <h3>It shows</h3><p>Type "Rent 40, Food 25" and get a pie chart. Type "Idea &gt; Build &gt; Launch" and get a flow diagram. Draw or drop in a photo too.</p>
+        <h3>Turn a line into a visual</h3><p>Type "chart: Flights 45, Hotel 35, Food 20" for a pie chart, or "flow: Idea &gt; Build &gt; Launch" for a diagram. You can sketch or add a photo too.</p>
       </article>
       <article class="note" style="--c:var(--mint);--r:-1.5deg">
         <div class="art"><div class="duo"><div class="ring"><span>2:58</span></div><div class="gbar"><i></i></div></div></div>
-        <h3>It remembers</h3><p>Write "remind me in 10 min" and the note counts down, then calls you. Goal notes track progress and celebrate when you finish.</p>
+        <h3>Track reminders and goals</h3><p>Type "remind me in 10 min" to start a countdown and hear an alert when it ends. Goal notes show how far you have come.</p>
       </article>
       <article class="note" style="--c:var(--lilac);--r:1deg">
-        <div class="art"><div class="chips"><span>Work</span><span>Home</span><span>Travel</span><span>Money</span><span>Ideas</span><span>Career</span></div></div>
-        <h3>It stays organised</h3><p>11 categories and 40+ ready-made notes: meeting notes, shopping lists, trip budgets, interview prep. One click each.</p>
+        <div class="art"><div class="minis"><i style="--k:#ffc93c"></i><i style="--k:#ff6f9c"></i><i style="--k:#5ef2c0"></i><i style="--k:#74ccff"></i></div></div>
+        <h3>Start with a template</h3><p>Meeting notes, a shopping list, a trip budget or interview prep. More than 40 notes are ready to use.</p>
       </article>
     </div>
     <div class="nums">
@@ -247,80 +421,199 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
       <div class="num" style="--k:var(--pink)"><b>9</b><span>paper textures</span></div>
       <div class="num" style="--k:var(--cream)"><b>8</b><span>fonts</span></div>
       <div class="num" style="--k:var(--mint)"><b>11</b><span>categories</span></div>
-      <div class="num" style="--k:var(--lilac)"><b>40+</b><span>ready-made notes</span></div>
+      <div class="num" style="--k:var(--lilac)"><b>40+</b><span>templates</span></div>
     </div>
   </section>
 
   <section id="categories">
     <div class="head">
-      <span class="kicker">Built around a real day</span>
-      <h2>One place for every kind of note in your life.</h2>
-      <p class="lede">Pick a category and see only those notes. Each one comes with notes that are already set up, so you never start from a blank square.</p>
+      <span class="kicker">Categories</span>
+      <h2>A note for every part of your day</h2>
+      <p class="lede">Pick a category to see the templates that come with it.</p>
     </div>
-    <div class="cats">
-      <div class="cat" style="--k:#74ccff"><i></i>Work <small>email replies, meetings, tasks</small></div>
-      <div class="cat" style="--k:#ffc93c"><i></i>Home <small>shopping, chores, bills</small></div>
-      <div class="cat" style="--k:#5ef2c0"><i></i>Travel <small>packing, itinerary, budget</small></div>
-      <div class="cat" style="--k:#c6f432"><i></i>Activity <small>workouts, habits</small></div>
-      <div class="cat" style="--k:#bda4ff"><i></i>Ideas <small>sketches, pros and cons</small></div>
-      <div class="cat" style="--k:#22d3a6"><i></i>Money <small>spending, savings</small></div>
-      <div class="cat" style="--k:#ff8a3d"><i></i>Hobbies <small>lists, recipes</small></div>
-      <div class="cat" style="--k:#ff6f9c"><i></i>Reminders <small>timers</small></div>
-      <div class="cat" style="--k:#f472d0"><i></i>Dreams <small>bucket list</small></div>
-      <div class="cat" style="--k:#3d7bff"><i></i>Career <small>goals, interview prep</small></div>
-      <div class="cat" style="--k:#fff4d6"><i></i>Knowledge <small>book notes, flashcards</small></div>
-    </div>
+    <div class="cats" id="cats"></div>
+    <div class="ready" id="ready" aria-live="polite"></div>
   </section>
 
-  <section id="vision">
+  <section id="roadmap">
     <div class="head">
-      <span class="kicker">Where this is going</span>
-      <h2>Today a note listens. Soon it helps. Later it does the work.</h2>
-      <p class="lede">This is our plan, not a promise of dates. We are building it in the open, one step at a time.</p>
+      <span class="kicker">Roadmap</span>
+      <h2>What's next for ChipZett</h2>
+      <p class="lede">This is the plan. It comes with no promised dates.</p>
     </div>
     <div class="road">
-      <div class="step now" style="--k:var(--mint)"><em>Now</em><h3>Notes that are alive</h3><p>Free in your browser today, with faces, moods, songs, charts, reminders and categories. The Windows app is being finished.</p></div>
-      <div class="step" style="--k:var(--sky)"><em>Next</em><h3>Notes in your pocket</h3><p>ChipZett on your phone, with the same notes wherever you are.</p></div>
-      <div class="step" style="--k:var(--lilac)"><em>Later</em><h3>Notes that do the work</h3><p>Write a task on a note and the note becomes a helper that gets it done, and shows you its progress right on your desktop.</p></div>
+      <div class="step now" style="--k:var(--mint)"><em>Available now</em><h3>ChipZett for the web</h3><p>Create notes, set reminders and use templates in your browser.</p></div>
+      <div class="step" style="--k:var(--sky)"><em>Coming next</em><h3>Desktop and mobile apps</h3><p>The Windows app comes first. Mobile apps and optional sync are planned.</p></div>
+      <div class="step" style="--k:var(--lilac)"><em>Exploring</em><h3>Notes that help do the work</h3><p>Write a task on a note and let the note prepare a draft for you to review, such as a meeting follow-up.</p></div>
     </div>
   </section>
-
 
   <section id="faq">
     <div class="head">
-      <span class="kicker">Good to know</span>
-      <h2>Questions people ask first.</h2>
+      <span class="kicker">Help</span>
+      <h2>Frequently asked questions</h2>
     </div>
     <div class="faq">
-      <details><summary>Is ChipZett really free?</summary><p>Yes. There is no payment, no trial and no account. You open it and use it.</p></details>
+      <details><summary>Is ChipZett free to use?</summary><p>Yes. There is no payment, no trial and no account. You open it and use it.</p></details>
       <details><summary>Where are my notes saved?</summary><p>On your own device, inside the browser you are using. They are not sent to us. If you clear your browser data, the notes go with it.</p></details>
-      <details><summary>Can anyone else see my notes?</summary><p>No. Your notes never leave your device, so nobody else can open them, including us.</p></details>
-      <details><summary>Will my notes show up on my other devices?</summary><p>Not yet. A note written on your laptop stays on your laptop. Sign-in and sync across devices are planned.</p></details>
-      <details><summary>Does it work on a phone?</summary><p>It opens in a phone browser, where notes appear as a list. Dragging notes around and resizing them works best on a computer for now.</p></details>
-      <details><summary>Do the notes really talk?</summary><p>Yes. They use the voice built into your browser or computer. You can turn Sound off in the menu at any time.</p></details>
-      <details><summary>When is the Windows app coming?</summary><p>It is being finished. When it is ready, a download button will appear on this page.</p></details>
+      <details><summary>Who can see my notes?</summary><p>Only you. Your notes never leave your device, so nobody else can open them, including us.</p></details>
+      <details><summary>Can I access my notes on another device?</summary><p>Not yet. A note written on your laptop stays on your laptop. Optional sync across devices is planned.</p></details>
+      <details><summary>Can I use ChipZett on my phone?</summary><p>Yes, it opens in a phone browser, where notes appear as a list. Moving notes around and resizing them is for computers.</p></details>
+      <details><summary>How do I make a note speak?</summary><p>Press its face. The note uses the voice built into your browser or device. You can turn Sound off in the menu at any time.</p></details>
+      <details><summary>When will the Windows app be available?</summary><p>It is being finished. When it is ready, a download link will appear on this page.</p></details>
+      <details><summary>How do I send feedback?</summary><p>Write to <a href="mailto:chipzett.official@gmail.com?subject=ChipZett%20feedback">chipzett.official@gmail.com</a>. Tell us what felt wrong or what you missed.</p></details>
     </div>
   </section>
+
   <section id="get">
     <div class="get">
       <div>
-        <h2>Try ChipZett now. It is free.</h2>
-        <p>Open it in your browser and start writing. No sign-up, no payment. Your notes are saved on your own device.</p>
+        <h2>Ready to write your first note?</h2>
+        <p>Open ChipZett in your browser and start writing. It's free, and you don't need an account.</p>
       </div>
       <div class="cta">
-        <a class="btn go" href="app/index.html">Use it online</a>
-        <span class="btn soon" id="dl-bottom">Windows app: coming soon</span>
+        <a class="btn go" href="app/index.html">Open ChipZett</a>
+        <p class="win" id="dl-bottom">Windows app is coming soon.</p>
       </div>
     </div>
   </section>
 
-  <footer><span>ChipZett Notes &middot; <a href="privacy.html">Privacy</a></span><span>Made for people who forget things and like a little fun.</span></footer>
+  <footer><span>ChipZett Notes &middot; <a href="privacy.html">Privacy</a> &middot; <a href="mailto:chipzett.official@gmail.com?subject=ChipZett%20feedback">Feedback</a></span><span>A little personality for your everyday notes.</span></footer>
 </div>
+<a class="btn go dock" id="dock" href="app/index.html">Open ChipZett</a>
 <script>
-/* When the Windows installer is ready, put its link here and both buttons turn into real downloads. */
+/* When the Windows installer is ready, put its link here and both "coming soon" lines turn into download links. */
 const DOWNLOAD_URL='';
-if(DOWNLOAD_URL)for(const id of['dl-top','dl-bottom']){const s=document.getElementById(id),a=document.createElement('a');a.className='btn ghost';a.href=DOWNLOAD_URL;a.textContent='Download for Windows';
-  if(id==='dl-bottom'){a.style.borderColor='rgba(27,20,48,.5)';a.style.background='transparent'}s.replaceWith(a)}
+if(DOWNLOAD_URL)for(const id of['dl-top','dl-bottom']){const p=document.getElementById(id),a=document.createElement('a');a.href=DOWNLOAD_URL;a.textContent='Download for Windows';p.textContent='';p.append(a)}
+
+const $=s=>document.querySelector(s);
+const CALM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* The live app is loaded only on wide screens, where dragging works. */
+if(matchMedia('(min-width:921px)').matches){const f=$('.screen iframe');f.src=f.dataset.src}
+
+/* Eyes follow the pointer, like notes in the app. */
+addEventListener('pointermove',e=>{for(const el of document.querySelectorAll('[data-look]')){
+  const r=el.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=Math.hypot(dx,dy)||1,k=Math.min(1,d/140)*r.width*.2;
+  el.style.setProperty('--ex',(dx/d*k).toFixed(1)+'px');el.style.setProperty('--ey',(dy/d*k).toFixed(1)+'px')}},{passive:true});
+
+/* ---------- Playground: the same typed shortcuts as the app's write bar ---------- */
+const UNIT={s:1e3,m:6e4,h:36e5},PAL=['#ff4d6d','#3d7bff','#22c58b','#ff9f1c','#8b5cf6','#06b6d4','#f472d0','#84cc16'];
+function parse(raw){
+  const t=raw.trim();let m;
+  if(m=t.match(/^(chart|pie|bar)\s*[:\-]\s*(.+)/i))return{type:'chart',kind:/bar/i.test(m[1])?'bar':'pie',text:'Chart',data:m[2]};
+  if(m=t.match(/^(?:flow|diagram)\s*[:\-]\s*(.+)/i))return{type:'flow',text:'Flow',data:m[1]};
+  if(m=t.match(/^(?:goal|progress)\s*[:\-]\s*(.*?)\s*(\d+)\s*\/\s*(\d+)/i))if(+m[3]>0)return{type:'goal',text:m[1]||'Goal',cur:Math.min(+m[2],+m[3]),total:+m[3]};
+  if(m=t.match(/^(?:todo|list)\s*[:\-]\s*(.+)/i)){const items=m[1].split(/[,;]/).map(s=>s.trim()).filter(Boolean).slice(0,8).map(t=>({t,d:false}));
+    if(items.length)return{type:'todo',text:'To do',items}}
+  if((m=t.match(/(\d+)\s*(seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h)\b/i))&&/(remind|timer|\bin\b)/i.test(t)){
+    const ms=Math.min(+m[1]*UNIT[m[2][0].toLowerCase()],864e5);
+    const label=t.replace(m[0],'').replace(/\b(remind me|timer|in|to)\b/gi,'').replace(/\s+/g,' ').trim()||'Time up';
+    return{type:'timer',text:label,end:Date.now()+ms,total:ms}}
+  return{type:'text',text:t};
+}
+const rows=d=>d.split(/[,;]/).map(p=>{const m=p.trim().match(/^(.*?)[\s:=]*(\d+(?:\.\d+)?)\s*%?$/);return m&&m[1].trim()?{l:m[1].trim(),v:+m[2]}:null}).filter(x=>x&&x.v>0).slice(0,8);
+const steps=d=>d.split(/\s*(?:->|→|>)\s*/).map(s=>s.trim()).filter(Boolean).slice(0,8);
+const fmt=ms=>{const s=Math.ceil(ms/1e3);return s>=3600?Math.floor(s/3600)+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'):Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+
+const note=$('#pg-note'),body=$('#pg-body'),say=$('#pg-say'),faceBtn=$('#pg-facebtn'),zett=$('#pg-zett');
+let cur=null,tick=0,sayT=0;
+
+function render(){
+  clearInterval(tick);body.textContent='';const n=cur;
+  if(n.type==='text'){body.append(el('p','',n.text))}
+  else if(n.type==='todo'){body.append(el('h4','',n.text));const ul=el('ul');
+    n.items.forEach(it=>{const li=el('li'),lb=el('label'),cb=el('input');cb.type='checkbox';cb.checked=it.d;
+      cb.onchange=()=>{it.d=cb.checked;if(n.items.every(i=>i.d)){boom();zett.textContent='All done. In the app the note is ready to be ticked off.'}};
+      lb.append(cb,el('span','',it.t));li.append(lb);ul.append(li)});body.append(ul)}
+  else if(n.type==='chart'){const r=rows(n.data),tot=r.reduce((a,x)=>a+x.v,0);
+    if(!r.length){body.append(el('p','','Add numbers, like "Rent 40, Food 25".'))}
+    else if(n.kind==='bar'){const b=el('div','pbars'),mx=Math.max(...r.map(x=>x.v));
+      r.forEach((x,i)=>{const row=el('div'),bar=el('b');bar.style.cssText='width:'+x.v/mx*100+'%;background:'+PAL[i];row.append(el('span','',x.l),bar,el('span','',x.v));b.append(row)});body.append(b)}
+    else{const w=el('div','pchart'),pie=el('div','ppie'),lg=el('div','pleg');let a=0;
+      pie.style.background='conic-gradient('+r.map((x,i)=>{const s=a;a+=x.v/tot*100;return PAL[i]+' '+s+'% '+a+'%'}).join(',')+')';
+      r.forEach((x,i)=>{const d=el('div'),sw=el('i');sw.style.background=PAL[i];d.append(sw,x.l+' '+Math.round(x.v/tot*100)+'%');lg.append(d)});
+      w.append(pie,lg);body.append(w)}}
+  else if(n.type==='flow'){const f=el('div','pflow');steps(n.data).forEach((s,i)=>{if(i)f.append('→');f.append(el('span','',s))});body.append(f)}
+  else if(n.type==='goal'){const g=el('div','pgoal'),t=el('div'),gb=el('div','gb'),bar=el('i'),pm=el('div','pm'),mi=el('button','','−'),pl=el('button','','+'),st=Math.max(1,Math.round(n.total/10));
+    mi.type=pl.type='button';mi.setAttribute('aria-label','Less');pl.setAttribute('aria-label','More');
+    const up=()=>{t.textContent=n.text+': '+n.cur+' of '+n.total+' ('+Math.round(n.cur/n.total*100)+'%)';bar.style.width=n.cur/n.total*100+'%'};
+    mi.onclick=()=>{n.cur=Math.max(0,n.cur-st);up()};pl.onclick=()=>{const was=n.cur;n.cur=Math.min(n.total,n.cur+st);up();if(n.cur===n.total&&was<n.total)boom()};
+    gb.append(bar);pm.append(mi,pl);g.append(t,gb,pm);body.append(g);up()}
+  else if(n.type==='timer'){const w=el('div','ptimer'),ring=el('div','pring'),lab=el('span'),tx=el('p','',n.text);ring.append(lab);w.append(ring,tx);body.append(w);
+    const up=()=>{const left=Math.max(0,n.end-Date.now()),p=left/n.total*100;lab.textContent=fmt(left);
+      ring.style.background='conic-gradient(var(--ink) 0 '+p+'%,rgba(27,20,48,.16) 0)';
+      if(!left&&!n.fired){n.fired=true;clearInterval(tick);note.classList.add('ring');setTimeout(()=>note.classList.remove('ring'),1600);talk('Time is up: '+n.text+'!')}};
+    up();tick=setInterval(up,250)}
+  sizeSky();
+}
+function says(n){
+  if(n.type==='todo'){const left=n.items.filter(i=>!i.d);return left.length?(n.items.length-left.length)+' of '+n.items.length+' done. Left: '+left.map(i=>i.t).join(', ')+'.':'All done, boss.'}
+  if(n.type==='timer'){const r=Math.max(0,n.end-Date.now());return r?n.text+'. '+fmt(r)+' left.':'Time is up: '+n.text+'!'}
+  if(n.type==='chart'){const r=rows(n.data),tot=r.reduce((a,x)=>a+x.v,0);if(!r.length)return'The chart is empty.';const b=r.reduce((a,x)=>x.v>a.v?x:a);return'The biggest share is '+b.l+', '+Math.round(b.v/tot*100)+' percent.'}
+  if(n.type==='flow')return steps(n.data).join(', then ')+'.';
+  if(n.type==='goal')return n.text+': '+n.cur+' of '+n.total+' done. '+Math.round(n.cur/n.total*100)+' percent.';
+  return'Remember: '+n.text;
+}
+function talk(t){
+  say.textContent=t;faceBtn.classList.add('talking');clearTimeout(sayT);
+  const done=()=>{faceBtn.classList.remove('talking')};
+  sayT=setTimeout(done,Math.min(9000,1200+t.length*60));
+  try{if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=1;u.onend=()=>{clearTimeout(sayT);done()};speechSynthesis.speak(u)}}catch(e){}
+}
+const ZSAY={text:'Press the face and the note reads itself.',todo:'Tick them off. Something happens when all are done.',chart:'Press the face to hear the biggest share.',flow:'One line in, one diagram out.',goal:'Use plus and minus to move the bar.',timer:'The note counts down, then calls you.'};
+function make(raw,quiet){if(!raw.trim())return;cur=parse(raw);say.textContent='';render();zett.textContent=ZSAY[cur.type];if(!quiet&&cur.type==='text')talk(says(cur))}
+$('#pg-form').onsubmit=e=>{e.preventDefault();const i=$('#pg-in');make(i.value);i.value=''};
+$('#pg-ex').onclick=e=>{const b=e.target.closest('button');if(b)make(b.dataset.ex)};
+faceBtn.onclick=()=>talk(says(cur));
+function group(id,fn){const g=$(id);g.onclick=e=>{const b=e.target.closest('button');if(!b)return;for(const x of g.children)x.setAttribute('aria-pressed',x===b);fn(b.dataset.v)}}
+group('#pg-face',v=>{faceBtn.className='pface f-'+v});
+group('#pg-col',v=>note.style.setProperty('--c',v));
+group('#pg-mood',v=>setMood(v));
+
+/* Moods: one small canvas behind the note. */
+const cv=$('#pg-sky'),cx=cv.getContext('2d');let mood='stars',parts=[],burst=[],raf=0,W=0,H=0;
+function sizeSky(){const r=note.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);if(!raf)frame()}
+function setMood(v){mood=v;const n={rain:36,snow:30,stars:22,party:26}[v]||0;parts=Array.from({length:n},()=>({x:Math.random(),y:Math.random(),s:.5+Math.random(),h:Math.random()*360,p:Math.random()*6.3}));if(!raf)frame()}
+function boom(){if(CALM)return;for(let i=0;i<70;i++)burst.push({x:W/2,y:H*.6,vx:(Math.random()-.5)*9,vy:-Math.random()*9-2,h:Math.random()*360,l:70+Math.random()*30});if(!raf)frame()}
+function frame(){
+  raf=0;cx.clearRect(0,0,W,H);const t=performance.now()/1e3;
+  for(const p of parts){
+    if(mood==='rain'){p.y+=.016*p.s;p.x-=.002;if(p.y>1){p.y=-.05;p.x=Math.random()}cx.strokeStyle='rgba(40,90,220,.45)';cx.lineWidth=1.5;cx.beginPath();cx.moveTo(p.x*W,p.y*H);cx.lineTo(p.x*W-3,p.y*H+12*p.s);cx.stroke()}
+    else if(mood==='snow'){p.y+=.003*p.s;p.x+=Math.sin(t+p.p)*.0012;if(p.y>1){p.y=-.03;p.x=Math.random()}cx.fillStyle='rgba(255,255,255,.85)';cx.beginPath();cx.arc(p.x*W,p.y*H,1.6+p.s*1.8,0,6.3);cx.fill()}
+    else if(mood==='stars'){const a=.35+.65*Math.abs(Math.sin(t*1.3+p.p)),r=1.5+p.s*2.2,x=p.x*W,y=p.y*H;cx.fillStyle='rgba(255,255,255,'+a+')';cx.beginPath();cx.moveTo(x,y-r*2);cx.quadraticCurveTo(x,y,x+r*2,y);cx.quadraticCurveTo(x,y,x,y+r*2);cx.quadraticCurveTo(x,y,x-r*2,y);cx.quadraticCurveTo(x,y,x,y-r*2);cx.fill()}
+    else if(mood==='party'){p.y+=.005*p.s;p.x+=Math.sin(t*2+p.p)*.002;if(p.y>1){p.y=-.03;p.x=Math.random()}cx.save();cx.translate(p.x*W,p.y*H);cx.rotate(t*2+p.p);cx.fillStyle='hsl('+p.h+' 85% 55%)';cx.fillRect(-4,-2,8,4);cx.restore()}
+  }
+  burst=burst.filter(b=>b.l>0);
+  for(const b of burst){b.x+=b.vx;b.y+=b.vy;b.vy+=.35;b.l--;cx.fillStyle='hsl('+b.h+' 90% 55%)';cx.fillRect(b.x,b.y,7,4)}
+  if(!CALM&&(parts.length||burst.length)&&!document.hidden)raf=requestAnimationFrame(frame);
+}
+addEventListener('resize',sizeSky);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!raf)frame()});
+setMood('stars');make('todo: gym, groceries, call mom',true);
+
+/* ---------- Categories and their ready-made notes ---------- */
+const CATS=[['Work','#74ccff',['Email reply','Meeting notes','Tasks today','Project steps','Deadline']],
+['Home','#ffc93c',['Shopping list','Chores','Bills to pay','Family note']],
+['Travel','#5ef2c0',['Trip plan','Packing list','Itinerary','Trip budget']],
+['Activity','#c6f432',['Workout','Habit streak','Weekly steps']],
+['Ideas','#bda4ff',['Idea','Sketch','Pros and cons']],
+['Money','#22d3a6',['Monthly spending','Savings goal','Expense log','Payments due']],
+['Hobbies','#ff8a3d',['Watch or read list','Practice goal','Recipe']],
+['Reminders','#ff6f9c',['In 5 minutes','In 30 minutes','In 1 hour','Do not forget']],
+['Dreams','#f472d0',['My dream','Bucket list','Dream progress']],
+['Career','#3d7bff',['Career goal','Skills to learn','Interview prep','Wins']],
+['Knowledge','#fff4d6',['Learning note','Book notes','Quote','Flashcard']]];
+const catBox=$('#cats'),ready=$('#ready');
+function showCat(i){const[name,k,list]=CATS[i];[...catBox.children].forEach((b,j)=>b.setAttribute('aria-pressed',i===j));
+  ready.textContent='';ready.style.setProperty('--k',k);ready.append(el('b','',name+' templates'));const ul=el('ul');list.forEach(t=>ul.append(el('li','',t)));ready.append(ul)}
+CATS.forEach(([name,k],i)=>{const b=el('button','cat');b.type='button';b.style.setProperty('--k',k);b.append(el('i'),name);b.onclick=()=>showCat(i);catBox.append(b)});
+showCat(0);
+
+/* ---------- Phone: keep one button within reach ---------- */
+if('IntersectionObserver' in window){const dock=$('#dock'),seen=new Set(),io=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?seen.add(e.target):seen.delete(e.target));dock.classList.toggle('on',!seen.size)});
+  io.observe($('#cta-top'));io.observe($('#get'));io.observe($('nav'))}
 </script>
 </body>
 </html>
