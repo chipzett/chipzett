@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChipZett Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Outfit:wght@400;500;600&family=Kalam:wght@400;700&family=Caveat:wght@500;700&family=Permanent+Marker&family=Pacifico&family=Special+Elite&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a night desk. Quiet dark glass chrome, loud paper notes that are alive. One world, single theme. */
+:root{
+  --desk:#0e0b1d; --desk-2:#1a1436; --glass:rgba(255,255,255,.07); --line:rgba(255,255,255,.14);
+  --text:#f3efff; --muted:#a79fc7; --ink:#1b1430;
+  --mango:#ffc93c; --pink:#ff6f9c; --mint:#5ef2c0; --sky:#74ccff; --lilac:#bda4ff;
+  --display:"Unbounded",system-ui,sans-serif; --ui:"Outfit",system-ui,sans-serif; --hand:"Kalam","Comic Sans MS",cursive;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--desk);color:var(--text);font-family:var(--ui);overflow:hidden;display:flex;flex-direction:column}
+body::before{content:"";position:fixed;inset:-20%;z-index:0;pointer-events:none;
+  background:radial-gradient(40% 35% at 20% 25%,rgba(189,164,255,.22),transparent 70%),
+             radial-gradient(35% 30% at 80% 20%,rgba(255,111,156,.16),transparent 70%),
+             radial-gradient(45% 40% at 60% 90%,rgba(94,242,192,.13),transparent 70%);
+  animation:drift 22s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(4%,-3%) rotate(6deg)}}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+
+.top{position:relative;z-index:5;display:flex;align-items:center;gap:12px;padding:14px 18px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+.logo i{width:22px;height:22px;border-radius:6px 6px 6px 2px;background:var(--mango);transform:rotate(-8deg);display:block;box-shadow:4px 4px 0 var(--pink)}
+.logo small{font-family:var(--ui);font-weight:500;font-size:12px;color:var(--muted);letter-spacing:0}
+.grow{flex:1}
+.pill{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:8px 14px;backdrop-filter:blur(14px);font-size:14px;transition:transform .15s,background .15s}
+button.pill:hover{background:rgba(255,255,255,.14);transform:translateY(-1px)}
+button.pill:active{transform:scale(.95)}
+#search{width:170px;outline-offset:0}
+#search::placeholder,#cap::placeholder{color:var(--muted)}
+
+.board{position:relative;z-index:1;flex:1;min-height:0;overflow:hidden}
+.note{position:absolute;width:var(--w,232px);transform:rotate(var(--r,0deg));transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .25s;touch-action:none}
+.note.glide{transition:left .6s cubic-bezier(.3,1.3,.5,1),top .6s cubic-bezier(.3,1.3,.5,1),transform .45s}
+.note.drag{transition:none;cursor:grabbing}
+.note.dim{opacity:.13}
+.paper{background-color:var(--c);color:var(--ink);border-radius:6px 18px 6px 18px;padding:10px 14px 16px;
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 18px 40px -12px rgba(0,0,0,.65),0 0 60px -20px var(--c);
+  animation:drop .6s cubic-bezier(.2,1.5,.4,1) backwards}
+.note.drag .paper{box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 40px 60px -14px rgba(0,0,0,.7),0 0 80px -10px var(--c);scale:1.04}
+@keyframes drop{from{opacity:0;transform:translateY(160px) scale(.3) rotate(-25deg)}}
+.paper.crumple{animation:crumple .55s cubic-bezier(.6,-.3,.7,.2) forwards}
+@keyframes crumple{to{transform:scale(0) rotate(260deg);border-radius:50%;opacity:.4}}
+.paper.fall{animation:fall .7s cubic-bezier(.5,0,.9,.4) forwards}
+@keyframes fall{30%{transform:rotate(-8deg)}to{transform:translateY(110vh) rotate(35deg);opacity:0}}
+.note.ringing .paper{animation:ring .5s linear infinite}
+@keyframes ring{25%{transform:rotate(-4deg) scale(1.04)}75%{transform:rotate(4deg) scale(1.04)}}
+
+.head{display:flex;align-items:center;justify-content:space-between;cursor:grab;margin-bottom:6px;min-height:30px}
+.face{display:flex;align-items:center;gap:5px;padding:4px 6px;border-radius:999px}
+button.face:hover{background:rgba(27,20,48,.1)}
+.eye{width:13px;height:13px;border-radius:50%;background:#fff;position:relative;overflow:hidden;animation:blink 5s infinite;animation-delay:var(--bd,0s)}
+.eye::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:var(--ink);left:3.5px;top:3.5px;transform:translate(var(--ex,0px),var(--ey,0px))}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.mouth{width:12px;height:6px;border-radius:0 0 12px 12px;background:var(--ink);margin-left:2px;transition:all .2s}
+.talking .mouth{animation:talk .22s infinite alternate}
+@keyframes talk{to{height:11px;border-radius:6px}}
+.acts{display:flex;gap:2px;opacity:.35;transition:opacity .2s}
+.note:hover .acts,.note:focus-within .acts{opacity:1}
+.acts button{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:var(--ink)}
+.acts button:hover{background:rgba(27,20,48,.14)}
+.acts svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--ink);background:conic-gradient(var(--mango),var(--pink),var(--lilac),var(--sky),var(--mint),var(--mango))}
+.body,.ttl{font-family:var(--f,var(--hand));font-size:calc(19px*var(--fs,1));line-height:1.3;outline:none;overflow-wrap:anywhere;white-space:pre-wrap;min-height:1.3em}
+.ttl{font-weight:700;margin-bottom:4px}
+ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:3px}
+li{display:flex;gap:8px;align-items:flex-start;font-family:var(--f,var(--hand));font-size:calc(18px*var(--fs,1));line-height:1.25;cursor:pointer;border-radius:6px;padding:1px 2px}
+li:hover{background:rgba(27,20,48,.08)}
+li b{flex:none;width:17px;height:17px;border:2px solid var(--ink);border-radius:5px;margin-top:3px;display:grid;place-items:center;transition:background .2s,transform .3s cubic-bezier(.3,2,.5,1)}
+li.d b{background:var(--ink);transform:rotate(360deg)}
+li.d b::after{content:"";width:8px;height:4px;border:2px solid var(--tk,var(--c));border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+li span{background:linear-gradient(var(--ink),var(--ink)) no-repeat 0 55%/0 2px;transition:background-size .35s,opacity .3s;overflow-wrap:anywhere}
+li.d span{background-size:100% 2px;opacity:.55}
+.addi{margin-top:6px;width:100%;background:color-mix(in srgb,var(--ink) 10%,transparent);border:0;border-radius:8px;padding:5px 8px;color:var(--ink);font-family:var(--hand);font-size:16px}
+.addi::placeholder{color:color-mix(in srgb,var(--ink) 55%,transparent)}
+.timer{display:flex;align-items:center;gap:12px}
+.ringc{flex:none;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--ink) calc(var(--p,1)*360deg),color-mix(in srgb,var(--ink) 18%,transparent) 0)}
+.ringc span{width:48px;height:48px;border-radius:50%;background:var(--tk,var(--c));display:grid;place-items:center;font:600 13px var(--ui);font-variant-numeric:tabular-nums}
+.say{position:absolute;left:8px;bottom:calc(100% + 8px);max-width:240px;background:#fff;color:#1b1430;font:500 14px/1.3 var(--ui);padding:8px 12px;border-radius:14px 14px 14px 3px;box-shadow:0 10px 30px -8px rgba(0,0,0,.6);animation:pop .3s cubic-bezier(.3,1.8,.5,1);pointer-events:none;z-index:3}
+@keyframes pop{from{transform:scale(.4) translateY(10px);opacity:0}}
+
+/* textures: each sits on top of the note colour */
+.mini{background-color:var(--c);color:var(--ink)}
+.tx-lined{background-image:repeating-linear-gradient(transparent 0 24px,color-mix(in srgb,var(--ink) 22%,transparent) 24px 25px);background-position:0 12px}
+.tx-grid{background-image:linear-gradient(color-mix(in srgb,var(--ink) 14%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ink) 14%,transparent) 1px,transparent 1px);background-size:18px 18px}
+.tx-dots{background-image:radial-gradient(color-mix(in srgb,var(--ink) 30%,transparent) 1.4px,transparent 1.6px);background-size:14px 14px}
+.tx-grain{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.tx-sunset{background-image:linear-gradient(140deg,color-mix(in srgb,var(--c),#fff 40%),var(--c) 45%,color-mix(in srgb,var(--c),#ff2d88 50%))}
+.tx-holo{background-image:linear-gradient(115deg,transparent 25%,rgba(255,255,255,.65) 42%,rgba(120,255,240,.35) 50%,transparent 62%);background-size:300% 100%}
+.paper.tx-holo{animation:drop .6s cubic-bezier(.2,1.5,.4,1) backwards,shine 3.5s linear infinite}
+.mini.tx-holo{animation:shine 3.5s linear infinite}
+@keyframes shine{from{background-position:150% 0}to{background-position:-150% 0}}
+.tx-glass{background-color:color-mix(in srgb,var(--c) 20%,transparent);backdrop-filter:blur(16px) saturate(1.4);border:1px solid color-mix(in srgb,var(--c) 70%,transparent)}
+.tx-neon{background-color:#120e24;border:2px solid var(--c);box-shadow:0 0 18px var(--c),0 0 4px var(--c) inset,0 18px 40px -12px #000}
+
+.pick{position:fixed;z-index:30;width:292px;max-height:min(600px,calc(100% - 16px));overflow:auto;background:rgba(26,20,54,.92);border:1px solid var(--line);border-radius:18px;padding:12px;backdrop-filter:blur(20px);box-shadow:0 30px 60px -20px #000;animation:pop .22s cubic-bezier(.3,1.6,.5,1);display:flex;flex-direction:column;gap:8px}
+.pick h4{font:600 11px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pcs{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.pc{aspect-ratio:1;border-radius:50%;background:var(--c);transition:transform .18s cubic-bezier(.3,2,.5,1)}
+.pc:hover{transform:scale(1.2)}
+.pc[aria-pressed=true]{box-shadow:0 0 0 2px #1a1436,0 0 0 4px var(--c)}
+.cust{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.cust input{width:34px;height:26px;padding:0;border:1px solid var(--line);border-radius:8px;background:none}
+.pts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pt{border-radius:10px;padding:3px;border:2px solid transparent;font-size:11.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px;align-items:center}
+.pt[aria-pressed=true]{border-color:var(--mint);color:var(--text)}
+.pt .mini{width:100%;height:34px;border-radius:4px 10px 4px 10px}
+
+.pvs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pv{border-radius:10px;padding:3px;border:2px solid transparent;font-size:11.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px;align-items:center}
+.pv:hover{color:var(--text)}
+.pv .mini{width:100%;height:40px;display:grid;place-items:center;font-size:17px;border-radius:4px 10px 4px 10px;transition:transform .2s cubic-bezier(.3,2,.5,1)}
+.pv:hover .mini{transform:rotate(-3deg) scale(1.06)}
+.pfs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pf{display:flex;flex-direction:column;align-items:center;font-size:10.5px;color:var(--muted);padding:5px 2px;border-radius:10px;border:2px solid transparent;background:var(--glass)}
+.pf b{font-size:18px;color:var(--text);font-weight:400;height:27px;display:grid;place-items:center}
+.pss{display:flex;gap:6px}
+.ps{flex:1;padding:6px;border-radius:10px;background:var(--glass);border:2px solid transparent;font-weight:600;font-size:13px}
+.pf[aria-pressed=true],.ps[aria-pressed=true]{border-color:var(--mint);color:var(--text)}
+.pc.auto{background:var(--glass);border:1px dashed var(--muted);font-size:12px;display:grid;place-items:center}
+.pc.auto[aria-pressed=true]{border:2px solid var(--mint);box-shadow:none}
+.pick .pill{align-self:stretch;text-align:center;font-weight:600;background:linear-gradient(90deg,var(--pink),var(--lilac),var(--sky));color:#1b1430;border:0}
+.seltool{position:fixed;z-index:40;display:flex;align-items:center;gap:2px;background:#fff;color:#1b1430;border-radius:14px;padding:4px;box-shadow:0 16px 40px -10px rgba(0,0,0,.7);animation:pop .2s cubic-bezier(.3,1.6,.5,1)}
+.seltool[hidden]{display:none}
+.seltool button{min-width:27px;height:27px;border-radius:8px;font:600 13px var(--ui);color:#1b1430;display:grid;place-items:center;padding:0 5px}
+.seltool button:hover{background:#ece8f7}
+.seltool .hl{min-width:19px;width:19px;height:19px;border-radius:50%;margin:0 2px;border:1px solid rgba(0,0,0,.15)}
+.seltool i{width:1px;height:18px;background:#d9d3ea;margin:0 3px}
+
+/* avatars: same eyes + mouth markup, different characters */
+.face,.blob{position:relative}
+.av-cyclops .eye+.eye{display:none}
+.av-cyclops .eye{width:19px;height:19px}
+.av-cyclops .eye::after{width:9px;height:9px;left:5px;top:5px}
+.av-cat .eye{background:#d9ff66}
+.av-cat .eye::after{width:3px;height:10px;left:5px;top:1.5px;border-radius:50%}
+.av-cat::before,.av-cat::after{content:"";position:absolute;top:-4px;border:5px solid transparent;border-bottom:8px solid var(--ink);border-top:0}
+.av-cat::before{left:5px;transform:rotate(-14deg)}
+.av-cat::after{left:22px;transform:rotate(14deg);animation:twitch 4s infinite}
+.blob.av-cat::before{left:9px;top:-7px}.blob.av-cat::after{left:38px;top:-7px}
+@keyframes twitch{0%,88%,100%{transform:rotate(14deg)}94%{transform:rotate(34deg)}}
+.av-cat .mouth{width:0;height:0;background:none;border:4px solid transparent;border-top:5px solid var(--ink);border-radius:0}
+.av-robot .eye{border-radius:3px;background:#7df9ff;box-shadow:0 0 6px #7df9ff;animation:scan 2.4s steps(1) infinite}
+.av-robot .eye::after{width:13px;height:2px;left:0;top:5.5px;border-radius:0;background:rgba(0,0,0,.55);transform:translateY(var(--ey,0px))}
+@keyframes scan{0%,100%{opacity:1}48%{opacity:.35}52%{opacity:1}}
+.av-robot::before{content:"";position:absolute;left:18px;top:-7px;width:2px;height:8px;background:var(--ink);box-shadow:0 -3px 0 2px #ff4d4d;animation:beep 1s steps(1) infinite}
+.blob.av-robot::before{left:28px;top:-9px}
+@keyframes beep{50%{box-shadow:0 -3px 0 2px transparent}}
+.av-robot .mouth{width:16px;height:5px;border-radius:1px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px)}
+.av-cool .eye{width:16px;height:10px;border-radius:3px 3px 8px 8px;background:var(--ink);animation:none}
+.av-cool .eye+.eye{margin-left:-3px}
+.av-cool .eye::after{width:4px;height:16px;left:-8px;top:-3px;border-radius:0;background:rgba(255,255,255,.75);transform:rotate(25deg);animation:glint 3s ease-in-out infinite}
+@keyframes glint{0%,60%{left:-8px}80%,100%{left:22px}}
+.av-cool .mouth{width:10px;height:4px;border-radius:0 0 10px 2px;transform:rotate(-10deg)}
+.av-love .eye{background:#ff2d55;border-radius:0;clip-path:path('M6.5 12.5C-4 5 2-1 6.5 3.5 11-1 17 5 6.5 12.5Z');animation:beat 1s ease-in-out infinite}
+.av-love .eye::after{display:none}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.3)}30%{transform:scale(1)}45%{transform:scale(1.2)}}
+.av-love .mouth{height:7px}
+.av-sleepy .eye{height:7px;border-radius:0 0 13px 13px;margin-top:5px;animation:none}
+.av-sleepy .eye::after{top:-2px}
+.av-sleepy .mouth{width:6px;height:6px;border-radius:50%;animation:breathe 3s ease-in-out infinite}
+.av-sleepy::after{content:"z";position:absolute;right:-6px;top:-8px;font:700 11px var(--ui);color:var(--ink);animation:zz 3s ease-out infinite}
+@keyframes zz{from{opacity:0;transform:translate(-4px,6px) scale(.6)}40%{opacity:1}to{opacity:0;transform:translate(6px,-8px) scale(1.2)}}
+@keyframes breathe{50%{transform:scale(1.5)}}
+.av-alien .eye{width:12px;height:16px;background:var(--ink);border-radius:60% 60% 50% 50%;rotate:18deg;animation:glow 1.8s ease-in-out infinite alternate}
+.av-alien .eye+.eye{rotate:-18deg}
+.av-alien .eye::after{width:4px;height:4px;background:#fff;left:4px;top:5px}
+@keyframes glow{to{box-shadow:0 0 9px 1px var(--mint)}}
+.av-alien .mouth{width:6px;height:2px;border-radius:2px}
+.av-none{visibility:hidden}
+.talking .av-sleepy .mouth{animation:talk .22s infinite alternate}
+/* idle moves for the whole note */
+.note.an-float{animation:floaty 4s ease-in-out infinite}
+.note.an-wiggle{animation:wig 2.4s ease-in-out infinite}
+.note.an-pulse{animation:pls 1.6s ease-in-out infinite}
+.note.an-swing{animation:swing 3s ease-in-out infinite;transform-origin:50% 0}
+.note.drag{animation:none}
+@keyframes floaty{50%{translate:0 -9px}}
+@keyframes wig{25%{rotate:-2.5deg}75%{rotate:2.5deg}}
+@keyframes pls{50%{scale:1.04}}
+@keyframes swing{0%,100%{rotate:-4deg}50%{rotate:4deg}}
+.pas{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pa{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:var(--ink);background:var(--c);border-radius:6px 12px 6px 12px;padding:11px 2px 5px;transition:transform .18s cubic-bezier(.3,2,.5,1)}
+.pa:hover{transform:translateY(-2px) rotate(-2deg)}
+.pa[aria-pressed=true]{box-shadow:0 0 0 2px #1a1436,0 0 0 4px var(--mint)}
+.pa .face{padding:0;height:16px}
+
+/* advanced notes: charts, flow diagrams, doodles, photos, goals */
+.body:empty::before{content:var(--ph,"write...");opacity:.45}
+.chart{position:relative;margin:4px 0}
+.chart svg{width:112px;height:112px;display:block;margin:0 auto}
+.chart circle{fill:none;stroke-width:22;animation:grow .9s cubic-bezier(.3,1,.4,1) backwards}
+@keyframes grow{from{stroke-dasharray:0 189}}
+.chart text{font:700 13px var(--ui);fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.lg{display:flex;flex-wrap:wrap;gap:3px 10px;font:500 12px var(--ui);margin-top:6px}
+.lg span{display:flex;align-items:center;gap:4px}
+.lg i{width:9px;height:9px;border-radius:3px;background:var(--k)}
+.bars{display:grid;grid-template-columns:auto 1fr auto;gap:4px 6px;align-items:center;font:500 12px var(--ui);padding-top:24px;font-variant-numeric:tabular-nums}
+.bars u{display:block;height:12px;border-radius:6px;background:var(--k);width:var(--w);animation:wgrow .8s cubic-bezier(.3,1.3,.5,1) backwards;text-decoration:none}
+@keyframes wgrow{from{width:0}}
+.kind{position:absolute;right:0;top:0;font:600 11px var(--ui);padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--ink) 12%,transparent);color:var(--ink)}
+.flow{display:flex;flex-direction:column;align-items:center;margin:4px 0}
+.step{border:2px solid var(--ink);border-radius:10px;padding:3px 12px;font-family:var(--f,var(--hand));font-size:calc(17px*var(--fs,1));text-align:center;max-width:100%;overflow-wrap:anywhere;animation:pop .4s cubic-bezier(.3,1.8,.5,1) backwards;animation-delay:calc(var(--i)*.12s)}
+.step:first-child{border-radius:999px}
+.step:last-child{background:var(--ink);color:var(--tk,var(--c))}
+.arr{width:2px;height:16px;background:var(--ink);position:relative;margin-bottom:5px}
+.arr::after{content:"";position:absolute;left:-4px;bottom:-5px;border:5px solid transparent;border-top:6px solid var(--ink);border-bottom:0;animation:nudge 1.2s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateY(3px)}}
+.pad{width:100%;aspect-ratio:204/150;border-radius:8px;background:color-mix(in srgb,var(--ink) 7%,transparent);touch-action:none;cursor:crosshair;display:block}
+.pens{display:flex;gap:6px;align-items:center;margin:6px 0}
+.pens button{width:16px;height:16px;border-radius:50%;background:var(--k);border:2px solid transparent}
+.pens button[aria-pressed=true]{border-color:var(--ink);transform:scale(1.25)}
+.pens .txt{width:auto;height:auto;border-radius:999px;background:color-mix(in srgb,var(--ink) 12%,transparent);font:600 11px var(--ui);padding:2px 8px;margin-left:auto;color:var(--ink)}
+.pic{width:100%;border-radius:4px 12px 4px 12px;display:block;margin-bottom:6px}
+.gb{height:16px;border-radius:999px;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden;margin:6px 0}
+.gb i{display:block;height:100%;width:var(--w);background:var(--ink);border-radius:999px;transition:width .5s cubic-bezier(.3,1.5,.5,1)}
+.grow2{display:flex;align-items:center;gap:6px;font:600 13px var(--ui);font-variant-numeric:tabular-nums}
+.grow2 button{width:26px;height:26px;border-radius:8px;background:color-mix(in srgb,var(--ink) 12%,transparent);color:var(--ink);font-weight:700}
+.grow2 span{flex:1;text-align:center}
+.menu{width:260px}
+.mis{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mi{text-align:left;background:var(--glass);border-radius:12px;padding:8px 10px;font-size:13px;font-weight:600;transition:transform .15s,background .15s}
+.mi:hover{background:rgba(255,255,255,.16);transform:translateY(-2px)}
+.mi small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+#more{width:30px;height:30px;border-radius:50%;background:var(--mint);color:#1b1430;font-size:20px;font-weight:600;line-height:1;flex:none;transition:transform .2s cubic-bezier(.3,2,.5,1)}
+#more:hover{transform:rotate(90deg) scale(1.1)}
+
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:11px;margin-left:7px}
+.eq i{width:3px;height:3px;background:var(--mint);border-radius:2px}
+#mus.on .eq i{animation:eq .7s ease-in-out infinite alternate}
+#mus.on .eq i:nth-child(2){animation-delay:.25s}
+#mus.on .eq i:nth-child(3){animation-delay:.45s}
+@keyframes eq{to{height:11px}}
+.mi[aria-pressed=true]{outline:2px solid var(--mint)}
+.volr{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.volr input{flex:1;accent-color:var(--mint)}
+
+.paper{position:relative}
+.has-song .paper::after{content:"\266A";position:absolute;top:-11px;right:16px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--tk,var(--c));display:grid;place-items:center;font:700 13px var(--ui);box-shadow:0 4px 10px -3px rgba(0,0,0,.5)}
+.singing .paper::after{animation:bob .5s ease-in-out infinite}
+
+/* mood: a live weather layer behind the note's content */
+.sky{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit;pointer-events:none;z-index:0}
+.paper>:not(.sky){position:relative;z-index:1}
+.has-song .paper::after{z-index:2}
+.pms{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pms .ps{font-size:11px;padding:6px 1px}
+
+.tabs{display:flex;gap:4px;position:sticky;top:-12px;background:#1a1436;padding:6px 0;margin:-6px 0 0;z-index:3}
+.tabs button{flex:1;padding:7px 2px;border-radius:9px;font-size:11.5px;font-weight:600;color:var(--muted);background:var(--glass)}
+.tabs button[aria-pressed=true]{background:var(--mint);color:#1b1430}
+.off{display:none!important}
+
+/* desktop app mode: the window is transparent and notes float on the real desktop */
+html.desk,html.desk body{background:transparent}
+html.desk body::before{display:none}
+html.desk .logo small{display:none}
+html.desk .logo{background:rgba(26,20,54,.92);padding:6px 14px;border-radius:999px}
+html.desk .pill,html.desk .cap{background:rgba(26,20,54,.92)}
+html.desk .hints button{background:rgba(26,20,54,.85)}
+html.desk .tx-glass{background-color:color-mix(in srgb,var(--c) 45%,#120e24)}
+
+/* resize: drag the corner; the note keeps whatever width and height you give it */
+.paper{min-height:var(--mh,0px)}
+.paper>.rz{position:absolute;right:3px;bottom:3px;width:17px;height:17px;cursor:nwse-resize;opacity:.3;touch-action:none;z-index:2;border-radius:0 0 12px 0;
+  background:linear-gradient(135deg,transparent 50%,var(--ink) 50% 58%,transparent 58% 70%,var(--ink) 70% 78%,transparent 78%)}
+.note:hover .rz{opacity:.8}
+
+/* hub: the only chrome. It opens from the mascot, so the desktop shows just notes. */
+.hub{position:fixed;right:18px;bottom:92px;z-index:8;width:min(390px,calc(100% - 24px));max-height:calc(100% - 110px);overflow:auto;background:rgba(26,20,54,.95);border:1px solid var(--line);border-radius:22px;padding:14px;display:flex;flex-direction:column;gap:10px;backdrop-filter:blur(20px);box-shadow:0 30px 70px -20px #000;animation:pop .25s cubic-bezier(.3,1.5,.5,1);transform-origin:100% 100%}
+.hub.off{display:none}
+.hub .top{padding:0;gap:6px;z-index:auto}
+.hub .logo{font-size:17px;flex:1}
+.hub .logo i{width:16px;height:16px;box-shadow:3px 3px 0 var(--pink)}
+.hub .pill{padding:6px 11px;font-size:13px}
+.hub #search{flex:1 0 100%;width:auto;order:9}
+.hub .cap{width:100%;box-shadow:none}
+.hub .hints{justify-content:flex-start}
+.hub h4{font:600 11px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cat{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--glass);font-size:13px;border:1.5px solid transparent;transition:transform .15s}
+.cat:hover{transform:translateY(-1px)}
+.cat i{width:10px;height:10px;border-radius:3px;background:var(--k)}
+.cat b{font-weight:500;color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+.cat[aria-pressed=true]{border-color:var(--k);background:color-mix(in srgb,var(--k) 18%,transparent)}
+body .pal{bottom:22px}
+.note.hid{display:none}
+.paper>.tag{position:absolute;top:-10px;left:14px;font:600 10.5px var(--ui);letter-spacing:.04em;padding:2px 9px;border-radius:999px;background:var(--ink);color:var(--tk,var(--c));z-index:2;box-shadow:0 4px 10px -3px rgba(0,0,0,.5)}
+@media (max-width:640px){body .pal{bottom:16px}.hub{right:12px;bottom:84px}}
+
+.dock{position:relative;z-index:6;padding:8px 18px 16px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.cap{display:flex;align-items:center;gap:8px;width:min(640px,100%);background:rgba(255,255,255,.09);border:1px solid var(--line);border-radius:20px;padding:8px 8px 8px 16px;backdrop-filter:blur(18px);box-shadow:0 20px 50px -20px #000;transition:border-color .2s,box-shadow .2s}
+.cap:focus-within{border-color:var(--mint);box-shadow:0 0 0 4px rgba(94,242,192,.15),0 20px 50px -20px #000}
+#cap{flex:1;min-width:0;background:none;border:0;outline:none;font-size:16px;padding:6px 0}
+.sw{width:18px;height:18px;border-radius:50%;background:var(--c);flex:none;transition:transform .2s cubic-bezier(.3,2,.5,1)}
+.sw[aria-pressed=true]{transform:scale(1.35);box-shadow:0 0 0 2px var(--desk),0 0 0 4px var(--c)}
+.go{background:var(--mango);color:var(--ink);font-weight:600;border-radius:14px;padding:9px 16px;transition:transform .15s}
+.go:hover{transform:translateY(-2px) rotate(-2deg)}.go:active{transform:scale(.92)}
+.hints{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.hints button{font-size:12.5px;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:4px 10px}
+.hints button:hover{color:var(--text);border-color:var(--text)}
+
+.pal{position:fixed;right:18px;bottom:128px;z-index:7;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+.pal .say{position:static;max-width:230px;border-radius:14px 14px 3px 14px}
+.blob{pointer-events:auto;width:58px;height:54px;border-radius:46% 54% 50% 50%/58% 58% 42% 42%;background:var(--mint);display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;align-content:center;animation:bob 3s ease-in-out infinite;box-shadow:0 14px 30px -10px rgba(94,242,192,.6)}
+.blob .mouth{flex-basis:14px;margin:2px 22px 0}
+@keyframes bob{50%{transform:translateY(-7px) rotate(3deg)}}
+.blob:active{animation:none;transform:scale(.85)}
+#fx{position:fixed;inset:0;z-index:20;pointer-events:none}
+
+@media (max-width:640px){
+  body{overflow:auto}
+  .board{overflow:auto;display:flex;flex-wrap:wrap;gap:16px;padding:8px 16px 20px;align-content:flex-start;justify-content:center}
+  .note{position:relative;left:auto!important;top:auto!important;width:min(var(--w,232px),100%)}
+  .pal{bottom:150px;right:12px}
+  #search{width:120px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="board" id="board"></main>
+
+<div class="pal"><div id="palsay"></div><button class="blob" id="pal" aria-label="ChipZett se baat karo"><span class="eye"></span><span class="eye" style="--bd:.1s"></span><span class="mouth"></span></button></div>
+
+<aside class="hub off" id="hub" aria-label="ChipZett menu">
+<header class="top">
+  <div class="logo"><i></i>ChipZett</div>
+  
+  <input id="search" class="pill" type="search" placeholder="Dhoondo..." aria-label="Search notes">
+  <button id="tip" class="pill">Tip</button>
+  <button id="lang" class="pill"></button>
+  <button id="mus" class="pill">Music<span class="eq"><i></i><i></i><i></i></span></button>
+  <input type="file" id="song" accept="audio/*" hidden>
+  <button id="tidy" class="pill">Saaf karo</button>
+  <button id="snd" class="pill" aria-pressed="true">Awaaz: on</button>
+  <button id="hubx" class="pill" aria-label="Close menu">&times;</button>
+</header>
+<form class="cap" id="capf">
+    <button type="button" id="more" aria-label="Aur tarah ke notes" title="Aur tarah ke notes">+</button>
+    <input type="file" id="file" accept="image/*" hidden>
+    <input id="cap" autocomplete="off" placeholder="Kuch bhi likho, Enter dabao..." aria-label="New note">
+    <span id="sws" style="display:flex;gap:6px"></span>
+    <button class="go">Chipkao</button>
+  </form>
+<div class="hints" id="hints"></div>
+<h4>Categories</h4>
+<div class="cats" id="cats"></div>
+<h4 id="tplh"></h4>
+<div class="mis" id="tpls"></div>
+</aside>
+<canvas id="fx"></canvas>
+
+<script>
+const DESK=!!window.chipku;if(DESK)document.documentElement.classList.add('desk');
+let LANG='en';try{LANG=localStorage.getItem('chipku-lang')||'en'}catch(e){}
+/* The app's source text is Hinglish. In English mode every piece of UI text is looked up here. */
+const D={"notes jo bolte hain": "notes that talk", "Dhoondo...": "Search...", "Saaf karo": "Tidy up", "Awaaz: ": "Sound: ", "Awaaz: on": "Sound: on", "ChipZett se baat karo": "Open the ChipZett menu", "Aur tarah ke notes": "More kinds of notes", "Kuch bhi likho, Enter dabao...": "Write anything, press Enter...", "Chipkao": "Stick it", "Ek-aankh": "One-eye", "Billi": "Cat", "Pyaar": "Love", "Neend": "Sleepy", "Bina chehra": "No face", "Harkat": "Motion", "Shaant": "Still", "Tairna": "Float", "Hilna": "Wiggle", "Dhadkan": "Pulse", "Jhoola": "Swing", "Kuch nahi": "None", "Baarish": "Rain", "Dhoop": "Sun", "Hawa": "Wind", "Barf": "Snow", "Taare": "Stars", "Dil": "Hearts", "Bulbule": "Bubbles", "Aag": "Embers", "Patte": "Leaves", "Baadal": "Clouds", "Koi nahi": "None", "Samundar": "Ocean", "Sukoon": "Calm", "Haath": "Hand", "Ghaseet": "Script", "Mota": "Bold", "Saaf": "Clean", "Neon raat": "Neon night", "Ek tap vibe": "One-tap vibe", "Rang": "Colour", "Apna rang chuno": "Pick your own colour", "Likhai": "Text", "Likhai ka rang": "Text colour", "Mood (peeche chalta animation)": "Mood (animation behind the note)", "Gaana (note pe aate hi bajega)": "Song (plays when you hover the note)", "Note ko bulwao": "Make the note talk", "Bolo": "Speak", "Rang aur texture": "Colour and style", "Ho gaya": "Done", "Hatao": "Remove", "Jhukaav": "Tilt", "+ aur ek kaam": "+ one more task", "Mitao": "Erase", "Kam karo": "Decrease", "Badhao": "Increase", "Pie ya bar badlo": "Switch pie or bar", "Naye note ka rang aur texture": "Style for new notes", "Text ka rang": "Text colour", "Bada": "Bigger", "Chhota": "Smaller", "Styling hatao": "Clear styling", "Kya banana hai?": "What do you want to make?", "Hisson ka gol chart": "Round chart of shares", "Numbers compare karo": "Compare numbers", "Steps aur arrows": "Steps and arrows", "Haath se banao": "Draw by hand", "Image chipkao": "Stick a picture", "Tick wali list": "List with ticks", "5 min ka timer": "5 minute timer", "Peeche kya bajau?": "What should I play?", "Halki baarish": "Light rain", "Aati jaati lehren": "Rolling waves", "Dheeme chords": "Slow chords", "Halki ghantiyan": "Soft bells", "Apna gaana": "My song", "Apni audio file": "Your own audio file", "Band karo": "Stop", "Music roko": "Stop the music", "Awaaz": "Volume", "Mahine ka kharcha": "Monthly spending", "Rent 40, Khana 25, Masti 15, Bachat 20": "Rent 40, Food 25, Fun 15, Savings 20", "Is hafte ke steps": "Steps this week", "Som 6200, Mangal 8100, Budh 4300, Guru 9900": "Mon 6200, Tue 8100, Wed 4300, Thu 9900", "Kitaab padhna": "Read the book", "Karna hai": "To do", "Pehla kaam": "First task", "Doosra kaam": "Second task", "Yaad dilana": "Reminder", "Gym 7 baje": "Gym at 7", "Mummy ko call": "Call mom", "Rent 5 tareekh ko": "Rent due on the 5th", "Idea: sticky notes jo boring na ho": "Idea: sticky notes that are not boring", "ChipZett mein swagat hai!\nKone wale hare ChipZett ko dabao, wahan se notes banao. Mere chehre pe click karo to main bolta hoon.": "Welcome to ChipZett!\nPress the green ChipZett in the corner to add notes. Click my face and I will talk.", "Neeche likho: A > B > C": "Type below: A > B > C", "Neeche likho: Rent 40, Khana 25": "Type below: Rent 40, Food 25", "Rent 40, Khana 25, ...": "Rent 40, Food 25, ...", "remind me in 1 min paani pi lo": "remind me in 1 min drink water", "todo: gym, groceries, mummy ko call": "todo: gym, groceries, call mom", "chart: Rent 40, Khana 25, Masti 15": "chart: Rent 40, Food 25, Fun 15", "goal: Kitaab 120/300": "goal: Book 120/300", "Chipka diya!": "Stuck it!", "Note pakad liya, tension mat le.": "Got it, no stress.", "Likh liya boss.": "Noted, boss.", "Shabash! Ek kaam kam.": "Nice! One less thing.", "Ho gaya? Mast.": "Done? Great.", "Tick! Chai banti hai.": "Tick! You earned a break.", "Gaya kachre mein.": "Into the bin.", "Bye bye note.": "Bye bye, note.", "Theek hai, uda diya.": "Okay, gone.", "Poori list khatam! Kya baat hai.": "Whole list done! Well played.", "Sab tick. Aaj tu hero hai.": "All ticked. You are on fire today.", "Ek aur gaya.": "One more down.", "Shabash!": "Nice!", "Badhiya, agla?": "Good, next?", "Lo, sab line mein.": "There, all lined up.", "Saaf safai ho gayi.": "All tidy now.", "Main wapas aa gaya.": "I am back.", "Photo chipka di!": "Picture stuck!", "Goal poora! Party kab hai?": "Goal reached! When is the party?", "Tera gaana chal raha hai.": "Your song is playing.", "Yahan audio nahi chal pa raha.": "Audio cannot play here.", "Yeh file nahi chal payi. Koi aur audio try karo.": "That file would not play. Try another audio file.", "Storage bhar gaya. Kuch photos hatao, warna naye badlav save nahi honge.": "Storage is full. Remove some photos or new changes will not be saved.", "Yeh sample notes hain. Mujhe dabao aur apne notes banao.": "These are sample notes. Press me to add your own.", "Sab ho gaya boss. Mujhe uda do!": "All done, boss. You can remove me!", "Chart khali hai, data likho.": "The chart is empty. Add some data.", "Mere paas ek tasveer hai. Caption likh do to woh bhi bol dunga.": "I have a picture. Add a caption and I will read it too.", "Sun lo: ": "Listen: ", "Yaad rakhna: ": "Remember: ", "Maine likha hai: ": "I wrote: ", " chala diya. Aaram se kaam kar.": " is playing. Work in peace.", " chipka diya. Isme apna data likh do.": " added. Put your own data in it.", "Likho: remind me in 10 min stretch karo. Main yaad dila dunga.": "Type: remind me in 10 min stretch. I will remind you.", "List chahiye? Likho: todo: doodh, bread, anda.": "Need a list? Type: todo: milk, bread, eggs.", "Kisi note ke chehre pe click karo, woh khud bolega.": "Click the face on a note and it will talk.", "Kaam ho gaya? Tick dabao aur confetti dekho.": "Finished something? Press the tick and watch the confetti.", "Notes ko pakad ke kahin bhi ghumao.": "Grab a note and move it anywhere.", "Text select karo, styling toolbar khud aa jayega.": "Select text and the styling toolbar appears.", "Rangeen gol button dabao aur ek tap mein poora vibe badlo.": "Press the round colour button to change the whole vibe in one tap.", "Hara + dabao: pie chart, flow diagram, doodle, photo sab milega.": "Press the green + for pie charts, flow diagrams, doodles and photos.", "Photo seedha paste ya drag karke bhi chipka sakte ho.": "You can also paste or drag a photo straight in.", "Note ka rangeen gol button dabao, phir Mood tab: baarish, dhoop, barf, party.": "Press the colour button on a note, then the Mood tab: rain, sun, snow, party.", "Picker mein Avatar chuno: billi, robot, alien, jo mann kare.": "Pick an avatar in the picker: cat, robot, alien, anything you like.", "Har note ka apna gaana ho sakta hai. Picker mein Gaana chuno, phir note pe cursor lao.": "Every note can have its own song. Pick a song in the picker, then hover the note.", "Upar Music dabao: baarish, samundar ya apna gaana peeche chalao.": "Press Music at the top to play rain, ocean or your own song in the background.", "Note ke neeche-right kone ko kheencho, size badal jayega.": "Drag the bottom-right corner of a note to resize it.", "Size badlo": "Resize"};
+const tr=s=>(LANG==='hi'||typeof s!=='string')?s:(D[s]??s);
+const L=(en,hi)=>LANG==='hi'?hi:en;
+{const sa=Element.prototype.setAttribute;Element.prototype.setAttribute=function(k,v){return sa.call(this,k,(k==='aria-label'||k==='title'||k==='placeholder')?tr(v):v)}}
+(function trDom(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){const t=n.nodeValue.trim();if(t&&D[t]&&LANG!=='hi')n.nodeValue=n.nodeValue.replace(t,D[t])}
+  root.querySelectorAll('[placeholder],[title],[aria-label]').forEach(e=>['placeholder','title','aria-label'].forEach(a=>{if(e.hasAttribute(a))e.setAttribute(a,e.getAttribute(a))}))})(document.body);
+document.documentElement.lang=LANG==='hi'?'hi-Latn':'en';document.documentElement.style.setProperty('--ph',JSON.stringify(L('write...','likho...')));
+const COLORS=['#ffc93c','#ff6f9c','#5ef2c0','#74ccff','#bda4ff','#ff8a3d','#ff4d4d','#c6f432','#22d3a6','#3d7bff','#8b5cf6','#f472d0','#fff4d6','#e8e4f5','#3a3357','#15121f'];
+const TEX=[['plain','Plain'],['lined','Lined'],['grid','Grid'],['dots','Dots'],['grain','Paper'],['sunset','Sunset'],['holo','Holo'],['glass','Glass'],['neon','Neon']];
+const FONTS=[['kalam','Haath','"Kalam",cursive',1],['caveat','Ghaseet','"Caveat",cursive',1.22],['marker','Marker','"Permanent Marker",cursive',.95],['pacifico','Retro','"Pacifico",cursive',.95],['elite','Typewriter','"Special Elite",monospace',.9],['outfit','Saaf','"Outfit",sans-serif',.9],['unbounded','Mota','"Unbounded",sans-serif',.76],['pixel','Arcade','"Press Start 2P",monospace',.52]];
+const fontOf=k=>FONTS.find(f=>f[0]===k)||FONTS[0];
+const INKS=['','#1b1430','#ffffff','#e11d48','#1d3fbf','#0f8a5f','#7c3aed','#ff8a3d','#ffc93c'];
+const VIBES=[['Classic','#ffc93c','plain','kalam',''],['School copy','#fff4d6','lined','caveat','#1d3fbf'],['Neon raat','#5ef2c0','neon','unbounded',''],['Love letter','#ff6f9c','sunset','pacifico',''],['Boss mode','#15121f','grain','unbounded','#ffc93c'],['Typewriter','#e8e4f5','grain','elite',''],['Holo party','#bda4ff','holo','marker',''],['Glass','#74ccff','glass','outfit',''],['Arcade','#3d7bff','grid','pixel','#ffffff']];
+const AVS=[['classic','Zett'],['cyclops','Ek-aankh'],['cat','Billi'],['robot','Robot'],['cool','Cool'],['love','Pyaar'],['sleepy','Neend'],['alien','Alien'],['none','Bina chehra']];
+const ANIMS=[['still','Shaant'],['float','Tairna'],['wiggle','Hilna'],['pulse','Dhadkan'],['swing','Jhoola']];
+const MOODS=[['','Kuch nahi'],['rain','Baarish'],['sun','Dhoop'],['wind','Hawa'],['snow','Barf'],['stars','Taare'],['hearts','Dil'],['bubbles','Bulbule'],['party','Party'],['embers','Aag'],['leaves','Patte'],['clouds','Baadal'],['aurora','Aurora']];
+const CATS=[
+['work','Work','#74ccff',[
+ ['Email reply','Points before you reply',()=>({text:'Reply to: \nKey points:\n- \n- \nSend by: '})],
+ ['Meeting notes','Decisions and actions',()=>({text:'Meeting: \nWith: \nDecisions:\n- \nAction items:\n- '})],
+ ['Tasks today','Tick them off',()=>({type:'todo',text:'Today at work',items:[{t:'Top priority',d:false},{t:'Second task',d:false},{t:'Follow up',d:false}]})],
+ ['Project steps','Flow of the work',()=>({type:'flow',text:'Project',data:'Plan > Build > Review > Deliver'})],
+ ['Deadline','1 hour countdown',()=>({type:'timer',text:'Deadline',end:Date.now()+36e5,total:36e5})]]],
+['home','Home','#ffc93c',[
+ ['Shopping list','Things to buy',()=>({type:'todo',text:'Shopping',items:[{t:'Milk',d:false},{t:'Vegetables',d:false},{t:'Eggs',d:false}]})],
+ ['Chores','Around the house',()=>({type:'todo',text:'Chores',items:[{t:'Laundry',d:false},{t:'Clean the kitchen',d:false}]})],
+ ['Bills to pay','Do not miss a date',()=>({type:'todo',text:'Bills',items:[{t:'Electricity',d:false},{t:'Internet',d:false},{t:'Rent',d:false}]})],
+ ['Family note','A message for home',()=>({text:'For the family:\n'})]]],
+['travel','Travel','#5ef2c0',[
+ ['Trip plan','Steps of the trip',()=>({type:'flow',text:'Trip',data:'Book tickets > Pack > Travel > Explore > Return'})],
+ ['Packing list','Nothing left behind',()=>({type:'todo',text:'Packing',items:[{t:'Passport or ID',d:false},{t:'Charger',d:false},{t:'Clothes',d:false},{t:'Medicines',d:false}]})],
+ ['Itinerary','Day by day',()=>({text:'Day 1: \nDay 2: \nDay 3: '})],
+ ['Trip budget','Where the money goes',()=>({type:'chart',kind:'bar',text:'Trip budget',data:'Flights 300, Hotel 250, Food 120, Fun 80'})]]],
+['activity','Activity','#c6f432',[
+ ['Workout','Today\'s session',()=>({type:'todo',text:'Workout',items:[{t:'Warm up',d:false},{t:'Main workout',d:false},{t:'Stretch',d:false}]})],
+ ['Habit streak','Days done this month',()=>({type:'goal',text:'Habit streak',cur:0,total:30})],
+ ['Weekly steps','Compare your days',()=>({type:'chart',kind:'bar',text:'Steps',data:'Mon 6000, Tue 8000, Wed 5000, Thu 9000'})]]],
+['ideas','Ideas','#bda4ff',[
+ ['Idea','Catch it before it goes',()=>({text:'Idea: \nWhy it matters: \nFirst step: '})],
+ ['Sketch','Draw it out',()=>({type:'doodle',text:''})],
+ ['Pros and cons','Think it through',()=>({text:'Pros:\n+ \n+ \nCons:\n- \n- '})]]],
+['money','Money','#22d3a6',[
+ ['Monthly spending','Pie chart of costs',()=>({type:'chart',kind:'pie',text:'Monthly spending',data:'Rent 40, Food 25, Fun 15, Savings 20'})],
+ ['Savings goal','Track your progress',()=>({type:'goal',text:'Savings',cur:2500,total:10000})],
+ ['Expense log','What you spent today',()=>({text:'Today I spent:\n- \n- '})],
+ ['Payments due','Tick when paid',()=>({type:'todo',text:'Payments due',items:[{t:'Credit card',d:false},{t:'Subscription',d:false}]})]]],
+['hobbies','Hobbies','#ff8a3d',[
+ ['Watch or read list','For your free time',()=>({type:'todo',text:'To watch or read',items:[{t:'A movie',d:false},{t:'A book',d:false},{t:'A show',d:false}]})],
+ ['Practice goal','Hours you put in',()=>({type:'goal',text:'Practice hours',cur:3,total:20})],
+ ['Recipe','Ingredients and steps',()=>({text:'Recipe: \nIngredients:\n- \nSteps:\n1. '})]]],
+['reminders','Reminders','#ff6f9c',[
+ ['In 5 minutes','Quick nudge',()=>({type:'timer',text:'Reminder',end:Date.now()+3e5,total:3e5})],
+ ['In 30 minutes','Half an hour',()=>({type:'timer',text:'Reminder',end:Date.now()+18e5,total:18e5})],
+ ['In 1 hour','One hour from now',()=>({type:'timer',text:'Reminder',end:Date.now()+36e5,total:36e5})],
+ ['Do not forget','A plain reminder',()=>({text:'Do not forget: '})]]],
+['dreams','Dreams','#f472d0',[
+ ['My dream','Write it down',()=>({text:'My dream: \nBy when: \nFirst small step: '})],
+ ['Bucket list','Things to do in life',()=>({type:'todo',text:'Bucket list',items:[{t:'A place to see',d:false},{t:'A thing to learn',d:false}]})],
+ ['Dream progress','Steps taken so far',()=>({type:'goal',text:'Dream progress',cur:1,total:10})]]],
+['career','Career','#3d7bff',[
+ ['Career goal','Where you are heading',()=>({type:'goal',text:'Career goal',cur:2,total:10})],
+ ['Skills to learn','Next on your list',()=>({type:'todo',text:'Skills to learn',items:[{t:'Skill one',d:false},{t:'Skill two',d:false}]})],
+ ['Interview prep','Be ready',()=>({type:'todo',text:'Interview prep',items:[{t:'Research the company',d:false},{t:'Practise answers',d:false},{t:'Prepare questions',d:false}]})],
+ ['Wins','What went well',()=>({text:'Wins this week:\n- '})]]],
+['knowledge','Knowledge','#fff4d6',[
+ ['Learning note','Key points of a topic',()=>({text:'Topic: \nKey points:\n1. \n2. \n3. '})],
+ ['Book notes','Big idea and a quote',()=>({text:'Book: \nBig idea: \nQuote: '})],
+ ['Quote','Words worth keeping',()=>({text:'"..."\n- who said it'})],
+ ['Flashcard','Question and answer',()=>({text:'Q: \nA: '})]]]
+];
+let activeCat='';
+const SONGS=[['','Koi nahi'],['rain','Baarish'],['sea','Samundar'],['pad','Sukoon'],['bells','Taare']];
+const def={color:COLORS[0],tex:'plain',font:'kalam',size:1,ink:'',face:'classic',anim:'still',song:'',mood:'',cat:''};
+function inkFor(c,t){if(t==='glass')return'#f3efff';if(t==='neon')return c;const h=c.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return .299*r+.587*g+.114*b>150?'#1b1430':'#fdfbff'}
+const tickFor=(c,t)=>t==='neon'?'#120e24':t==='glass'?'#1a1436':c;
+const KEY='chipku-v1', $=s=>document.querySelector(s), board=$('#board');
+let notes=[], sound=true, zTop=10;
+const isPhone=()=>matchMedia('(max-width:640px)').matches;
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const uid=()=>Math.random().toString(36).slice(2,9);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=tr(x);return e};
+const ICON={say:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 8.5a5 5 0 0 1 0 7"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7"/>',del:'<path d="M6 6l12 12M18 6L6 18"/>',tilt:'<path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 4v5h-5"/>'};
+const svg=k=>'<svg viewBox="0 0 24 24">'+ICON[k]+'</svg>';
+
+function save(){if(DESK){chipku.save({notes,sound,def,cat:activeCat});return}try{localStorage.setItem(KEY,JSON.stringify({notes,sound,def,cat:activeCat}))}catch(e){if(!save.w){save.w=1;setTimeout(()=>pal('Storage bhar gaya. Kuch photos hatao, warna naye badlav save nahi honge.',true))}}}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+
+/* ---------- voice ---------- */
+function speak(text,pitch){
+  if(!sound||!('speechSynthesis' in window))return;
+  try{const u=new SpeechSynthesisUtterance(text);const vs=speechSynthesis.getVoices();
+    const v=LANG==='hi'?(vs.find(v=>/hi[-_]IN/i.test(v.lang))||vs.find(v=>/en[-_]IN/i.test(v.lang))):(vs.find(v=>/en[-_]US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang)));if(v)u.voice=v;
+    u.pitch=pitch||1.2;u.rate=1.05;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}
+}
+function bubble(host,text,ms){
+  host.querySelector(':scope > .say')?.remove();
+  const b=el('div','say',text);host.prepend(b);host.classList.add('talking');
+  clearTimeout(host._t);host._t=setTimeout(()=>{b.remove();host.classList.remove('talking')},ms||Math.max(2200,text.length*70));
+}
+function pal(text,quiet){text=tr(text);bubble($('#palsay').parentElement,text);const s=$('.pal .say');$('#palsay').after(s);if(!quiet)speak(text,1.5)}
+function noteSays(n){
+  const d=dom(n);if(!d)return;let t;
+  if(n.type==='todo'){const left=n.items.filter(i=>!i.d);
+    t=left.length?L(`${n.items.length-left.length} of ${n.items.length} done. Left: ${left.map(i=>i.t).join(', ')}.`,`${n.items.length} mein se ${n.items.length-left.length} ho gaye. Bacha hai: ${left.map(i=>i.t).join(', ')}.`):tr('Sab ho gaya boss. Mujhe uda do!')}
+  else if(n.type==='timer'){const r=Math.max(0,n.end-Date.now());t=r?L(`${n.text}. ${fmt(r)} left.`,`${n.text}. Abhi ${fmt(r)} baaki hai.`):L(`Time is up: ${n.text}!`,`Time ho gaya: ${n.text}!`)}
+  else if(n.type==='chart'){const r=rows(n.data),tot=r.reduce((a,x)=>a+x.v,0);
+    if(r.length){const b=r.reduce((a,x)=>x.v>a.v?x:a);t=L(`${n.text}. The biggest share is ${b.l}, ${Math.round(b.v/tot*100)} percent.`,`${n.text}. Sabse bada hissa ${b.l} ka hai, ${Math.round(b.v/tot*100)} percent.`)}else t=tr('Chart khali hai, data likho.')}
+  else if(n.type==='flow')t=`${n.text}. `+steps(n.data).join(L(', then ',', phir '))+'.';
+  else if(n.type==='goal')t=L(`${n.text}: ${n.cur} of ${n.total} done. ${Math.round(n.cur/n.total*100)} percent.`,`${n.text}: ${n.total} mein se ${n.cur} ho gaya. ${Math.round(n.cur/n.total*100)} percent.`);
+  else if((n.type==='image'||n.type==='doodle')&&!n.text)t=tr('Mere paas ek tasveer hai. Caption likh do to woh bhi bol dunga.');
+  else t=tr(rnd(['Sun lo: ','Yaad rakhna: ','Maine likha hai: ']))+n.text;
+  bubble(d,t);speak(t,.8+(Math.max(0,COLORS.indexOf(n.color))%5)*.25);
+}
+
+/* ---------- notes ---------- */
+const dom=n=>board.querySelector(`[data-id="${n.id}"]`);
+function place(){const w=board.clientWidth,h=board.clientHeight;return{x:Math.max(10,Math.random()*(w-260)),y:Math.max(10,Math.random()*(h-240))}}
+function add(n,fresh){
+  const ac=CATS.find(c=>c[0]===activeCat);
+  n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,rot:+(Math.random()*8-4).toFixed(1),z:++zTop},place(),n);
+  n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();return n;
+}
+function render(n,fresh){
+  const d=el('div','note');d.dataset.id=n.id;
+  const p=el('div','paper');if(!fresh)p.style.animationDelay=(notes.indexOf(n)*70)+'ms';
+  const head=el('div','head');
+  const face=el('button','face');face.setAttribute('aria-label','Note ko bulwao');
+  face.append(el('span','eye'),el('span','eye'),el('span','mouth'));face.lastChild.previousSibling.style.setProperty('--bd','.12s');
+  face.onclick=()=>noteSays(n);
+  const acts=el('div','acts');
+  const mk=(k,label,fn)=>{const b=el('button');b.innerHTML=k==='dot'?'<span class="dot"></span>':svg(k);b.setAttribute('aria-label',label);b.title=tr(label);b.onclick=fn;acts.append(b)};
+  mk('say','Bolo',()=>noteSays(n));
+  mk('dot','Rang aur texture',e=>openPicker(e.currentTarget,n,st=>{const ch=(n.song||'')!==st.song;Object.assign(n,st);paint(d,n);save();renderCats();if(ch){stopNote();if(n.song)noteSong(n,true,0)}}));
+  mk('tilt','Jhukaav',()=>{n.rot=n.rot===0?-4:n.rot===-4?4:0;d.style.setProperty('--r',n.rot+'deg');save()});
+  mk('ok','Ho gaya',()=>finish(n,true));
+  mk('del','Hatao',()=>finish(n,false));
+  head.append(face,acts);p.append(head);
+
+  if(n.type==='todo'){
+    const t=el('div','ttl',n.text);edit(t,n);const ul=el('ul');
+    const row=i=>{const li=el('li',i.d?'d':'');li.append(el('b'),el('span',null,i.t));
+      li.onclick=()=>{i.d=!i.d;li.classList.toggle('d',i.d);save();
+        if(i.d){const all=n.items.every(x=>x.d);if(all){boom(d);pal(rnd(['Poori list khatam! Kya baat hai.','Sab tick. Aaj tu hero hai.']))}else pal(rnd(['Ek aur gaya.','Shabash!','Badhiya, agla?']),true)}};
+      ul.append(li)};
+    n.items.forEach(row);
+    const ai=el('input','addi');ai.placeholder=tr('+ aur ek kaam');ai.id='ai-'+n.id;ai.setAttribute('aria-label','Add item');
+    ai.onkeydown=e=>{if(e.key==='Enter'&&ai.value.trim()){const i={t:ai.value.trim(),d:false};n.items.push(i);row(i);ai.value='';save()}};
+    p.append(t,ul,ai);
+  }else if(n.type==='timer'){
+    const w=el('div','timer'),r=el('div','ringc'),s=el('span');r.append(s);const b=el('div','body',n.text);edit(b,n);w.append(r,b);p.append(w);
+  }else if(EXTRA[n.type]){EXTRA[n.type](n,p,d)}else{const b=el('div','body',n.text);edit(b,n);p.append(b)}
+  const rz=el('div','rz');rz.setAttribute('title','Size badlo');p.append(rz);
+  rz.addEventListener('pointerdown',e=>{if(isPhone())return;e.preventDefault();e.stopPropagation();rz.setPointerCapture(e.pointerId);const sx=e.clientX,sy=e.clientY,sw=d.offsetWidth,sh=p.offsetHeight;
+    const mv=ev=>{n.w=Math.round(Math.max(150,Math.min(640,sw+ev.clientX-sx)));n.mh=Math.round(Math.max(0,sh+ev.clientY-sy));d.style.setProperty('--w',n.w+'px');d.style.setProperty('--mh',n.mh+'px')};
+    const up=()=>{rz.removeEventListener('pointermove',mv);rz.removeEventListener('pointerup',up);rz.removeEventListener('pointercancel',up);save()};
+    rz.addEventListener('pointermove',mv);rz.addEventListener('pointerup',up);rz.addEventListener('pointercancel',up)});
+  d.append(p);paint(d,n);board.append(d);drag(d,n,head);
+  d.addEventListener('pointerenter',()=>noteSong(n,true));d.addEventListener('pointerleave',()=>noteSong(n,false));
+  d.addEventListener('focusin',()=>noteSong(n,true));d.addEventListener('focusout',e=>{if(!d.contains(e.relatedTarget)&&!d.matches(':hover'))noteSong(n,false)});
+}
+function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${n.y}px;z-index:${n.z};--r:${n.rot}deg;--c:${n.color};--w:${n.w||232}px;--mh:${n.mh||0}px;--ink:${n.ink||inkFor(n.color,t)};--tk:${tickFor(n.color,t)};--f:${fontOf(n.font)[2]};--fs:${(n.size||1)*fontOf(n.font)[3]};animation-delay:-${((n.rot||0)+4)/2}s`;
+  const f=d.querySelector('.face');if(f)f.className='face av-'+(n.face||'classic');
+  d.classList.toggle('has-song',!!n.song);d.classList.toggle('hid',!!activeCat&&n.cat!==activeCat);
+  {const pp=d.firstChild;if(pp){let tg=pp.querySelector('.tag');const c=CATS.find(x=>x[0]===n.cat);if(c){if(!tg){tg=el('span','tag');pp.append(tg)}tg.textContent=c[1]}else if(tg)tg.remove()}}
+  setSky(d,n);ANIMS.forEach(a=>d.classList.remove('an-'+a[0]));d.classList.add('an-'+(n.anim||'still'));
+  const p=d.firstChild;if(p){TEX.forEach(x=>p.classList.remove('tx-'+x[0]));p.classList.add('tx-'+t)}}
+
+/* ---------- colour + texture picker ---------- */
+let pk=null,lastTab='Vibe';
+function closePicker(){if(pk)stopNote();pk?.remove();pk=null}
+function openPicker(anchor,cur,apply){
+  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||''};
+  const p=el('div','pick');pk=p;const groups=[];let ci;
+  const sync=()=>{groups.forEach(([g,key])=>[...g.children].forEach(b=>b.setAttribute('aria-pressed',b._v===st[key])));
+    p.querySelectorAll('.pt .mini').forEach(m=>{m.style.cssText=`display:block;--c:${st.color};--ink:${inkFor(st.color,m.parentElement._v)}`});
+    p.querySelectorAll('.pa').forEach(b=>b.style.cssText=`--c:${st.color};--ink:${inkFor(st.color,'plain')}`);
+    if(/^#[0-9a-f]{6}$/i.test(st.color))ci.value=st.color;apply({...st})};
+  const grp=(title,cls,items,key,build)=>{const g=el('div',cls);items.forEach(it=>{const b=el('button');b.type='button';b._v=Array.isArray(it)?it[0]:it;build(b,it);b.onclick=()=>{st[key]=b._v;sync()};g.append(b)});groups.push([g,key]);p.append(el('h4',null,title),g)};
+  const vg=el('div','pvs');
+  VIBES.forEach(([name,c,t,f,ink])=>{const b=el('button','pv');b.type='button';const m=el('span','mini tx-'+t,'Aa');m.style.cssText=`--c:${c};--ink:${ink||inkFor(c,t)};font-family:${fontOf(f)[2]}`;
+    b.append(m,document.createTextNode(tr(name)));b.onclick=()=>{Object.assign(st,{color:c,tex:t,font:f,ink:ink});sync()};vg.append(b)});
+  const dice=el('button','pill','Surprise me');dice.type='button';dice.onclick=()=>{Object.assign(st,{color:rnd(COLORS),tex:rnd(TEX)[0],font:rnd(FONTS)[0],ink:'',face:rnd(AVS.slice(0,8))[0],anim:rnd(ANIMS)[0],mood:rnd(MOODS)[0]});sync()};
+  p.append(el('h4',null,'Ek tap vibe'),vg,dice);
+  grp('Category','pms',[['','None'],...CATS],'cat',(b,it)=>{b.className='ps';b.textContent=it[1]});
+  grp('Avatar','pas',AVS,'face',(b,it)=>{b.className='pa';const f=el('span','face av-'+it[0]);f.append(el('span','eye'),el('span','eye'),el('span','mouth'));b.append(f,document.createTextNode(tr(it[1])))});
+  grp('Harkat','pss',ANIMS,'anim',(b,it)=>{b.className='ps';b.textContent=tr(it[1]);b.style.fontSize='11.5px';b.style.padding='6px 2px'});
+  grp('Mood (peeche chalta animation)','pms',MOODS,'mood',(b,it)=>{b.className='ps';b.textContent=tr(it[1])});
+  grp('Gaana (note pe aate hi bajega)','pss',SONGS,'song',(b,it)=>{b.className='ps';b.textContent=tr(it[1]);b.style.fontSize='11px';b.style.padding='6px 1px'});
+  grp('Rang','pcs',COLORS,'color',(b,c)=>{b.className='pc';b.style.setProperty('--c',c);b.setAttribute('aria-label','Colour '+c)});
+  const cu=el('label','cust','Apna rang chuno');ci=document.createElement('input');ci.type='color';ci.id='pk-custom';ci.oninput=()=>{st.color=ci.value;sync()};cu.prepend(ci);p.append(cu);
+  grp('Texture','pts',TEX,'tex',(b,it)=>{b.className='pt';b.append(el('span','mini tx-'+it[0]),document.createTextNode(tr(it[1])))});
+  grp('Font','pfs',FONTS,'font',(b,it)=>{b.className='pf';const a=el('b',null,'Aa');a.style.fontFamily=it[2];if(it[0]==='pixel')a.style.fontSize='11px';b.append(a,document.createTextNode(tr(it[1])))});
+  grp('Size','pss',[[.85,'S'],[1,'M'],[1.25,'L'],[1.55,'XL']],'size',(b,it)=>{b.className='ps';b.textContent=tr(it[1])});
+  grp('Likhai ka rang','pcs',INKS,'ink',(b,c)=>{b.className='pc';if(c)b.style.setProperty('--c',c);else{b.textContent=tr('A');b.classList.add('auto')}b.setAttribute('aria-label',c?'Ink '+c:'Auto ink')});
+  /* tabs keep the picker short: one group of options at a time */
+  const TABS=['Vibe','Rang','Likhai','Avatar','Mood'],tabOf={'Ek tap vibe':'Vibe','Category':'Vibe','Avatar':'Avatar','Harkat':'Avatar','Mood (peeche chalta animation)':'Mood','Gaana (note pe aate hi bajega)':'Mood','Rang':'Rang','Texture':'Rang','Font':'Likhai','Size':'Likhai','Likhai ka rang':'Likhai'};
+  const tabT={};for(const k in tabOf)tabT[tr(k)]=tabOf[k];let ct='Vibe';[...p.children].forEach(c=>{if(c.tagName==='H4')ct=tabT[c.textContent]||ct;c.dataset.tab=ct});
+  const bar=el('div','tabs');p.prepend(bar);
+  const place=()=>{const r=anchor.getBoundingClientRect(),h=p.offsetHeight;
+    p.style.left=Math.max(8,Math.min(innerWidth-300,r.left-130))+'px';
+    p.style.top=Math.max(8,r.top>innerHeight/2?r.top-h-10:Math.min(innerHeight-h-8,r.bottom+10))+'px'};
+  const show=t=>{lastTab=t;[...p.children].forEach(c=>{if(c.dataset.tab)c.classList.toggle('off',c.dataset.tab!==t)});[...bar.children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t));place()};
+  TABS.forEach(t=>{const b=el('button',null,t);b.dataset.t=t;b.type='button';b.onclick=()=>show(t);bar.append(b)});
+  document.body.append(p);sync();show(lastTab);
+}
+/* ---------- select text, style it ---------- */
+const tool=el('div','seltool');tool.hidden=true;document.body.append(tool);
+const curEd=()=>{const s=getSelection();if(!s.rangeCount||!s.anchorNode)return null;const n=s.anchorNode;return(n.nodeType===1?n:n.parentElement)?.closest('.body,.ttl')||null};
+const ex=(c,v)=>{try{document.execCommand('styleWithCSS',false,true);document.execCommand(c,false,v)}catch(e){}};
+const tb=(label,title,fn,css,cls)=>{const b=el('button',cls,label);b.type='button';b.title=tr(title);b.setAttribute('aria-label',title);if(css)b.style.cssText=css;
+  b.onpointerdown=e=>{e.preventDefault();const ed=curEd();fn();ed&&ed.dispatchEvent(new Event('input'))};tool.append(b)};
+tb('B','Bold',()=>ex('bold'),'font-weight:800');tb('I','Italic',()=>ex('italic'),'font-style:italic');tb('U','Underline',()=>ex('underline'),'text-decoration:underline');
+tool.append(el('i'));
+['#fff176','#ff9ec4','#8ff5d2','#9ad8ff'].forEach(c=>tb('','Highlight',()=>ex('hiliteColor',c),'background:'+c,'hl'));
+tool.append(el('i'));
+['#e11d48','#1d3fbf','#0f8a5f','#7c3aed','#ffffff'].forEach(c=>tb('A','Text ka rang',()=>ex('foreColor',c),'font-weight:800;color:'+c+(c==='#ffffff'?';background:#1b1430':'')));
+tool.append(el('i'));
+tb('A+','Bada',()=>ex('fontSize',5));tb('A-','Chhota',()=>ex('fontSize',2));tb('Clear','Styling hatao',()=>{ex('removeFormat');ex('hiliteColor','transparent')});
+document.addEventListener('selectionchange',()=>{const s=getSelection(),ed=curEd();if(!ed||s.isCollapsed){tool.hidden=true;return}
+  const r=s.getRangeAt(0).getBoundingClientRect();tool.hidden=false;
+  tool.style.left=Math.max(8,Math.min(innerWidth-tool.offsetWidth-8,r.left+r.width/2-tool.offsetWidth/2))+'px';
+  tool.style.top=(r.top>60?r.top-46:r.bottom+10)+'px'});
+addEventListener('pointerdown',e=>{if(pk&&!pk.contains(e.target)&&!e.target.closest('.acts,#style,#more,#mus'))closePicker()});
+addEventListener('keydown',e=>{if(e.key==='Escape')closePicker()});
+function clean(html){const t=document.createElement('template');t.innerHTML=html;const ok={B:1,I:1,U:1,SPAN:1,FONT:1,BR:1,DIV:1,STRONG:1,EM:1};
+  (function walk(node){[...node.childNodes].forEach(c=>{if(c.nodeType===3)return;if(c.nodeType!==1){c.remove();return}
+    if(!ok[c.tagName]){c.replaceWith(document.createTextNode(tr(c.textContent)));return}
+    const k={color:c.style.color,backgroundColor:c.style.backgroundColor,fontSize:c.style.fontSize,fontWeight:c.style.fontWeight,fontStyle:c.style.fontStyle,textDecoration:c.style.textDecorationLine};
+    [...c.attributes].forEach(a=>c.removeAttribute(a.name));for(const p in k)if(k[p])c.style[p]=k[p];walk(c)})})(t.content);return t.innerHTML}
+function edit(e,n){e.contentEditable='true';e.spellcheck=false;if(n.textH)e.innerHTML=clean(n.textH);else e['textContent']=n.text;
+  e.oninput=()=>{n.text=e.innerText.trim();const h=clean(e.innerHTML);n.textH=/<(span|b|i|u|font|strong|em)\b/i.test(h)?h:'';save()};
+  e.onpaste=ev=>{ev.preventDefault();document.execCommand('insertText',false,ev.clipboardData?ev.clipboardData.getData('text/plain'):'')}}
+function finish(n,done){
+  const d=dom(n);if(!d)return;if(noteOn===n.id)stopNote();SK.delete(n.id);const p=d.firstChild;p.style.animationDelay='0s';
+  p.classList.add(done?'crumple':'fall');if(done){boom(d);pal(rnd(['Shabash! Ek kaam kam.','Ho gaya? Mast.','Tick! Chai banti hai.']))}else pal(rnd(['Gaya kachre mein.','Bye bye note.','Theek hai, uda diya.']),true);
+  notes=notes.filter(x=>x!==n);save();renderCats();setTimeout(()=>d.remove(),700);
+}
+function drag(d,n,handle){
+  let sx,sy,ox,oy,lx,on=false;
+  handle.addEventListener('pointerdown',e=>{if(e.target.closest('button')||isPhone())return;on=true;sx=e.clientX;sy=e.clientY;ox=n.x;oy=n.y;lx=e.clientX;
+    n.z=++zTop;d.style.zIndex=n.z;d.classList.remove('glide');d.classList.add('drag');handle.setPointerCapture(e.pointerId)});
+  handle.addEventListener('pointermove',e=>{if(!on)return;
+    n.x=Math.min(board.clientWidth-60,Math.max(-120,ox+e.clientX-sx));n.y=Math.min(board.clientHeight-50,Math.max(0,oy+e.clientY-sy));
+    const v=Math.max(-14,Math.min(14,(e.clientX-lx)*1.2));lx=e.clientX;d.style.left=n.x+'px';d.style.top=n.y+'px';d.style.setProperty('--r',(n.rot+v)+'deg')});
+  const end=()=>{if(!on)return;on=false;d.classList.remove('drag');d.style.setProperty('--r',n.rot+'deg');save()};
+  handle.addEventListener('pointerup',end);handle.addEventListener('pointercancel',end);
+}
+
+
+/* ---------- advanced note types ---------- */
+const CH=['#ff4d6d','#3d7bff','#22c58b','#ff9f1c','#8b5cf6','#00b8d9','#f472d0','#5b5470'],NS='http://www.w3.org/2000/svg';
+function rows(data){return(data||'').split(/[,;\n]/).map(x=>{const m=x.trim().match(/^(.*?)[\s:=]+(\d+(?:\.\d+)?)\s*%?$/);return m?{l:m[1].trim()||'?',v:+m[2]}:null}).filter(r=>r&&r.v>0).slice(0,8)}
+const steps=data=>(data||'').split(/\s*(?:->|=>|>|→)\s*/).map(x=>x.trim()).filter(Boolean).slice(0,8);
+function srcLine(n,p,ph,redraw){const i=el('input','addi');i.id='src-'+n.id;i.value=n.data||'';i.placeholder=tr(ph);i.setAttribute('aria-label','Data');i.oninput=()=>{n.data=i.value;redraw();save()};p.append(i)}
+const titleOf=(n,p)=>{const t=el('div','ttl',n.text);edit(t,n);p.append(t)};
+const EXTRA={
+  chart(n,p){titleOf(n,p);const box=el('div','chart');p.append(box);
+    const draw=()=>{box.textContent=tr('');const r=rows(n.data),tot=r.reduce((a,x)=>a+x.v,0)||1;
+      const k=el('button','kind',n.kind==='bar'?'Bar':'Pie');k.type='button';k.title=tr('Pie ya bar badlo');k.onclick=()=>{n.kind=n.kind==='bar'?'pie':'bar';draw();save()};
+      if(!r.length){box.append(el('div','body','Neeche likho: Rent 40, Khana 25'));return}
+      if(n.kind==='bar'){const mx=Math.max(...r.map(x=>x.v)),g=el('div','bars');
+        r.forEach((x,i)=>{const u=el('u');u.style.cssText=`--k:${CH[i]};--w:${Math.max(4,x.v/mx*100)}%;animation-delay:${i*80}ms`;g.append(el('span',null,x.l),u,el('b',null,x.v))});box.append(g)}
+      else{const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox','0 0 100 100');let acc=0;const C=2*Math.PI*30;
+        r.forEach((x,i)=>{const c=document.createElementNS(NS,'circle'),f=x.v/tot;c.setAttribute('cx',50);c.setAttribute('cy',50);c.setAttribute('r',30);c.setAttribute('stroke',CH[i]);
+          c.setAttribute('stroke-dasharray',`${f*C} ${C}`);c.setAttribute('stroke-dashoffset',-acc*C);c.setAttribute('transform','rotate(-90 50 50)');c.style.animationDelay=i*90+'ms';acc+=f;s.append(c)});
+        const t=document.createElementNS(NS,'text');t.setAttribute('x',50);t.setAttribute('y',50);t.textContent=tr(tot%1?tot.toFixed(1):tot);s.append(t);
+        const lg=el('div','lg');r.forEach((x,i)=>{const sp=el('span'),dot=el('i');dot.style.setProperty('--k',CH[i]);sp.append(dot,document.createTextNode(tr(`${x.l} ${Math.round(x.v/tot*100)}%`)));lg.append(sp)});box.append(s,lg)}
+      box.append(k)};
+    draw();srcLine(n,p,'Rent 40, Khana 25, ...',draw)},
+  flow(n,p){titleOf(n,p);const box=el('div','flow');p.append(box);
+    const draw=()=>{box.textContent=tr('');const st=steps(n.data);st.forEach((x,i)=>{if(i)box.append(el('div','arr'));const s=el('div','step',x);s.style.setProperty('--i',i);box.append(s)});
+      if(!st.length)box.append(el('div','body','Neeche likho: A > B > C'))};
+    draw();srcLine(n,p,'Idea > Design > Launch',draw)},
+  doodle(n,p,d){const c=el('canvas','pad');c.width=408;c.height=300;const x=c.getContext('2d');x.lineWidth=5;x.lineCap=x.lineJoin='round';
+    if(n.img){const im=new Image();im.onload=()=>x.drawImage(im,0,0);im.src=n.img}
+    let col=null,on=false;const pos=e=>[e.offsetX*408/c.clientWidth,e.offsetY*300/c.clientHeight];
+    c.onpointerdown=e=>{on=true;c.setPointerCapture(e.pointerId);x.strokeStyle=col||getComputedStyle(d).getPropertyValue('--ink').trim()||'#1b1430';x.beginPath();x.moveTo(...pos(e));x.lineTo(...pos(e));x.stroke()};
+    c.onpointermove=e=>{if(on){x.lineTo(...pos(e));x.stroke()}};
+    c.onpointerup=c.onpointercancel=()=>{if(!on)return;on=false;n.img=c.toDataURL('image/png');save()};
+    const pens=el('div','pens');
+    [null,'#e11d48','#1d3fbf','#0f8a5f','#ff9f1c'].forEach((k,i)=>{const b=el('button');b.type='button';b.style.setProperty('--k',k||'var(--ink)');b.setAttribute('aria-label','Pen '+(i+1));b.setAttribute('aria-pressed',i===0);
+      b.onclick=()=>{col=k;pens.querySelectorAll('button:not(.txt)').forEach(q=>q.setAttribute('aria-pressed',q===b))};pens.append(b)});
+    const clr=el('button','txt','Mitao');clr.type='button';clr.onclick=()=>{x.clearRect(0,0,408,300);n.img='';save()};pens.append(clr);
+    const cap=el('div','body',n.text);edit(cap,n);p.append(c,pens,cap)},
+  image(n,p){const im=el('img','pic');im.src=n.img;im.alt=n.text||'Photo';im.draggable=false;const cap=el('div','body',n.text);edit(cap,n);p.append(im,cap)},
+  goal(n,p,d){titleOf(n,p);const bar=el('div','gb'),fill=el('i'),row=el('div','grow2'),lab=el('span'),step=Math.max(1,Math.round(n.total/20));bar.append(fill);
+    const draw=()=>{const pc=Math.min(100,Math.round(n.cur/n.total*100));fill.style.setProperty('--w',pc+'%');lab.textContent=tr(`${n.cur} / ${n.total} (${pc}%)`)};
+    const btn=(t,dl,label)=>{const b=el('button',null,t);b.type='button';b.setAttribute('aria-label',label);
+      b.onclick=()=>{const was=n.cur;n.cur=Math.max(0,Math.min(n.total,n.cur+dl));draw();save();if(n.cur>=n.total&&was<n.total){boom(d);pal('Goal poora! Party kab hai?')}};return b};
+    row.append(btn('-',-step,'Kam karo'),lab,btn('+',step,'Badhao'));p.append(bar,row);draw()}
+};
+function addImage(file){if(!file||!/^image\//.test(file.type))return;const fr=new FileReader();
+  fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,520/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);add({type:'image',text:'',img:c.toDataURL('image/jpeg',.82)},true);pal('Photo chipka di!')};im.src=fr.result};fr.readAsDataURL(file)}
+$('#file').onchange=e=>{addImage(e.target.files[0]);e.target.value=''};
+addEventListener('paste',e=>{const f=[...(e.clipboardData?.files||[])].find(f=>/^image\//.test(f.type));if(f){e.preventDefault();addImage(f)}});
+board.addEventListener('dragover',e=>e.preventDefault());
+board.addEventListener('drop',e=>{e.preventDefault();addImage(e.dataTransfer.files[0])});
+const MENU=[['Pie chart','Hisson ka gol chart',()=>({type:'chart',kind:'pie',text:'Mahine ka kharcha',data:'Rent 40, Khana 25, Masti 15, Bachat 20'})],
+  ['Bar chart','Numbers compare karo',()=>({type:'chart',kind:'bar',text:'Is hafte ke steps',data:'Som 6200, Mangal 8100, Budh 4300, Guru 9900'})],
+  ['Flow diagram','Steps aur arrows',()=>({type:'flow',text:'Plan',data:'Idea > Design > Build > Launch'})],
+  ['Doodle','Haath se banao',()=>({type:'doodle',text:''})],
+  ['Photo','Image chipkao',null],
+  ['Goal tracker','Progress bar',()=>({type:'goal',text:'Kitaab padhna',cur:120,total:300})],
+  ['Checklist','Tick wali list',()=>({type:'todo',text:'Karna hai',items:[{t:'Pehla kaam',d:false},{t:'Doosra kaam',d:false}]})],
+  ['Reminder','5 min ka timer',()=>({type:'timer',text:'Yaad dilana',end:Date.now()+3e5,total:3e5})]];
+$('#more').onclick=e=>{if(pk){closePicker();return}const p=el('div','pick menu'),g=el('div','mis');pk=p;
+  MENU.forEach(([name,hint,mkn])=>{const b=el('button','mi',name);b.type='button';b.append(el('small',null,hint));
+    b.onclick=()=>{closePicker();if(!mkn){$('#file').click();return}add(mkn(),true);pal(tr(name)+tr(' chipka diya. Isme apna data likh do.'))};g.append(b)});
+  p.append(el('h4',null,'Kya banana hai?'),g);document.body.append(p);const r=e.currentTarget.getBoundingClientRect();
+  p.style.left=Math.max(8,r.left-10)+'px';p.style.top=Math.max(8,r.top-p.offsetHeight-14)+'px'};
+
+
+/* ---------- moods: one small canvas per note, one shared animation loop ---------- */
+const R=n=>Math.random()*n,SK=new Map();
+const MD={
+  rain:{n:26,mk:(w,h,i)=>({x:R(w+40),y:i?R(h):-12,vx:-1.2,vy:6+R(4),s:8+R(8)}),dr(x,p){x.globalAlpha=.75;x.strokeStyle='#4f8dff';x.lineWidth=1.5;x.beginPath();x.moveTo(p.x,p.y);x.lineTo(p.x-2,p.y+p.s);x.stroke()}},
+  snow:{n:28,mk:(w,h,i)=>({x:R(w),y:i?R(h):-6,vx:R(.6)-.3,vy:.5+R(1),s:1.5+R(2.5)}),dr(x,p,t,ink){x.globalAlpha=.85;x.fillStyle=ink;x.beginPath();x.arc(p.x,p.y,p.s,0,7);x.fill()}},
+  wind:{n:8,mk:(w,h,i)=>({x:i?R(w):-90,y:R(h),vx:3+R(3),vy:0,s:30+R(50),ph:R(6)}),dr(x,p,t,ink){x.globalAlpha=.45;x.strokeStyle=ink;x.lineWidth=2;x.lineCap='round';x.beginPath();
+    for(let k=0;k<=p.s;k+=6){const y=p.y+Math.sin((p.x+k)/18+p.ph)*4;k?x.lineTo(p.x+k,y):x.moveTo(p.x,y)}x.stroke()}},
+  stars:{n:24,mk:(w,h)=>({x:R(w),y:R(h),vx:0,vy:0,s:2+R(4),ph:R(6)}),dr(x,p,t,ink){x.globalAlpha=.15+.85*Math.abs(Math.sin(t/600+p.ph));x.fillStyle=ink;x.fillRect(p.x-p.s,p.y-.5,p.s*2,1);x.fillRect(p.x-.5,p.y-p.s,1,p.s*2);x.fillRect(p.x-1,p.y-1,2,2)}},
+  hearts:{n:12,mk:(w,h,i)=>({x:R(w),y:i?R(h):h+12,vx:R(.6)-.3,vy:-.5-R(.9),s:9+R(10)}),dr(x,p){x.globalAlpha=.7;x.fillStyle='#ff2d55';x.font=p.s+'px sans-serif';x.fillText('♥',p.x,p.y)}},
+  bubbles:{n:14,mk:(w,h,i)=>({x:R(w),y:i?R(h):h+10,vx:R(.4)-.2,vy:-.4-R(.8),s:3+R(7)}),dr(x,p,t,ink){x.globalAlpha=.55;x.strokeStyle=ink;x.lineWidth=1.3;x.beginPath();x.arc(p.x,p.y,p.s,0,7);x.stroke()}},
+  party:{n:26,mk:(w,h,i)=>({x:R(w),y:i?R(h):-8,vx:R(1)-.5,vy:1+R(1.6),s:4+R(4),c:rnd(COLORS.slice(0,12)),ph:R(6)}),dr(x,p,t){x.globalAlpha=.9;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(t/300+p.ph);x.fillRect(-p.s/2,-p.s/3,p.s,p.s*.6);x.restore()}},
+  embers:{n:22,mk:(w,h,i)=>({x:R(w),y:i?R(h):h+6,vx:R(.8)-.4,vy:-.8-R(1.4),s:1.5+R(2.5),c:`hsl(${15+R(35)} 100% 55%)`}),dr(x,p,t,ink,w,h){x.globalAlpha=Math.max(0,Math.min(1,p.y/h));x.fillStyle=p.c;x.beginPath();x.arc(p.x,p.y,p.s,0,7);x.fill()}},
+  leaves:{n:10,mk:(w,h,i)=>({x:R(w),y:i?R(h):-10,vx:.4+R(.8),vy:.7+R(.9),s:5+R(4),c:rnd(['#e07a1f','#c0392b','#d4a017','#8a5a2b']),ph:R(6)}),dr(x,p,t){x.globalAlpha=.85;x.fillStyle=p.c;x.save();x.translate(p.x+Math.sin(t/500+p.ph)*6,p.y);x.rotate(Math.sin(t/400+p.ph));x.beginPath();x.ellipse(0,0,p.s,p.s/2.2,0,0,7);x.fill();x.restore()}},
+  clouds:{n:4,mk:(w,h,i)=>({x:i?R(w):-70,y:R(h*.7),vx:.25+R(.35),vy:0,s:12+R(10)}),dr(x,p,t,ink){x.globalAlpha=.22;x.fillStyle=ink;x.beginPath();x.arc(p.x,p.y,p.s,0,7);x.arc(p.x+p.s,p.y-p.s*.4,p.s*1.1,0,7);x.arc(p.x+p.s*2.1,p.y,p.s*.9,0,7);x.fill()}},
+  sun:{n:0,bg(x,w,h,t){x.save();x.translate(w-20,20);x.rotate(t/5000);x.fillStyle='rgba(255,255,255,.4)';for(let k=0;k<12;k++){x.rotate(Math.PI/6);x.beginPath();x.moveTo(0,0);x.lineTo(-9,-120);x.lineTo(9,-120);x.fill()}
+    x.fillStyle='#ff9f1c';x.strokeStyle='#fff';x.lineWidth=3;x.beginPath();x.arc(0,0,17+Math.sin(t/700)*1.5,0,7);x.fill();x.stroke();x.restore()}},
+  aurora:{n:0,bg(x,w,h,t){['#5ef2c0','#74ccff','#bda4ff'].forEach((c,k)=>{x.globalAlpha=.33;x.fillStyle=c;x.beginPath();x.moveTo(0,h);for(let i=0;i<=w+8;i+=8)x.lineTo(i,h*(.3+k*.18)+Math.sin(i/40+t/900+k*2)*14);x.lineTo(w,h);x.fill()})}}
+};
+function setSky(d,n){const p=d.firstChild;if(!p)return;let c=p.querySelector('.sky');
+  if(!n.mood||!MD[n.mood]){c?.remove();SK.delete(n.id);return}
+  if(!c){c=el('canvas','sky');p.prepend(c)}
+  const cur=SK.get(n.id),ink=n.ink||inkFor(n.color,n.tex||'plain');
+  if(cur&&cur.mood===n.mood&&cur.c===c)cur.ink=ink;else SK.set(n.id,{c,x:c.getContext('2d'),ps:null,mood:n.mood,ink})}
+function skyTick(t){SK.forEach((s,id)=>{const c=s.c;if(!c.isConnected){SK.delete(id);return}const w=c.clientWidth,h=c.clientHeight;if(!w||!h)return;
+    if(c.width!==w||c.height!==h){c.width=w;c.height=h}const m=MD[s.mood],x=s.x;x.clearRect(0,0,w,h);if(m.bg)m.bg(x,w,h,t);
+    if(!s.ps)s.ps=Array.from({length:m.n},()=>m.mk(w,h,true));
+    for(const p of s.ps){p.x+=p.vx;p.y+=p.vy;if(p.y>h+20||p.y<-20||p.x>w+80||p.x<-100)Object.assign(p,m.mk(w,h,false));m.dr(x,p,t,s.ink,w,h)}x.globalAlpha=1});
+  requestAnimationFrame(skyTick)}
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches)requestAnimationFrame(skyTick);
+
+/* ---------- capture ---------- */
+const UNIT={s:1e3,m:6e4,h:36e5,g:36e5};
+function parse(raw){
+  const t=raw.trim();let m;
+  if(m=t.match(/^(chart|pie|bar)\s*[:\-]\s*(.+)/i))return{type:'chart',kind:/bar/i.test(m[1])?'bar':'pie',text:'Chart',data:m[2]};
+  if(m=t.match(/^(?:flow|diagram)\s*[:\-]\s*(.+)/i))return{type:'flow',text:'Flow',data:m[1]};
+  if(m=t.match(/^(?:goal|progress)\s*[:\-]\s*(.*?)\s*(\d+)\s*\/\s*(\d+)/i))if(+m[3]>0)return{type:'goal',text:m[1]||'Goal',cur:Math.min(+m[2],+m[3]),total:+m[3]};
+  if(/^(draw|doodle)\b/i.test(t))return{type:'doodle',text:''};
+  if(m=t.match(/^(?:todo|list|kaam)\s*[:\-]\s*(.+)/i)){const items=m[1].split(/[,;]|\s+aur\s+/).map(s=>s.trim()).filter(Boolean).map(t=>({t,d:false}));
+    if(items.length)return{type:'todo',text:'Karna hai',items}}
+  if((m=t.match(/(\d+)\s*(seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|ghante?)\b/i))&&/(remind|yaad|timer|\bin\b|baad)/i.test(t)){
+    const ms=+m[1]*UNIT[m[2][0].toLowerCase()];
+    const label=t.replace(m[0],'').replace(/\b(remind me|yaad dila(na|o)?|timer|in|baad|mein|to)\b/gi,'').replace(/\s+/g,' ').trim()||'Time up';
+    return{type:'timer',text:label,end:Date.now()+ms,total:ms}}
+  return{type:'text',text:t};
+}
+$('#capf').onsubmit=e=>{e.preventDefault();const i=$('#cap');if(!i.value.trim())return;
+  const n=parse(i.value);i.value='';
+  if(!isPhone()){const w=board.clientWidth,h=board.clientHeight;n.x=w/2-116+(Math.random()*240-120);n.y=Math.max(10,h-300-Math.random()*120)}
+  add(n,true);
+  pal(n.type==='timer'?L(`Okay, I will shout in ${fmt(n.total)}.`,`Theek hai, ${fmt(n.total)} baad chillaunga.`):n.type==='todo'?L(`Made a list of ${n.items.length} tasks.`,`${n.items.length} kaam ki list bana di.`):rnd(['Chipka diya!','Note pakad liya, tension mat le.','Likh liya boss.']));
+};
+const sb=el('button','sw');sb.type='button';sb.id='style';sb.title=tr('Naye note ka rang aur texture');sb.setAttribute('aria-label','Naye note ka rang aur texture');sb.style.cssText='--c:'+def.color+';width:26px;height:26px;border:2px solid #fff';
+sb.onclick=()=>pk?closePicker():openPicker(sb,def,st=>{Object.assign(def,st);sb.style.setProperty('--c',st.color);$('#pal').className='blob av-'+st.face;save()});$('#sws').append(sb);
+['remind me in 1 min paani pi lo','todo: gym, groceries, mummy ko call','chart: Rent 40, Khana 25, Masti 15','flow: Idea > Design > Launch','goal: Kitaab 120/300'].forEach(h=>{const b=el('button',null,h);b.type='button';b.onclick=()=>{$('#cap').value=b.textContent;$('#cap').focus()};$('#hints').append(b)});
+
+/* ---------- timers ---------- */
+function fmt(ms){const s=Math.ceil(ms/1000);return s>=3600?`${Math.floor(s/3600)}h ${Math.floor(s%3600/60)}m`:s>=60?`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`:s+'s'}
+setInterval(()=>{for(const n of notes){if(n.type!=='timer')continue;const d=dom(n);if(!d)continue;
+  const r=Math.max(0,n.end-Date.now()),ring=d.querySelector('.ringc');ring.style.setProperty('--p',n.total?r/n.total:0);ring.firstChild.textContent=tr(r?fmt(r):'Ho gaya');
+  if(!r&&!n.fired){n.fired=true;save();d.classList.add('ringing');n.z=++zTop;d.style.zIndex=n.z;const t=L(`Hey! Time is up: ${n.text}`,`Oye! Time ho gaya: ${n.text}`);if(DESK)try{new Notification('ChipZett Notes',{body:t})}catch(e){}bubble(d,t,6000);speak(t,1.4);boom(d);setTimeout(()=>d.classList.remove('ringing'),4000)}}},250);
+
+/* ---------- chrome ---------- */
+$('#lang').textContent=tr(LANG==='hi'?'Hinglish':'English');$('#lang').setAttribute('title',L('Change language','Bhasha badlo'));
+$('#lang').onclick=()=>{try{localStorage.setItem('chipku-lang',LANG==='hi'?'en':'hi')}catch(e){}location.reload()};
+$('#snd').onclick=e=>{sound=!sound;e.target.textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));e.target.setAttribute('aria-pressed',sound);if(!sound)try{speechSynthesis.cancel()}catch(x){}else pal('Main wapas aa gaya.');save()};
+$('#search').oninput=e=>{const q=e.target.value.toLowerCase();for(const n of notes){const s=(n.text+' '+(n.data||'')+' '+(n.items||[]).map(i=>i.t).join(' ')).toLowerCase();dom(n)?.classList.toggle('dim',!!q&&!s.includes(q))}};
+$('#tidy').onclick=()=>{const w=board.clientWidth,cw=Math.max(...notes.map(n=>n.w||232),232)+20,cols=Math.max(1,Math.floor((w-20)/cw)),off=(w-cols*cw)/2+10,hs=Array(cols).fill(14);
+  notes.filter(n=>!activeCat||n.cat===activeCat).forEach((n,i)=>{const c=hs.indexOf(Math.min(...hs)),d=dom(n);n.x=off+c*cw;n.y=hs[c];hs[c]+=d.offsetHeight+18;n.rot=+(Math.random()*4-2).toFixed(1);
+    d.classList.add('glide');d.style.transitionDelay=i*45+'ms';paint(d,n);d.style.transitionDelay=i*45+'ms';setTimeout(()=>{d.classList.remove('glide');d.style.transitionDelay=''},900+i*45)});
+  save();pal(rnd(['Lo, sab line mein.','Saaf safai ho gayi.']))};
+const TIPS=['Likho: remind me in 10 min stretch karo. Main yaad dila dunga.','List chahiye? Likho: todo: doodh, bread, anda.','Kisi note ke chehre pe click karo, woh khud bolega.','Kaam ho gaya? Tick dabao aur confetti dekho.','Notes ko pakad ke kahin bhi ghumao.','Text select karo, styling toolbar khud aa jayega.','Note ke neeche-right kone ko kheencho, size badal jayega.','Hara + dabao: pie chart, flow diagram, doodle, photo sab milega.','Photo seedha paste ya drag karke bhi chipka sakte ho.','Note ka rangeen gol button dabao, phir Mood tab: baarish, dhoop, barf, party.','Har note ka apna gaana ho sakta hai. Picker mein Gaana chuno, phir note pe cursor lao.','Upar Music dabao: baarish, samundar ya apna gaana peeche chalao.','Picker mein Avatar chuno: billi, robot, alien, jo mann kare.','Rangeen gol button dabao aur ek tap mein poora vibe badlo.'];
+let tip=0;const hub=$('#hub');
+function openHub(focus){hub.classList.remove('off');if(focus)$('#cap').focus()}
+$('#pal').onclick=()=>{hub.classList.toggle('off');if(!hub.classList.contains('off'))$('#cap').focus()};
+$('#hubx').onclick=()=>hub.classList.add('off');
+$('#tip').onclick=()=>pal(TIPS[tip++%TIPS.length]);
+addEventListener('pointerdown',e=>{if(!hub.classList.contains('off')&&!e.target.closest('.hub,.pal,.pick,.seltool'))hub.classList.add('off')});
+function renderCats(){const box=$('#cats');if(!box)return;box.textContent='';
+  const mk=(key,name,col,count)=>{const b=el('button','cat');b.type='button';b.style.setProperty('--k',col);b.setAttribute('aria-pressed',activeCat===key);b.append(el('i'),el('span',null,name),el('b',null,String(count)));
+    b.onclick=()=>{activeCat=key;applyFilter();save()};box.append(b)};
+  mk('',L('All','Sab'),'#ffffff',notes.length);CATS.forEach(c=>mk(c[0],c[1],c[2],notes.filter(n=>n.cat===c[0]).length));
+  const tp=$('#tpls'),c=CATS.find(x=>x[0]===activeCat);tp.textContent='';
+  $('#tplh').textContent=c?L('Ready-made '+c[1]+' notes',c[1]+' ke ready-made notes'):L('Pick a category to see ready-made notes','Category chuno, ready-made notes dikhenge');
+  if(c)c[3].forEach(([name,hint,make])=>{const b=el('button','mi',name);b.type='button';b.append(el('small',null,hint));
+    b.onclick=()=>{add(Object.assign({color:c[2]},make(),{cat:c[0]}),true);pal(L(name+' note added.',name+' note chipka diya.'),true)};tp.append(b)})}
+function applyFilter(){notes.forEach(n=>{const d=dom(n);if(d)d.classList.toggle('hid',!!activeCat&&n.cat!==activeCat)});renderCats()}
+
+
+
+/* ---------- background music: made live in the browser, plus the user's own file ---------- */
+let actx=null,master=null,bus=null,stopSt=null,curSt='',vol=.5;const au=new Audio();au.loop=true;
+function noise(brown){const b=actx.createBuffer(1,actx.sampleRate*2,actx.sampleRate),d=b.getChannelData(0);let l=0;
+  for(let i=0;i<d.length;i++){const w=Math.random()*2-1;if(brown){l=(l+.02*w)/1.02;d[i]=l*3.5}else d[i]=w}
+  const src=actx.createBufferSource();src.buffer=b;src.loop=true;return src}
+const STN={
+  rain(out){const n=noise(),f=actx.createBiquadFilter(),g=actx.createGain(),r=noise(true),g2=actx.createGain();f.type='highpass';f.frequency.value=1200;g.gain.value=.16;g2.gain.value=.45;
+    n.connect(f).connect(g).connect(out);r.connect(g2).connect(out);n.start();r.start();return()=>{n.stop();r.stop()}},
+  sea(out){const n=noise(true),f=actx.createBiquadFilter(),g=actx.createGain(),l=actx.createOscillator(),lg=actx.createGain();f.type='lowpass';f.frequency.value=700;g.gain.value=.5;l.frequency.value=.11;lg.gain.value=.4;
+    l.connect(lg).connect(g.gain);n.connect(f).connect(g).connect(out);n.start();l.start();return()=>{n.stop();l.stop()}},
+  pad(out){const f=actx.createBiquadFilter();f.type='lowpass';f.frequency.value=900;f.connect(out);const CHD=[[220,277.18,329.63],[196,246.94,293.66],[174.61,220,261.63],[164.81,207.65,246.94]];let i=0;
+    const play=()=>{const t=actx.currentTime;CHD[i++%4].forEach(fr=>['sine','triangle'].forEach((ty,k)=>{const o=actx.createOscillator(),g=actx.createGain();o.type=ty;o.frequency.value=fr*(k?.5:1);
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.07,t+2.5);g.gain.linearRampToValueAtTime(0,t+8.5);o.connect(g).connect(f);o.start(t);o.stop(t+9)}))};
+    play();const id=setInterval(play,6000);return()=>clearInterval(id)},
+  bells(out){const dl=actx.createDelay(),fb=actx.createGain(),N=[261.63,293.66,329.63,392,440,523.25,587.33,659.25];dl.delayTime.value=.42;fb.gain.value=.4;dl.connect(fb).connect(dl);dl.connect(out);let id;
+    const play=()=>{const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain();o.frequency.value=rnd(N);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.16,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+2.6);
+      o.connect(g);g.connect(out);g.connect(dl);o.start(t);o.stop(t+2.7);id=setTimeout(play,500+Math.random()*1300)};play();return()=>clearTimeout(id)}
+};
+function ensureCtx(){if(!actx){actx=new(window.AudioContext||window.webkitAudioContext)();master=actx.createGain();master.connect(actx.destination)}actx.resume();master.gain.value=vol}
+/* each note can carry its own song: plays while the pointer or focus is on it */
+let noteBus=null,noteStop=null,noteOn=null,hoverT=0;
+function stopNote(){clearTimeout(hoverT);if(noteStop){try{noteStop()}catch(e){}noteStop=null}
+  if(noteBus){const b=noteBus;try{b.gain.setTargetAtTime(0,actx.currentTime,.12)}catch(e){}setTimeout(()=>b.disconnect(),700);noteBus=null}
+  if(noteOn){board.querySelector(`[data-id="${noteOn}"]`)?.classList.remove('singing');noteOn=null;
+    if(bus)try{bus.gain.setTargetAtTime(1,actx.currentTime,.3)}catch(e){}au.volume=vol}}
+function noteSong(n,on,wait){clearTimeout(hoverT);if(!on){if(noteOn===n.id)stopNote();return}
+  if(!n.song||noteOn===n.id||!STN[n.song])return;
+  hoverT=setTimeout(()=>{try{ensureCtx();stopNote();if(bus)bus.gain.setTargetAtTime(0,actx.currentTime,.15);au.volume=0;
+    noteBus=actx.createGain();noteBus.connect(master);noteStop=STN[n.song](noteBus);noteOn=n.id;dom(n)?.classList.add('singing')}catch(e){}},wait??250)}
+function stopMusic(){if(stopSt){try{stopSt()}catch(e){}stopSt=null}if(bus){const b=bus;try{b.gain.linearRampToValueAtTime(0,actx.currentTime+.4)}catch(e){}setTimeout(()=>b.disconnect(),600);bus=null}
+  au.pause();au.volume=vol;curSt='';$('#mus').classList.remove('on')}
+function playMusic(k){stopMusic();if(k==='off')return;
+  try{if(k==='own'){au.volume=vol;au.play().then(()=>{curSt='own';$('#mus').classList.add('on')}).catch(()=>pal('Yeh file nahi chal payi. Koi aur audio try karo.',true));return}
+    ensureCtx();bus=actx.createGain();bus.connect(master);stopSt=STN[k](bus);curSt=k;$('#mus').classList.add('on')}
+  catch(e){pal('Yahan audio nahi chal pa raha.',true)}}
+$('#song').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{URL.revokeObjectURL(au.src)}catch(x){}au.src=URL.createObjectURL(f);playMusic('own');pal('Tera gaana chal raha hai.',true)};
+$('#mus').onclick=e=>{if(pk){closePicker();return}const p=el('div','pick menu'),g=el('div','mis');pk=p;
+  [['rain','Baarish','Halki baarish'],['sea','Samundar','Aati jaati lehren'],['pad','Sukoon','Dheeme chords'],['bells','Taare','Halki ghantiyan'],['own','Apna gaana','Apni audio file'],['off','Band karo','Music roko']].forEach(([k,name,hint])=>{
+    const b=el('button','mi',name);b.type='button';b.append(el('small',null,hint));b.setAttribute('aria-pressed',k===curSt);
+    b.onclick=()=>{closePicker();if(k==='own'){$('#song').click();return}playMusic(k);if(k!=='off')pal(tr(name)+tr(' chala diya. Aaram se kaam kar.'),true)};g.append(b)});
+  const vr=el('label','volr','Awaaz'),vi=document.createElement('input');vi.type='range';vi.id='vol';vi.min=0;vi.max=1;vi.step=.05;vi.value=vol;
+  vi.oninput=()=>{vol=+vi.value;if(master)master.gain.value=vol;au.volume=vol};vr.append(vi);
+  p.append(el('h4',null,'Peeche kya bajau?'),g,vr);document.body.append(p);const r=e.currentTarget.getBoundingClientRect();
+  p.style.left=Math.max(8,Math.min(innerWidth-270,r.left-60))+'px';p.style.top=Math.max(8,Math.min(innerHeight-p.offsetHeight-8,r.bottom+10))+'px'};
+
+/* eyes follow the pointer */
+let raf=0;addEventListener('pointermove',e=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;
+  document.querySelectorAll('.face,.blob').forEach(f=>{const b=f.getBoundingClientRect(),a=Math.atan2(e.clientY-b.top-b.height/2,e.clientX-b.left-b.width/2);
+    f.style.setProperty('--ex',(Math.cos(a)*2.6).toFixed(1)+'px');f.style.setProperty('--ey',(Math.sin(a)*2.6).toFixed(1)+'px')})})});
+
+/* confetti */
+const fx=$('#fx'),cx=fx.getContext('2d');let bits=[],run=false;
+function boom(d){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;const b=d.getBoundingClientRect();fx.width=innerWidth;fx.height=innerHeight;
+  for(let i=0;i<70;i++)bits.push({x:b.left+b.width/2,y:b.top+b.height/2,vx:Math.random()*14-7,vy:-Math.random()*12-3,c:rnd(COLORS),s:Math.random()*7+4,r:Math.random()*6,l:90});
+  if(!run){run=true;requestAnimationFrame(tick)}}
+function tick(){cx.clearRect(0,0,fx.width,fx.height);bits=bits.filter(p=>p.l-->0);
+  for(const p of bits){p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.r+=.2;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.globalAlpha=Math.min(1,p.l/30);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/3,p.s,p.s*.66);cx.restore()}
+  if(bits.length)requestAnimationFrame(tick);else run=false}
+
+/* ---------- boot ---------- */
+function start(state){
+  const s=(state&&state.notes)?state:load();
+  if(s&&s.cat&&CATS.some(c=>c[0]===s.cat))activeCat=s.cat;
+  if(s&&s.def){Object.assign(def,s.def);sb.style.setProperty('--c',def.color);$('#pal').className='blob av-'+def.face}
+  if(s&&s.notes&&s.notes.length){sound=s.sound!==false;s.notes.forEach(n=>{notes.push(n);zTop=Math.max(zTop,n.z||0);render(n)})}
+  else{const w=board.clientWidth,h=board.clientHeight,at=(fx,fy)=>({x:Math.max(10,Math.min(w-242,w*fx)),y:Math.max(10,h*fy)});
+    [{type:'text',text:'ChipZett mein swagat hai!\nKone wale hare ChipZett ko dabao, wahan se notes banao. Mere chehre pe click karo to main bolta hoon.',color:COLORS[0],anim:'float',song:'bells',mood:'sun',...at(.06,.06)},
+     {type:'todo',text:'Weekend plan',items:[{t:'Gym 7 baje',d:true},{t:'Groceries',d:false},{t:'Mummy ko call',d:false}],cat:'home',color:'#fff4d6',tex:'lined',font:'caveat',ink:'#1d3fbf',face:'cat',...at(.3,.2)},
+     {type:'timer',text:'Chai break',end:Date.now()+180000,total:180000,cat:'reminders',color:COLORS[1],face:'robot',...at(.56,.05)},
+     {type:'text',text:'Idea: sticky notes jo boring na ho',cat:'ideas',color:COLORS[4],tex:'holo',font:'marker',face:'cool',mood:'party',...at(.76,.3)},
+     {type:'text',text:'Rent 5 tareekh ko',cat:'money',color:COLORS[3],tex:'neon',font:'unbounded',face:'alien',mood:'rain',...at(.12,.52)},
+     {type:'chart',kind:'pie',text:'Mahine ka kharcha',data:'Rent 40, Khana 25, Masti 15, Bachat 20',cat:'money',color:'#fff4d6',tex:'grid',font:'outfit',...at(.5,.42)}].forEach(n=>add(n));
+    setTimeout(()=>pal('Yeh sample notes hain. Mujhe dabao aur apne notes banao.',true),900)}
+  $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
+  applyFilter();
+}
+addEventListener('resize',()=>{if(isPhone())return;for(const n of notes){const d=dom(n);if(!d)continue;n.x=Math.min(n.x,board.clientWidth-80);n.y=Math.min(n.y,board.clientHeight-60);d.style.left=n.x+'px';d.style.top=n.y+'px'}});
+window.claude?.hot?.snapshot?.(()=>({notes,sound,def,cat:activeCat}));
+if(DESK){
+  /* clicks pass through to the desktop unless the pointer is on a note or a control */
+  let over=false;const HOT='.note,.hub,.blob,.pick,.seltool,.say';
+  addEventListener('mousemove',e=>{const o=!!(e.target.closest&&e.target.closest(HOT));if(o!==over){over=o;chipku.hit(o)}});
+  chipku.on('focus-cap',()=>{over=true;openHub(true)});
+  chipku.load().then(s=>start(s||{}),()=>start({}));
+}else window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
+</script>
+</body>
+</html>
