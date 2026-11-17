@@ -2,8 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='14' y='14' width='44' height='44' rx='10' fill='%23ff6f9c'/%3E%3Crect x='6' y='6' width='44' height='44' rx='10' fill='%23ffc93c'/%3E%3Ccircle cx='20' cy='24' r='6' fill='%23fff'/%3E%3Ccircle cx='36' cy='24' r='6' fill='%23fff'/%3E%3Ccircle cx='21.5' cy='25' r='2.6' fill='%231b1430'/%3E%3Ccircle cx='37.5' cy='25' r='2.6' fill='%231b1430'/%3E%3Cpath d='M20 36h16a8 8 0 0 1-16 0z' fill='%231b1430'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="theme-color" content="#0e0b1d">
+<link rel="canonical" href="https://www.chipzett.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChipZett">
+<meta property="og:title" content="ChipZett: sticky notes, finally alive">
+<meta property="og:description" content="Notes that talk, change their mood, play their own song and turn a line of text into a chart. Free, no account.">
+<meta property="og:url" content="https://www.chipzett.com/">
+<meta property="og:image" content="https://www.chipzett.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ChipZett Notes</title>
+<title>ChipZett: sticky notes, finally alive</title>
 <meta name="description" content="ChipZett: sticky notes that talk, feel and sing. Free on your desktop and in your browser.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Outfit:wght@400;500;600&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
@@ -130,6 +143,19 @@ section{padding:74px 0}
 .get .btn.soon{border-color:rgba(27,20,48,.45);color:var(--ink)}
 footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14px;justify-content:space-between;flex-wrap:wrap}
 
+
+.start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:8px}
+.go1{border:1px solid var(--line);border-radius:18px;padding:18px 20px;background:rgba(255,255,255,.04)}
+.go1 b{font:800 15px var(--display);color:var(--k);display:block;margin-bottom:6px}
+.go1 p{color:var(--muted);font-size:15.5px}
+.faq{display:grid;gap:10px;max-width:780px}
+.faq details{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.04);padding:0 20px}
+.faq summary{cursor:pointer;list-style:none;padding:16px 0;font-weight:600;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:500 22px var(--ui);color:var(--mint);transition:rotate .2s}
+.faq details[open] summary::after{rotate:45deg}
+.faq p{color:var(--muted);padding:0 0 18px;max-width:62ch}
+@media (max-width:920px){.start{grid-template-columns:1fr}.screen{transform:none}.screen iframe{aspect-ratio:4/5}}
 @media (max-width:920px){
   .hero{grid-template-columns:1fr;padding-bottom:50px}
   .notes{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -146,7 +172,7 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
 <div class="wrap">
   <nav>
     <a class="logo" href="#top"><i></i>ChipZett</a>
-    <div class="links"><a href="#notes">What notes can do</a><a href="#categories">Categories</a><a href="#vision">Vision</a><a href="#get">Get it</a></div>
+    <div class="links"><a href="#notes">What notes can do</a><a href="#categories">Categories</a><a href="#vision">Vision</a><a href="#faq">Questions</a><a href="#get">Get it</a></div>
     <a class="btn go sm" href="app/index.html">Open ChipZett</a>
   </nav>
 
@@ -170,6 +196,18 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
     </div>
   </header>
 
+
+  <section id="start" style="padding-top:0">
+    <div class="head">
+      <span class="kicker">Start in ten seconds</span>
+      <h2>No download. No sign-up.</h2>
+    </div>
+    <div class="start">
+      <div class="go1" style="--k:var(--mango)"><b>1. Open it</b><p>Press "Use it online". ChipZett opens right in your browser.</p></div>
+      <div class="go1" style="--k:var(--mint)"><b>2. Press Zett</b><p>Zett is the green helper in the corner. Press it to write a note or pick a ready-made one.</p></div>
+      <div class="go1" style="--k:var(--pink)"><b>3. Make it yours</b><p>Give the note a face, a mood and a song. It stays there until you tick it off.</p></div>
+    </div>
+  </section>
   <section id="notes">
     <div class="head">
       <span class="kicker">What a note can do</span>
@@ -246,6 +284,22 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
     </div>
   </section>
 
+
+  <section id="faq">
+    <div class="head">
+      <span class="kicker">Good to know</span>
+      <h2>Questions people ask first.</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Is ChipZett really free?</summary><p>Yes. There is no payment, no trial and no account. You open it and use it.</p></details>
+      <details><summary>Where are my notes saved?</summary><p>On your own device, inside the browser you are using. They are not sent to us. If you clear your browser data, the notes go with it.</p></details>
+      <details><summary>Can anyone else see my notes?</summary><p>No. Your notes never leave your device, so nobody else can open them, including us.</p></details>
+      <details><summary>Will my notes show up on my other devices?</summary><p>Not yet. A note written on your laptop stays on your laptop. Sign-in and sync across devices are planned.</p></details>
+      <details><summary>Does it work on a phone?</summary><p>It opens in a phone browser, where notes appear as a list. Dragging notes around and resizing them works best on a computer for now.</p></details>
+      <details><summary>Do the notes really talk?</summary><p>Yes. They use the voice built into your browser or computer. You can turn Sound off in the menu at any time.</p></details>
+      <details><summary>When is the Windows app coming?</summary><p>It is being finished. When it is ready, a download button will appear on this page.</p></details>
+    </div>
+  </section>
   <section id="get">
     <div class="get">
       <div>
