@@ -77,16 +77,26 @@ button.face:hover{background:rgba(27,20,48,.1)}
 .body,.ttl{font-family:var(--f,var(--hand));font-size:calc(19px*var(--fs,1));line-height:1.3;outline:none;overflow-wrap:anywhere;white-space:pre-wrap;min-height:1.3em}
 .ttl{font-weight:700;margin-bottom:4px}
 ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:3px}
-li{display:flex;gap:8px;align-items:flex-start;font-family:var(--f,var(--hand));font-size:calc(18px*var(--fs,1));line-height:1.25;cursor:pointer;border-radius:6px;padding:1px 2px}
+li{display:flex;gap:8px;align-items:flex-start;font-family:var(--f,var(--hand));font-size:calc(18px*var(--fs,1));line-height:1.25;border-radius:6px;padding:1px 2px}
+li b{cursor:pointer}
+li span{flex:1;min-width:1ch;outline:none;cursor:text}
+li span:focus,li span:focus-visible{outline:none;box-shadow:0 1.500px 0 color-mix(in srgb,var(--ink) 55%,transparent)}
+.lx{flex:none;width:19px;height:19px;border-radius:6px;font:600 15px/1 var(--ui);color:var(--ink);opacity:0;display:grid;place-items:center;margin-top:1px}
+li:hover .lx,li:focus-within .lx{opacity:.5}
+.lx:hover,.lx:focus-visible{opacity:1;background:color-mix(in srgb,var(--ink) 14%,transparent)}
+@media (hover:none){.lx{opacity:.45}}
 li:hover{background:rgba(27,20,48,.08)}
 li b{flex:none;width:17px;height:17px;border:2px solid var(--ink);border-radius:5px;margin-top:3px;display:grid;place-items:center;transition:background .2s,transform .3s cubic-bezier(.3,2,.5,1)}
 li.d b{background:var(--ink);transform:rotate(360deg)}
 li.d b::after{content:"";width:8px;height:4px;border:2px solid var(--tk,var(--c));border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
 li span{background:linear-gradient(var(--ink),var(--ink)) no-repeat 0 55%/0 2px;transition:background-size .35s,opacity .3s;overflow-wrap:anywhere}
-li.d span{background-size:100% 2px;opacity:.55}
+li.d span{background-size:0 2px;text-decoration:line-through;text-decoration-thickness:1.500px;opacity:.55}
 .addi{margin-top:6px;width:100%;background:color-mix(in srgb,var(--ink) 10%,transparent);border:0;border-radius:8px;padding:5px 8px;color:var(--ink);font-family:var(--hand);font-size:16px}
 .addi::placeholder{color:color-mix(in srgb,var(--ink) 55%,transparent)}
 .timer{display:flex;align-items:center;gap:12px}
+.tcol{flex:1;min-width:0}
+.tagain{display:none;margin-top:6px;font:600 12px var(--ui);padding:5px 10px;border-radius:8px;background:var(--ink);color:var(--tk,var(--c))}
+.note.over .tagain{display:inline-block}
 .ringc{flex:none;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;
   background:conic-gradient(var(--ink) calc(var(--p,1)*360deg),color-mix(in srgb,var(--ink) 18%,transparent) 0)}
 .ringc span{width:48px;height:48px;border-radius:50%;background:var(--tk,var(--c));display:grid;place-items:center;font:600 13px var(--ui);font-variant-numeric:tabular-nums}
@@ -231,6 +241,7 @@ li.d span{background-size:100% 2px;opacity:.55}
 .grow2{display:flex;align-items:center;gap:6px;font:600 13px var(--ui);font-variant-numeric:tabular-nums}
 .grow2 button{width:26px;height:26px;border-radius:8px;background:color-mix(in srgb,var(--ink) 12%,transparent);color:var(--ink);font-weight:700}
 .grow2 span{flex:1;text-align:center}
+.gin input{width:4.4em;border:0;border-radius:7px;padding:4px 5px;font:600 13px var(--ui);text-align:center;background:color-mix(in srgb,var(--ink) 12%,transparent);color:var(--ink)}
 .menu{width:260px}
 .mis{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .mi{text-align:left;background:var(--glass);border-radius:12px;padding:8px 10px;font-size:13px;font-weight:600;transition:transform .15s,background .15s}
@@ -477,7 +488,7 @@ body.ws:not(.st-play) .note.fk .paper li,body.ws:not(.st-play) .note.fk .paper l
 /* pen writing */
 .wpen{position:fixed;left:0;top:0;z-index:30;pointer-events:none;opacity:0;transition:opacity .4s,transform .1s ease-out;will-change:transform}
 .wpen.on{opacity:1}
-.wpen svg{position:absolute;left:-5.5px;bottom:-1px;width:11px;height:74px;transform-origin:50% 100%;transform:rotate(34deg);filter:drop-shadow(5px 9px 6px rgba(0,0,0,.45))}
+.wpen svg{position:absolute;left:-1.800px;bottom:0;width:3.600px;height:24px;transform-origin:50% 100%;transform:rotate(34deg);filter:drop-shadow(1px 2px 1.500px rgba(0,0,0,.4))}
 .wpen.jot svg{animation:jot .16s ease-out}
 @keyframes jot{45%{transform:rotate(30deg) translateY(-2.5px)}}
 /* wall backgrounds */
@@ -560,6 +571,35 @@ body.ws:not(.st-play) .agb button{min-height:30px;border-radius:9px;box-shadow:i
 .tln{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.8}
 .zgnone{color:#9d95c0;font:500 14px var(--ui)}
 @media (max-width:720px){.zgal{padding:0}.zgbox{border-radius:0;height:100%}.zgbody{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.zgnav{flex-direction:row;border-right:0;border-bottom:1px solid rgba(255,255,255,.13);padding:8px 10px}.zgnav h6{display:none}.zgnav button{flex:none}.zgnav button span{margin-left:2px}.zghd .zsearch{width:auto;flex:1;min-width:0}.zggrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));padding:12px;gap:10px}}
+
+/* ---------- note shapes: chosen per note in the look picker ---------- */
+body .note.sh-soft .paper{border-radius:24px}
+body .note.sh-square .paper{border-radius:3px}
+body .note.sh-doc .paper{border-radius:6px;clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,0 100%)}
+.note.sh-doc .paper::before{content:"";position:absolute;right:0;top:0;width:28px;height:28px;background:linear-gradient(225deg,transparent 50%,color-mix(in srgb,var(--ink) 24%,transparent) 50%);border-radius:0 0 0 6px;z-index:2;pointer-events:none}
+.note.sh-doc .head{padding-right:22px}
+body .note.sh-ticket .paper{border-radius:12px;padding-left:24px;padding-right:24px;-webkit-mask:radial-gradient(circle 12px at 0 50%,#0000 97%,#000),radial-gradient(circle 12px at 100% 50%,#0000 97%,#000);-webkit-mask-composite:source-in;mask:radial-gradient(circle 12px at 0 50%,#0000 97%,#000),radial-gradient(circle 12px at 100% 50%,#0000 97%,#000);mask-composite:intersect}
+body .note.sh-label .paper{border-radius:0 10px 10px 0;padding-left:36px;clip-path:polygon(24px 0,100% 0,100% 100%,24px 100%,0 calc(100% - 24px),0 24px)}
+.note.sh-label .paper::before{content:"";position:absolute;left:10px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:rgba(0,0,0,.42);box-shadow:inset 0 1px 2px rgba(0,0,0,.5);z-index:2;pointer-events:none}
+body .note.sh-oval .paper{border-radius:50%;padding:17% 16% 15%}
+body .note.sh-circle .paper{border-radius:50%;aspect-ratio:1;padding:19% 17%;display:flex;flex-direction:column;justify-content:center}
+body .note.sh-cloud .paper{border-radius:36px;padding-top:58px;
+  -webkit-mask:radial-gradient(circle 30px at 24% 36px,#000 97%,#0000),radial-gradient(circle 40px at 50% 40px,#000 97%,#0000),radial-gradient(circle 30px at 76% 38px,#000 97%,#0000),radial-gradient(circle 28px at 28px 60px,#000 97%,#0000),radial-gradient(circle 28px at calc(100% - 28px) 60px,#000 97%,#0000),linear-gradient(#000 0 0) 28px 40px/calc(100% - 56px) calc(100% - 40px) no-repeat,linear-gradient(#000 0 0) 0 60px/100% calc(100% - 60px) no-repeat;
+  mask:radial-gradient(circle 30px at 24% 36px,#000 97%,#0000),radial-gradient(circle 40px at 50% 40px,#000 97%,#0000),radial-gradient(circle 30px at 76% 38px,#000 97%,#0000),radial-gradient(circle 28px at 28px 60px,#000 97%,#0000),radial-gradient(circle 28px at calc(100% - 28px) 60px,#000 97%,#0000),linear-gradient(#000 0 0) 28px 40px/calc(100% - 56px) calc(100% - 40px) no-repeat,linear-gradient(#000 0 0) 0 60px/100% calc(100% - 60px) no-repeat}
+.note.sh-doc,.note.sh-label,.note.sh-ticket,.note.sh-cloud{filter:drop-shadow(0 14px 14px rgba(0,0,0,.42))}
+body .note.sh-doc .paper,body .note.sh-label .paper,body .note.sh-ticket .paper,body .note.sh-cloud .paper{box-shadow:none}
+body .note.sh-cloud .paper>.tag,body .note.sh-circle .paper>.tag,body .note.sh-oval .paper>.tag,body .note.sh-ticket .paper>.tag,body .note.sh-label .paper>.tag{display:none}
+.note.sh-oval .rz,.note.sh-circle .rz{right:14%;bottom:10%}
+.pshs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.psh{display:flex;flex-direction:column;align-items:center;gap:7px;font-size:11.500px;color:var(--muted);padding:10px 2px 7px;border-radius:10px;border:2px solid transparent;background:var(--glass)}
+.psh[aria-pressed=true]{border-color:var(--mint);color:var(--text)}
+.shp{width:38px;height:28px;background:var(--mango);display:block}
+.sp-classic{border-radius:3px 10px 3px 10px}.sp-soft{border-radius:9px}.sp-square{border-radius:1px}
+.sp-doc{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)}
+.sp-ticket{border-radius:4px;-webkit-mask:radial-gradient(circle 5px at 0 50%,#0000 96%,#000),radial-gradient(circle 5px at 100% 50%,#0000 96%,#000);-webkit-mask-composite:source-in;mask:radial-gradient(circle 5px at 0 50%,#0000 96%,#000),radial-gradient(circle 5px at 100% 50%,#0000 96%,#000);mask-composite:intersect}
+.sp-label{clip-path:polygon(9px 0,100% 0,100% 100%,9px 100%,0 calc(100% - 9px),0 9px)}
+.sp-oval{border-radius:50%}.sp-circle{width:28px;border-radius:50%}
+.sp-cloud{border-radius:11px;-webkit-mask:radial-gradient(circle 8px at 26% 10px,#000 96%,#0000),radial-gradient(circle 10px at 52% 10px,#000 96%,#0000),radial-gradient(circle 8px at 78% 11px,#000 96%,#0000),linear-gradient(#000 0 0) 0 12px/100% calc(100% - 12px) no-repeat;mask:radial-gradient(circle 8px at 26% 10px,#000 96%,#0000),radial-gradient(circle 10px at 52% 10px,#000 96%,#0000),radial-gradient(circle 8px at 78% 11px,#000 96%,#0000),linear-gradient(#000 0 0) 0 12px/100% calc(100% - 12px) no-repeat}
 </style>
 </head>
 <body>
@@ -618,6 +658,7 @@ const VIBES=[['Classic','#ffc93c','plain','kalam',''],['School copy','#fff4d6','
 const AVS=[['classic','Zett'],['cyclops','Ek-aankh'],['cat','Billi'],['robot','Robot'],['cool','Cool'],['love','Pyaar'],['sleepy','Neend'],['alien','Alien'],['none','Bina chehra'],['boss','Boss'],['homey','Homey'],['pilot','Pilot'],['sporty','Sporty'],['sparky','Sparky'],['coin','Coin eyes'],['tunes','Tunes'],['ringer','Ringer'],['dreamer','Dreamer'],['grad','Graduate'],['owl','Owl']];
 /* each category suggests a face and a paper for new notes made in it */
 const PACK={work:['boss','blueprint'],home:['homey','gingham'],travel:['pilot','map'],activity:['sporty','track'],ideas:['sparky','dots'],money:['coin','ledger'],hobbies:['tunes','cork'],reminders:['ringer','hazard'],dreams:['dreamer','night'],career:['grad','letter'],knowledge:['owl','index']};
+const SHAPES=[['',L('Classic','Classic')],['soft',L('Rounded','Gol kone')],['square',L('Square','Chaukor')],['doc',L('Folded','Muda kona')],['ticket',L('Ticket','Ticket')],['label',L('Tag','Tag')],['oval',L('Oval','Oval')],['circle',L('Circle','Gol')],['cloud',L('Cloud','Baadal')]];
 const ANIMS=[['still','Shaant'],['float','Tairna'],['wiggle','Hilna'],['pulse','Dhadkan'],['swing','Jhoola']];
 const MOODS=[['','Kuch nahi'],['rain','Baarish'],['sun','Dhoop'],['wind','Hawa'],['snow','Barf'],['stars','Taare'],['hearts','Dil'],['bubbles','Bulbule'],['party','Party'],['embers','Aag'],['leaves','Patte'],['clouds','Baadal'],['aurora','Aurora']];
 const CATS=[
@@ -710,7 +751,7 @@ CATS.unshift(['quick','Quick notes','#ffe08a',[['Blank note','Just write',X('')]
   ['Pie chart','Shares of a whole',CH('pie','Chart','Part one 50, Part two 30, Part three 20')],['Bar chart','Compare numbers',CH('bar','Chart','A 4, B 7, C 5')],['Flow','Steps in order',FL('Flow','First > Next > Done')],['Goal','Track progress',GO('Goal',0,10)],['Sketch','Draw by hand',()=>({type:'doodle',text:''})]]]);}
 let activeCat='';
 const SONGS=[['','Koi nahi'],['rain','Baarish'],['sea','Samundar'],['pad','Sukoon'],['bells','Taare']];
-const def={color:COLORS[0],tex:'plain',font:'kalam',size:1,ink:'',face:'classic',anim:'still',song:'',mood:'',cat:''};
+const def={color:COLORS[0],tex:'plain',font:'kalam',size:1,ink:'',face:'classic',anim:'still',song:'',mood:'',cat:'',shape:''};
 function inkFor(c,t){if(t==='glass'||t==='night')return'#f3efff';if(t==='neon')return c;const h=c.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return .299*r+.587*g+.114*b>150?'#1b1430':'#fdfbff'}
 const tickFor=(c,t)=>t==='night'?'#1c1b4b':t==='neon'?'#120e24':t==='glass'?'#1a1436':c;
 const KEY='chipku-v1', $=s=>document.querySelector(s), board=$('#board');
@@ -764,7 +805,7 @@ const TOPY=DESK?0:104;
 function place(){const w=board.clientWidth,h=board.clientHeight;return{x:Math.max(10,Math.random()*(w-260)),y:board.scrollTop+TOPY+Math.max(10,Math.random()*(h-TOPY-330))}}
 function add(n,fresh){
   const ac=CATS.find(c=>c[0]===activeCat),given=n;
-  n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,rot:DESK?+(Math.random()*8-4).toFixed(1):0,z:++zTop},place(),n);
+  n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,shape:def.shape||'',rot:DESK?+(Math.random()*8-4).toFixed(1):0,z:++zTop},place(),n);
   if(n.cat==='quick')n.cat='';if(!('agent' in given)&&(WS.agent||wsNext.agent))n.agent=true;if(!('space' in given)&&WS.space)n.space=WS.space;
   n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();return n;
 }
@@ -848,17 +889,38 @@ function render(n,fresh){
   head.append(face,acts);p.append(head);
 
   if(n.type==='todo'){
-    const t=el('div','ttl',n.text);edit(t,n);const ul=el('ul');
-    const row=i=>{const li=el('li',i.d?'d':'');li.append(el('b'),el('span',null,i.t));
-      li.onclick=()=>{i.d=!i.d;li.classList.toggle('d',i.d);save();
+    /* A list people can work in: tick the box, click the words to rewrite them, Enter for a new item below,
+       Backspace on an empty item (or its x) to remove it, arrow keys to move between items. */
+    const t=el('div','ttl',n.text);edit(t,n);const ul=el('ul'),ai=el('input','addi');
+    const caret=(sp,end)=>{sp.focus();const r=document.createRange();r.selectNodeContents(sp);r.collapse(!end);const g=getSelection();g.removeAllRanges();g.addRange(r)};
+    const spanAt=k=>{const l=ul.children[k];return l?l.querySelector('span'):null};
+    const row=(i,at)=>{const li=el('li',i.d?'d':''),bx=el('b'),sp=el('span'),x=el('button','lx');sp['textContent']=i.t;let gone=false;
+      bx.setAttribute('role','checkbox');bx.tabIndex=0;bx.setAttribute('aria-checked',!!i.d);bx.setAttribute('aria-label',L('Done','Ho gaya'));
+      const tog=()=>{i.d=!i.d;li.classList.toggle('d',i.d);bx.setAttribute('aria-checked',i.d);save();
         if(i.d){const all=n.items.every(x=>x.d);if(all){boom(d);pal(rnd(['Poori list khatam! Kya baat hai.','Sab tick. Aaj tu hero hai.']))}else pal(rnd(['Ek aur gaya.','Shabash!','Badhiya, agla?']),true)}};
-      ul.append(li)};
-    n.items.forEach(row);
-    const ai=el('input','addi');ai.placeholder=tr('+ aur ek kaam');ai.id='ai-'+n.id;ai.setAttribute('aria-label','Add item');
-    ai.onkeydown=e=>{if(e.key==='Enter'&&ai.value.trim()){const i={t:ai.value.trim(),d:false};n.items.push(i);row(i);ai.value='';save()}};
+      bx.onclick=tog;bx.onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();tog()}};
+      const remove=back=>{const k=n.items.indexOf(i);if(k<0||gone)return;gone=true;n.items.splice(k,1);li.remove();save();if(back){const q=spanAt(k-1)||spanAt(0);q?caret(q,true):ai.focus()}};
+      sp.contentEditable='true';sp.spellcheck=false;sp.setAttribute('role','textbox');sp.setAttribute('aria-label',L('List item','List ka kaam'));
+      sp.oninput=()=>{i.t=sp.innerText.replace(/\s*\n\s*/g,' ');save()};
+      sp.onpaste=ev=>{ev.preventDefault();document.execCommand('insertText',false,(ev.clipboardData?ev.clipboardData.getData('text/plain'):'').replace(/\s*\n\s*/g,' '))};
+      sp.onkeydown=e=>{const k=n.items.indexOf(i);
+        if(e.key==='Enter'){e.preventDefault();const g=getSelection();let off=sp.textContent.length;
+          if(g.rangeCount&&sp.contains(g.anchorNode)){const r=g.getRangeAt(0),pre=document.createRange();pre.selectNodeContents(sp);pre.setEnd(r.startContainer,r.startOffset);off=pre.toString().length}
+          const full=sp.textContent,ni={t:full.slice(off).trim(),d:false};i.t=full.slice(0,off).trim();sp['textContent']=i.t;n.items.splice(k+1,0,ni);const nl=row(ni,k+1);save();caret(nl.querySelector('span'),false)}
+        else if(e.key==='Backspace'&&!sp.textContent){e.preventDefault();remove(true)}
+        else if(e.key==='ArrowUp'&&k>0){e.preventDefault();caret(spanAt(k-1),true)}
+        else if(e.key==='ArrowDown'){e.preventDefault();const q=spanAt(k+1);q?caret(q,true):ai.focus()}};
+      sp.onblur=()=>{if(gone)return;const v=i.t.trim();if(!v&&n.items.length>1){remove(false);return}if(v!==i.t||sp.textContent!==v){i.t=v;sp['textContent']=v;save()}};
+      x.type='button';x['textContent']='×';x.setAttribute('aria-label',L('Remove this item','Yeh kaam hatao'));x.title=L('Remove','Hatao');x.onclick=()=>remove(false);
+      li.append(bx,sp,x);ul.insertBefore(li,at==null?null:(ul.children[at]||null));return li};
+    n.items.forEach(i=>row(i));
+    ai.placeholder=tr('+ aur ek kaam');ai.id='ai-'+n.id;ai.setAttribute('aria-label','Add item');
+    ai.onkeydown=e=>{if(e.key==='Enter'&&ai.value.trim()){const i={t:ai.value.trim(),d:false};n.items.push(i);row(i);ai.value='';save()}
+      else if((e.key==='ArrowUp'||(e.key==='Backspace'&&!ai.value))&&n.items.length){e.preventDefault();caret(spanAt(n.items.length-1),true)}};
     p.append(t,ul,ai);
   }else if(n.type==='timer'){
-    const w=el('div','timer'),r=el('div','ringc'),s=el('span');r.append(s);const b=el('div','body',n.text);edit(b,n);w.append(r,b);p.append(w);
+    const w=el('div','timer'),r=el('div','ringc'),s=el('span'),c2=el('div','tcol'),ag=el('button','tagain',L('Start again','Dobara chalao'));r.append(s);const b=el('div','body',n.text);edit(b,n);
+    ag.type='button';ag.onclick=()=>{n.end=Date.now()+n.total;n.fired=false;d.classList.remove('over','ringing');save()};c2.append(b,ag);w.append(r,c2);p.append(w);
   }else if(EXTRA[n.type]){EXTRA[n.type](n,p,d)}else{const b=el('div','body',n.text);edit(b,n);p.append(b)}
   agentUI(n,p,d);
   const rz=el('div','rz');rz.setAttribute('title','Size badlo');p.append(rz);
@@ -874,14 +936,14 @@ function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${
   const f=d.querySelector('.face');if(f)f.className='face av-'+(n.face||'classic');
   d.style.order=-(n.z||0);d.classList.toggle('has-song',!!n.song);d.classList.toggle('hid',isHid(n));d.classList.toggle('is-agent',!!n.agent);d.classList.toggle('fk',(n.font||'kalam')==='kalam');d.classList.toggle('f0',!n.face||n.face==='classic');
   {const pp=d.firstChild;if(pp){let tg=pp.querySelector('.tag');const c=CATS.find(x=>x[0]===n.cat);if(c){if(!tg){tg=el('span','tag');pp.append(tg)}tg.textContent=c[1]}else if(tg)tg.remove()}}
-  setSky(d,n);ANIMS.forEach(a=>d.classList.remove('an-'+a[0]));d.classList.add('an-'+(n.anim||'still'));
+  setSky(d,n);SHAPES.forEach(x=>{if(x[0])d.classList.toggle('sh-'+x[0],n.shape===x[0])});ANIMS.forEach(a=>d.classList.remove('an-'+a[0]));d.classList.add('an-'+(n.anim||'still'));
   const p=d.firstChild;if(p){TEX.forEach(x=>p.classList.remove('tx-'+x[0]));p.classList.add('tx-'+t)}}
 
 /* ---------- colour + texture picker ---------- */
 let pk=null,lastTab='Vibe';
 function closePicker(){if(pk)stopNote();pk?.remove();pk=null}
 function openPicker(anchor,cur,apply){
-  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||''};if(PROFILE&&cur.id){st.space=spaceOf(cur);st.agent=!!cur.agent}
+  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||'',shape:cur.shape||''};if(PROFILE&&cur.id){st.space=spaceOf(cur);st.agent=!!cur.agent}
   const p=el('div','pick');pk=p;const groups=[];let ci;
   const sync=()=>{groups.forEach(([g,key])=>[...g.children].forEach(b=>b.setAttribute('aria-pressed',b._v===st[key])));
     p.querySelectorAll('.pt .mini').forEach(m=>{m.style.cssText=`display:block;--c:${st.color};--ink:${inkFor(st.color,m.parentElement._v)}`});
@@ -896,6 +958,7 @@ function openPicker(anchor,cur,apply){
   grp('Category','pms',[['','None'],...CATS.filter(c=>c[0]!=='quick')],'cat',(b,it)=>{b.className='ps';b.textContent=it[1]});
   if('space' in st){grp('Desk','pms',[['personal',L('Personal','Personal')],['work',L('Work','Kaam')]],'space',(b,it)=>{b.className='ps';b.textContent=it[1]});
     grp('Agentic note','pms',[[false,L('Off','Band')],[true,L('On','Chalu')]],'agent',(b,it)=>{b.className='ps';b.textContent=it[1]})}
+  grp('Shape','pshs',SHAPES,'shape',(b,it)=>{b.className='psh';b.dataset.shape=it[0]||'classic';b.append(el('span','shp sp-'+(it[0]||'classic')),document.createTextNode(it[1]))});
   grp('Avatar','pas',AVS,'face',(b,it)=>{b.className='pa';const f=el('span','face av-'+it[0]);f.append(el('span','eye'),el('span','eye'),el('span','mouth'));b.append(f,document.createTextNode(tr(it[1])))});
   grp('Harkat','pss',ANIMS,'anim',(b,it)=>{b.className='ps';b.textContent=tr(it[1]);b.style.fontSize='11.5px';b.style.padding='6px 2px'});
   grp('Mood (peeche chalta animation)','pms',MOODS,'mood',(b,it)=>{b.className='ps';b.textContent=tr(it[1])});
@@ -907,7 +970,7 @@ function openPicker(anchor,cur,apply){
   grp('Size','pss',[[.85,'S'],[1,'M'],[1.25,'L'],[1.55,'XL']],'size',(b,it)=>{b.className='ps';b.textContent=tr(it[1])});
   grp('Likhai ka rang','pcs',INKS,'ink',(b,c)=>{b.className='pc';if(c)b.style.setProperty('--c',c);else{b.textContent=tr('A');b.classList.add('auto')}b.setAttribute('aria-label',c?'Ink '+c:'Auto ink')});
   /* tabs keep the picker short: one group of options at a time */
-  const TABS=['Vibe','Rang','Likhai','Avatar','Mood'],tabOf={'Ek tap vibe':'Vibe','Category':'Vibe','Desk':'Vibe','Agentic note':'Vibe','Avatar':'Avatar','Harkat':'Avatar','Mood (peeche chalta animation)':'Mood','Gaana (note pe aate hi bajega)':'Mood','Rang':'Rang','Texture':'Rang','Font':'Likhai','Size':'Likhai','Likhai ka rang':'Likhai'};
+  const TABS=['Vibe','Shape','Rang','Likhai','Avatar','Mood'],tabOf={'Shape':'Shape','Ek tap vibe':'Vibe','Category':'Vibe','Desk':'Vibe','Agentic note':'Vibe','Avatar':'Avatar','Harkat':'Avatar','Mood (peeche chalta animation)':'Mood','Gaana (note pe aate hi bajega)':'Mood','Rang':'Rang','Texture':'Rang','Font':'Likhai','Size':'Likhai','Likhai ka rang':'Likhai'};
   const tabT={};for(const k in tabOf)tabT[tr(k)]=tabOf[k];let ct='Vibe';[...p.children].forEach(c=>{if(c.tagName==='H4')ct=tabT[c.textContent]||ct;c.dataset.tab=ct});
   const bar=el('div','tabs');p.prepend(bar);
   const place=()=>{const r=anchor.getBoundingClientRect(),h=p.offsetHeight;
@@ -951,7 +1014,7 @@ function finish(n,done){
 }
 function drag(d,n,handle){
   /* Press and move anywhere on the note to drag it. A plain click on the text puts the cursor there. */
-  let sx,sy,ox,oy,lx,on=false,moved=false,ed=null;const SKIP='button,input,textarea,select,canvas,label,a,li,.rz,.agc,.addi';
+  let sx,sy,ox,oy,lx,on=false,moved=false,ed=null;const SKIP='button,input,textarea,select,canvas,label,a,li,.rz,.agc,.addi,.grow2';
   handle.addEventListener('mousedown',e=>{if(DESK||isPhone()||e.target.closest(SKIP))return;const t=e.target.closest('[contenteditable]');if(t&&document.activeElement!==t)e.preventDefault()});
   handle.addEventListener('pointerdown',e=>{if(e.button||e.target.closest(SKIP)||isPhone())return;ed=e.target.closest('[contenteditable]');if(ed&&(DESK||document.activeElement===ed))return;
     on=true;moved=false;sx=e.clientX;sy=e.clientY;ox=n.x;oy=n.y;lx=e.clientX;handle.setPointerCapture(e.pointerId)});
@@ -1007,6 +1070,13 @@ const EXTRA={
     const draw=()=>{const pc=Math.min(100,Math.round(n.cur/n.total*100));fill.style.setProperty('--w',pc+'%');lab.textContent=tr(`${n.cur} / ${n.total} (${pc}%)`)};
     const btn=(t,dl,label)=>{const b=el('button',null,t);b.type='button';b.setAttribute('aria-label',label);
       b.onclick=()=>{const was=n.cur;n.cur=Math.max(0,Math.min(n.total,n.cur+dl));draw();save();if(n.cur>=n.total&&was<n.total){boom(d);pal('Goal poora! Party kab hai?')}};return b};
+    lab.title=L('Click to type the numbers','Number likhne ke liye dabao');lab.style.cursor='text';
+    lab.onclick=()=>{if(row.querySelector('input'))return;const a=document.createElement('input'),b2=document.createElement('input'),w=el('span','gin');
+      [a,b2].forEach(q=>{q.type='number';q.min=0;q.inputMode='numeric'});a.value=n.cur;b2.value=n.total;a.setAttribute('aria-label',L('Done so far','Ab tak'));b2.setAttribute('aria-label',L('Target','Target'));
+      w.append(a,document.createTextNode(' / '),b2);lab.replaceWith(w);a.focus();a.select();
+      let fin=false;const done=()=>{if(fin)return;fin=true;const t=Math.max(1,Math.round(+b2.value)||n.total),c=Math.max(0,Math.min(t,Math.round(+a.value)||0));n.total=t;n.cur=c;w.replaceWith(lab);draw();save()};
+      w.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();done()}else if(e.key==='Escape'){fin=true;w.replaceWith(lab)}});
+      w.addEventListener('focusout',e=>{if(!w.contains(e.relatedTarget))done()})};
     row.append(btn('-',-step,'Kam karo'),lab,btn('+',step,'Badhao'));p.append(bar,row);draw()}
 };
 function addImage(file){if(!file||!/^image\//.test(file.type))return;const fr=new FileReader();
@@ -1090,7 +1160,7 @@ sb.onclick=()=>pk?closePicker():openPicker(sb,def,st=>{Object.assign(def,st);sb.
 /* ---------- timers ---------- */
 function fmt(ms){const s=Math.ceil(ms/1000);return s>=3600?`${Math.floor(s/3600)}h ${Math.floor(s%3600/60)}m`:s>=60?`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`:s+'s'}
 setInterval(()=>{for(const n of notes){if(n.type!=='timer')continue;const d=dom(n);if(!d)continue;
-  const r=Math.max(0,n.end-Date.now()),ring=d.querySelector('.ringc');ring.style.setProperty('--p',n.total?r/n.total:0);ring.firstChild.textContent=tr(r?fmt(r):'Ho gaya');
+  const r=Math.max(0,n.end-Date.now()),ring=d.querySelector('.ringc');ring.style.setProperty('--p',n.total?r/n.total:0);ring.firstChild.textContent=tr(r?fmt(r):'Ho gaya');d.classList.toggle('over',!r);
   if(!r&&!n.fired){n.fired=true;save();d.classList.add('ringing');n.z=++zTop;d.style.zIndex=n.z;const t=L(`Hey! Time is up: ${n.text}`,`Oye! Time ho gaya: ${n.text}`);if(DESK)try{new Notification('ChipZett Notes',{body:t})}catch(e){}bubble(d,t,6000);speak(t,1.4);boom(d);setTimeout(()=>d.classList.remove('ringing'),4000)}}},250);
 
 /* ---------- chrome ---------- */
@@ -1098,7 +1168,8 @@ $('#lang').textContent=tr(LANG==='hi'?'Hinglish':'English');$('#lang').setAttrib
 $('#lang').onclick=()=>{try{localStorage.setItem('chipku-lang',LANG==='hi'?'en':'hi')}catch(e){}location.reload()};
 $('#snd').onclick=e=>{sound=!sound;e.target.textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));e.target.setAttribute('aria-pressed',sound);if(!sound)try{speechSynthesis.cancel()}catch(x){}else pal('Main wapas aa gaya.');save()};
 $('#search').oninput=e=>{const q=e.target.value.toLowerCase();for(const n of notes){const s=(n.text+' '+(n.data||'')+' '+(n.items||[]).map(i=>i.t).join(' ')).toLowerCase();dom(n)?.classList.toggle('dim',!!q&&!s.includes(q))}};
-$('#tidy').onclick=()=>{const w=board.clientWidth,cw=Math.max(...notes.map(n=>n.w||232),232)+28,cols=Math.max(1,Math.floor((w-20)/cw)),off=(w-cols*cw)/2+10,hs=Array(cols).fill(TOPY+14);board.scrollTop=0;
+$('#tidy').onclick=()=>{const w=board.clientWidth,cw=Math.max(...notes.map(n=>n.w||232),232)+28,vis=notes.filter(n=>!isHid(n)),cols=Math.max(1,Math.min(Math.floor((w-20)/cw),Math.max(isPhone()?1:3,Math.ceil(Math.sqrt(vis.length*1.700))))),off=(w-cols*cw)/2+10,hs=Array(cols).fill(TOPY+14);board.scrollTop=0;
+  {const sim=Array(cols).fill(0);vis.forEach(n=>{const c=sim.indexOf(Math.min(...sim));sim[c]+=dom(n).offsetHeight+26});const free=board.clientHeight-TOPY-110-Math.max(...sim);if(free>0)hs.fill(TOPY+14+Math.min(150,free*.42))}
   notes.filter(n=>!isHid(n)).forEach((n,i)=>{const c=hs.indexOf(Math.min(...hs)),d=dom(n);n.x=off+c*cw;n.y=hs[c];hs[c]+=d.offsetHeight+26;n.rot=+(Math.random()*4-2).toFixed(1);
     d.classList.add('glide');d.style.transitionDelay=i*45+'ms';paint(d,n);d.style.transitionDelay=i*45+'ms';setTimeout(()=>{d.classList.remove('glide');d.style.transitionDelay=''},900+i*45)});
   save();pal(rnd(['Lo, sab line mein.','Saaf safai ho gayi.']))};
@@ -1252,9 +1323,9 @@ function wsBuild(){
   search.oninput=()=>{const o=$('#search');o.value=search.value;o.dispatchEvent(new Event('input'))};
   segw.append(seg,ag);r1.append(brand,segw,el('div','zgrow'),search,tidy,wall,me);r2.append(chips,today);top.append(r1,r2);
   /* command bar */
-  const bar=document.createElement('form'),inp=document.createElement('input'),bAg=zb('zbag',ZI.bolt,L('Agentic','Agentic')),bTp=zb('',ZI.tpl,L('Templates','Templates')),bAdd=el('button','zbtn zadd',L('Add note','Note banao'));
+  const bar=document.createElement('form'),inp=document.createElement('input'),bAg=zb('zbag',ZI.bolt,L('Agentic (preview)','Agentic (preview)')),bTp=zb('',ZI.tpl,L('Templates','Templates')),bAdd=el('button','zbtn zadd',L('Add note','Note banao'));
   bar.className='zbar';bar.autocomplete='off';inp.id='zcap';inp.placeholder=L('Write a note','Note likho');inp.setAttribute('aria-label','New note');
-  bAg.title=L('Make the next note agentic: it can Ask and Do','Agla note agentic banao: Ask aur Do kar sakta hai');bTp.title=L('Ready-made notes','Bane-banaye notes');bAdd.type='submit';
+  bAg.title=L('Preview you can try now: the next note gets Ask and Do. It answers from the note\'s own words. No AI is connected yet.','Preview jo abhi try kar sakte ho: agle note mein Ask aur Do aayega. Jawab note ke apne shabdon se banta hai. AI abhi juda nahi hai.');bTp.title=L('Ready-made notes','Bane-banaye notes');bAdd.type='submit';
   bar.append(inp,bAg,bTp,bAdd);
   /* profile and appearance cards */
   const prof=el('div','zpop'),card=el('div','zpop');prof.id='zprof';card.id='wset';
@@ -1344,13 +1415,13 @@ function start(state){
   if(s&&s.def){Object.assign(def,s.def);sb.style.setProperty('--c',def.color);$('#pal').className='blob av-'+def.face}
   if(s&&s.notes&&s.notes.length){sound=s.sound!==false;s.notes.forEach(n=>{notes.push(n);zTop=Math.max(zTop,n.z||0);render(n)})}
   else{const w=board.clientWidth,h=board.clientHeight,at=(fx,fy)=>({x:Math.max(10,Math.min(w-242,w*fx)),y:Math.max(10,h*fy)});
-    [{type:'text',text:L('Welcome to ChipZett.\nWrite in the bar below to add a note. Press a note\'s face to hear it. Drag notes anywhere.','ChipZett mein swagat hai.\nNeeche bar mein likh kar note banao. Note ka chehra dabao to woh bolta hai. Notes kahin bhi kheencho.'),color:COLORS[0],...at(.05,.05)},
+    [{type:'text',text:L('Welcome to ChipZett.\nWrite in the bar below to add a note. Point at a note and press the speaker to hear it. Drag notes anywhere.','ChipZett mein swagat hai.\nNeeche bar mein likh kar note banao. Note par jao aur speaker dabao to woh bolta hai. Notes kahin bhi kheencho.'),color:COLORS[0],...at(.05,.05)},
      {type:'todo',text:L('This week','Is hafte'),items:[{t:L('Send the proposal','Proposal bhejo'),d:true},{t:L('Book the review','Review book karo'),d:false},{t:L('Call the bank','Bank ko call'),d:false}],cat:'work',color:'#74ccff',tex:'lined',...at(.27,.05)},
      {type:'timer',text:L('Focus','Focus'),end:Date.now()+15e5,total:15e5,cat:'reminders',color:'#ff6f9c',...at(.5,.05)},
      {type:'chart',kind:'pie',text:L('Monthly spending','Mahine ka kharcha'),data:L('Rent 40, Food 25, Fun 15, Savings 20','Rent 40, Khana 25, Masti 15, Bachat 20'),cat:'money',color:'#fff4d6',tex:'grid',font:'outfit',...at(.72,.05)},
      {type:'text',text:L('Idea: a weekly review every Friday at 4','Idea: har Friday 4 baje weekly review'),cat:'ideas',color:'#bda4ff',...at(.05,.4)},
      {type:'goal',text:L('Read 12 books','12 kitaabein padho'),cur:3,total:12,cat:'hobbies',color:'#5ef2c0',...at(.27,.45)}].forEach(n=>add(n));
-    setTimeout(()=>pal('Yeh sample notes hain. Mujhe dabao aur apne notes banao.',true),900)}
+    setTimeout(()=>pal(L('These are sample notes. Write in the bar below to add your own.','Yeh sample notes hain. Apna note banane ke liye neeche bar mein likho.'),true),900)}
   $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
   applyFilter();
   if(!DESK)setTimeout(()=>{notes.forEach(n=>{if(n.y<TOPY){n.y=TOPY+6;const d=dom(n);if(d)d.style.top=n.y+'px'}});
