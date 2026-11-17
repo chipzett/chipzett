@@ -475,6 +475,49 @@ body.d-personal::before{background:radial-gradient(42% 38% at 16% 20%,rgba(255,2
 .wpenb{left:122px}
 .wpenb[aria-pressed=true]{background:var(--mango);color:#1b1430;border-color:var(--mango)}
 @media (max-width:720px){.wpenb{display:block;left:12px;bottom:100px}}
+
+/* ---- wall settings: one paper card for layout, background and writing tool ---- */
+.wset{position:fixed;left:16px;bottom:66px;z-index:9;width:292px;max-height:calc(100% - 90px);overflow:auto;background:#fffaf0;color:#1b1430;border-radius:6px 20px 6px 20px;padding:14px 16px 16px;box-shadow:0 30px 60px -18px #000;transform:rotate(-1deg);transform-origin:0 100%;display:none;flex-direction:column;gap:8px}
+.wset.on{display:flex;animation:pop .22s cubic-bezier(.3,1.5,.5,1)}
+.wset h5{font:700 11px var(--ui);letter-spacing:.09em;text-transform:uppercase;color:#5b5273;margin-top:6px}
+.wset h5:first-child{margin-top:0}
+.wseg{display:flex;gap:6px}
+.wseg button{flex:1;font:600 13px var(--ui);padding:8px 6px;border-radius:10px;color:#1b1430;box-shadow:inset 0 0 0 1.5px rgba(27,20,48,.25)}
+.wseg button[aria-pressed=true]{background:#1b1430;color:#fff4d6;box-shadow:none}
+.wbgs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.wbgs button{display:grid;gap:3px;justify-items:center;font:600 10.5px var(--ui);color:#1b1430}
+.wbgs i{display:block;width:100%;height:36px;border-radius:5px 12px 5px 12px;background:var(--sw);box-shadow:inset 0 0 0 1.5px rgba(27,20,48,.2)}
+.wbgs button[aria-pressed=true] i{box-shadow:0 0 0 2px #fffaf0,0 0 0 4px #1b1430}
+.wcust{display:flex;align-items:center;gap:8px;font:600 12.5px var(--ui)}
+.wcust input{width:34px;height:28px;border:0;padding:0;background:none;cursor:pointer}
+.wtools{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.wtools button{display:grid;gap:2px;justify-items:center;align-content:end;height:74px;padding:4px 2px 5px;border-radius:10px;font:600 10.5px var(--ui);color:#1b1430;box-shadow:inset 0 0 0 1.5px rgba(27,20,48,.2);overflow:hidden}
+.wtools button[aria-pressed=true]{background:#ffc93c;box-shadow:inset 0 0 0 2px #1b1430}
+.wtools svg{width:7px;height:46px;transform:rotate(24deg)}
+.wtools .none{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(27,20,48,.4);margin-bottom:12px;position:relative}
+.wtools .none::after{content:"";position:absolute;left:10px;top:-2px;width:2px;height:26px;background:rgba(27,20,48,.4);transform:rotate(45deg)}
+.wpen svg{left:-5.5px;width:11px;height:74px}
+/* wall backgrounds */
+body[data-bg]{background-color:var(--wb)}
+body[data-bg]::before{background:var(--wg)}
+body[data-bg=blue]{--wb:#0b1430;--wg:linear-gradient(rgba(116,204,255,.07) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(116,204,255,.07) 1px,transparent 1px) 0 0/44px 44px,radial-gradient(45% 40% at 78% 18%,rgba(61,123,255,.32),transparent 70%)}
+body[data-bg=sunset]{--wb:#2a1140;--wg:linear-gradient(165deg,#241038 0,#6a2450 52%,#c85a3c 100%)}
+body[data-bg=forest]{--wb:#0c1f1a;--wg:radial-gradient(44% 40% at 18% 22%,rgba(94,242,192,.22),transparent 70%),radial-gradient(40% 36% at 84% 78%,rgba(198,244,50,.14),transparent 70%)}
+body[data-bg=aurora]{--wb:#090a1c;--wg:radial-gradient(50% 34% at 24% 20%,rgba(94,242,192,.34),transparent 70%),radial-gradient(46% 32% at 70% 28%,rgba(189,164,255,.36),transparent 70%),radial-gradient(52% 36% at 52% 88%,rgba(255,111,156,.28),transparent 70%)}
+body[data-bg=chalk]{--wb:#1f3b33;--wg:radial-gradient(60% 50% at 30% 30%,rgba(255,255,255,.07),transparent 70%),radial-gradient(50% 44% at 76% 72%,rgba(255,255,255,.05),transparent 70%)}
+body[data-bg=cork]{--wb:#b78a56;--wg:radial-gradient(rgba(90,50,12,.32) 1.2px,transparent 1.8px) 0 0/11px 11px,radial-gradient(rgba(255,255,255,.22) 1.2px,transparent 1.8px) 5px 6px/15px 15px}
+body[data-bg=paper]{--wb:#f1e8d4;--wg:radial-gradient(rgba(27,20,48,.16) 1.2px,transparent 1.7px) 0 0/22px 22px}
+body[data-bg=custom]{--wg:radial-gradient(60% 50% at 20% 15%,rgba(255,255,255,.1),transparent 70%)}
+body.w-light .wempty{color:#5b5273}
+body.w-light .wmode{background:rgba(27,20,48,.82);color:#f3efff;border-color:transparent}
+body.w-light.ws .board{scrollbar-color:rgba(27,20,48,.3) transparent}
+/* calmer layout: fewer things on screen, more air */
+.wmode{display:flex;align-items:center;gap:7px}
+.wmode svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.wtabs .more{background:rgba(255,255,255,.14);color:#f3efff;backdrop-filter:blur(10px)}
+body.w-light .wtabs .more{background:rgba(27,20,48,.75)}
+body.v-tidy .board{gap:48px 34px;padding:128px 56px 190px 124px}
+@media (max-width:720px){.wset{left:10px;right:10px;width:auto;bottom:10px;transform:none;z-index:12}.wmode{display:flex;left:12px;bottom:auto;top:54px;padding:7px 11px}body.ws.v-tidy .board{gap:34px}}
 </style>
 </head>
 <body>
@@ -1053,6 +1096,21 @@ function tick(){cx.clearRect(0,0,fx.width,fx.height);bits=bits.filter(p=>p.l-->0
 
 /* ---------- boot ---------- */
 
+/* wall backgrounds and writing tools */
+const WBG=[['night',L('Night','Raat'),'linear-gradient(140deg,#2a1f55,#0e0b1d 60%)'],['blue',L('Blueprint','Blueprint'),'linear-gradient(140deg,#1f4fc0,#0b1430 70%)'],['sunset',L('Sunset','Shaam'),'linear-gradient(165deg,#241038,#6a2450 52%,#c85a3c)'],['aurora',L('Aurora','Aurora'),'linear-gradient(120deg,#5ef2c0,#bda4ff 50%,#ff6f9c)'],
+  ['forest',L('Forest','Jungle'),'linear-gradient(140deg,#1d5a48,#0c1f1a 70%)'],['chalk',L('Chalkboard','Blackboard'),'#1f3b33'],['cork',L('Cork','Cork'),'#b78a56'],['paper',L('Paper','Kaagaz'),'#f1e8d4']];
+const WTOOLS=[['',L('None','Kuch nahi')],['fountain',L('Fountain','Fountain')],['pencil',L('Pencil','Pencil')],['marker',L('Marker','Marker')],['ball',L('Ballpoint','Ball pen')]];
+const PENSVG={
+  fountain:'<svg viewBox="0 0 16 110"><polygon points="8,110 3.500,93 12.500,93" fill="#f3d27a"/><path d="M8 110V99" stroke="#1b1430" stroke-width=".8"/><rect x="3" y="70" width="10" height="23" rx="2" fill="#1b1430"/><rect x="2.500" y="65" width="11" height="5" rx="1" fill="#ffc93c"/><rect x="3" y="12" width="10" height="53" rx="3" fill="#2b2350"/><rect x="11" y="16" width="2.200" height="30" rx="1" fill="#ffc93c"/><rect x="4" y="4" width="8" height="10" rx="3" fill="#ffc93c"/></svg>',
+  pencil:'<svg viewBox="0 0 16 110"><polygon points="8,110 5.800,101 10.200,101" fill="#2e2e38"/><polygon points="5.800,101 3,88 13,88 10.200,101" fill="#e8c79a"/><rect x="3" y="20" width="10" height="68" fill="#ffc93c"/><rect x="6.500" y="20" width="3" height="68" fill="#e9b32a"/><rect x="3" y="12" width="10" height="8" fill="#c9c9d4"/><rect x="3" y="3" width="10" height="9" rx="2.500" fill="#ff6f9c"/></svg>',
+  marker:'<svg viewBox="0 0 16 110"><polygon points="8,110 4.500,99 11.500,99" fill="#1b1430"/><rect x="4" y="88" width="8" height="11" fill="#2b2350"/><rect x="2" y="22" width="12" height="66" rx="3" fill="#5ef2c0"/><rect x="2" y="78" width="12" height="6" fill="#3fd6a5"/><rect x="3" y="12" width="10" height="12" rx="2.500" fill="#2b2350"/></svg>',
+  ball:'<svg viewBox="0 0 16 110"><polygon points="8,110 6.600,103 9.400,103" fill="#8a8a98"/><polygon points="6.600,103 4,90 12,90 9.400,103" fill="#d9d9e3"/><rect x="4" y="66" width="8" height="24" rx="1" fill="#1b1430"/><rect x="4" y="14" width="8" height="52" rx="2" fill="#74ccff"/><rect x="11" y="16" width="2" height="28" rx="1" fill="#f3efff"/><rect x="6" y="5" width="4" height="10" rx="1.500" fill="#f3efff"/></svg>'};
+let BG='night';try{BG=localStorage.getItem('chipzett-bg')||'night'}catch(e){}
+function setBg(v,quiet){BG=v;const B=document.body,hex=/^#[0-9a-f]{6}$/i.test(v);
+  if(v==='night'||(!hex&&!WBG.some(b=>b[0]===v))){B.removeAttribute('data-bg');B.style.removeProperty('--wb');BG='night'}
+  else if(hex){B.dataset.bg='custom';B.style.setProperty('--wb',v)}else{B.dataset.bg=v;B.style.removeProperty('--wb')}
+  const lum=hex?(c=>.299*parseInt(c.slice(1,3),16)+.587*parseInt(c.slice(3,5),16)+.114*parseInt(c.slice(5,7),16))(v):(v==='paper'||v==='cork'?200:0);
+  B.classList.toggle('w-light',lum>150);try{localStorage.setItem('chipzett-bg',BG)}catch(e){}if(!quiet)wsRender()}
 /* ---------- the wall ---------- */
 let wsEls=null;
 function wsBuild(){
@@ -1062,8 +1120,7 @@ function wsBuild(){
   ti.id='wname';ti.maxLength=18;ti.autocomplete='off';ti.placeholder=L('write your name','apna naam likho');ti.setAttribute('aria-label','Your name');ti.value=PROFILE?PROFILE.name:'';
   tb.append(tf,ti);tag.append(el('div','wth',L("HELLO, I'M","HELLO, MAIN HOON")),tb,el('div','wts',L('Saved on this device only','Sirf is device pe save')));
   const desks=el('div','wdesks'),tabs=el('div','wtabs'),pads=el('div','wpads'),mode=el('button','wmode'),empty=el('div','wempty');mode.type='button';
-  const penB=el('button','wmode wpenb');penB.type='button';penB.onclick=()=>{PEN=!PEN;try{localStorage.setItem('chipzett-pen',PEN?'1':'0')}catch(e){}wsRender();if(PEN)pal(L('Pen is on. Write on any note and watch.','Pen chalu hai. Kisi bhi note pe likho aur dekho.'),true)};
-  B.append(tape,tag,desks,tabs,pads,mode,penB,empty);wsEls={tape,tf,ti,desks,tabs,pads,mode,empty,penB};
+  B.append(tape,tag,desks,tabs,pads,mode,empty);wsEls={tape,tf,ti,desks,tabs,pads,mode,empty};
   const FACES=AVS.map(a=>a[0]).filter(k=>k!=='none');
   const saveP=()=>{try{PROFILE?localStorage.setItem('chipzett-profile',JSON.stringify(PROFILE)):localStorage.removeItem('chipzett-profile')}catch(e){}};
   ti.onchange=()=>{const v=ti.value.trim(),had=!!PROFILE;
@@ -1076,13 +1133,27 @@ function wsBuild(){
   ti.onkeydown=e=>{if(e.key==='Enter')ti.blur()};
   tf.onclick=()=>{const cur=(PROFILE&&PROFILE.face)||tf.dataset.f||'classic',nx=FACES[(FACES.indexOf(cur)+1)%FACES.length];tf.dataset.f=nx;tf.className='face av-'+nx;if(PROFILE){PROFILE.face=nx;saveP()}};
   tape.onclick=()=>{WS.daily=!WS.daily;applyFilter()};
-  mode.onclick=()=>{B.classList.remove('v-'+VIEW);VIEW=VIEW==='tidy'?'free':'tidy';B.classList.add('v-'+VIEW);try{localStorage.setItem('chipzett-view',VIEW)}catch(e){}board.scrollTop=0;
+  /* settings card */
+  const setV=v=>{if(v===VIEW)return;B.classList.remove('v-'+VIEW);VIEW=v;B.classList.add('v-'+VIEW);try{localStorage.setItem('chipzett-view',VIEW)}catch(e){}board.scrollTop=0;
     if(VIEW==='free')for(const n of notes){const d=dom(n);if(d){n.x=Math.max(10,Math.min(n.x,board.clientWidth-250));n.y=Math.max(10,Math.min(n.y,board.clientHeight-200));d.style.left=n.x+'px';d.style.top=n.y+'px'}}
     wsRender()};
+  const card=el('div','wset');card.id='wset';B.append(card);wsEls.card=card;
+  const seg=el('div','wseg'),bgs=el('div','wbgs'),tools=el('div','wtools'),cust=el('label','wcust'),ci=document.createElement('input');
+  [['tidy',L('Tidy wall','Saaf deewar')],['free',L('Free desk','Khula desk')]].forEach(([k,t])=>{const b=el('button',null,t);b.type='button';b.dataset.v=k;b.onclick=()=>setV(k);seg.append(b)});
+  WBG.forEach(([k,name,sw])=>{const b=el('button');b.type='button';b.dataset.v=k;const i=el('i');i.style.setProperty('--sw',sw);b.append(i,document.createTextNode(name));b.onclick=()=>setBg(k);bgs.append(b)});
+  ci.type='color';ci.id='wbgc';ci.value=/^#/.test(BG)?BG:'#3a2a6a';ci.oninput=()=>setBg(ci.value);cust.append(ci,document.createTextNode(L('Or pick any colour','Ya koi bhi rang chuno')));
+  WTOOLS.forEach(([k,name])=>{const b=el('button');b.type='button';b.dataset.v=k;if(k)b.innerHTML=PENSVG[k];else b.append(el('span','none'));b.append(document.createTextNode(name));
+    b.onclick=()=>{TOOL=k;try{localStorage.setItem('chipzett-pen',k)}catch(e){}setTool();wsRender();if(k)pal(L('Write on any note and watch.','Kisi bhi note pe likho aur dekho.'),true)};tools.append(b)});
+  card.append(el('h5',null,L('Layout','Layout')),seg,el('h5',null,L('Background','Background')),bgs,cust,el('h5',null,L('Writing tool','Likhne ka tool')),tools);
+  wsEls.seg=seg;wsEls.bgs=bgs;wsEls.tools=tools;
+  mode.innerHTML='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4.500h7M12.500 4.500H14M2 11.500h1.500M7 11.500h7"/><circle cx="10.700" cy="4.500" r="1.800"/><circle cx="5.200" cy="11.500" r="1.800"/></svg>';mode.append(document.createTextNode(L('Wall','Deewar')));
+  mode.onclick=()=>card.classList.toggle('on');
+  addEventListener('pointerdown',e=>{if(card.classList.contains('on')&&!e.target.closest('.wset,.wmode'))card.classList.remove('on')});
+  setBg(BG,true);
 }
 function wsRender(){
-  if(!wsEls)return;const{tape,ti,desks,tabs,pads,mode,empty,penB}=wsEls,B=document.body;
-  penB.textContent=PEN?L('Pen writing: on','Pen se likhna: chalu'):L('Pen writing: off','Pen se likhna: band');penB.setAttribute('aria-pressed',PEN);
+  if(!wsEls)return;const{tape,ti,desks,tabs,pads,mode,empty}=wsEls,B=document.body;
+  [[wsEls.seg,VIEW],[wsEls.bgs,/^#/.test(BG)?'custom':BG],[wsEls.tools,TOOL]].forEach(([g,v])=>{for(const b of g.children)b.setAttribute('aria-pressed',b.dataset.v===v)});
   const h=new Date().getHours(),hello=h<12?L('Good morning','Suprabhat'):h<17?L('Good afternoon','Namaste'):L('Good evening','Shubh sandhya');
   const left=notes.filter(n=>n.type==='todo').reduce((a,n)=>a+n.items.filter(i=>!i.d).length,0),run=notes.filter(n=>n.type==='timer'&&n.end>Date.now()).length,goals=notes.filter(n=>n.type==='goal'&&n.total>0);
   const bits=[PROFILE?hello+', '+PROFILE.name:new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})];
@@ -1094,26 +1165,29 @@ function wsRender(){
   desks.textContent='';
   if(PROFILE){[['',L('Everything','Sab kuch')],['personal',L('Home desk','Ghar ka desk')],['work',L('Work desk','Kaam ka desk')]].forEach(([k,t])=>{const b=el('button',null,t);b.type='button';b.setAttribute('aria-pressed',WS.space===k);b.onclick=()=>{WS.space=k;applyFilter()};desks.append(b)});
     const sp=el('button','spark');sp.type='button';sp.innerHTML=AG_ICON.act;sp.append(document.createTextNode(L('Agentic only','Sirf agentic')));sp.setAttribute('aria-pressed',WS.agent);sp.onclick=()=>{WS.agent=!WS.agent;applyFilter()};desks.append(sp)}
-  B.classList.toggle('has-profile',!!PROFILE);B.classList.toggle('d-work',WS.space==='work');B.classList.toggle('d-personal',WS.space==='personal');
+  B.classList.toggle('has-profile',!!PROFILE);B.classList.toggle('d-work',WS.space==='work'&&BG==='night');B.classList.toggle('d-personal',WS.space==='personal'&&BG==='night');
   tabs.textContent='';const pool=notes.filter(n=>(!WS.space||spaceOf(n)===WS.space)&&(!WS.agent||n.agent)&&(!WS.daily||DAILY.has(n.type)));
   const tab=(k,name,col,c)=>{const b=el('button',null,name);b.type='button';b.style.setProperty('--k',col);b.style.color=inkFor(col,'plain');b.setAttribute('aria-pressed',activeCat===k);if(c)b.append(el('b',null,String(c)));b.onclick=()=>{activeCat=k;applyFilter();save()};tabs.append(b)};
-  tab('',L('All','Sab'),'#f3efff',pool.length);CATS.forEach(c=>tab(c[0],c[1],c[2],pool.filter(n=>n.cat===c[0]).length));
+  tab('',L('All','Sab'),'#f3efff',pool.length);let hiddenTabs=0;
+  CATS.forEach(c=>{const k=pool.filter(n=>n.cat===c[0]).length;if(k||activeCat===c[0]||wsEls.allTabs)tab(c[0],c[1],c[2],k);else hiddenTabs++});
+  if(hiddenTabs||wsEls.allTabs){const m=el('button','more',wsEls.allTabs?L('Less','Kam'):L('More','Aur'));m.type='button';if(!wsEls.allTabs)m.append(el('b',null,String(hiddenTabs)));m.onclick=()=>{wsEls.allTabs=!wsEls.allTabs;wsRender()};tabs.append(m)}
   pads.textContent='';
   const pad=(cls,label,sub,fn)=>{const b=el('button','wpad '+cls);b.type='button';b.append(el('span',null,label),el('small',null,sub));b.onclick=fn;pads.append(b)};
   const fresh=o=>{const n=add(Object.assign({type:'text',text:''},o),true),d=dom(n);if(d){if(VIEW==='tidy')board.scrollTo({top:0,behavior:'smooth'});const bd=d.querySelector('.body');if(bd)setTimeout(()=>bd.focus(),450)}};
   pad('y',L('+ Note','+ Note'),L('tear one off','ek phaad lo'),()=>fresh({}));
   pad('m',L('+ Agentic','+ Agentic'),PROFILE?L('it can Ask and Do','Ask aur Do karta hai'):L('name tag first','pehle naam likho'),()=>{if(!PROFILE){ti.focus();pal(L('Write your name on the tag first. Agentic notes come with a profile.','Pehle tag pe apna naam likho. Agentic notes profile ke saath aate hain.'),true);return}fresh({agent:true})});
   pad('c',L('Templates','Templates'),L('lists, charts, timers','lists, charts, timers'),()=>openHub(true));
-  mode.textContent=VIEW==='tidy'?L('Wall: tidy','Deewar: saaf'):L('Wall: free','Deewar: khuli');mode.title=L('Switch between a tidy wall and a free desk you can drag notes on','Saaf deewar aur khule desk ke beech badlo');
+  mode.title=L('Layout, background and writing tool','Layout, background aur likhne ka tool');
   empty.textContent=notes.some(n=>!isHid(n))?'':L('Nothing here yet. Tear a note off the pad below.','Yahan abhi kuch nahi. Neeche pad se ek note phaad lo.');
 }
 if(!DESK)wsBuild();
 /* pen writing: while you type on a note, a pen sits at the caret and jots with each letter */
-let PEN=false;try{PEN=localStorage.getItem('chipzett-pen')==='1'}catch(e){}
-{const pen=document.createElement('div');pen.className='wpen';pen.setAttribute('aria-hidden','true');
-  pen.innerHTML='<svg viewBox="0 0 16 110"><polygon points="8,110 3.500,93 12.500,93" fill="#f3d27a"/><path d="M8 110V99" stroke="#1b1430" stroke-width=".8"/><rect x="3" y="70" width="10" height="23" rx="2" fill="#1b1430"/><rect x="2.500" y="65" width="11" height="5" rx="1" fill="#ffc93c"/><rect x="3" y="12" width="10" height="53" rx="3" fill="#2b2350"/><rect x="11" y="16" width="2.200" height="30" rx="1" fill="#ffc93c"/><rect x="4" y="4" width="8" height="10" rx="3" fill="#ffc93c"/></svg>';
-  document.body.append(pen);let pt=0;
-  document.addEventListener('input',e=>{if(!PEN)return;const t=e.target;if(!t.closest||!t.closest('.note'))return;let x,y;
+let TOOL='';try{const v=localStorage.getItem('chipzett-pen')||'';TOOL=v==='1'?'fountain':(v==='0'?'':v)}catch(e){}
+const pen=document.createElement('div');pen.className='wpen';pen.setAttribute('aria-hidden','true');document.body.append(pen);
+function setTool(){pen.innerHTML=PENSVG[TOOL]||'';pen.classList.remove('on')}
+setTool();
+{let pt=0;
+  document.addEventListener('input',e=>{if(!TOOL)return;const t=e.target;if(!t.closest||!t.closest('.note'))return;let x,y;
     const sel=getSelection();
     if(t.isContentEditable&&sel.rangeCount){const rg=sel.getRangeAt(0).cloneRange();rg.collapse(true);let r=rg.getClientRects()[0];
       if(!r){const b=(sel.anchorNode&&sel.anchorNode.nodeType===1?sel.anchorNode:t).getBoundingClientRect();r={left:b.left+4,bottom:b.top+26}}x=r.left;y=r.bottom}
