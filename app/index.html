@@ -604,10 +604,29 @@ body .note.sh-cloud .paper>.tag,body .note.sh-circle .paper>.tag,body .note.sh-o
 
 /* ---------- the wall, in the homepage's look: purple stage with a grid, a solid top bar,
    notes with their faces and category pills, a write bar that reads as the main action ---------- */
-html:not(.desk) body.ws:not([data-bg]){background-color:#17122a}
+html:not(.desk) body.ws:not([data-bg]){background-color:#1a1431}
 html:not(.desk) body.ws:not([data-bg])::before{inset:0;animation:none;transform:none;filter:none;opacity:1;
-  background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/44px 44px,
-  radial-gradient(60% 70% at 80% 30%,rgba(125,72,200,.42),transparent 70%),radial-gradient(40% 50% at 8% 96%,rgba(94,242,192,.1),transparent 70%)}
+  background:radial-gradient(130% 105% at 50% 40%,transparent 58%,rgba(4,3,12,.42)),
+  radial-gradient(900px circle at var(--lx,72%) var(--ly,26%),var(--glow,rgba(140,88,235,.46)),transparent 66%),
+  radial-gradient(40% 50% at 6% 98%,var(--glow2,rgba(94,242,192,.1)),transparent 70%),
+  linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px) var(--px,0px) var(--py,0px)/220px 220px,linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px) var(--px,0px) var(--py,0px)/220px 220px,
+  linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px) var(--px,0px) var(--py,0px)/44px 44px,linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px) var(--px,0px) var(--py,0px)/44px 44px}
+/* the board: a framed surface that sits far behind the notes. Its grid moves slower than the notes, a soft light follows the pointer,
+   the light changes colour through the day, and the date is written large on it. All of it is decoration: nothing here takes a click. */
+body.ws[data-tod=morning]{--glow:rgba(255,170,96,.34);--glow2:rgba(255,111,156,.12)}
+body.ws[data-tod=evening]{--glow:rgba(226,92,170,.4);--glow2:rgba(255,160,60,.13)}
+body.ws[data-tod=night]{--glow:rgba(84,110,255,.42);--glow2:rgba(94,242,192,.09)}
+.wframe{position:fixed;inset:0;z-index:1;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07),inset 0 0 90px rgba(0,0,0,.3)}
+.wframe::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;opacity:.5;background:repeating-linear-gradient(rgba(255,255,255,.34) 0 1px,transparent 1px 44px) 0 var(--py,0px)/7px 44px no-repeat repeat-y,repeating-linear-gradient(rgba(255,255,255,.5) 0 1px,transparent 1px 220px) 0 var(--py,0px)/14px 220px no-repeat repeat-y}
+.wframe::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,rgba(6,4,16,.72));border-bottom:3px solid rgba(255,255,255,.08)}
+.wdate{position:fixed;left:34px;bottom:104px;z-index:1;pointer-events:none;font:800 clamp(64px,9.500vw,176px)/.86 var(--display);letter-spacing:-.06em;color:#fff;opacity:.06;white-space:nowrap;user-select:none}
+.wdate small{display:block;font:600 clamp(13px,1.200vw,20px)/1 var(--ui);letter-spacing:.34em;text-transform:uppercase;margin:0 0 14px 6px;opacity:1.6}
+.wday{position:fixed;left:0;right:0;top:0;height:2px;z-index:7;pointer-events:none;background:rgba(255,255,255,.06)}
+.wday i{display:block;height:100%;width:var(--dp,0%);background:linear-gradient(90deg,var(--mint),var(--mango) 60%,var(--pink));border-radius:0 2px 2px 0;box-shadow:0 0 10px rgba(255,201,60,.7)}
+body.w-light .wdate{color:#1b1430;opacity:.07}body.w-light .wframe{box-shadow:inset 0 0 0 1px rgba(27,20,48,.1),inset 0 0 140px rgba(27,20,48,.16)}body.w-light .wframe::after{background:linear-gradient(transparent,rgba(27,20,48,.16))}
+body.tv-week .wdate,body.tv-month .wdate{display:none}
+html.desk .wframe,html.desk .wdate,html.desk .wday{display:none}
+@media (max-width:760px){.wdate{left:14px;bottom:86px;font-size:72px}.wframe::before{display:none}}
 body.ws .ztop{padding:12px 22px 12px;gap:10px;background:rgba(13,10,27,.92);border-bottom:1px solid rgba(255,255,255,.12);box-shadow:0 14px 30px -24px #000}
 body.ws .zbrand{font-size:22px;gap:11px;margin-right:14px}
 body.ws .zbrand i{width:22px;height:22px;border-radius:6px 6px 6px 2px;box-shadow:4px 4px 0 var(--pink)}
@@ -1483,6 +1502,13 @@ function tvLayout(){
   board.addEventListener('input',()=>tvSoon());board.addEventListener('click',()=>tvSoon());addEventListener('resize',()=>tvSoon())}
 function wsBuild(){
   const B=document.body;B.classList.add('ws');
+  {const fr=el('div','wframe'),dt=el('div','wdate'),dy=el('div','wday'),bar=el('i'),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;dy.append(bar);[fr,dt,dy].forEach(x=>x.setAttribute('aria-hidden','true'));B.append(fr,dt,dy);
+    const tick=()=>{const d=new Date(),h=d.getHours();B.dataset.tod=h<5?'night':h<11?'morning':h<17?'day':h<21?'evening':'night';
+      dy.style.setProperty('--dp',((h*60+d.getMinutes())/14.400).toFixed(1)+'%');dt.textContent='';const sm=el('small');sm['textContent']=d.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+      dt.append(sm,document.createTextNode(d.toLocaleDateString('en-GB',{weekday:'short'})+' '+d.getDate()))};tick();setInterval(tick,60000);
+    if(!calm){board.addEventListener('scroll',()=>{B.style.setProperty('--py',(-board.scrollTop*.35).toFixed(1)+'px');B.style.setProperty('--px',(-board.scrollLeft*.35).toFixed(1)+'px')},{passive:true});
+      if(matchMedia('(hover:hover) and (pointer:fine)').matches){let tx=.72,ty=.26,cx=.72,cy=.26,raf=0;const step=()=>{cx+=(tx-cx)*.06;cy+=(ty-cy)*.06;B.style.setProperty('--lx',(cx*100).toFixed(2)+'%');B.style.setProperty('--ly',(cy*100).toFixed(2)+'%');raf=Math.abs(tx-cx)+Math.abs(ty-cy)>.001?requestAnimationFrame(step):0};
+        addEventListener('pointermove',e=>{tx=e.clientX/innerWidth;ty=e.clientY/innerHeight;if(!raf)raf=requestAnimationFrame(step)},{passive:true})}}}
   const zb=(cls,icon,label)=>{const b=el('button','zbtn '+cls);b.type='button';b.innerHTML=icon||'';if(label)b.append(el('span',null,label));return b};
   const top=el('div','ztop'),r1=el('div','zrow r1'),r2=el('div','zrow'),brand=el('div','zbrand'),segw=el('div','zsegw'),seg=el('div','zseg'),ag=zb('zag',ZI.bolt,L('Agentic','Agentic')),
     vseg=el('div','zseg zview'),search=document.createElement('input'),tidy=zb('ztidy',ZI.tidy,L('Tidy up','Saaf karo')),wall=zb('zwall',ZI.wall,L('Appearance','Roop')),me=zb('zme','',''),chips=el('div','zchips'),today=el('button','ztoday'),empty=el('div','wempty');
