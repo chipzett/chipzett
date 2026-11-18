@@ -600,6 +600,43 @@ body .note.sh-cloud .paper>.tag,body .note.sh-circle .paper>.tag,body .note.sh-o
 .sp-label{clip-path:polygon(9px 0,100% 0,100% 100%,9px 100%,0 calc(100% - 9px),0 9px)}
 .sp-oval{border-radius:50%}.sp-circle{width:28px;border-radius:50%}
 .sp-cloud{border-radius:11px;-webkit-mask:radial-gradient(circle 8px at 26% 10px,#000 96%,#0000),radial-gradient(circle 10px at 52% 10px,#000 96%,#0000),radial-gradient(circle 8px at 78% 11px,#000 96%,#0000),linear-gradient(#000 0 0) 0 12px/100% calc(100% - 12px) no-repeat;mask:radial-gradient(circle 8px at 26% 10px,#000 96%,#0000),radial-gradient(circle 10px at 52% 10px,#000 96%,#0000),radial-gradient(circle 8px at 78% 11px,#000 96%,#0000),linear-gradient(#000 0 0) 0 12px/100% calc(100% - 12px) no-repeat}
+
+/* ---------- the wall, in the homepage's look: purple stage with a grid, a solid top bar,
+   notes with their faces and category pills, a write bar that reads as the main action ---------- */
+html:not(.desk) body.ws:not([data-bg]){background-color:#17122a}
+html:not(.desk) body.ws:not([data-bg])::before{inset:0;animation:none;transform:none;filter:none;opacity:1;
+  background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/44px 44px,
+  radial-gradient(60% 70% at 80% 30%,rgba(125,72,200,.42),transparent 70%),radial-gradient(40% 50% at 8% 96%,rgba(94,242,192,.1),transparent 70%)}
+body.ws .ztop{padding:12px 22px 12px;gap:10px;background:rgba(13,10,27,.92);border-bottom:1px solid rgba(255,255,255,.12);box-shadow:0 14px 30px -24px #000}
+body.ws .zbrand{font-size:22px;gap:11px;margin-right:14px}
+body.ws .zbrand i{width:22px;height:22px;border-radius:6px 6px 6px 2px;box-shadow:4px 4px 0 var(--pink)}
+body.ws .zbtn,body.ws .zsearch{padding:8px 13px;border-radius:11px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+body.ws .zbtn:hover{background:rgba(255,255,255,.11)}
+body.ws .zbtn[aria-pressed=true]{background:var(--mint);border-color:var(--mint)}
+body.ws .zchips button{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.13);padding:6px 12px}
+body.ws .zchips button[aria-pressed=true]{background:#f3efff;border-color:#f3efff}
+/* notes: face on every note, category as a pill on the top edge, brand colours a touch richer */
+body.ws:not(.st-play) .paper{border-radius:13px;padding:14px 16px 16px}
+body.ws:not(.st-play) .paper:not(.tx-glass):not(.tx-neon):not(.tx-night){background-color:color-mix(in srgb,var(--c) 86%,#fffaf0)}
+body.ws:not(.st-play) .note:not(.is-agent) .paper{box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 22px 38px -20px rgba(0,0,0,.85),0 0 46px -26px var(--c)}
+body.ws:not(.st-play) .note .head,body.ws:not(.st-play) .note.f0 .head{justify-content:space-between;min-height:26px;margin-bottom:6px}
+body.ws:not(.st-play) .note.f0 .face{display:flex}
+body.ws:not(.st-play) .face{padding:3px 5px;margin-left:-5px}
+body.ws:not(.st-play) .note .paper>.tag,body.ws:not(.st-play) .note.f0 .paper>.tag{top:-10px;left:14px;padding:3px 10px;background:var(--ink);color:var(--tk,var(--c));opacity:1;font:600 10.500px var(--ui);letter-spacing:.02em;text-transform:none;box-shadow:0 4px 10px -3px rgba(0,0,0,.5);border-radius:999px;display:block}
+body.ws:not(.st-play) .note.f0:hover .paper>.tag,body.ws:not(.st-play) .note.f0:focus-within .paper>.tag{opacity:1}
+body.ws:not(.st-play) .acts{opacity:0}
+body.ws:not(.st-play) .acts button{width:24px;height:24px}
+body.ws:not(.st-play) .acts svg{width:14px;height:14px}
+body.ws:not(.st-play) .note:hover .acts,body.ws:not(.st-play) .note:focus-within .acts{opacity:.9}
+/* the write bar */
+body.ws .zbar{bottom:22px;width:min(760px,calc(100% - 190px));padding:8px;border-radius:20px;background:rgba(24,18,48,.94);border-color:rgba(255,255,255,.2);box-shadow:0 30px 60px -24px #000,0 0 0 6px rgba(125,72,200,.14),0 0 70px -18px rgba(150,100,255,.7)}
+body.ws .zbar:focus-within{border-color:var(--mango);box-shadow:0 30px 60px -24px #000,0 0 0 6px rgba(255,201,60,.14),0 0 70px -18px rgba(255,201,60,.55)}
+body.ws .zbar input{font-size:16.500px;padding:11px 14px}
+body.ws .zbar .zbtn{background:transparent;border-color:transparent}
+body.ws .zbar .zbtn:hover{background:rgba(255,255,255,.1)}
+body.ws .zbar .zbtn[aria-pressed=true]{background:var(--mint)}
+body.ws .zbar .zadd{background:var(--mango);border-radius:13px;font-size:14.500px;padding:12px 20px;box-shadow:0 12px 26px -12px rgba(255,201,60,.8)}
+@media (max-width:760px){body.ws .board{padding-top:146px!important}body.ws.has-profile .board{padding-top:190px!important}body.ws .zbar{width:calc(100% - 20px);bottom:10px}body.ws .ztop{padding:10px 12px}body.ws .zbrand{font-size:19px}}
 </style>
 </head>
 <body>
@@ -1415,12 +1452,13 @@ function start(state){
   if(s&&s.def){Object.assign(def,s.def);sb.style.setProperty('--c',def.color);$('#pal').className='blob av-'+def.face}
   if(s&&s.notes&&s.notes.length){sound=s.sound!==false;s.notes.forEach(n=>{notes.push(n);zTop=Math.max(zTop,n.z||0);render(n)})}
   else{const w=board.clientWidth,h=board.clientHeight,at=(fx,fy)=>({x:Math.max(10,Math.min(w-242,w*fx)),y:Math.max(10,h*fy)});
-    [{type:'text',text:L('Welcome to ChipZett.\nWrite in the bar below to add a note. Point at a note and press the speaker to hear it. Drag notes anywhere.','ChipZett mein swagat hai.\nNeeche bar mein likh kar note banao. Note par jao aur speaker dabao to woh bolta hai. Notes kahin bhi kheencho.'),color:COLORS[0],...at(.05,.05)},
-     {type:'todo',text:L('This week','Is hafte'),items:[{t:L('Send the proposal','Proposal bhejo'),d:true},{t:L('Book the review','Review book karo'),d:false},{t:L('Call the bank','Bank ko call'),d:false}],cat:'work',color:'#74ccff',tex:'lined',...at(.27,.05)},
-     {type:'timer',text:L('Focus','Focus'),end:Date.now()+15e5,total:15e5,cat:'reminders',color:'#ff6f9c',...at(.5,.05)},
-     {type:'chart',kind:'pie',text:L('Monthly spending','Mahine ka kharcha'),data:L('Rent 40, Food 25, Fun 15, Savings 20','Rent 40, Khana 25, Masti 15, Bachat 20'),cat:'money',color:'#fff4d6',tex:'grid',font:'outfit',...at(.72,.05)},
-     {type:'text',text:L('Idea: a weekly review every Friday at 4','Idea: har Friday 4 baje weekly review'),cat:'ideas',color:'#bda4ff',...at(.05,.4)},
-     {type:'goal',text:L('Read 12 books','12 kitaabein padho'),cur:3,total:12,cat:'hobbies',color:'#5ef2c0',...at(.27,.45)}].forEach(n=>add(n));
+    [{type:'todo',text:L('Launch checklist','Launch checklist'),items:[{t:L('Review homepage','Homepage dekho'),d:true},{t:L('Approve launch copy','Launch copy approve karo'),d:false},{t:L('Share the update','Update share karo'),d:false}],cat:'work',color:'#ffc93c',tex:'lined',...at(.05,.05)},
+     {type:'text',text:L('Client meeting\nThey want the revised quote and a signed timeline by Friday. Budget is fixed.','Client meeting\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai.'),agent:true,cat:'work',color:'#5ef2c0',...at(.27,.05)},
+     {type:'text',text:L('Morning routine\n6:30  Wake up\n7:00  Run\n8:00  Plan the day','Subah ka routine\n6:30  Utho\n7:00  Daud\n8:00  Din ka plan'),mood:'sun',face:'cool',cat:'home',color:'#74ccff',...at(.5,.05)},
+     {type:'chart',kind:'pie',text:L('Trip budget','Trip ka budget'),data:L('Flights 45, Hotel 35, Food 20','Flights 45, Hotel 35, Khana 20'),cat:'travel',color:'#fff4d6',tex:'grid',face:'cyclops',...at(.72,.05)},
+     {type:'timer',text:L('Stretch break','Stretch break'),end:Date.now()+6e5,total:6e5,cat:'reminders',color:'#ff6f9c',face:'robot',...at(.05,.4)},
+     {type:'goal',text:L('Sleep goal','Neend ka goal'),cur:5,total:7,face:'cat',cat:'reminders',color:'#bda4ff',...at(.27,.45)},
+     {type:'text',text:L('Welcome to ChipZett\nWrite in the bar below to add a note. Press a face to hear the note. Drag notes anywhere.','ChipZett mein swagat hai\nNeeche bar mein likh kar note banao. Chehra dabao to note bolta hai. Notes kahin bhi kheencho.'),color:'#ffe08a',...at(.5,.45)}].forEach(n=>add(n));
     setTimeout(()=>pal(L('These are sample notes. Write in the bar below to add your own.','Yeh sample notes hain. Apna note banane ke liye neeche bar mein likho.'),true),900)}
   $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
   applyFilter();
