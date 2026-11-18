@@ -81,7 +81,8 @@ li{display:flex;gap:8px;align-items:flex-start;font-family:var(--f,var(--hand));
 li b{cursor:pointer}
 li span{flex:1;min-width:1ch;outline:none;cursor:text}
 li span:focus,li span:focus-visible{outline:none;box-shadow:0 1.500px 0 color-mix(in srgb,var(--ink) 55%,transparent)}
-.lx{flex:none;width:19px;height:19px;border-radius:6px;font:600 15px/1 var(--ui);color:var(--ink);opacity:0;display:grid;place-items:center;margin-top:1px}
+li{position:relative}
+.lx{position:absolute;right:0;top:1px;width:19px;height:19px;border-radius:6px;font:600 15px/1 var(--ui);color:var(--ink);opacity:0;display:grid;place-items:center;margin-top:1px}
 li:hover .lx,li:focus-within .lx{opacity:.5}
 .lx:hover,.lx:focus-visible{opacity:1;background:color-mix(in srgb,var(--ink) 14%,transparent)}
 @media (hover:none){.lx{opacity:.45}}
@@ -636,7 +637,70 @@ body.ws .zbar .zbtn{background:transparent;border-color:transparent}
 body.ws .zbar .zbtn:hover{background:rgba(255,255,255,.1)}
 body.ws .zbar .zbtn[aria-pressed=true]{background:var(--mint)}
 body.ws .zbar .zadd{background:var(--mango);border-radius:13px;font-size:14.500px;padding:12px 20px;box-shadow:0 12px 26px -12px rgba(255,201,60,.8)}
-@media (max-width:760px){body.ws .board{padding-top:146px!important}body.ws.has-profile .board{padding-top:190px!important}body.ws .zbar{width:calc(100% - 20px);bottom:10px}body.ws .ztop{padding:10px 12px}body.ws .zbrand{font-size:19px}}
+@media (max-width:760px){body.ws .board{padding-top:190px!important}body.ws.has-profile .board{padding-top:236px!important}body.ws .zbar{width:calc(100% - 20px);bottom:10px}body.ws .ztop{padding:10px 12px}body.ws .zbrand{font-size:19px}}
+
+/* ---------- time views ---------- */
+.tv{position:absolute;left:0;top:0;width:100%;z-index:0;pointer-events:none;color:#f3efff}
+.tv>*{pointer-events:auto}
+.tvnav{position:sticky;left:0;display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 16px}
+.tvnav h3{font:700 19px var(--display);letter-spacing:-.03em;min-width:min(330px,60vw);text-align:center;white-space:pre-wrap}
+.tvb{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:inherit;font:600 19px/1 var(--ui);display:grid;place-items:center}
+.tvb:hover{background:rgba(255,255,255,.15)}
+.tvb.wide{width:auto;padding:0 14px;font:600 13px var(--ui)}
+.tvb.go{background:var(--mango);border-color:var(--mango);color:#1b1430}
+.tvcarry{position:sticky;left:0;display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 16px;font:500 14px var(--ui);color:#d9d3f2}
+.tvempty{position:sticky;left:0;text-align:center;font:500 15.500px var(--ui);color:#a59fc0;padding:26px 20px 0;max-width:560px;margin:0 auto}
+.tvc{position:absolute;border-radius:18px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.09);transition:background .15s,border-color .15s}
+.tvc header{display:flex;align-items:baseline;gap:8px;padding:13px 16px 0;font:600 12.500px var(--ui);letter-spacing:.06em;text-transform:uppercase;color:#a59fc0}
+.tvc header b{font:700 21px var(--display);letter-spacing:-.03em;color:#f3efff}
+.tvc header i{margin-left:auto;font:600 11.500px var(--ui);font-style:normal;background:rgba(255,255,255,.1);border-radius:99px;padding:2px 8px;letter-spacing:0}
+.tvc.now{background:rgba(255,201,60,.07);border-color:rgba(255,201,60,.45)}
+.tvc.now header b{color:var(--mango)}
+.tvc.none{border-style:dashed;background:rgba(255,255,255,.02)}
+.tvc.over{background:rgba(94,242,192,.12);border-color:var(--mint)}
+.tvm{position:sticky;left:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;padding:14px 22px 112px}
+.tvd{font:600 12px var(--ui);letter-spacing:.07em;text-transform:uppercase;color:#a59fc0;padding:0 4px 2px}
+.tvcell{display:flex;flex-direction:column;align-items:stretch;gap:4px;text-align:left;padding:9px 10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);color:#f3efff;min-width:0;transition:background .15s,border-color .15s}
+.tvcell:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.26)}
+.tvcell b{font:600 14px var(--ui)}
+.tvcell.out{opacity:.38}
+.tvcell.now{border-color:var(--mango);background:rgba(255,201,60,.08)}
+.tvcell.now b{color:var(--mango)}
+.tvcell em{font:500 11.500px var(--ui);font-style:normal;color:#a59fc0}
+.tvchip{font:600 11.500px/1.5 var(--ui);padding:1px 7px;border-radius:6px;background:color-mix(in srgb,var(--c) 86%,#fffaf0);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.tv-on .note{transform:none}
+body.tv-on .note .rz{display:none}
+body.tv-month .pal .say{display:none}
+.paper>.dayp{position:absolute;top:-10px;right:14px;z-index:2;font:600 10.500px var(--ui);padding:3px 9px;border-radius:999px;background:var(--ink);color:var(--tk,var(--c));box-shadow:0 4px 10px -3px rgba(0,0,0,.5)}
+.note.is-agent .paper>.dayp{right:40px}
+body.tv-day .dayp,body.tv-week .dayp{display:none}
+body.w-light .tv{color:#1b1430}body.w-light .tvnav h3,body.w-light .tvc header b,body.w-light .tvcell{color:#1b1430}body.w-light .tvc,body.w-light .tvcell,body.w-light .tvb{background:rgba(27,20,48,.06);border-color:rgba(27,20,48,.16)}
+.pdate{margin-top:6px;width:100%;border:1px solid var(--line);border-radius:10px;background:var(--glass);color:var(--text);font:500 13px var(--ui);padding:7px 9px;color-scheme:dark}
+.pday{grid-template-columns:repeat(3,1fr)}
+.zview button{padding:6px 12px}
+@media (max-width:1180px){body.ws .zsearch{width:130px}}
+@media (max-width:760px){.tv{position:static;flex:0 0 100%;width:100%;order:-2147483000}.tvnav h3{font-size:16px;min-width:0}.tvm{gap:4px;padding:10px 0 0}.tvcell{padding:6px;border-radius:10px;align-items:center}.zview{order:5;flex:1 0 100%}.zview button{flex:1}}
+
+/* ---------- note polish (clean style): depth, type and quieter controls ---------- */
+body.ws:not(.st-play) .note .paper{transition:translate .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s}
+body.ws:not(.st-play) .note:not(.is-agent) .paper{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),inset 0 -22px 34px -30px rgba(27,20,48,.35),0 0 0 1px rgba(0,0,0,.06),0 2px 3px rgba(0,0,0,.22),0 26px 44px -24px rgba(0,0,0,.9),0 0 50px -28px var(--c)}
+body.ws:not(.st-play):not(.tv-on) .note:hover:not(.drag) .paper{translate:0 -2px}
+body.ws:not(.st-play) .note.fk .ttl{font:700 calc(16.500px*var(--fs,1))/1.3 var(--ui);letter-spacing:-.012em;margin-bottom:6px}
+body.ws:not(.st-play) .note.fk .body{font-size:calc(15.500px*var(--fs,1));line-height:1.5;letter-spacing:-.005em}
+body.ws:not(.st-play) .paper li{gap:9px;padding:2px 3px;line-height:1.4}
+body.ws:not(.st-play) .paper li b{width:17px;height:17px;margin-top:2px;border:1.500px solid color-mix(in srgb,var(--ink) 62%,transparent);border-radius:5.500px;background:rgba(255,255,255,.28)}
+body.ws:not(.st-play) .paper li.d b{background:var(--ink);border-color:var(--ink)}
+body.ws:not(.st-play) .paper li:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+body.ws:not(.st-play) .addi{margin-top:8px;background:none;border-radius:0;border-top:1px dashed color-mix(in srgb,var(--ink) 28%,transparent);padding:8px 3px 0;font:500 calc(14px*var(--fs,1)) var(--ui);outline:none}
+body.ws:not(.st-play) .addi:focus{border-top-color:var(--ink);border-top-style:solid}
+body.ws:not(.st-play) .addi::placeholder{color:color-mix(in srgb,var(--ink) 46%,transparent)}
+body.ws:not(.st-play) .ringc{width:66px;height:66px}
+body.ws:not(.st-play) .ringc span{width:56px;height:56px;font:700 14px var(--ui)}
+body.ws:not(.st-play) .timer .body{font-weight:700}
+body.ws:not(.st-play) .gb{height:10px}
+body.ws:not(.st-play) .grow2{margin-top:2px}
+body.ws:not(.st-play) .grow2 button{border-radius:50%;width:28px;height:28px}
+body.ws:not(.st-play) .kind{font-weight:700;background:color-mix(in srgb,var(--ink) 10%,transparent)}
 </style>
 </head>
 <body>
@@ -793,12 +857,14 @@ function inkFor(c,t){if(t==='glass'||t==='night')return'#f3efff';if(t==='neon')r
 const tickFor=(c,t)=>t==='night'?'#1c1b4b':t==='neon'?'#120e24':t==='glass'?'#1a1436':c;
 const KEY='chipku-v1', $=s=>document.querySelector(s), board=$('#board');
 let notes=[], sound=true, zTop=10;
-let VIEW='tidy',PROFILE=null;const WS={space:'',agent:false,daily:false},DAILY=new Set(['todo','timer','goal']);
+const pad2=x=>String(x).padStart(2,'0'),dkey=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()),dparse=k=>{const a=k.split('-').map(Number);return new Date(a[0],a[1]-1,a[2])},
+  dadd=(k,n)=>{const d=dparse(k);d.setDate(d.getDate()+n);return dkey(d)},TODAY=()=>dkey(new Date()),monday=k=>dadd(k,-((dparse(k).getDay()+6)%7)),dfmt=(k,o)=>dparse(k).toLocaleDateString('en-GB',o);
+let VIEW='tidy',PROFILE=null;const WS={space:'',agent:false,daily:false,view:'all',date:TODAY()},DAILY=new Set(['todo','timer','goal']);
 try{VIEW='free';PROFILE=JSON.parse(localStorage.getItem('chipzett-profile')||'null')}catch(e){}
 if(DESK)VIEW='free';
 const spaceOf=n=>n.space||((n.cat==='work'||n.cat==='career')?'work':'personal');
 const inCat=(n,k)=>k==='quick'?!n.cat:n.cat===k;
-const isHid=n=>(!!activeCat&&!inCat(n,activeCat))||(!!WS.space&&spaceOf(n)!==WS.space)||(WS.agent&&!n.agent)||(WS.daily&&!DAILY.has(n.type));
+const isHid=n=>(!!activeCat&&!inCat(n,activeCat))||(!!WS.space&&spaceOf(n)!==WS.space)||(WS.agent&&!n.agent)||(WS.daily&&!DAILY.has(n.type))||(WS.view==='day'&&n.day!==WS.date)||(WS.view==='week'&&!!n.day&&(n.day<monday(WS.date)||n.day>dadd(monday(WS.date),6)))||WS.view==='month';
 const isPhone=()=>VIEW==='tidy'||matchMedia('(max-width:640px)').matches;
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const uid=()=>Math.random().toString(36).slice(2,9);
@@ -843,8 +909,8 @@ function place(){const w=board.clientWidth,h=board.clientHeight;return{x:Math.ma
 function add(n,fresh){
   const ac=CATS.find(c=>c[0]===activeCat),given=n;
   n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,shape:def.shape||'',rot:DESK?+(Math.random()*8-4).toFixed(1):0,z:++zTop},place(),n);
-  if(n.cat==='quick')n.cat='';if(!('agent' in given)&&(WS.agent||wsNext.agent))n.agent=true;if(!('space' in given)&&WS.space)n.space=WS.space;
-  n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();return n;
+  if(n.cat==='quick')n.cat='';if(!('day' in given)&&WS.view!=='all'){const m=monday(WS.date),t=TODAY();n.day=WS.view==='day'?WS.date:WS.view==='week'&&(t<m||t>dadd(m,6))?m:t}if(!('agent' in given)&&(WS.agent||wsNext.agent))n.agent=true;if(!('space' in given)&&WS.space)n.space=WS.space;
+  n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();tvSoon();return n;
 }
 
 /* ---------- agent preview ----------
@@ -973,6 +1039,8 @@ function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${
   const f=d.querySelector('.face');if(f)f.className='face av-'+(n.face||'classic');
   d.style.order=-(n.z||0);d.classList.toggle('has-song',!!n.song);d.classList.toggle('hid',isHid(n));d.classList.toggle('is-agent',!!n.agent);d.classList.toggle('fk',(n.font||'kalam')==='kalam');d.classList.toggle('f0',!n.face||n.face==='classic');
   {const pp=d.firstChild;if(pp){let tg=pp.querySelector('.tag');const c=CATS.find(x=>x[0]===n.cat);if(c){if(!tg){tg=el('span','tag');pp.append(tg)}tg.textContent=c[1]}else if(tg)tg.remove()}}
+  {const pp=d.firstChild;if(pp){let dp=pp.querySelector('.dayp');if(n.day){if(!dp){dp=el('span','dayp');pp.append(dp)}dp['textContent']=n.day===TODAY()?L('Today','Aaj'):dfmt(n.day,{weekday:'short',day:'numeric',month:'short'})}else if(dp)dp.remove()}}
+  if(WS.view!=='all')tvSoon();
   setSky(d,n);SHAPES.forEach(x=>{if(x[0])d.classList.toggle('sh-'+x[0],n.shape===x[0])});ANIMS.forEach(a=>d.classList.remove('an-'+a[0]));d.classList.add('an-'+(n.anim||'still'));
   const p=d.firstChild;if(p){TEX.forEach(x=>p.classList.remove('tx-'+x[0]));p.classList.add('tx-'+t)}}
 
@@ -980,7 +1048,7 @@ function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${
 let pk=null,lastTab='Vibe';
 function closePicker(){if(pk)stopNote();pk?.remove();pk=null}
 function openPicker(anchor,cur,apply){
-  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||'',shape:cur.shape||''};if(PROFILE&&cur.id){st.space=spaceOf(cur);st.agent=!!cur.agent}
+  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||'',shape:cur.shape||''};if(cur.id)st.day=cur.day||'';if(PROFILE&&cur.id){st.space=spaceOf(cur);st.agent=!!cur.agent}
   const p=el('div','pick');pk=p;const groups=[];let ci;
   const sync=()=>{groups.forEach(([g,key])=>[...g.children].forEach(b=>b.setAttribute('aria-pressed',b._v===st[key])));
     p.querySelectorAll('.pt .mini').forEach(m=>{m.style.cssText=`display:block;--c:${st.color};--ink:${inkFor(st.color,m.parentElement._v)}`});
@@ -993,6 +1061,9 @@ function openPicker(anchor,cur,apply){
   const dice=el('button','pill','Surprise me');dice.type='button';dice.onclick=()=>{Object.assign(st,{color:rnd(COLORS),tex:rnd(TEX)[0],font:rnd(FONTS)[0],ink:'',face:rnd(AVS.slice(0,8))[0],anim:rnd(ANIMS)[0],mood:rnd(MOODS)[0]});sync()};
   p.append(el('h4',null,'Ek tap vibe'),vg,dice);
   grp('Category','pms',[['','None'],...CATS.filter(c=>c[0]!=='quick')],'cat',(b,it)=>{b.className='ps';b.textContent=it[1]});
+  if('day' in st){const dg=el('div','pms pday'),di=document.createElement('input');di.type='date';di.className='pdate';di.value=st.day;di.setAttribute('aria-label',L('Pick a date','Tareekh chuno'));di.oninput=()=>{st.day=di.value;sync()};
+    [[L('No date','Bina din'),''],[L('Today','Aaj'),TODAY()],[L('Tomorrow','Kal'),dadd(TODAY(),1)]].forEach(([t,v])=>{const b=el('button','ps');b.type='button';b['textContent']=t;b._v=v;b.onclick=()=>{st.day=v;di.value=v;sync()};dg.append(b)});
+    groups.push([dg,'day']);p.append(el('h4',null,'Day'),dg,di)}
   if('space' in st){grp('Desk','pms',[['personal',L('Personal','Personal')],['work',L('Work','Kaam')]],'space',(b,it)=>{b.className='ps';b.textContent=it[1]});
     grp('Agentic note','pms',[[false,L('Off','Band')],[true,L('On','Chalu')]],'agent',(b,it)=>{b.className='ps';b.textContent=it[1]})}
   grp('Shape','pshs',SHAPES,'shape',(b,it)=>{b.className='psh';b.dataset.shape=it[0]||'classic';b.append(el('span','shp sp-'+(it[0]||'classic')),document.createTextNode(it[1]))});
@@ -1007,7 +1078,7 @@ function openPicker(anchor,cur,apply){
   grp('Size','pss',[[.85,'S'],[1,'M'],[1.25,'L'],[1.55,'XL']],'size',(b,it)=>{b.className='ps';b.textContent=tr(it[1])});
   grp('Likhai ka rang','pcs',INKS,'ink',(b,c)=>{b.className='pc';if(c)b.style.setProperty('--c',c);else{b.textContent=tr('A');b.classList.add('auto')}b.setAttribute('aria-label',c?'Ink '+c:'Auto ink')});
   /* tabs keep the picker short: one group of options at a time */
-  const TABS=['Vibe','Shape','Rang','Likhai','Avatar','Mood'],tabOf={'Shape':'Shape','Ek tap vibe':'Vibe','Category':'Vibe','Desk':'Vibe','Agentic note':'Vibe','Avatar':'Avatar','Harkat':'Avatar','Mood (peeche chalta animation)':'Mood','Gaana (note pe aate hi bajega)':'Mood','Rang':'Rang','Texture':'Rang','Font':'Likhai','Size':'Likhai','Likhai ka rang':'Likhai'};
+  const TABS=['Vibe','Shape','Rang','Likhai','Avatar','Mood'],tabOf={'Shape':'Shape','Day':'Vibe','Ek tap vibe':'Vibe','Category':'Vibe','Desk':'Vibe','Agentic note':'Vibe','Avatar':'Avatar','Harkat':'Avatar','Mood (peeche chalta animation)':'Mood','Gaana (note pe aate hi bajega)':'Mood','Rang':'Rang','Texture':'Rang','Font':'Likhai','Size':'Likhai','Likhai ka rang':'Likhai'};
   const tabT={};for(const k in tabOf)tabT[tr(k)]=tabOf[k];let ct='Vibe';[...p.children].forEach(c=>{if(c.tagName==='H4')ct=tabT[c.textContent]||ct;c.dataset.tab=ct});
   const bar=el('div','tabs');p.prepend(bar);
   const place=()=>{const r=anchor.getBoundingClientRect(),h=p.offsetHeight;
@@ -1047,13 +1118,13 @@ function edit(e,n){e.contentEditable='true';e.spellcheck=false;if(n.textH)e.inne
 function finish(n,done){
   const d=dom(n);if(!d)return;if(noteOn===n.id)stopNote();SK.delete(n.id);const p=d.firstChild;p.style.animationDelay='0s';
   p.classList.add(done?'crumple':'fall');if(done){boom(d);pal(rnd(['Shabash! Ek kaam kam.','Ho gaya? Mast.','Tick! Chai banti hai.']))}else pal(rnd(['Gaya kachre mein.','Bye bye note.','Theek hai, uda diya.']),true);
-  notes=notes.filter(x=>x!==n);save();renderCats();setTimeout(()=>d.remove(),700);
+  notes=notes.filter(x=>x!==n);save();renderCats();setTimeout(()=>{d.remove();tvSoon()},700);
 }
 function drag(d,n,handle){
   /* Press and move anywhere on the note to drag it. A plain click on the text puts the cursor there. */
   let sx,sy,ox,oy,lx,on=false,moved=false,ed=null;const SKIP='button,input,textarea,select,canvas,label,a,li,.rz,.agc,.addi,.grow2';
   handle.addEventListener('mousedown',e=>{if(DESK||isPhone()||e.target.closest(SKIP))return;const t=e.target.closest('[contenteditable]');if(t&&document.activeElement!==t)e.preventDefault()});
-  handle.addEventListener('pointerdown',e=>{if(e.button||e.target.closest(SKIP)||isPhone())return;ed=e.target.closest('[contenteditable]');if(ed&&(DESK||document.activeElement===ed))return;
+  handle.addEventListener('pointerdown',e=>{if(e.button||e.target.closest(SKIP)||isPhone()||WS.view!=='all')return;ed=e.target.closest('[contenteditable]');if(ed&&(DESK||document.activeElement===ed))return;
     on=true;moved=false;sx=e.clientX;sy=e.clientY;ox=n.x;oy=n.y;lx=e.clientX;handle.setPointerCapture(e.pointerId)});
   handle.addEventListener('pointermove',e=>{if(!on)return;
     if(!moved){if(Math.hypot(e.clientX-sx,e.clientY-sy)<5)return;moved=true;n.z=++zTop;d.style.zIndex=n.z;d.classList.remove('glide');d.classList.add('drag');if(d.contains(document.activeElement))document.activeElement.blur()}
@@ -1225,7 +1296,7 @@ function renderCats(){wsRender();const box=$('#cats');if(!box)return;box.textCon
   $('#tplh').textContent=c?L('Ready-made '+c[1]+' notes',c[1]+' ke ready-made notes'):L('Pick a category to see ready-made notes','Category chuno, ready-made notes dikhenge');
   if(c)c[3].forEach(([name,hint,make])=>{const b=el('button','mi',name);b.type='button';b.append(el('small',null,hint));
     b.onclick=()=>{add(Object.assign({color:c[2]},make(),{cat:c[0]}),true);pal(L(name+' note added.',name+' note chipka diya.'),true)};tp.append(b)})}
-function applyFilter(){notes.forEach(n=>{const d=dom(n);if(d)d.classList.toggle('hid',isHid(n))});renderCats()}
+function applyFilter(){notes.forEach(n=>{const d=dom(n);if(d)d.classList.toggle('hid',isHid(n))});renderCats();tvLayout()}
 
 
 
@@ -1350,15 +1421,75 @@ const ZI={tidy:'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" wi
   bolt:'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1.500L3.500 9H8l-1 5.500L12.500 7H8z"/></svg>',
   tpl:'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.500" y="2.500" width="11" height="11" rx="2"/><path d="M5.500 6h5M5.500 8.500h5M5.500 11h3"/></svg>',
   user:'<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.500" r="2.700"/><path d="M2.800 13.500c.8-2.600 2.800-3.800 5.200-3.800s4.400 1.200 5.200 3.800"/></svg>'};
+/* ---------- time views: the same notes seen as a day, a week or a month ----------
+   A note can carry a day (n.day, YYYY-MM-DD). The open wall ignores it. Day and Week lay the notes out
+   for you without touching their saved place on the wall; Month is a calendar that opens a day. */
+const tv=el('div','tv');let tvT=0;
+function tvSoon(){if(WS.view==='all'||DESK)return;cancelAnimationFrame(tvT);tvT=requestAnimationFrame(tvLayout)}
+function tvGo(view,date){WS.view=view;if(date)WS.date=date;board.scrollTop=0;board.scrollLeft=0;applyFilter()}
+function tvLayout(){
+  if(DESK)return;const B=document.body,v=WS.view;B.classList.toggle('tv-on',v!=='all');['day','week','month'].forEach(k=>B.classList.toggle('tv-'+k,v===k));
+  if(!tv.isConnected)board.prepend(tv);tv.textContent='';tv.style.cssText='';
+  if(v==='all'){notes.forEach(n=>{const d=dom(n);if(d&&d._tv){d._tv=false;paint(d,n)}});return}
+  const W=board.clientWidth,H=board.clientHeight,phone=isPhone(),top=TOPY+(phone?0:8),vis=notes.filter(n=>!isHid(n)),t=TODAY();
+  const btn=(txt,label,fn)=>{const b=el('button','tvb');b.type='button';b['textContent']=txt;b.setAttribute('aria-label',label);b.onclick=fn;return b};
+  const nav=el('div','tvnav'),ttl=el('h3'),step=v==='day'?1:v==='week'?7:0;
+  const move=dir=>{if(v==='month'){const d=dparse(WS.date);d.setDate(1);d.setMonth(d.getMonth()+dir);WS.date=dkey(d)}else WS.date=dadd(WS.date,dir*step);applyFilter()};
+  const m0=monday(WS.date);
+  ttl['textContent']=v==='day'?(WS.date===t?L('Today','Aaj')+'  ·  ':'')+dfmt(WS.date,{weekday:'long',day:'numeric',month:'long'}):v==='week'?dfmt(m0,{day:'numeric',month:'short'})+' – '+dfmt(dadd(m0,6),{day:'numeric',month:'short',year:'numeric'}):dfmt(WS.date,{month:'long',year:'numeric'});
+  nav.append(btn('‹',L('Earlier','Pehle'),()=>move(-1)),ttl,btn('›',L('Later','Baad'),()=>move(1)));
+  const inNow=v==='day'?WS.date===t:v==='week'?(t>=m0&&t<=dadd(m0,6)):WS.date.slice(0,7)===t.slice(0,7);
+  if(!inNow){const b=btn(v==='day'?L('Today','Aaj'):v==='week'?L('This week','Yeh hafta'):L('This month','Yeh mahina'),'',()=>{WS.date=t;applyFilter()});b.classList.add('wide');nav.append(b)}
+  if(!phone){tv.style.paddingTop=top+'px';nav.style.width=W+'px'}
+  tv.append(nav);
+  const put=(n,x,y,w)=>{const d=dom(n);d._tv=true;d.classList.add('glide');d.style.left=x+'px';d.style.top=y+'px';if(w)d.style.setProperty('--w',w+'px');d.style.setProperty('--r','0deg')};
+  if(v==='day'){
+    if(WS.date===t){const old=notes.filter(n=>n.day&&n.day<t);if(old.length){const c=el('div','tvcarry');c.append(el('span',null,L(`${old.length} note${old.length>1?'s are':' is'} still on earlier days.`,`${old.length} note pichhle dino mein pade hain.`)));
+      const b=btn(L('Bring to today','Aaj mein le aao'),'',()=>{old.forEach(n=>n.day=t);save();notes.forEach(n=>{const d=dom(n);if(d)paint(d,n)});applyFilter()});b.classList.add('wide','go');c.append(b);if(!phone)c.style.width=W+'px';tv.append(c)}}
+    if(!vis.length)tv.append(el('p','tvempty',L('Nothing on this day yet. Write a note below and it lands here.','Is din abhi kuch nahi. Neeche note likho, yahin aayega.')));
+    if(!phone){const y0=top+nav.offsetHeight+(tv.querySelector('.tvcarry')?66:22),cw=260,cols=Math.max(1,Math.min(Math.floor((W-40)/cw),Math.max(2,Math.min(vis.length,4)))),off=(W-cols*cw)/2+14,hs=Array(cols).fill(y0);
+      vis.forEach(n=>{const c=hs.indexOf(Math.min(...hs));put(n,off+c*cw,hs[c]);hs[c]+=dom(n).offsetHeight+26});tv.style.height=Math.max(...hs)+120+'px'}
+  }else if(v==='week'){
+    if(phone)return;const colW=Math.max(196,Math.floor((W-28)/8)),y0=top+nav.offsetHeight+18,keys=['',...Array.from({length:7},(_,i)=>dadd(m0,i))],hs=[];
+    const lanes=keys.map((k,i)=>{const c=el('div','tvc'+(k===t?' now':'')+(k?'':' none')),h=el('header');c.dataset.day=k;c.style.cssText=`left:${14+i*colW}px;top:${y0}px;width:${colW-8}px`;
+      if(k){h.append(el('span',null,dfmt(k,{weekday:'short'})),el('b',null,String(dparse(k).getDate())));c.ondblclick=()=>tvGo('day',k);c.title=L('Double-click to open this day','Is din ko kholne ke liye double-click')}else h.append(el('span',null,L('No date','Bina din')));
+      const cnt=vis.filter(n=>(n.day||'')===k).length;if(cnt)h.append(el('i',null,String(cnt)));c.append(h);tv.append(c);hs.push(y0+64);return c});
+    vis.forEach(n=>{const i=Math.max(0,keys.indexOf(n.day||''));put(n,14+i*colW+8,hs[i],colW-24);hs[i]+=dom(n).offsetHeight+24});
+    const bottom=Math.max(H-108,Math.max(...hs)+14);lanes.forEach(c=>c.style.height=(bottom-y0)+'px');tv.style.height=bottom+110+'px';tv.style.width=Math.max(W,28+8*colW)+'px';
+  }else{
+    const first=dparse(WS.date);first.setDate(1);const start=monday(dkey(first)),mon=first.getMonth(),g=el('div','tvm'),by={};notes.forEach(n=>{if(n.day&&!(WS.space&&spaceOf(n)!==WS.space)&&!(activeCat&&!inCat(n,activeCat)))(by[n.day]=by[n.day]||[]).push(n)});
+    Array.from({length:7},(_,i)=>dfmt(dadd(start,i),{weekday:'short'})).forEach(x=>g.append(el('div','tvd',x)));
+    const last=new Date(first.getFullYear(),mon+1,0),rows=Math.ceil(((first.getDay()+6)%7+last.getDate())/7),ch=phone?72:Math.max(88,Math.floor((H-top-nav.offsetHeight-160)/rows)-8);
+    for(let i=0;i<rows*7;i++){const k=dadd(start,i),c=el('button','tvcell'+(dparse(k).getMonth()!==mon?' out':'')+(k===t?' now':''));c.type='button';c.style.minHeight=ch+'px';c.append(el('b',null,String(dparse(k).getDate())));
+      const list=by[k]||[],max=phone?0:Math.max(1,Math.floor((ch-40)/23));list.slice(0,max).forEach(n=>{const x=el('span','tvchip');x['textContent']=(n.text||'').split('\n')[0].slice(0,40)||L('Note','Note');x.style.setProperty('--c',n.color);x.style.setProperty('--ink',n.ink||inkFor(n.color,n.tex||'plain'));c.append(x)});
+      if(list.length>max)c.append(el('em',null,phone?String(list.length):'+'+(list.length-max)+L(' more',' aur')));
+      c.setAttribute('aria-label',dfmt(k,{weekday:'long',day:'numeric',month:'long'})+', '+list.length+' notes');c.onclick=()=>tvGo('day',k);g.append(c)}
+    if(!phone)g.style.width=W+'px';tv.append(g);
+    const und=notes.filter(n=>!n.day).length;if(und)tv.append(el('p','tvempty',L(`${und} note${und>1?'s have':' has'} no day yet. Give a note a day from its look menu, or drag it in Week.`,`${und} notes mein abhi din nahi hai. Note ke look menu se din do, ya Week mein kheencho.`)));
+  }
+}
+/* in Day and Week the notes are placed for you: a click still edits text, and in Week a drag moves a note to another day */
+{let st=null;const SK='button,input,textarea,select,canvas,label,a,li,.rz,.agc,.addi,.grow2';
+  board.addEventListener('pointerdown',e=>{if(WS.view==='all'||WS.view==='month'||e.button||isPhone()||DESK)return;const d=e.target.closest('.note');if(!d||e.target.closest(SK))return;
+    const ed=e.target.closest('[contenteditable]');if(ed&&document.activeElement===ed)return;const n=notes.find(x=>x.id===d.dataset.id);if(!n)return;
+    st={d,n,ed,sx:e.clientX,sy:e.clientY,ox:parseFloat(d.style.left)||0,oy:parseFloat(d.style.top)||0,moved:false};try{board.setPointerCapture(e.pointerId)}catch(x){}});
+  board.addEventListener('pointermove',e=>{if(!st)return;if(!st.moved){if(WS.view!=='week'||Math.hypot(e.clientX-st.sx,e.clientY-st.sy)<5)return;st.moved=true;st.d.classList.remove('glide');st.d.classList.add('drag');st.d.style.zIndex=++zTop;if(st.d.contains(document.activeElement))document.activeElement.blur()}
+    st.d.style.left=st.ox+e.clientX-st.sx+'px';st.d.style.top=st.oy+e.clientY-st.sy+'px';
+    const x=e.clientX-board.getBoundingClientRect().left+board.scrollLeft;tv.querySelectorAll('.tvc').forEach(c=>c.classList.toggle('over',x>=c.offsetLeft&&x<c.offsetLeft+c.offsetWidth+8))});
+  const end=e=>{if(!st)return;const s=st;st=null;
+    if(s.moved){s.d.classList.remove('drag');const c=tv.querySelector('.tvc.over');if(c&&e.type==='pointerup'){if(c.dataset.day)s.n.day=c.dataset.day;else delete s.n.day;save();paint(s.d,s.n)}applyFilter();return}
+    if(s.ed&&e.type==='pointerup'){s.ed.focus();try{const r=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;if(r&&s.ed.contains(r.startContainer)){const g=getSelection();g.removeAllRanges();g.addRange(r)}}catch(x){}}};
+  board.addEventListener('pointerup',end);board.addEventListener('pointercancel',end);
+  board.addEventListener('input',()=>tvSoon());board.addEventListener('click',()=>tvSoon());addEventListener('resize',()=>tvSoon())}
 function wsBuild(){
   const B=document.body;B.classList.add('ws');
   const zb=(cls,icon,label)=>{const b=el('button','zbtn '+cls);b.type='button';b.innerHTML=icon||'';if(label)b.append(el('span',null,label));return b};
   const top=el('div','ztop'),r1=el('div','zrow r1'),r2=el('div','zrow'),brand=el('div','zbrand'),segw=el('div','zsegw'),seg=el('div','zseg'),ag=zb('zag',ZI.bolt,L('Agentic','Agentic')),
-    search=document.createElement('input'),tidy=zb('ztidy',ZI.tidy,L('Tidy up','Saaf karo')),wall=zb('zwall',ZI.wall,L('Appearance','Roop')),me=zb('zme','',''),chips=el('div','zchips'),today=el('button','ztoday'),empty=el('div','wempty');
+    vseg=el('div','zseg zview'),search=document.createElement('input'),tidy=zb('ztidy',ZI.tidy,L('Tidy up','Saaf karo')),wall=zb('zwall',ZI.wall,L('Appearance','Roop')),me=zb('zme','',''),chips=el('div','zchips'),today=el('button','ztoday'),empty=el('div','wempty');
   brand.append(el('i'),document.createTextNode('ChipZett'));today.type='button';
   search.className='zsearch';search.type='search';search.id='zsearch';search.placeholder=L('Search notes','Notes dhoondo');search.setAttribute('aria-label','Search notes');
   search.oninput=()=>{const o=$('#search');o.value=search.value;o.dispatchEvent(new Event('input'))};
-  segw.append(seg,ag);r1.append(brand,segw,el('div','zgrow'),search,tidy,wall,me);r2.append(chips,today);top.append(r1,r2);
+  segw.append(seg,ag);r1.append(brand,vseg,segw,el('div','zgrow'),search,tidy,wall,me);vseg.setAttribute('role','group');vseg.setAttribute('aria-label',L('View','View'));r2.append(chips,today);top.append(r1,r2);
   /* command bar */
   const bar=document.createElement('form'),inp=document.createElement('input'),bAg=zb('zbag',ZI.bolt,L('Agentic (preview)','Agentic (preview)')),bTp=zb('',ZI.tpl,L('Templates','Templates')),bAdd=el('button','zbtn zadd',L('Add note','Note banao'));
   bar.className='zbar';bar.autocomplete='off';inp.id='zcap';inp.placeholder=L('Write a note','Note likho');inp.setAttribute('aria-label','New note');
@@ -1367,7 +1498,7 @@ function wsBuild(){
   /* profile and appearance cards */
   const prof=el('div','zpop'),card=el('div','zpop');prof.id='zprof';card.id='wset';
   B.append(top,bar,prof,card,empty);
-  wsEls={seg,ag,chips,today,me,empty,prof,card,bAg,inp,segw};
+  wsEls={seg,ag,chips,today,me,empty,prof,card,bAg,inp,segw,vseg};
   const closePops=()=>{prof.classList.remove('on');card.classList.remove('on')};
   const saveP=()=>{try{PROFILE?localStorage.setItem('chipzett-profile',JSON.stringify(PROFILE)):localStorage.removeItem('chipzett-profile')}catch(e){}};
   const pn=document.createElement('input'),pSave=zb('zpri','',L('Save','Save')),pOut=zb('','',L('Remove profile','Profile hatao')),pRow=el('div','zrow');
@@ -1394,7 +1525,7 @@ function wsBuild(){
   wsEls.st=st;wsEls.bgs=bgs;wsEls.tools=tools;
   wall.onclick=()=>{const on=card.classList.contains('on');closePops();if(!on)card.classList.add('on')};
   addEventListener('pointerdown',e=>{if(!e.target.closest('.zpop,.zme,.zwall'))closePops()});
-  tidy.onclick=()=>$('#tidy').click();
+  tidy.onclick=()=>WS.view==='all'?$('#tidy').click():tvLayout();
   today.onclick=()=>{WS.daily=!WS.daily;applyFilter()};
   ag.onclick=()=>{WS.agent=!WS.agent;applyFilter()};
   bAg.onclick=()=>{if(!PROFILE){me.click();return}wsNext.agent=!wsNext.agent;wsRender();inp.focus()};
@@ -1412,6 +1543,7 @@ function wsRender(){
   /* spaces */
   seg.textContent='';segw.style.display=PROFILE?'':'none';pOut.style.display=PROFILE?'':'none';
   if(PROFILE)[['',L('All','Sab')],['personal',L('Personal','Personal')],['work',L('Work','Kaam')]].forEach(([k,t])=>{const b=el('button',null,t);b.type='button';b.setAttribute('aria-pressed',WS.space===k);b.onclick=()=>{WS.space=k;applyFilter()};seg.append(b)});
+  {const vs=wsEls.vseg;vs.textContent='';[['all',L('Wall','Wall')],['day',L('Today','Aaj')],['week',L('Week','Hafta')],['month',L('Month','Mahina')]].forEach(([k,t])=>{const b=el('button');b.type='button';b['textContent']=t;b.setAttribute('aria-pressed',WS.view===k);b.onclick=()=>tvGo(k,k==='day'?TODAY():WS.date);vs.append(b)})}
   ag.setAttribute('aria-pressed',WS.agent);ag.title=L('Show only agentic notes','Sirf agentic notes dikhao');
   bAg.setAttribute('aria-pressed',wsNext.agent);
   /* profile button */
@@ -1429,7 +1561,7 @@ function wsRender(){
   if(left)bits.push(L(`${left} task${left>1?'s':''} left`,`${left} kaam baaki`));if(run)bits.push(L(`${run} reminder${run>1?'s':''} running`,`${run} reminder chalu`));if(STREAK>1)bits.push(L(`${STREAK}-day streak`,`${STREAK} din lagataar`));
   today.textContent=bits.join('  ·  ');today.setAttribute('aria-pressed',WS.daily);today.title=L('Show only lists, reminders and goals','Sirf lists, reminders aur goals dikhao');
   [[wsEls.st,STYLE],[wsEls.bgs,/^#/.test(BG)?'custom':BG],[wsEls.tools,TOOL]].forEach(([g,v])=>{for(const b of g.children)b.setAttribute('aria-pressed',b.dataset.v===v)});
-  empty.textContent=notes.some(n=>!isHid(n))?'':L('No notes here yet. Write one in the bar below.','Yahan abhi koi note nahi. Neeche bar mein likho.');
+  empty.textContent=WS.view!=='all'||notes.some(n=>!isHid(n))?'':L('No notes here yet. Write one in the bar below.','Yahan abhi koi note nahi. Neeche bar mein likho.');
 }
 if(!DESK)wsBuild();
 /* pen writing: while you type on a note, a pen sits at the caret and jots with each letter */
@@ -1452,12 +1584,12 @@ function start(state){
   if(s&&s.def){Object.assign(def,s.def);sb.style.setProperty('--c',def.color);$('#pal').className='blob av-'+def.face}
   if(s&&s.notes&&s.notes.length){sound=s.sound!==false;s.notes.forEach(n=>{notes.push(n);zTop=Math.max(zTop,n.z||0);render(n)})}
   else{const w=board.clientWidth,h=board.clientHeight,at=(fx,fy)=>({x:Math.max(10,Math.min(w-242,w*fx)),y:Math.max(10,h*fy)});
-    [{type:'todo',text:L('Launch checklist','Launch checklist'),items:[{t:L('Review homepage','Homepage dekho'),d:true},{t:L('Approve launch copy','Launch copy approve karo'),d:false},{t:L('Share the update','Update share karo'),d:false}],cat:'work',color:'#ffc93c',tex:'lined',...at(.05,.05)},
-     {type:'text',text:L('Client meeting\nThey want the revised quote and a signed timeline by Friday. Budget is fixed.','Client meeting\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai.'),agent:true,cat:'work',color:'#5ef2c0',...at(.27,.05)},
-     {type:'text',text:L('Morning routine\n6:30  Wake up\n7:00  Run\n8:00  Plan the day','Subah ka routine\n6:30  Utho\n7:00  Daud\n8:00  Din ka plan'),mood:'sun',face:'cool',cat:'home',color:'#74ccff',...at(.5,.05)},
-     {type:'chart',kind:'pie',text:L('Trip budget','Trip ka budget'),data:L('Flights 45, Hotel 35, Food 20','Flights 45, Hotel 35, Khana 20'),cat:'travel',color:'#fff4d6',tex:'grid',face:'cyclops',...at(.72,.05)},
-     {type:'timer',text:L('Stretch break','Stretch break'),end:Date.now()+6e5,total:6e5,cat:'reminders',color:'#ff6f9c',face:'robot',...at(.05,.4)},
-     {type:'goal',text:L('Sleep goal','Neend ka goal'),cur:5,total:7,face:'cat',cat:'reminders',color:'#bda4ff',...at(.27,.45)},
+    [{type:'todo',text:L('Launch checklist','Launch checklist'),items:[{t:L('Review homepage','Homepage dekho'),d:true},{t:L('Approve launch copy','Launch copy approve karo'),d:false},{t:L('Share the update','Update share karo'),d:false}],cat:'work',color:'#ffc93c',tex:'lined',day:TODAY(),...at(.05,.05)},
+     {type:'text',text:L('Client meeting\nThey want the revised quote and a signed timeline by Friday. Budget is fixed.','Client meeting\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai.'),agent:true,cat:'work',color:'#5ef2c0',day:TODAY(),...at(.27,.05)},
+     {type:'text',text:L('Morning routine\n6:30  Wake up\n7:00  Run\n8:00  Plan the day','Subah ka routine\n6:30  Utho\n7:00  Daud\n8:00  Din ka plan'),mood:'sun',face:'cool',cat:'home',color:'#74ccff',day:dadd(TODAY(),1),...at(.5,.05)},
+     {type:'chart',kind:'pie',text:L('Trip budget','Trip ka budget'),data:L('Flights 45, Hotel 35, Food 20','Flights 45, Hotel 35, Khana 20'),cat:'travel',color:'#fff4d6',tex:'grid',face:'cyclops',day:dadd(TODAY(),3),...at(.72,.05)},
+     {type:'timer',text:L('Stretch break','Stretch break'),end:Date.now()+6e5,total:6e5,cat:'reminders',color:'#ff6f9c',face:'robot',day:TODAY(),...at(.05,.4)},
+     {type:'goal',text:L('Sleep goal','Neend ka goal'),cur:5,total:7,face:'cat',cat:'reminders',color:'#bda4ff',day:dadd(TODAY(),2),...at(.27,.45)},
      {type:'text',text:L('Welcome to ChipZett\nWrite in the bar below to add a note. Press a face to hear the note. Drag notes anywhere.','ChipZett mein swagat hai\nNeeche bar mein likh kar note banao. Chehra dabao to note bolta hai. Notes kahin bhi kheencho.'),color:'#ffe08a',...at(.5,.45)}].forEach(n=>add(n));
     setTimeout(()=>pal(L('These are sample notes. Write in the bar below to add your own.','Yeh sample notes hain. Apna note banane ke liye neeche bar mein likho.'),true),900)}
   $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
