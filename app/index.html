@@ -720,6 +720,47 @@ body.ws:not(.st-play) .gb{height:10px}
 body.ws:not(.st-play) .grow2{margin-top:2px}
 body.ws:not(.st-play) .grow2 button{border-radius:50%;width:28px;height:28px}
 body.ws:not(.st-play) .kind{font-weight:700;background:color-mix(in srgb,var(--ink) 10%,transparent)}
+
+/* ---------- agentic notes, second design ---------- */
+.note:not(.is-agent) .agx{display:none!important}
+.agx{display:flex;flex-direction:column;gap:7px;margin-top:12px;padding-top:11px;border-top:1px solid color-mix(in srgb,var(--ink) 16%,transparent)}
+.agmv{display:flex;flex-wrap:wrap;gap:5px}
+.agmv:empty{display:none}
+.agmv button{font:600 11.500px var(--ui);padding:5px 10px;border-radius:99px;color:var(--ink);background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent);transition:background .15s,translate .15s}
+.agmv button:hover{background:#fff;translate:0 -1px}
+.agline{position:relative;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.78);border-radius:11px;padding:4px 4px 4px 9px;overflow:hidden;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 10%,transparent)}
+.agline:focus-within{background:#fff;box-shadow:inset 0 0 0 1.500px var(--ink)}
+.agic{display:grid;place-items:center;flex:none;color:#1b1430}
+.agic svg{width:13px;height:13px;fill:currentColor}
+.agline input{flex:1;min-width:0;border:0;outline:none;background:none;font:500 13px var(--ui);color:#1b1430;padding:5px 0}
+.agline input::placeholder{color:rgba(27,20,48,.5)}
+.aggo{flex:none;width:26px;height:26px;border-radius:8px;background:#1b1430;color:var(--mint);display:grid;place-items:center}
+.aggo svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.agtr{display:flex;flex-direction:column;gap:6px}
+.agtr:empty{display:none}
+.age{position:relative;background:#fff;color:#1b1430;border-radius:11px;padding:8px 11px;font:500 13px/1.42 var(--ui);box-shadow:0 8px 16px -10px rgba(0,0,0,.5);animation:agin .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes agin{from{opacity:0;translate:0 8px}}
+.ageq{font:600 11px var(--ui);color:rgba(27,20,48,.55);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aget{white-space:pre-wrap;overflow-wrap:anywhere}
+.age.made,.age.set{padding-left:32px}
+.age.made::before,.age.set::before{content:"";position:absolute;left:10px;top:10px;width:15px;height:15px;border-radius:50%;background:var(--mint)}
+.age.made::after,.age.set::after{content:"";position:absolute;left:14.500px;top:14px;width:6px;height:3.500px;border:1.700px solid #1b1430;border-top:0;border-right:0;rotate:-45deg}
+.ageo{margin-top:5px;font:700 11.500px var(--ui);color:#1b1430;padding:3px 9px;border-radius:99px;background:rgba(27,20,48,.09)}
+.ageo:hover{background:rgba(27,20,48,.18)}
+.agmore{align-self:flex-start;font:600 11.500px var(--ui);color:var(--ink);opacity:.62;padding:1px 2px}
+.agmore:hover{opacity:1}
+.agfoot{font:500 10.500px/1.35 var(--ui);color:var(--ink);opacity:0;max-height:0;overflow:hidden;transition:opacity .2s}
+.note:focus-within .agfoot,.note.ag-all .agfoot{opacity:.62;max-height:40px}
+.agfrom{margin-top:9px;align-self:flex-start;font:600 11px var(--ui);color:var(--ink);opacity:.66;padding:3px 9px 3px 8px;border-radius:99px;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 26%,transparent);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agfrom:hover{opacity:1;background:color-mix(in srgb,var(--ink) 9%,transparent)}
+.note.ag-busy .agline::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,#1b1430 40%,var(--mint) 60%,transparent);background-size:60% 100%;background-repeat:no-repeat;animation:agrun .64s linear infinite}
+@keyframes agrun{from{background-position:-60% 0}to{background-position:160% 0}}
+.note.ag-busy .agic{animation:agpulse .64s ease-in-out infinite}
+@keyframes agpulse{50%{scale:1.35}}
+.note.ag-flash .paper{animation:agflash 1.400s ease-out}
+@keyframes agflash{0%,60%{box-shadow:0 0 0 3px var(--mint),0 0 44px 4px rgba(94,242,192,.75)}}
+body.ws:not(.st-play) .note.is-agent .paper{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 0 0 1.500px var(--mint),0 26px 44px -24px rgba(0,0,0,.9),0 0 44px -14px rgba(94,242,192,.6)}
+::highlight(agsrc){background-color:#1b1430;color:#5ef2c0}
 </style>
 </head>
 <body>
@@ -928,7 +969,7 @@ function place(){const w=board.clientWidth,h=board.clientHeight;return{x:Math.ma
 function add(n,fresh){
   const ac=CATS.find(c=>c[0]===activeCat),given=n;
   n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,shape:def.shape||'',rot:DESK?+(Math.random()*8-4).toFixed(1):0,z:++zTop},place(),n);
-  if(n.cat==='quick')n.cat='';if(!('day' in given)&&WS.view!=='all'){const m=monday(WS.date),t=TODAY();n.day=WS.view==='day'?WS.date:WS.view==='week'&&(t<m||t>dadd(m,6))?m:t}if(!('agent' in given)&&(WS.agent||wsNext.agent))n.agent=true;if(!('space' in given)&&WS.space)n.space=WS.space;
+  if(n.cat==='quick')n.cat='';if(n.agent&&!n.w)n.w=300;if(!('day' in given)&&WS.view!=='all'){const m=monday(WS.date),t=TODAY();n.day=WS.view==='day'?WS.date:WS.view==='week'&&(t<m||t>dadd(m,6))?m:t}if(!('agent' in given)&&(WS.agent||wsNext.agent)){n.agent=true;if(!n.w)n.w=300}if(!('space' in given)&&WS.space)n.space=WS.space;
   n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();tvSoon();return n;
 }
 
@@ -940,12 +981,6 @@ const AG_STOP=new Set('the a an and or of to in on at by for with is are was wer
 const agWords=t=>(t.toLowerCase().match(/[a-z0-9]+/g)||[]).filter(w=>!AG_STOP.has(w));
 function agText(n){let t=n.text||'';if(n.items)t+='. '+n.items.map(i=>i.t+(i.d?' (done)':'')).join('. ');if(n.data)t+='. '+n.data;return t}
 const agSents=t=>t.split(/\n+|(?<=[.!?])\s+/).map(x=>x.trim()).filter(x=>x.length>2);
-function agAsk(n,q){
-  const ss=agSents(agText(n)),qw=agWords(q);if(!ss.length)return L('This note is empty, so I have nothing to answer from.','Yeh note khaali hai, jawab dene ko kuch nahi hai.');
-  const sc=ss.map(x=>{const w=new Set(agWords(x));return qw.filter(k=>w.has(k)||[...w].some(v=>v.length>3&&k.length>3&&(v.startsWith(k.slice(0,4))))).length});
-  const best=Math.max(...sc);if(!best)return L('I could not find that in this note.','Yeh is note mein nahi mila.');
-  return ss.filter((x,i)=>sc[i]===best).slice(0,2).join(' ');
-}
 function agItems(n){
   if(n.items&&n.items.length)return n.items.filter(i=>!i.d).map(i=>i.t);
   const ss=agSents(n.text||''),body=ss.length>1?ss.slice(1):ss,TR=/\b(want|wants|need|needs|must|should|have to|has to|deliver|send|bring|buy|get|chahiye|karna hai|lana hai|bhejna hai)\b/i;
@@ -955,44 +990,80 @@ function agItems(n){
   return body.flatMap(split).slice(0,6).map(cap);
 }
 function agBeside(n){return{x:Math.min((n.x||0)+((n.w||232)+26),Math.max(10,board.clientWidth-250)),y:(n.y||0)+18,cat:n.cat,color:n.color,space:spaceOf(n),agent:false}}
-function agDo(n,cmd){
-  const c=cmd.toLowerCase(),title=(agSents(n.text||'')[0]||L('Note','Note')).slice(0,40),out=[];
-  if(/check|list|action|task|todo|kaam/.test(c)){const it=agItems(n);
-    if(it.length){add({type:'todo',text:title+': '+L('action items','kaam'),items:it.map(t=>({t,d:false})),...agBeside(n)},true);out.push(L(`I made a checklist with ${it.length} items, next to me.`,`Maine ${it.length} kaam ki checklist bana di, mere bagal mein.`))}
-    else out.push(L('I found nothing here to turn into tasks.','Yahan kaam banane layak kuch nahi mila.'))}
-  if(/mail|email|follow/.test(c)){const pts=agItems(n);
-    const b=L('Hello,\nThank you for your time. Here is where things stand:\n','Namaste,\nAapke samay ke liye dhanyavaad. Abhi ki sthiti:\n')+pts.map(x=>'- '+x).join('\n')+L('\nI will follow up soon.\nRegards','\nMain jald update dunga.\nDhanyavaad');
-    const pos=agBeside(n);if((n.x||0)>336)pos.x=n.x-326;else pos.y+=260;add({type:'text',text:L('Email draft: ','Email draft: ')+title+'\n'+b,mail:{s:L('Follow-up: ','Follow-up: ')+title,b},tex:'lined',face:'boss',...pos,color:'#fff4d6',w:300},true);
-    out.push(L('The email draft is a new note. Nothing is sent until you send it.','Email draft ek naya note hai. Jab tak tum na bhejo, kuch nahi jayega.'))}
-  if(/total|sum|add up|jod/.test(c)){const nums=(agText(n).match(/\d+(?:\.\d+)?/g)||[]).map(Number);
-    out.push(nums.length?L(`I found ${nums.length} numbers. The total is ${+nums.reduce((a,b)=>a+b,0).toFixed(2)}.`,`${nums.length} numbers mile. Total ${+nums.reduce((a,b)=>a+b,0).toFixed(2)} hai.`):L('I found no numbers in this note.','Is note mein koi number nahi mila.'))}
-  if(/summar|short|saar/.test(c)){const ss=agSents(agText(n));out.push(ss.length?ss[0]+(ss.length>1?L(` (and ${ss.length-1} more lines)`,` (aur ${ss.length-1} line)`):''):L('This note is empty.','Yeh note khaali hai.'))}
-  if(/grow|expand|step|plan|badha/.test(c)){add({type:'flow',text:title,data:L('Write it down > Find 3 people who need it > Build the smallest version > Ask what they think','Likh lo > 3 log dhundo jinhe chahiye > Sabse chhota version banao > Unse poochho'),...agBeside(n)},true);
-    out.push(L('I laid out first steps as a flow note. These steps are a sample in this preview.','Pehle kadam ek flow note mein rakh diye. Is preview mein yeh kadam namoona hain.'))}
-  return out.length?out.join(' '):L('In this preview I can: make a checklist, draft an email, total the numbers, summarise, or grow an idea into steps.','Is preview mein main yeh kar sakta hoon: checklist, email draft, numbers ka total, saar, ya idea ke kadam.');
-}
-const AG_QUICK={work:[['Checklist of action items','Kaam ki checklist'],['Draft a follow-up email','Follow-up email draft']],ideas:[['Grow this idea into steps','Idea ke kadam banao']],money:[['Total the numbers','Numbers ka total']],travel:[['Make a packing checklist','Packing checklist']],'':[['Make a checklist','Checklist banao'],['Summarise this note','Is note ka saar']]};
+/* ---------- agentic notes, second design ----------
+   The note reads itself. It offers moves that come from its own words (a day it mentions, things someone wants, numbers),
+   takes one line of input for anything else, and keeps what it did as a short trail. Things it makes are real notes that
+   point back to it. Still no AI: every answer is worked out on this device from the note's text, and the note says so. */
+const AG_DN=[['sunday'],['monday','mon'],['tuesday','tue','tues'],['wednesday','wed'],['thursday','thu','thur','thurs'],['friday','fri'],['saturday']];
+function agWhen(text){const t=' '+String(text).toLowerCase()+' ',now=new Date();let d=null,m,hasDay=false,named=false;
+  if(m=t.match(/\bin\s+(\d+)\s*(minutes?|mins?|hours?|hrs?|days?)\b/)){d=new Date(now.getTime()+ +m[1]*(m[2][0]==='m'?6e4:m[2][0]==='h'?36e5:864e5));return{d,label:agLab(d)}}
+  if(/\b(today|aaj|tonight)\b/.test(t)){d=new Date(now);hasDay=true}else if(/\b(tomorrow|tmrw|kal)\b/.test(t)){d=new Date(now);d.setDate(d.getDate()+1);hasDay=true}
+  else for(let i=0;i<7;i++)if(new RegExp('\\b(?:'+AG_DN[i].join('|')+')\\b').test(t)){d=new Date(now);d.setDate(d.getDate()+(i-now.getDay()+7)%7);hasDay=named=true;break}
+  let h=-1,mi=0;if(m=t.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/)){h=+m[1]%12+(m[3]==='pm'?12:0);mi=+(m[2]||0)}else if(m=t.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/)){h=+m[1];mi=+m[2]}else if(m=t.match(/\bat\s+(\d{1,2})\b/)){h=+m[1];if(h<8)h+=12}
+  if(!hasDay&&h<0)return null;if(!d)d=new Date(now);d.setHours(h<0?9:h,mi,0,0);
+  if(d<=now){if(!hasDay)d.setDate(d.getDate()+1);else if(named)d.setDate(d.getDate()+7);else if(h<0)d=new Date(now.getTime()+36e5);else return null}
+  return{d,label:agLab(d)}}
+function agLab(d){const k=dkey(d),t=TODAY();return(k===t?L('today','aaj'):k===dadd(t,1)?L('tomorrow','kal'):d.toLocaleDateString('en-GB',k<=dadd(t,6)?{weekday:'short'}:{weekday:'short',day:'numeric',month:'short'}))+' '+d.getHours()+':'+pad2(d.getMinutes())}
+const agTitle=n=>(agSents(n.text||'')[0]||L('Note','Note')).replace(/[.:]$/,'').slice(0,40);
+const agPairs=n=>n.type==='chart'?[]:rows((n.text||'').split('\n').slice(1).join(','));
+function agFind(n,q){const ss=agSents(agText(n)),qw=agWords(q);if(!ss.length)return{t:L('This note is empty, so I have nothing to answer from.','Yeh note khaali hai, jawab dene ko kuch nahi hai.')};
+  const sc=ss.map(x=>{const w=new Set(agWords(x));return qw.filter(k=>w.has(k)||[...w].some(v=>v.length>3&&k.length>3&&v.startsWith(k.slice(0,4)))).length}),best=Math.max(...sc);
+  if(!best)return{t:L('That is not in this note. I only know what is written here.','Yeh is note mein nahi hai. Mujhe sirf wahi pata hai jo yahan likha hai.')};const hit=ss.filter((x,i)=>sc[i]===best).slice(0,2);return{t:hit.join(' '),src:hit}}
+function agMoves(n){const txt=agText(n),mv=[],w=agWhen(txt),it=n.type==='todo'?[]:agItems(n),ss=agSents(txt),pr=agPairs(n);
+  if(n.type==='todo'&&n.items.some(i=>!i.d))mv.push(['next',L('What is next?','Agla kya hai?')]);
+  if(n.type!=='todo'&&it.length>=2&&pr.length<2)mv.push(['list',L(`Checklist of ${it.length}`,`${it.length} ki checklist`)]);
+  if(w)mv.push(['remind',L('Remind me ','Yaad dilao ')+w.label]);
+  if(it.length&&/\b(client|meeting|call|they|customer|team|quote|proposal|vendor|manager)\b/i.test(txt))mv.push(['mail',L('Draft a follow-up','Follow-up draft')]);
+  if(w&&n.day!==dkey(w.d))mv.push(['plan',L('Plan for ','Is din rakho: ')+dfmt(dkey(w.d),{weekday:'short'})]);
+  if(pr.length>=2)mv.push(['chart',L(`Chart ${pr.length} numbers`,`${pr.length} numbers ka chart`)]);
+  if((txt.length>170||ss.length>=4)&&pr.length<2)mv.push(['sum',L('Summarise','Saar')]);
+  return mv.slice(0,4)}
+function agFlash(id){const x=notes.find(q=>q.id===id),d=x&&dom(x);if(!d)return;if(d.classList.contains('hid')){pal(L('That note is on another day or filter.','Woh note kisi aur din ya filter mein hai.'),true);return}
+  d.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'});x.z=++zTop;d.style.zIndex=x.z;d.classList.remove('ag-flash');void d.offsetWidth;d.classList.add('ag-flash');setTimeout(()=>d.classList.remove('ag-flash'),1500)}
+function agMark(host,phrases){try{if(!window.Highlight||!CSS.highlights)return;const rs=[],w=document.createTreeWalker(host,NodeFilter.SHOW_TEXT);let node;
+  while(node=w.nextNode()){if(node.parentElement.closest('.agx'))continue;phrases.forEach(ph=>{const k=node.data.indexOf(ph.slice(0,Math.min(ph.length,60)));if(k>=0){const r=new Range();r.setStart(node,k);r.setEnd(node,Math.min(node.data.length,k+ph.length));rs.push(r)}})}
+  if(rs.length){CSS.highlights.set('agsrc',new Highlight(...rs));clearTimeout(agMark.t);agMark.t=setTimeout(()=>CSS.highlights.delete('agsrc'),5000)}}catch(e){}}
+function agAct(n,what,said){
+  const title=agTitle(n),beside=()=>{const b=agBeside(n);notes.forEach(x=>{const dx=x.from===n.id&&dom(x);if(dx)b.y=Math.max(b.y,x.y+dx.offsetHeight+24)});b.from=n.id;return b},c=(said||'').toLowerCase();
+  if(!what){const isQ=/\?\s*$/.test(c)||/^(what|when|who|where|which|how|why|is|are|does|do|did|can|kya|kab|kaun|kahan|kitn|kaise)\b/.test(c);
+    what=isQ?'ask':/remind|reminder|alarm|yaad/.test(c)?'remind':/\b(put|move|schedule|plan)\b.*\b(on|to|for)\b|is din/.test(c)?'plan':/check|list|action|task|todo|kaam/.test(c)?'list':/chart|graph|pie|bar/.test(c)?'chart':/mail|email|follow/.test(c)?'mail':/summar|short|tl;?dr|saar/.test(c)?'sum':/total|add up|sum up|jod/.test(c)?'total':/\bnext\b|agla/.test(c)?'next':/grow|expand|steps|badha/.test(c)?'grow':'ask'}
+  const w=agWhen(said||'')||agWhen(agText(n));
+  if(what==='ask'){const f=agFind(n,said);if(!f.src&&!/\?\s*$/.test(c)&&c.split(/\s+/).length<7)return{k:'ans',q:said,t:L('I can make a checklist, set a reminder, put the note on a day, draft a follow-up, chart numbers, total them, or summarise. Or ask me anything about what is written here.','Main checklist bana sakta hoon, reminder laga sakta hoon, note ko kisi din rakh sakta hoon, follow-up draft, numbers ka chart ya total, ya saar. Ya is note ke baare mein kuch bhi poochho.')};return{k:'ans',q:said,t:f.t,src:f.src}}
+  if(what==='next'){const o=(n.items||[]).filter(i=>!i.d);return{k:'ans',q:said,t:o.length?L(`Next: ${o[0].t}. ${o.length} left in all.`,`Agla: ${o[0].t}. Kul ${o.length} baaki.`):L('Nothing is left on this list.','Is list mein kuch baaki nahi.'),src:o.length?[o[0].t]:null}}
+  if(what==='list'){const it=agItems(n);if(!it.length)return{k:'ans',q:said,t:L('I found nothing here to turn into tasks.','Yahan kaam banane layak kuch nahi mila.')};
+    const x=add({type:'todo',text:title+': '+L('actions','kaam'),items:it.map(t=>({t,d:false})),...beside()},true);return{k:'made',q:said,t:L(`Checklist made · ${it.length} items`,`Checklist ban gayi · ${it.length} kaam`),id:x.id}}
+  if(what==='remind'){if(!w)return{k:'ans',q:said,t:L('I could not find a day or time. Try: remind me Friday 4pm.','Din ya samay nahi mila. Aise likho: remind me Friday 4pm.')};
+    const x=add({type:'timer',text:title,end:+w.d,total:w.d-Date.now(),day:dkey(w.d),face:'ringer',...beside(),color:'#ff6f9c'},true);return{k:'made',q:said,t:L('Reminder set · ','Reminder lag gaya · ')+w.label,id:x.id}}
+  if(what==='plan'){if(!w)return{k:'ans',q:said,t:L('I could not find a day in that. Try: put this on Friday.','Usme din nahi mila. Aise likho: put this on Friday.')};n.day=dkey(w.d);const d=dom(n);if(d)paint(d,n);return{k:'set',q:said,t:L('Placed on ','Is din rakha: ')+dfmt(n.day,{weekday:'long',day:'numeric',month:'short'})+L('. See it in Week.','. Week mein dekho.')}}
+  if(what==='chart'){const pr=agPairs(n);if(pr.length<2)return{k:'ans',q:said,t:L('I need at least two lines like "Rent 40" to draw a chart.','Chart ke liye kam se kam do line chahiye, jaise "Rent 40".')};
+    const x=add({type:'chart',kind:'pie',text:title,data:pr.map(r=>r.l+' '+r.v).join(', '),tex:'grid',...beside(),color:'#fff4d6'},true);return{k:'made',q:said,t:L(`Chart made · ${pr.length} parts`,`Chart ban gaya · ${pr.length} hisse`),id:x.id}}
+  if(what==='mail'){const pts=agItems(n),b=L('Hello,\nThank you for your time. Here is where things stand:\n','Namaste,\nAapke samay ke liye dhanyavaad. Abhi ki sthiti:\n')+pts.map(x=>'- '+x).join('\n')+L('\nI will follow up soon.\nRegards','\nMain jald update dunga.\nDhanyavaad');
+    const x=add({type:'text',text:L('Follow-up: ','Follow-up: ')+title+'\n'+b,mail:{s:L('Follow-up: ','Follow-up: ')+title,b},tex:'lined',...beside(),color:'#fff4d6',w:300},true);return{k:'made',q:said,t:L('Follow-up drafted. Nothing is sent until you send it.','Follow-up draft ho gaya. Jab tak tum na bhejo, kuch nahi jayega.'),id:x.id}}
+  if(what==='total'){const nums=(agText(n).match(/\d+(?:\.\d+)?/g)||[]).map(Number);return{k:'ans',q:said,t:nums.length?L(`${nums.length} numbers. Total ${+nums.reduce((a,b)=>a+b,0).toFixed(2)}.`,`${nums.length} numbers. Total ${+nums.reduce((a,b)=>a+b,0).toFixed(2)}.`):L('There are no numbers in this note.','Is note mein koi number nahi.')}}
+  if(what==='sum'){const ss=agSents(agText(n));if(!ss.length)return{k:'ans',q:said,t:L('This note is empty.','Yeh note khaali hai.')};
+    const key=ss.slice(1).filter(x=>/\d|must|want|need|fixed|deadline|by |chahiye|zaroori/i.test(x)||agWhen(x)).slice(0,2);return{k:'ans',q:said||L('Summary','Saar'),t:[ss[0],...key].map(x=>'• '+x).join('\n'),src:[ss[0],...key]}}
+  const x=add({type:'flow',text:title,data:L('Write it down > Find 3 people who need it > Build the smallest version > Ask what they think','Likh lo > 3 log dhundo jinhe chahiye > Sabse chhota version banao > Unse poochho'),...beside()},true);return{k:'made',q:said,t:L('First steps laid out as a flow. In this preview the steps are a sample.','Pehle kadam flow mein rakh diye. Is preview mein kadam namoona hain.'),id:x.id}}
 function agentUI(n,p,d){
-  const bar=el('div','agb'),box=el('div','agc'),list=el('div','agl'),quick=el('div','agq'),form=document.createElement('form'),inp=document.createElement('input'),go=el('button',null,'');
-  let mode='ask';n.chat=n.chat||[];
-  const mk=(k,label)=>{const b=el('button');b.type='button';b.innerHTML=AG_ICON[k];b.append(document.createTextNode(label));bar.append(b);return b};
-  const bAsk=mk('ask',L('Ask','Poochho')),bDo=mk('act',L('Do','Karo')),cnt=el('i');
-  const draw=()=>{list.textContent='';n.chat.forEach(m=>list.append(el('div','agm '+m.r,m.t)));list.scrollTop=list.scrollHeight;
-    if(n.chat.length){cnt.textContent=Math.ceil(n.chat.length/2);bAsk.append(cnt)}else cnt.remove()};
-  const setMode=m=>{mode=m;const open=d.classList.contains('ag-open');bAsk.setAttribute('aria-pressed',open&&m==='ask');bDo.setAttribute('aria-pressed',open&&m==='act');
-    inp.placeholder=m==='ask'?L('Ask this note','Is note se poochho'):L('Tell this note what to do','Is note ko kaam do');go.textContent=m==='ask'?L('Ask','Poochho'):L('Do','Karo');
-    quick.textContent='';if(m==='act')(AG_QUICK[n.cat]||AG_QUICK['']).forEach(([en,hi])=>{const b=el('button',null,L(en,hi));b.type='button';b.onclick=()=>run(L(en,hi));quick.append(b)})};
-  const toggle=m=>{const open=d.classList.contains('ag-open');if(open&&mode===m){d.classList.remove('ag-open');setMode(m);return}
-    d.classList.add('ag-open');if((n.w||232)<300){n.w=300;d.style.setProperty('--w','300px')}n.z=++zTop;d.style.zIndex=n.z;setMode(m);draw();inp.focus({preventScroll:true})};
-  const run=q=>{q=q.trim();if(!q)return;const a=mode==='ask'?agAsk(n,q):agDo(n,q);n.chat.push({r:'u',t:q},{r:'a',t:a});if(n.chat.length>40)n.chat.splice(0,n.chat.length-40);
-    draw();save();bubble(d,a);speak(a,.8+(Math.max(0,COLORS.indexOf(n.color))%5)*.25)};
-  bAsk.onclick=()=>toggle('ask');bDo.onclick=()=>toggle('act');
-  form.className='agf';inp.type='text';inp.id='ag-'+n.id;inp.setAttribute('aria-label','Ask this note');go.type='submit';form.append(inp,go);
-  form.onsubmit=e=>{e.preventDefault();run(inp.value);inp.value=''};
-  box.append(list,quick,form,el('div','agn',L('Preview: a sample agent that reads only this note. No AI is connected yet.','Preview: namoona agent jo sirf yeh note padhta hai. AI abhi juda nahi hai.')));
+  const box=el('div','agx'),mv=el('div','agmv'),line=document.createElement('form'),ic=el('span','agic'),inp=document.createElement('input'),go=el('button','aggo'),trl=el('div','agtr'),
+    foot=el('div','agfoot',L('Preview. Works on this device from the words in this note. No AI is connected yet.','Preview. Isi device par is note ke shabdon se chalta hai. AI abhi juda nahi hai.'));
+  if(!n.trail){n.trail=[];if(n.chat&&n.chat.length)for(let i=0;i+1<n.chat.length;i+=2)n.trail.push({k:'ans',q:n.chat[i].t,t:n.chat[i+1].t})}
+  ic.innerHTML=AG_ICON.act;go.type='submit';go.innerHTML='<svg viewBox="0 0 16 16"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg>';go.setAttribute('aria-label',L('Send','Bhejo'));
+  const PH=L('Ask, or tell this note what to do','Poochho, ya is note ko kaam do');line.className='agline';inp.type='text';inp.id='ag-'+n.id;inp.placeholder=PH;inp.setAttribute('aria-label',PH);inp.autocomplete='off';line.append(ic,inp,go);
+  const drawMoves=()=>{mv.textContent='';agMoves(n).forEach(([id,label])=>{const b=el('button');b.type='button';b['textContent']=label;b.dataset.mv=id;b.onclick=()=>run(id,label);mv.append(b)})};
+  const drawTrail=()=>{trl.textContent='';const all=d.classList.contains('ag-all');(all?n.trail:n.trail.slice(-1)).forEach(e=>{const c=el('div','age '+e.k);
+      if(e.q){const q=el('div','ageq');q['textContent']=e.q;c.append(q)}const t=el('div','aget');t['textContent']=e.t;c.append(t);
+      if(e.id&&notes.some(x=>x.id===e.id)){const o=el('button','ageo',L('Show','Dikhao'));o.type='button';o.onclick=()=>agFlash(e.id);c.append(o)}trl.append(c)});
+    if(n.trail.length>1){const m=el('button','agmore');m.type='button';m['textContent']=all?L('Show less','Kam dikhao'):L(`Earlier: ${n.trail.length-1} more`,`Pehle ke: ${n.trail.length-1} aur`);m.onclick=()=>{d.classList.toggle('ag-all');drawTrail();tvSoon()};trl.append(m)}};
+  let busy=false;
+  const run=(what,said)=>{if(busy)return;busy=true;d.classList.add('ag-busy');n.z=++zTop;d.style.zIndex=n.z;inp.value='';inp.placeholder=L('Reading the note…','Note padh raha hoon…');
+    setTimeout(()=>{busy=false;d.classList.remove('ag-busy');inp.placeholder=PH;const e=agAct(n,what,said),src=e.src;delete e.src;e.at=Date.now();n.trail.push(e);if(n.trail.length>30)n.trail.splice(0,n.trail.length-30);
+      save();drawTrail();drawMoves();tvSoon();if(src)agMark(p,src);if(e.k==='ans')speak(e.t,1.1);if(e.id)setTimeout(()=>agFlash(e.id),380)},640)};
+  line.onsubmit=ev=>{ev.preventDefault();const v=inp.value.trim();if(v)run('',v)};
+  let mt=0;p.addEventListener('input',e=>{if(e.target===inp||!n.agent)return;clearTimeout(mt);mt=setTimeout(drawMoves,450)});
   if(n.mail){const m=el('button','mailb',L('Open in mail','Mail mein kholo'));m.type='button';m.onclick=()=>{location.href='mailto:?subject='+encodeURIComponent(n.mail.s)+'&body='+encodeURIComponent(n.mail.b)};p.append(m)}
+  if(n.from){const par=notes.find(x=>x.id===n.from);if(par){const f=el('button','agfrom');f.type='button';f['textContent']=L('From: ','Yahan se: ')+agTitle(par);f.title=L('Show the note this came from','Jis note se bana woh dikhao');f.onclick=()=>agFlash(n.from);p.append(f)}}
   {const sp=el('span','spk');sp.innerHTML=AG_ICON.act;sp.title=L('Agentic note','Agentic note');queueMicrotask(()=>d.append(sp))}
-  p.append(bar,box);setMode('ask');draw();
+  box.append(mv,line,trl,foot);p.append(box);drawMoves();drawTrail();
 }
 function render(n,fresh){
   const d=el('div','note');d.dataset.id=n.id;
@@ -1067,7 +1138,7 @@ function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${
 let pk=null,lastTab='Vibe';
 function closePicker(){if(pk)stopNote();pk?.remove();pk=null}
 function openPicker(anchor,cur,apply){
-  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||'',shape:cur.shape||''};if(cur.id)st.day=cur.day||'';if(PROFILE&&cur.id){st.space=spaceOf(cur);st.agent=!!cur.agent}
+  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||'',shape:cur.shape||''};if(cur.id)st.day=cur.day||'';if(cur.id)st.agent=!!cur.agent;if(PROFILE&&cur.id)st.space=spaceOf(cur);
   const p=el('div','pick');pk=p;const groups=[];let ci;
   const sync=()=>{groups.forEach(([g,key])=>[...g.children].forEach(b=>b.setAttribute('aria-pressed',b._v===st[key])));
     p.querySelectorAll('.pt .mini').forEach(m=>{m.style.cssText=`display:block;--c:${st.color};--ink:${inkFor(st.color,m.parentElement._v)}`});
@@ -1083,8 +1154,8 @@ function openPicker(anchor,cur,apply){
   if('day' in st){const dg=el('div','pms pday'),di=document.createElement('input');di.type='date';di.className='pdate';di.value=st.day;di.setAttribute('aria-label',L('Pick a date','Tareekh chuno'));di.oninput=()=>{st.day=di.value;sync()};
     [[L('No date','Bina din'),''],[L('Today','Aaj'),TODAY()],[L('Tomorrow','Kal'),dadd(TODAY(),1)]].forEach(([t,v])=>{const b=el('button','ps');b.type='button';b['textContent']=t;b._v=v;b.onclick=()=>{st.day=v;di.value=v;sync()};dg.append(b)});
     groups.push([dg,'day']);p.append(el('h4',null,'Day'),dg,di)}
-  if('space' in st){grp('Desk','pms',[['personal',L('Personal','Personal')],['work',L('Work','Kaam')]],'space',(b,it)=>{b.className='ps';b.textContent=it[1]});
-    grp('Agentic note','pms',[[false,L('Off','Band')],[true,L('On','Chalu')]],'agent',(b,it)=>{b.className='ps';b.textContent=it[1]})}
+  if('space' in st)grp('Desk','pms',[['personal',L('Personal','Personal')],['work',L('Work','Kaam')]],'space',(b,it)=>{b.className='ps';b.textContent=it[1]});
+  if('agent' in st)grp('Agentic note','pms',[[false,L('Off','Band')],[true,L('On','Chalu')]],'agent',(b,it)=>{b.className='ps';b.textContent=it[1]});
   grp('Shape','pshs',SHAPES,'shape',(b,it)=>{b.className='psh';b.dataset.shape=it[0]||'classic';b.append(el('span','shp sp-'+(it[0]||'classic')),document.createTextNode(it[1]))});
   grp('Avatar','pas',AVS,'face',(b,it)=>{b.className='pa';const f=el('span','face av-'+it[0]);f.append(el('span','eye'),el('span','eye'),el('span','mouth'));b.append(f,document.createTextNode(tr(it[1])))});
   grp('Harkat','pss',ANIMS,'anim',(b,it)=>{b.className='ps';b.textContent=tr(it[1]);b.style.fontSize='11.5px';b.style.padding='6px 2px'});
@@ -1141,7 +1212,7 @@ function finish(n,done){
 }
 function drag(d,n,handle){
   /* Press and move anywhere on the note to drag it. A plain click on the text puts the cursor there. */
-  let sx,sy,ox,oy,lx,on=false,moved=false,ed=null;const SKIP='button,input,textarea,select,canvas,label,a,li,.rz,.agc,.addi,.grow2';
+  let sx,sy,ox,oy,lx,on=false,moved=false,ed=null;const SKIP='button,input,textarea,select,canvas,label,a,li,.rz,.agc,.agx,.addi,.grow2';
   handle.addEventListener('mousedown',e=>{if(DESK||isPhone()||e.target.closest(SKIP))return;const t=e.target.closest('[contenteditable]');if(t&&document.activeElement!==t)e.preventDefault()});
   handle.addEventListener('pointerdown',e=>{if(e.button||e.target.closest(SKIP)||isPhone()||WS.view!=='all')return;ed=e.target.closest('[contenteditable]');if(ed&&(DESK||document.activeElement===ed))return;
     on=true;moved=false;sx=e.clientX;sy=e.clientY;ox=n.x;oy=n.y;lx=e.clientX;handle.setPointerCapture(e.pointerId)});
@@ -1285,7 +1356,7 @@ sb.onclick=()=>pk?closePicker():openPicker(sb,def,st=>{Object.assign(def,st);sb.
 ['remind me in 1 min paani pi lo','todo: gym, groceries, mummy ko call','chart: Rent 40, Khana 25, Masti 15','flow: Idea > Design > Launch','goal: Kitaab 120/300'].forEach(h=>{const b=el('button',null,h);b.type='button';b.onclick=()=>{$('#cap').value=b.textContent;$('#cap').focus()};$('#hints').append(b)});
 
 /* ---------- timers ---------- */
-function fmt(ms){const s=Math.ceil(ms/1000);return s>=3600?`${Math.floor(s/3600)}h ${Math.floor(s%3600/60)}m`:s>=60?`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`:s+'s'}
+function fmt(ms){const s=Math.ceil(ms/1000);return s>=86400?`${Math.floor(s/86400)}d ${Math.floor(s%86400/3600)}h`:s>=3600?`${Math.floor(s/3600)}h ${Math.floor(s%3600/60)}m`:s>=60?`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`:s+'s'}
 setInterval(()=>{for(const n of notes){if(n.type!=='timer')continue;const d=dom(n);if(!d)continue;
   const r=Math.max(0,n.end-Date.now()),ring=d.querySelector('.ringc');ring.style.setProperty('--p',n.total?r/n.total:0);ring.firstChild.textContent=tr(r?fmt(r):'Ho gaya');d.classList.toggle('over',!r);
   if(!r&&!n.fired){n.fired=true;save();d.classList.add('ringing');n.z=++zTop;d.style.zIndex=n.z;const t=L(`Hey! Time is up: ${n.text}`,`Oye! Time ho gaya: ${n.text}`);if(DESK)try{new Notification('ChipZett Notes',{body:t})}catch(e){}bubble(d,t,6000);speak(t,1.4);boom(d);setTimeout(()=>d.classList.remove('ringing'),4000)}}},250);
@@ -1297,7 +1368,7 @@ $('#snd').onclick=e=>{sound=!sound;e.target.textContent=tr(tr('Awaaz: ')+(sound?
 $('#search').oninput=e=>{const q=e.target.value.toLowerCase();for(const n of notes){const s=(n.text+' '+(n.data||'')+' '+(n.items||[]).map(i=>i.t).join(' ')).toLowerCase();dom(n)?.classList.toggle('dim',!!q&&!s.includes(q))}};
 $('#tidy').onclick=()=>{const w=board.clientWidth,cw=Math.max(...notes.map(n=>n.w||232),232)+28,vis=notes.filter(n=>!isHid(n)),cols=Math.max(1,Math.min(Math.floor((w-20)/cw),Math.max(isPhone()?1:3,Math.ceil(Math.sqrt(vis.length*1.700))))),off=(w-cols*cw)/2+10,hs=Array(cols).fill(TOPY+14);board.scrollTop=0;
   {const sim=Array(cols).fill(0);vis.forEach(n=>{const c=sim.indexOf(Math.min(...sim));sim[c]+=dom(n).offsetHeight+26});const free=board.clientHeight-TOPY-110-Math.max(...sim);if(free>0)hs.fill(TOPY+14+Math.min(150,free*.42))}
-  notes.filter(n=>!isHid(n)).forEach((n,i)=>{const c=hs.indexOf(Math.min(...hs)),d=dom(n);n.x=off+c*cw;n.y=hs[c];hs[c]+=d.offsetHeight+26;n.rot=+(Math.random()*4-2).toFixed(1);
+  notes.filter(n=>!isHid(n)).forEach((n,i)=>{const c=hs.indexOf(Math.min(...hs)),d=dom(n);n.x=off+c*cw+Math.round((cw-28-(n.w||232))/2);n.y=hs[c];hs[c]+=d.offsetHeight+26;n.rot=+(Math.random()*4-2).toFixed(1);
     d.classList.add('glide');d.style.transitionDelay=i*45+'ms';paint(d,n);d.style.transitionDelay=i*45+'ms';setTimeout(()=>{d.classList.remove('glide');d.style.transitionDelay=''},900+i*45)});
   save();pal(rnd(['Lo, sab line mein.','Saaf safai ho gayi.']))};
 const TIPS=['Likho: remind me in 10 min stretch karo. Main yaad dila dunga.','List chahiye? Likho: todo: doodh, bread, anda.','Kisi note ke chehre pe click karo, woh khud bolega.','Kaam ho gaya? Tick dabao aur confetti dekho.','Notes ko pakad ke kahin bhi ghumao.','Text select karo, styling toolbar khud aa jayega.','Note ke neeche-right kone ko kheencho, size badal jayega.','Hara + dabao: pie chart, flow diagram, doodle, photo sab milega.','Photo seedha paste ya drag karke bhi chipka sakte ho.','Note ka rangeen gol button dabao, phir Mood tab: baarish, dhoop, barf, party.','Har note ka apna gaana ho sakta hai. Picker mein Gaana chuno, phir note pe cursor lao.','Upar Music dabao: baarish, samundar ya apna gaana peeche chalao.','Picker mein Avatar chuno: billi, robot, alien, jo mann kare.','Rangeen gol button dabao aur ek tap mein poora vibe badlo.'];
@@ -1488,7 +1559,7 @@ function tvLayout(){
   }
 }
 /* in Day and Week the notes are placed for you: a click still edits text, and in Week a drag moves a note to another day */
-{let st=null;const SK='button,input,textarea,select,canvas,label,a,li,.rz,.agc,.addi,.grow2';
+{let st=null;const SK='button,input,textarea,select,canvas,label,a,li,.rz,.agc,.agx,.addi,.grow2';
   board.addEventListener('pointerdown',e=>{if(WS.view==='all'||WS.view==='month'||e.button||isPhone()||DESK)return;const d=e.target.closest('.note');if(!d||e.target.closest(SK))return;
     const ed=e.target.closest('[contenteditable]');if(ed&&document.activeElement===ed)return;const n=notes.find(x=>x.id===d.dataset.id);if(!n)return;
     st={d,n,ed,sx:e.clientX,sy:e.clientY,ox:parseFloat(d.style.left)||0,oy:parseFloat(d.style.top)||0,moved:false};try{board.setPointerCapture(e.pointerId)}catch(x){}});
@@ -1554,7 +1625,7 @@ function wsBuild(){
   tidy.onclick=()=>WS.view==='all'?$('#tidy').click():tvLayout();
   today.onclick=()=>{WS.daily=!WS.daily;applyFilter()};
   ag.onclick=()=>{WS.agent=!WS.agent;applyFilter()};
-  bAg.onclick=()=>{if(!PROFILE){me.click();return}wsNext.agent=!wsNext.agent;wsRender();inp.focus()};
+  bAg.onclick=()=>{wsNext.agent=!wsNext.agent;wsRender();inp.focus()};
   bTp.onclick=()=>openGallery();
   bar.onsubmit=e=>{e.preventDefault();const v=inp.value.trim();inp.value='';
     if(v){$('#cap').value=v;$('#capf').requestSubmit()}
