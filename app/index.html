@@ -4,8 +4,13 @@
 <meta charset="utf-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ffc93c'/%3E%3Cpath d='M44 0h6a14 14 0 0 1 14 14v6z' fill='%23e0a516'/%3E%3Cpath d='M17 17h30v7.5L28.5 39.5H47V47H17v-7.5L35.5 24.5H17z' fill='%2315112b'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="../icon.png">
-<meta name="theme-color" content="#0e0b1d">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ChipZett">
+<meta name="theme-color" content="#0d0a1b">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ChipZett Notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Outfit:wght@400;500;600&family=Kalam:wght@400;700&family=Caveat:wght@500;700&family=Permanent+Marker&family=Pacifico&family=Special+Elite&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -761,6 +766,81 @@ body.ws:not(.st-play) .kind{font-weight:700;background:color-mix(in srgb,var(--i
 @keyframes agflash{0%,60%{box-shadow:0 0 0 3px var(--mint),0 0 44px 4px rgba(94,242,192,.75)}}
 body.ws:not(.st-play) .note.is-agent .paper{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 0 0 1.500px var(--mint),0 26px 44px -24px rgba(0,0,0,.9),0 0 44px -14px rgba(94,242,192,.6)}
 ::highlight(agsrc){background-color:#1b1430;color:#5ef2c0}
+
+/* ---------- phone shell ---------- */
+.ptabs,.pquick,.pstrip,.psum{display:none}
+@media (max-width:640px){
+  body.ph .ztop{padding:calc(8px + env(safe-area-inset-top)) 14px 8px;gap:8px}
+  body.ph .zbrand{font-size:20px;margin-right:auto}
+  body.ph .zview,body.ph .zsearch,body.ph .ztidy,body.ph .ztoday,body.ph .zsegw .zag{display:none}
+  body.ph .zrow.r1{flex-wrap:nowrap}
+  body.ph .ztop .zbtn{padding:8px 10px}
+  body.ph .ztop .zbtn span{display:none}
+  body.ph .zme b{margin:0}
+  body.ph.tv-on .zchips{display:none}
+  body.ph .zrow:not(.r1):not(:has(.zchips button)){display:none}
+  body.ph.tv-on .zrow:not(.r1){display:none}
+  body.ph .board{padding:66px 14px calc(206px + env(safe-area-inset-bottom))!important;gap:14px}
+  body.ph:not(.tv-on) .board{padding-top:112px!important}
+  body.ph.has-profile .board{padding-top:66px!important}
+  body.ph .note{width:100%!important;touch-action:pan-y}
+  body.ph .paper{padding:16px 18px 18px}
+  body.ph.ws:not(.st-play) .note.fk .ttl{font-size:18px}
+  body.ph.ws:not(.st-play) .note.fk .body{font-size:16.500px}
+  body.ph.ws:not(.st-play) .note.fk .paper li,body.ph.ws:not(.st-play) .note.fk .paper li span{font-size:16.500px}
+  body.ph.ws:not(.st-play) .paper li{padding:5px 3px;gap:12px}
+  body.ph.ws:not(.st-play) .paper li b{width:22px;height:22px;border-radius:7px;margin-top:1px}
+  body.ph .lx{opacity:.4;width:26px;height:26px;font-size:18px}
+  body.ph .acts{opacity:.5!important}
+  body.ph .acts button{width:32px;height:32px}
+  body.ph .agmv button{font-size:13px;padding:8px 13px}
+  body.ph .agline input{font-size:16px;padding:8px 0}
+  body.ph .aggo{width:34px;height:34px}
+  body.ph .addi{font-size:16px!important}
+  body.ph .wdate{display:none}
+  body.ph .wframe{z-index:5}
+  body.ph .wframe::after{height:calc(214px + env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(13,10,27,.97) 26%);border-bottom:0}
+  body.ph .pal{right:10px;bottom:calc(196px + env(safe-area-inset-bottom))}
+  body.ph .blob{width:44px;height:41px}
+  /* write bar, quick starts and tabs live under the thumb */
+  body.ph .zbar{left:10px;right:10px;transform:none;width:auto;bottom:calc(70px + env(safe-area-inset-bottom));padding:6px;border-radius:18px}
+  body.ph .zbar input{font-size:16px;padding:11px 10px}
+  body.ph .zbar .zbtn:not(.zadd){display:none}
+  body.ph .zbar .zadd{padding:12px 18px}
+  body.ph .pquick{display:flex;position:fixed;left:10px;right:10px;bottom:calc(138px + env(safe-area-inset-bottom));z-index:6;gap:7px;overflow-x:auto;scrollbar-width:none}
+  .pquick::-webkit-scrollbar{display:none}
+  .pquick button{flex:none;font:600 13.500px var(--ui);padding:8px 14px;border-radius:999px;color:#e9e4ff;background:rgba(24,18,48,.92);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .pquick button.ag[aria-pressed=true]{background:var(--mint);border-color:var(--mint);color:#1b1430}
+  body.ph .ptabs{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:7;padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:rgba(13,10,27,.96);border-top:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .ptabs button{display:grid;justify-items:center;gap:3px;padding:6px 2px;border-radius:12px;font:600 11.500px var(--ui);color:#9d95c0}
+  .ptabs svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.800;stroke-linecap:round;stroke-linejoin:round}
+  .ptabs button[aria-pressed=true]{color:var(--mango)}
+  /* Today */
+  body.ph .tvnav{padding:4px 0 2px;justify-content:space-between}
+  body.ph .tvnav h3{font-size:19px;text-align:left;order:-1;flex:1;white-space:normal}
+  body.ph .tvb{width:38px;height:38px}
+  body.ph .pstrip{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px}
+  .pstrip button{position:relative;display:grid;justify-items:center;gap:3px;padding:8px 0 11px;border-radius:14px;color:#cfc8ea;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
+  .pstrip span{font:600 11px var(--ui);opacity:.7}
+  .pstrip b{font:700 16px var(--ui)}
+  .pstrip i{position:absolute;bottom:5px;width:5px;height:5px;border-radius:50%;background:var(--mint)}
+  .pstrip button.now b{color:var(--mango)}
+  .pstrip button.on{background:#f3efff;border-color:#f3efff;color:#1b1430}
+  .pstrip button.on b{color:#1b1430}
+  .pstrip button.on i{background:#1b1430}
+  body.ph .psum{display:block;font:500 14px var(--ui);color:#a59fc0;margin:12px 2px 2px;min-height:1px}
+  body.ph .psum:empty{display:none}
+  body.ph .tvcarry{flex-direction:column;gap:8px;padding:10px 0 0}
+  body.ph .tvempty{padding-top:34px}
+  /* swipe */
+  .note.sw{z-index:5!important}
+  .note.sw::before{content:attr(data-label);position:absolute;top:50%;translate:0 -50%;font:700 14px var(--ui);padding:9px 14px;border-radius:999px;white-space:nowrap;transition:scale .15s}
+  .note.sw[data-sw=done]::before{content:"Done";right:calc(100% + 14px);background:var(--mint);color:#1b1430}
+  .note.sw[data-sw=later]::before{content:"Tomorrow";left:calc(100% + 14px);background:var(--mango);color:#1b1430}
+  .note.sw.go::before{scale:1.15}
+  body.ph .zgal{padding:0}
+}
+@media (display-mode:standalone){body.ph .ztop{padding-top:calc(12px + env(safe-area-inset-top))}}
 </style>
 </head>
 <body>
@@ -1532,6 +1612,10 @@ function tvLayout(){
   if(!inNow){const b=btn(v==='day'?L('Today','Aaj'):v==='week'?L('This week','Yeh hafta'):L('This month','Yeh mahina'),'',()=>{WS.date=t;applyFilter()});b.classList.add('wide');nav.append(b)}
   if(!phone){tv.style.paddingTop=top+'px';nav.style.width=W+'px'}
   tv.append(nav);
+  if(phone&&v==='day'){const strip=el('div','pstrip');for(let i=0;i<7;i++){const k=dadd(m0,i),c=notes.filter(n=>n.day===k).length,b=el('button',(k===WS.date?'on':'')+(k===t?' now':''));b.type='button';
+      b.append(el('span',null,dfmt(k,{weekday:'narrow'})),el('b',null,String(dparse(k).getDate())));if(c)b.append(el('i'));b.setAttribute('aria-label',dfmt(k,{weekday:'long',day:'numeric',month:'long'})+', '+c+' notes');b.setAttribute('aria-pressed',k===WS.date);b.onclick=()=>{WS.date=k;applyFilter()};strip.append(b)}
+    const left=vis.filter(n=>n.type==='todo').reduce((a,n)=>a+n.items.filter(i=>!i.d).length,0),sum=el('p','psum');
+    sum['textContent']=vis.length?L(`${vis.length} note${vis.length>1?'s':''}`,`${vis.length} notes`)+(left?L(` · ${left} task${left>1?'s':''} left`,` · ${left} kaam baaki`):vis.some(n=>n.type==='todo')?L(' · all tasks done',' · saare kaam ho gaye'):''):'';tv.append(strip,sum)}
   const put=(n,x,y,w)=>{const d=dom(n);d._tv=true;d.classList.add('glide');d.style.left=x+'px';d.style.top=y+'px';if(w)d.style.setProperty('--w',w+'px');d.style.setProperty('--r','0deg')};
   if(v==='day'){
     if(WS.date===t){const old=notes.filter(n=>n.day&&n.day<t);if(old.length){const c=el('div','tvcarry');c.append(el('span',null,L(`${old.length} note${old.length>1?'s are':' is'} still on earlier days.`,`${old.length} note pichhle dino mein pade hain.`)));
@@ -1571,6 +1655,37 @@ function tvLayout(){
     if(s.ed&&e.type==='pointerup'){s.ed.focus();try{const r=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;if(r&&s.ed.contains(r.startContainer)){const g=getSelection();g.removeAllRanges();g.addRange(r)}}catch(x){}}};
   board.addEventListener('pointerup',end);board.addEventListener('pointercancel',end);
   board.addEventListener('input',()=>tvSoon());board.addEventListener('click',()=>tvSoon());addEventListener('resize',()=>tvSoon())}
+/* ---------- phone: its own shell ----------
+   A phone is for two things: writing something down fast, and seeing what today holds. So a phone opens on Today,
+   with tabs and the write bar under the thumb, notes as full-width cards, and a swipe to finish a note or push it to tomorrow. */
+const PH={mq:matchMedia('(max-width:640px)'),init:false,tabs:null,quick:null};
+function phBuild(){
+  if(DESK)return;const B=document.body,tabs=el('nav','ptabs'),quick=el('div','pquick'),I=d=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+d+'</svg>';
+  const tab=(k,icon,label,fn)=>{const b=el('button');b.type='button';b.dataset.k=k;b.innerHTML=I(icon);b.append(el('span',null,label));b.onclick=fn;tabs.append(b)};
+  tab('day','<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/>',L('Today','Aaj'),()=>tvGo('day',TODAY()));
+  tab('month','<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4M8 14h2M14 14h2M8 17h2"/>',L('Calendar','Calendar'),()=>tvGo('month',WS.date));
+  tab('all','<rect x="4" y="4" width="7" height="8" rx="2"/><rect x="13" y="4" width="7" height="5" rx="2"/><rect x="13" y="11" width="7" height="9" rx="2"/><rect x="4" y="14" width="7" height="6" rx="2"/>',L('Wall','Wall'),()=>tvGo('all'));
+  tab('tpl','<rect x="5" y="4" width="14" height="16" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/>',L('Templates','Templates'),()=>openGallery());
+  tabs.setAttribute('aria-label',L('Views','Views'));
+  const chip=(label,fn)=>{const b=el('button');b.type='button';b['textContent']=label;b.onclick=()=>fn(b);quick.append(b);return b},inp=wsEls.inp,start=t=>{inp.value=t;inp.focus();try{inp.setSelectionRange(t.length,t.length)}catch(e){}};
+  chip(L('List','List'),()=>start('todo: '));chip(L('Reminder','Reminder'),()=>start(L('remind me in 10 min ','remind me in 10 min ')));chip(L('Goal','Goal'),()=>start('goal: '));
+  PH.ag=chip(L('Agentic','Agentic'),()=>{wsNext.agent=!wsNext.agent;wsRender();inp.focus()});PH.ag.classList.add('ag');
+  B.append(quick,tabs);PH.tabs=tabs;PH.quick=quick;
+  const sync=first=>{const on=PH.mq.matches;B.classList.toggle('ph',on);if(on&&!PH.init){PH.init=true;WS.view='day';WS.date=TODAY()}if(first!==true)applyFilter()};
+  PH.mq.addEventListener('change',sync);sync(true);
+  /* swipe a card: right finishes it, left moves it to tomorrow */
+  let sw=null;const reset=d=>{d.style.transition='transform .2s';d.style.transform='';d.classList.remove('sw');delete d.dataset.sw;setTimeout(()=>d.style.transition='',220)};
+  board.addEventListener('pointerdown',e=>{if(!B.classList.contains('ph')||e.button)return;const d=e.target.closest('.note');if(!d||e.target.closest('input,button,canvas,.agx,li b')||(document.activeElement&&document.activeElement.isContentEditable&&d.contains(document.activeElement)))return;sw={d,x:e.clientX,y:e.clientY,on:false,dx:0}});
+  board.addEventListener('pointermove',e=>{if(!sw)return;const dx=e.clientX-sw.x,dy=e.clientY-sw.y;if(!sw.on){if(Math.abs(dy)>16&&Math.abs(dy)>Math.abs(dx)){sw=null;return}if(Math.abs(dx)<16||Math.abs(dx)<Math.abs(dy)*1.5)return;sw.on=true;sw.d.classList.add('sw');if(document.activeElement)document.activeElement.blur()}
+    sw.dx=dx;sw.d.style.transform='translateX('+dx+'px) rotate('+(dx/40).toFixed(2)+'deg)';sw.d.dataset.sw=dx>0?'done':'later';sw.d.classList.toggle('go',Math.abs(dx)>96)});
+  const end=e=>{if(!sw)return;const q=sw;sw=null;if(!q.on)return;const n=notes.find(x=>x.id===q.d.dataset.id);
+    if(!n||Math.abs(q.dx)<=96||e.type==='pointercancel'){reset(q.d);return}
+    q.d.style.transition='transform .22s ease-in,opacity .22s';q.d.style.transform='translateX('+(q.dx>0?120:-120)+'%)';q.d.style.opacity='0';
+    setTimeout(()=>{q.d.style.transition='';q.d.style.transform='';q.d.style.opacity='';q.d.classList.remove('sw','go');delete q.d.dataset.sw;
+      if(q.dx>0)finish(n,true);else{n.day=dadd(TODAY(),1);save();paint(q.d,n);applyFilter();pal(L('Moved to tomorrow.','Kal pe daal diya.'),true)}},230)};
+  board.addEventListener('pointerup',end);board.addEventListener('pointercancel',end);
+}
+function phRender(){if(!PH.tabs)return;for(const b of PH.tabs.children)b.setAttribute('aria-pressed',b.dataset.k===WS.view||(b.dataset.k==='day'&&WS.view==='week'));PH.ag.setAttribute('aria-pressed',wsNext.agent)}
 function wsBuild(){
   const B=document.body;B.classList.add('ws');
   {const fr=el('div','wframe'),dt=el('div','wdate'),dy=el('div','wday'),bar=el('i'),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;dy.append(bar);[fr,dt,dy].forEach(x=>x.setAttribute('aria-hidden','true'));B.append(fr,dt,dy);
@@ -1631,7 +1746,7 @@ function wsBuild(){
     if(v){$('#cap').value=v;$('#capf').requestSubmit()}
     else{const n=add({type:'text',text:''},true),d=dom(n);if(d){d.scrollIntoView({block:'nearest',behavior:'smooth'});const bd=d.querySelector('.body');if(bd)setTimeout(()=>bd.focus(),450)}}
     if(wsNext.agent){wsNext.agent=false;wsRender()}};
-  setBg(BG,true);
+  setBg(BG,true);phBuild();
 }
 function wsRender(){
   if(!wsEls)return;const{seg,ag,chips,today,me,empty,bAg,segw,pOut}=wsEls,B=document.body;
@@ -1658,6 +1773,7 @@ function wsRender(){
   if(left)bits.push(L(`${left} task${left>1?'s':''} left`,`${left} kaam baaki`));if(run)bits.push(L(`${run} reminder${run>1?'s':''} running`,`${run} reminder chalu`));if(STREAK>1)bits.push(L(`${STREAK}-day streak`,`${STREAK} din lagataar`));
   today.textContent=bits.join('  ·  ');today.setAttribute('aria-pressed',WS.daily);today.title=L('Show only lists, reminders and goals','Sirf lists, reminders aur goals dikhao');
   [[wsEls.st,STYLE],[wsEls.bgs,/^#/.test(BG)?'custom':BG],[wsEls.tools,TOOL]].forEach(([g,v])=>{for(const b of g.children)b.setAttribute('aria-pressed',b.dataset.v===v)});
+  phRender();
   empty.textContent=WS.view!=='all'||notes.some(n=>!isHid(n))?'':L('No notes here yet. Write one in the bar below.','Yahan abhi koi note nahi. Neeche bar mein likho.');
 }
 if(!DESK)wsBuild();
