@@ -883,6 +883,67 @@ body.ws:not(.st-play) .note.is-agent .paper{box-shadow:inset 0 1px 0 rgba(255,25
 .zbki,.zbkq p{font:500 12.500px/1.45 var(--ui);color:#b9b2d6}
 .zbkq{display:grid;gap:8px}
 .zbkq:empty{display:none}
+
+/* ---------- covers ---------- */
+.note.cov .paper>*:not(.cv):not(.tag):not(.dayp){visibility:hidden}
+.note.cov .paper{min-height:132px}
+.cv{position:absolute!important;inset:0;z-index:3!important;display:grid;place-content:center;justify-items:center;gap:5px;text-align:center;padding:16px;border-radius:inherit;color:var(--ink);cursor:pointer;background:repeating-linear-gradient(135deg,transparent 0 11px,color-mix(in srgb,var(--ink) 5%,transparent) 11px 12px)}
+.cvi{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--tk,var(--c));margin-bottom:5px;box-shadow:0 8px 16px -8px rgba(0,0,0,.6)}
+.cvi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.800;stroke-linecap:round;stroke-linejoin:round}
+.cv b{font:700 15.500px var(--ui)}
+.cv span:last-child{font:500 12.500px var(--ui);opacity:.7}
+.note[data-cov=ready] .cvi{background:var(--mango);color:#1b1430;animation:cvpulse 1.800s ease-in-out infinite}
+@keyframes cvpulse{50%{box-shadow:0 0 0 9px rgba(255,201,60,.25),0 8px 16px -8px rgba(0,0,0,.6)}}
+.cv.nope{animation:nope .35s}
+@keyframes nope{25%{translate:-5px 0}75%{translate:5px 0}}
+.note.unseal .paper{animation:unseal 1.100s cubic-bezier(.2,.8,.2,1)}
+@keyframes unseal{0%{transform:rotateX(-70deg);opacity:.2;transform-origin:50% 0}60%{transform:rotateX(8deg)}100%{transform:none}}
+.phint{font:500 11.500px/1.4 var(--ui);color:var(--muted);margin-top:-2px}
+.plock{grid-template-columns:repeat(2,1fr)}.pseal{grid-template-columns:repeat(3,1fr)}
+/* PIN pad */
+.pinp{position:fixed;inset:0;z-index:60;background:rgba(8,6,18,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:grid;place-items:center;padding:20px}
+.pinb{width:min(320px,100%);background:#1b1536;border:1px solid rgba(255,255,255,.16);border-radius:24px;padding:24px 22px 18px;display:grid;gap:10px;justify-items:center;color:#f3efff;box-shadow:0 40px 80px -30px #000}
+.pinb h3{font:700 19px var(--display);letter-spacing:-.03em;text-align:center}
+.pinb p{font:500 13.500px/1.4 var(--ui);color:#b9b2d6;text-align:center;min-height:19px}
+.pind{display:flex;gap:14px;margin:8px 0 10px}
+.pind i{width:15px;height:15px;border-radius:50%;border:2px solid rgba(255,255,255,.4);transition:background .12s,scale .12s}
+.pind i.on{background:var(--mango);border-color:var(--mango);scale:1.12}
+.pink{display:grid;grid-template-columns:repeat(3,66px);gap:10px}
+.pink button{height:58px;border-radius:18px;font:600 22px var(--ui);color:#f3efff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.pink button:active{background:rgba(255,255,255,.2);scale:.95}
+.pink.off{opacity:.3;pointer-events:none}
+.pinf{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
+.pinf button{font:600 13px var(--ui);color:#b9b2d6;padding:7px 12px;border-radius:10px}
+.pinf button:hover{background:rgba(255,255,255,.08);color:#fff}
+.pinf button.warn{color:#ffb6cb;border:1px solid rgba(255,111,156,.6)}
+.pinb.shake{animation:nope .35s}
+/* ---------- ageing ---------- */
+.note.old .paper{filter:saturate(calc(1 - var(--age,0)*.5)) brightness(calc(1 - var(--age,0)*.1))}
+.paper>.agep{position:absolute;left:14px;bottom:-9px;z-index:2;font:600 10.500px var(--ui);padding:3px 9px;border-radius:999px;background:#2a2440;color:#cfc8ea;border:1px solid rgba(255,255,255,.16);white-space:nowrap}
+body.tv-week .agep{display:none}
+.zchips .zsweep{color:var(--mint);border-color:rgba(94,242,192,.5);background:rgba(94,242,192,.08)}
+.psweep{display:none}
+@media (max-width:640px){body.ph .psweep{display:block;width:100%;margin:8px 0 2px;font:600 14px var(--ui);padding:11px;border-radius:13px;color:var(--mint);background:rgba(94,242,192,.08);border:1px solid rgba(94,242,192,.4)}}
+.swp{position:fixed;inset:0;z-index:55;background:rgba(8,6,18,.74);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:grid;place-items:center;padding:20px}
+.swpb{width:min(400px,100%);display:grid;gap:14px}
+.swpt{display:flex;align-items:center;gap:10px;color:#f3efff}
+.swpt b{font:700 19px var(--display);letter-spacing:-.03em}
+.swpt span{font:600 13px var(--ui);color:#a59fc0}
+.swpt .x{margin-left:auto;width:34px;height:34px;border-radius:11px;font:500 22px/1 var(--ui);color:#cfc8ea;background:rgba(255,255,255,.08)}
+.swpc{min-height:210px;border-radius:18px;padding:20px 22px 22px;background:color-mix(in srgb,var(--c,#ffc93c) 86%,#fffaf0);color:var(--ink,#1b1430);display:grid;gap:8px;align-content:start;box-shadow:0 34px 60px -26px #000;animation:agin .3s cubic-bezier(.2,.8,.2,1)}
+.swpc small{font:700 10.500px var(--ui);letter-spacing:.08em;text-transform:uppercase;opacity:.62}
+.swpc h4{font:700 20px/1.25 var(--ui);overflow-wrap:anywhere}
+.swpc p{font:500 15px/1.5 var(--ui);white-space:pre-wrap;overflow-wrap:anywhere}
+.swpc ul{display:grid;gap:4px;font:500 15px var(--ui)}
+.swpc li{display:block;cursor:default;font:inherit;padding:0}
+.swpc li::before{content:"";display:inline-block;width:13px;height:13px;border:1.500px solid currentColor;border-radius:4px;margin-right:9px;vertical-align:-2px}
+.swpc li.d{text-decoration:line-through;opacity:.5}
+.swpc.end{background:rgba(255,255,255,.08);color:#f3efff;place-content:center;text-align:center;min-height:120px}
+.swpa{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.swpa button{font:700 15px var(--ui);padding:14px 6px;border-radius:14px;color:#f3efff;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16)}
+.swpa button:active{scale:.96}
+.swpa button.go{background:var(--mango);border-color:var(--mango);color:#1b1430}
+.swpa button:only-child{grid-column:1/-1}
 </style>
 </head>
 <body>
@@ -1070,7 +1131,48 @@ function bubble(host,text,ms){
   clearTimeout(host._t);host._t=setTimeout(()=>{b.remove();host.classList.remove('talking')},ms||Math.max(2200,text.length*70));
 }
 function pal(text,quiet){text=tr(text);bubble($('#palsay').parentElement,text);const s=$('.pal .say');$('#palsay').after(s);if(!quiet)speak(text,1.5)}
+/* ---------- covers ----------
+   Two reasons a note hides its words. Private: behind a 4-digit PIN, for the person next to you. Sealed: closed until a day
+   you choose, a note to your later self. Both are a screen over the note, not encryption: the words stay in this browser. */
+let UNLOCKED=false,hidAt=0;
+const covered=n=>n.seal&&TODAY()<n.seal?'seal':n.seal?'ready':n.lock&&!UNLOCKED?'lock':'';
+const pinGet=()=>{try{return localStorage.getItem('chipzett-pin')||''}catch(e){return''}};
+async function pinHash(salt,pin){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+':'+pin));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function repaintAll(){notes.forEach(n=>{const d=dom(n);if(d)paint(d,n)});applyFilter()}
+/* the PIN pad: mode 'set' asks twice, mode 'ask' checks. Resolves true when done. */
+function pinPad(mode){return new Promise(res=>{
+  const ov=el('div','pinp'),box=el('div','pinb'),ttl=el('h3'),sub=el('p'),dots=el('div','pind'),keys=el('div','pink'),foot=el('div','pinf');let val='',first='',tries=0,busy=false;
+  const setT=(a,b)=>{ttl['textContent']=a;sub['textContent']=b||''},draw=()=>{dots.textContent='';for(let i=0;i<4;i++)dots.append(el('i',i<val.length?'on':''))};
+  const close=ok=>{ov.remove();removeEventListener('keydown',onKey,true);res(ok)};
+  const bad=m=>{val='';draw();sub['textContent']=m;box.classList.remove('shake');void box.offsetWidth;box.classList.add('shake')};
+  const done=async()=>{if(busy)return;busy=true;try{
+      if(mode==='set'){if(!first){first=val;val='';draw();setT(L('Repeat the PIN','PIN dobara daalo'),L('So a typo does not lock you out.','Taaki galti se lock na ho jao.'))}
+        else if(first!==val){first='';bad(L('Those did not match. Choose a PIN again.','Dono alag the. PIN dobara chuno.'));ttl['textContent']=L('Choose a 4-digit PIN','4 ank ka PIN chuno')}
+        else{const salt=uid()+uid();localStorage.setItem('chipzett-pin',salt+'.'+await pinHash(salt,val));UNLOCKED=true;close(true)}}
+      else{const[salt,h]=pinGet().split('.');if(await pinHash(salt,val)===h){UNLOCKED=true;close(true)}else{tries++;bad(tries>=5?L('Too many tries. Wait 30 seconds.','Bahut koshish. 30 second ruko.'):L('Wrong PIN. Try again.','Galat PIN. Dobara.'));if(tries>=5){keys.classList.add('off');setTimeout(()=>{tries=0;keys.classList.remove('off');sub['textContent']=''},30000)}}}
+    }finally{busy=false}};
+  const press=k=>{if(keys.classList.contains('off'))return;if(k==='<')val=val.slice(0,-1);else if(val.length<4)val+=k;draw();if(val.length===4)setTimeout(done,120)};
+  '123456789 0<'.split('').forEach(k=>{if(k===' '){keys.append(el('span'));return}const b=el('button');b.type='button';b['textContent']=k==='<'?'⌫':k;b.setAttribute('aria-label',k==='<'?L('Delete','Mitao'):k);b.onclick=()=>press(k);keys.append(b)});
+  const onKey=e=>{if(/^\d$/.test(e.key)){e.preventDefault();e.stopPropagation();press(e.key)}else if(e.key==='Backspace'){e.preventDefault();press('<')}else if(e.key==='Escape')close(false)};addEventListener('keydown',onKey,true);
+  const cancel=el('button',null,L('Cancel','Rehne do'));cancel.type='button';cancel.onclick=()=>close(false);foot.append(cancel);
+  if(mode==='ask'){const fg=el('button',null,L('Forgot PIN','PIN bhool gaye'));fg.type='button';fg.onclick=()=>{const c=notes.filter(n=>n.lock).length;foot.textContent='';keys.classList.add('off');setT(L('Reset the PIN?','PIN reset karein?'),L(`The PIN cannot be recovered. Resetting it deletes your ${c} private note${c===1?'':'s'}.`,`PIN wapas nahi aa sakta. Reset karne se ${c} private notes mit jayenge.`));
+      const y=el('button','warn',L('Delete them and reset','Mita do aur reset karo'));y.type='button';y.onclick=()=>{notes.filter(n=>n.lock).forEach(n=>{const d=dom(n);if(d)d.remove()});notes=notes.filter(n=>!n.lock);try{localStorage.removeItem('chipzett-pin')}catch(e){}save();applyFilter();close(false)};
+      const no=el('button',null,L('Keep trying','Dobara koshish'));no.type='button';no.onclick=()=>close(false);foot.append(y,no)};foot.append(fg)}
+  setT(mode==='set'?L('Choose a 4-digit PIN','4 ank ka PIN chuno'):L('Enter your PIN','Apna PIN daalo'),mode==='set'?L('It opens your private notes on this device.','Yeh is device par tumhare private notes kholta hai.'):'');
+  box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.append(ttl,sub,dots,keys,foot);ov.append(box);document.body.append(ov);draw()})}
+async function unlock(){if(UNLOCKED)return true;const ok=await pinPad(pinGet()?'ask':'set');if(ok)repaintAll();return ok}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)hidAt=Date.now();else if(UNLOCKED&&hidAt&&Date.now()-hidAt>60000&&notes.some(n=>n.lock)){UNLOCKED=false;repaintAll()}});
+function openSeal(n){const d=dom(n);if(!d)return;const since=n.sealedAt?Math.max(0,Math.round((Date.now()-n.sealedAt)/864e5)):0;delete n.seal;n.opened=TODAY();n.touch=Date.now();save();paint(d,n);d.classList.add('unseal');setTimeout(()=>d.classList.remove('unseal'),1200);boom(d);
+  pal(since?L(`You wrote this ${since} day${since===1?'':'s'} ago. Here it is.`,`Yeh tumne ${since} din pehle likha tha. Lo.`):L('Opened.','Khul gaya.'),true);tvSoon()}
+function paintCover(d,n){const pp=d.firstChild,c=covered(n);if(!pp)return;d.classList.toggle('cov',!!c);d.dataset.cov=c;let cv=pp.querySelector('.cv');if(!c){if(cv)cv.remove();return}
+  if(!cv){cv=el('button','cv');cv.type='button';pp.append(cv)}cv.textContent='';const ic=el('span','cvi'),a=el('b'),b=el('span');
+  if(c==='lock'){ic.innerHTML='<svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>';a['textContent']=L('Private note','Private note');b['textContent']=L('Tap to unlock','Kholne ke liye dabao');cv.onclick=()=>unlock()}
+  else{ic.innerHTML='<svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12.5" rx="2.5"/><path d="M4 7.500l8 6 8-6"/></svg>';const left=Math.round((dparse(n.seal)-dparse(TODAY()))/864e5);
+    if(c==='ready'){a['textContent']=L('Ready to open','Kholne ko taiyaar');b['textContent']=L('Sealed on ','Band kiya: ')+(n.sealedAt?new Date(n.sealedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'')+L('. Tap to open.','. Kholne ke liye dabao.');cv.onclick=()=>openSeal(n)}
+    else{a['textContent']=L('Opens ','Khulega ')+dfmt(n.seal,{weekday:'short',day:'numeric',month:'short'});b['textContent']=left===1?L('Tomorrow','Kal'):L(left+' days to go',left+' din baaki');cv.onclick=()=>{cv.classList.remove('nope');void cv.offsetWidth;cv.classList.add('nope')}}}
+  cv.append(ic,a,b)}
 function noteSays(n){
+  {const c=covered(n);if(c){const d0=dom(n),t0=c==='lock'?L('This note is private.','Yeh note private hai.'):c==='ready'?L('This note is ready to open.','Yeh note kholne ko taiyaar hai.'):L('This note is sealed.','Yeh note band hai.');if(d0)bubble(d0,t0);speak(t0,1);return}}
   const d=dom(n);if(!d)return;let t;
   if(n.type==='todo'){const left=n.items.filter(i=>!i.d);
     t=left.length?L(`${n.items.length-left.length} of ${n.items.length} done. Left: ${left.map(i=>i.t).join(', ')}.`,`${n.items.length} mein se ${n.items.length-left.length} ho gaye. Bacha hai: ${left.map(i=>i.t).join(', ')}.`):tr('Sab ho gaya boss. Mujhe uda do!')}
@@ -1197,7 +1299,7 @@ function render(n,fresh){
   const acts=el('div','acts');
   const mk=(k,label,fn)=>{const b=el('button');b.innerHTML=k==='dot'?'<span class="dot"></span>':svg(k);b.setAttribute('aria-label',label);b.title=tr(label);b.onclick=fn;acts.append(b)};
   mk('say','Bolo',()=>noteSays(n));
-  mk('dot','Rang aur texture',e=>openPicker(e.currentTarget,n,st=>{const ch=(n.song||'')!==st.song;Object.assign(n,st);paint(d,n);save();renderCats();if(ch){stopNote();if(n.song)noteSong(n,true,0)}}));
+  mk('dot','Rang aur texture',e=>openPicker(e.currentTarget,n,st=>{const ch=(n.song||'')!==st.song;if(st.seal&&st.seal!==n.seal)n.sealedAt=Date.now();Object.assign(n,st);if(!n.seal)delete n.seal;if(!n.lock)delete n.lock;paint(d,n);save();renderCats();if(ch){stopNote();if(n.song)noteSong(n,true,0)}}));
   mk('tilt','Jhukaav',()=>{n.rot=n.rot===0?-4:n.rot===-4?4:0;d.style.setProperty('--r',n.rot+'deg');save()});
   mk('ok','Ho gaya',()=>finish(n,true));
   mk('del','Hatao',()=>finish(n,false));
@@ -1252,6 +1354,7 @@ function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${
   d.style.order=-(n.z||0);d.style.setProperty('--i',notes.indexOf(n)%5);d.classList.toggle('has-song',!!n.song);d.classList.toggle('hid',isHid(n));d.classList.toggle('is-agent',!!n.agent);d.classList.toggle('fk',(n.font||'kalam')==='kalam');d.classList.toggle('f0',!n.face||n.face==='classic');
   {const pp=d.firstChild;if(pp){let tg=pp.querySelector('.tag');const c=CATS.find(x=>x[0]===n.cat);if(c){if(!tg){tg=el('span','tag');pp.append(tg)}tg.textContent=c[1]}else if(tg)tg.remove()}}
   {const pp=d.firstChild;if(pp){let dp=pp.querySelector('.dayp');if(n.day){if(!dp){dp=el('span','dayp');pp.append(dp)}dp['textContent']=n.day===TODAY()?L('Today','Aaj'):dfmt(n.day,{weekday:'short',day:'numeric',month:'short'})}else if(dp)dp.remove()}}
+  paintCover(d,n);paintAge(d,n);
   if(WS.view!=='all')tvSoon();
   setSky(d,n);SHAPES.forEach(x=>{if(x[0])d.classList.toggle('sh-'+x[0],n.shape===x[0])});ANIMS.forEach(a=>d.classList.remove('an-'+a[0]));d.classList.add('an-'+(n.anim||'still'));
   const p=d.firstChild;if(p){TEX.forEach(x=>p.classList.remove('tx-'+x[0]));p.classList.add('tx-'+t)}}
@@ -1260,7 +1363,7 @@ function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${
 let pk=null,lastTab='Vibe';
 function closePicker(){if(pk)stopNote();pk?.remove();pk=null}
 function openPicker(anchor,cur,apply){
-  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||'',shape:cur.shape||''};if(cur.id)st.day=cur.day||'';if(cur.id)st.agent=!!cur.agent;if(PROFILE&&cur.id)st.space=spaceOf(cur);
+  closePicker();const st={color:cur.color,tex:cur.tex||'plain',font:cur.font||'kalam',size:cur.size||1,ink:cur.ink||'',face:cur.face||'classic',anim:cur.anim||'still',song:cur.song||'',mood:cur.mood||'',cat:cur.cat||'',shape:cur.shape||''};if(cur.id){st.day=cur.day||'';st.lock=!!cur.lock;st.seal=cur.seal||''}if(cur.id)st.agent=!!cur.agent;if(PROFILE&&cur.id)st.space=spaceOf(cur);
   const p=el('div','pick');pk=p;const groups=[];let ci;
   const sync=()=>{groups.forEach(([g,key])=>[...g.children].forEach(b=>b.setAttribute('aria-pressed',b._v===st[key])));
     p.querySelectorAll('.pt .mini').forEach(m=>{m.style.cssText=`display:block;--c:${st.color};--ink:${inkFor(st.color,m.parentElement._v)}`});
@@ -1276,6 +1379,11 @@ function openPicker(anchor,cur,apply){
   if('day' in st){const dg=el('div','pms pday'),di=document.createElement('input');di.type='date';di.className='pdate';di.value=st.day;di.setAttribute('aria-label',L('Pick a date','Tareekh chuno'));di.oninput=()=>{st.day=di.value;sync()};
     [[L('No date','Bina din'),''],[L('Today','Aaj'),TODAY()],[L('Tomorrow','Kal'),dadd(TODAY(),1)]].forEach(([t,v])=>{const b=el('button','ps');b.type='button';b['textContent']=t;b._v=v;b.onclick=()=>{st.day=v;di.value=v;sync()};dg.append(b)});
     groups.push([dg,'day']);p.append(el('h4',null,'Day'),dg,di)}
+  if('lock' in st){const g=el('div','pms plock');[[false,L('Off','Band')],[true,L('On','Chalu')]].forEach(([v,t])=>{const b=el('button','ps');b.type='button';b['textContent']=t;b._v=v;
+      b.onclick=async()=>{if(v===st.lock)return;if(!(await unlock()))return;st.lock=v;sync()};g.append(b)});groups.push([g,'lock']);p.append(el('h4',null,'Private'),g,el('p','phint',L('Hides this note behind your PIN. A screen, not encryption.','Is note ko PIN ke peeche chhupata hai. Parda hai, encryption nahi.')));
+    const sg=el('div','pms pseal'),si=document.createElement('input');si.type='date';si.className='pdate';si.min=dadd(TODAY(),1);si.value=st.seal;si.setAttribute('aria-label',L('Open on','Is din khule'));si.oninput=()=>{st.seal=si.value>TODAY()?si.value:'';sync()};
+    [[L('Off','Band'),''],[L('1 week','1 hafta'),dadd(TODAY(),7)],[L('1 month','1 mahina'),dadd(TODAY(),30)]].forEach(([t,v])=>{const b=el('button','ps');b.type='button';b['textContent']=t;b._v=v;b.onclick=()=>{st.seal=v;si.value=v;sync()};sg.append(b)});
+    groups.push([sg,'seal']);p.append(el('h4',null,'Seal'),sg,si,el('p','phint',L('Closes the note until that day. A note to your later self.','Note us din tak band rehta hai. Apne aane wale kal ke liye.')))}
   if('space' in st)grp('Desk','pms',[['personal',L('Personal','Personal')],['work',L('Work','Kaam')]],'space',(b,it)=>{b.className='ps';b.textContent=it[1]});
   if('agent' in st)grp('Agentic note','pms',[[false,L('Off','Band')],[true,L('On','Chalu')]],'agent',(b,it)=>{b.className='ps';b.textContent=it[1]});
   grp('Shape','pshs',SHAPES,'shape',(b,it)=>{b.className='psh';b.dataset.shape=it[0]||'classic';b.append(el('span','shp sp-'+(it[0]||'classic')),document.createTextNode(it[1]))});
@@ -1290,7 +1398,7 @@ function openPicker(anchor,cur,apply){
   grp('Size','pss',[[.85,'S'],[1,'M'],[1.25,'L'],[1.55,'XL']],'size',(b,it)=>{b.className='ps';b.textContent=tr(it[1])});
   grp('Likhai ka rang','pcs',INKS,'ink',(b,c)=>{b.className='pc';if(c)b.style.setProperty('--c',c);else{b.textContent=tr('A');b.classList.add('auto')}b.setAttribute('aria-label',c?'Ink '+c:'Auto ink')});
   /* tabs keep the picker short: one group of options at a time */
-  const TABS=['Vibe','Shape','Rang','Likhai','Avatar','Mood'],tabOf={'Shape':'Shape','Day':'Vibe','Ek tap vibe':'Vibe','Category':'Vibe','Desk':'Vibe','Agentic note':'Vibe','Avatar':'Avatar','Harkat':'Avatar','Mood (peeche chalta animation)':'Mood','Gaana (note pe aate hi bajega)':'Mood','Rang':'Rang','Texture':'Rang','Font':'Likhai','Size':'Likhai','Likhai ka rang':'Likhai'};
+  const TABS=['Vibe','Shape','Rang','Likhai','Avatar','Mood'],tabOf={'Shape':'Shape','Day':'Vibe','Private':'Vibe','Seal':'Vibe','Ek tap vibe':'Vibe','Category':'Vibe','Desk':'Vibe','Agentic note':'Vibe','Avatar':'Avatar','Harkat':'Avatar','Mood (peeche chalta animation)':'Mood','Gaana (note pe aate hi bajega)':'Mood','Rang':'Rang','Texture':'Rang','Font':'Likhai','Size':'Likhai','Likhai ka rang':'Likhai'};
   const tabT={};for(const k in tabOf)tabT[tr(k)]=tabOf[k];let ct='Vibe';[...p.children].forEach(c=>{if(c.tagName==='H4')ct=tabT[c.textContent]||ct;c.dataset.tab=ct});
   const bar=el('div','tabs');p.prepend(bar);
   const place=()=>{const r=anchor.getBoundingClientRect(),h=p.offsetHeight;
@@ -1487,7 +1595,7 @@ setInterval(()=>{for(const n of notes){if(n.type!=='timer')continue;const d=dom(
 $('#lang').textContent=tr(LANG==='hi'?'Hinglish':'English');$('#lang').setAttribute('title',L('Change language','Bhasha badlo'));
 $('#lang').onclick=()=>{try{localStorage.setItem('chipku-lang',LANG==='hi'?'en':'hi')}catch(e){}location.reload()};
 $('#snd').onclick=e=>{sound=!sound;e.target.textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));e.target.setAttribute('aria-pressed',sound);if(!sound)try{speechSynthesis.cancel()}catch(x){}else pal('Main wapas aa gaya.');save()};
-$('#search').oninput=e=>{const q=e.target.value.toLowerCase();for(const n of notes){const s=(n.text+' '+(n.data||'')+' '+(n.items||[]).map(i=>i.t).join(' ')).toLowerCase();dom(n)?.classList.toggle('dim',!!q&&!s.includes(q))}};
+$('#search').oninput=e=>{const q=e.target.value.toLowerCase();for(const n of notes){const s=covered(n)?'':(n.text+' '+(n.data||'')+' '+(n.items||[]).map(i=>i.t).join(' ')).toLowerCase();dom(n)?.classList.toggle('dim',!!q&&!s.includes(q))}};
 $('#tidy').onclick=()=>{const w=board.clientWidth,cw=Math.max(...notes.map(n=>n.w||232),232)+28,vis=notes.filter(n=>!isHid(n)),cols=Math.max(1,Math.min(Math.floor((w-20)/cw),Math.max(isPhone()?1:3,Math.ceil(Math.sqrt(vis.length*1.700))))),off=(w-cols*cw)/2+10,hs=Array(cols).fill(TOPY+14);board.scrollTop=0;
   {const sim=Array(cols).fill(0);vis.forEach(n=>{const c=sim.indexOf(Math.min(...sim));sim[c]+=dom(n).offsetHeight+26});const free=board.clientHeight-TOPY-110-Math.max(...sim);if(free>0)hs.fill(TOPY+14+Math.min(150,free*.42))}
   notes.filter(n=>!isHid(n)).forEach((n,i)=>{const c=hs.indexOf(Math.min(...hs)),d=dom(n);n.x=off+c*cw+Math.round((cw-28-(n.w||232))/2);n.y=hs[c];hs[c]+=d.offsetHeight+26;n.rot=+(Math.random()*4-2).toFixed(1);
@@ -1657,7 +1765,7 @@ function tvLayout(){
   if(phone&&v==='day'){const strip=el('div','pstrip');for(let i=0;i<7;i++){const k=dadd(m0,i),c=notes.filter(n=>n.day===k).length,b=el('button',(k===WS.date?'on':'')+(k===t?' now':''));b.type='button';
       b.append(el('span',null,dfmt(k,{weekday:'narrow'})),el('b',null,String(dparse(k).getDate())));if(c)b.append(el('i'));b.setAttribute('aria-label',dfmt(k,{weekday:'long',day:'numeric',month:'long'})+', '+c+' notes');b.setAttribute('aria-pressed',k===WS.date);b.onclick=()=>{WS.date=k;applyFilter()};strip.append(b)}
     const left=vis.filter(n=>n.type==='todo').reduce((a,n)=>a+n.items.filter(i=>!i.d).length,0),sum=el('p','psum');
-    sum['textContent']=vis.length?L(`${vis.length} note${vis.length>1?'s':''}`,`${vis.length} notes`)+(left?L(` · ${left} task${left>1?'s':''} left`,` · ${left} kaam baaki`):vis.some(n=>n.type==='todo')?L(' · all tasks done',' · saare kaam ho gaye'):''):'';tv.append(strip,sum);if(WS.date===t)tv.append(phFocus(vis,t))}
+    sum['textContent']=vis.length?L(`${vis.length} note${vis.length>1?'s':''}`,`${vis.length} notes`)+(left?L(` · ${left} task${left>1?'s':''} left`,` · ${left} kaam baaki`):vis.some(n=>n.type==='todo')?L(' · all tasks done',' · saare kaam ho gaye'):''):'';tv.append(strip,sum);if(WS.date===t)tv.append(phFocus(vis,t));{const o=notes.filter(isOld).length;if(o>=2){const sb=el('button','psweep');sb.type='button';sb['textContent']=L(`${o} old notes are waiting · Sweep`,`${o} purane notes pade hain · Saaf karo`);sb.onclick=openSweep;tv.append(sb)}}}
   const put=(n,x,y,w)=>{const d=dom(n);d._tv=true;d.classList.add('glide');d.style.left=x+'px';d.style.top=y+'px';if(w)d.style.setProperty('--w',w+'px');d.style.setProperty('--r','0deg')};
   if(v==='day'){
     if(WS.date===t){const old=notes.filter(n=>n.day&&n.day<t);if(old.length){const c=el('div','tvcarry');c.append(el('span',null,L(`${old.length} note${old.length>1?'s are':' is'} still on earlier days.`,`${old.length} note pichhle dino mein pade hain.`)));
@@ -1677,7 +1785,7 @@ function tvLayout(){
     Array.from({length:7},(_,i)=>dfmt(dadd(start,i),{weekday:'short'})).forEach(x=>g.append(el('div','tvd',x)));
     const last=new Date(first.getFullYear(),mon+1,0),rows=Math.ceil(((first.getDay()+6)%7+last.getDate())/7),ch=phone?72:Math.max(88,Math.floor((H-top-nav.offsetHeight-160)/rows)-8);
     for(let i=0;i<rows*7;i++){const k=dadd(start,i),c=el('button','tvcell'+(dparse(k).getMonth()!==mon?' out':'')+(k===t?' now':''));c.type='button';c.style.minHeight=ch+'px';c.append(el('b',null,String(dparse(k).getDate())));
-      const list=by[k]||[],max=phone?0:Math.max(1,Math.floor((ch-40)/23));list.slice(0,max).forEach(n=>{const x=el('span','tvchip');x['textContent']=(n.text||'').split('\n')[0].slice(0,40)||L('Note','Note');x.style.setProperty('--c',n.color);x.style.setProperty('--ink',n.ink||inkFor(n.color,n.tex||'plain'));c.append(x)});
+      const list=by[k]||[],max=phone?0:Math.max(1,Math.floor((ch-40)/23));list.slice(0,max).forEach(n=>{const x=el('span','tvchip');x['textContent']=covered(n)==='lock'?L('Private','Private'):covered(n)?L('Sealed','Band'):(n.text||'').split('\n')[0].slice(0,40)||L('Note','Note');x.style.setProperty('--c',n.color);x.style.setProperty('--ink',n.ink||inkFor(n.color,n.tex||'plain'));c.append(x)});
       if(list.length>max)c.append(el('em',null,phone?String(list.length):'+'+(list.length-max)+L(' more',' aur')));
       c.setAttribute('aria-label',dfmt(k,{weekday:'long',day:'numeric',month:'long'})+', '+list.length+' notes');c.onclick=()=>tvGo('day',k);g.append(c)}
     if(!phone)g.style.width=W+'px';tv.append(g);
@@ -1705,7 +1813,7 @@ const buzz=ms=>{try{if(document.body.classList.contains('ph')&&navigator.vibrate
 const closedDays=()=>{try{return JSON.parse(localStorage.getItem('chipzett-closed')||'[]')}catch(e){return[]}},closeStreak=()=>{const c=new Set(closedDays());let k=TODAY(),n=0;if(!c.has(k))k=dadd(k,-1);while(c.has(k)){n++;k=dadd(k,-1)}return n};
 /* the phone's Today: one thing to do next, how far the day has come, a plan when it is empty, and a way to close the day */
 function phFocus(vis,t){
-  const box=el('div','pfocus'),items=[];vis.forEach(n=>{if(n.type==='todo')n.items.forEach(i=>items.push([n,i]))});
+  const box=el('div','pfocus'),items=[];vis.forEach(n=>{if(n.type==='todo'&&!covered(n))n.items.forEach(i=>items.push([n,i]))});
   const open=items.filter(x=>!x[1].d),done=items.length-open.length,closed=closedDays().includes(t),btn=(cls,txt,fn)=>{const b=el('button',cls);b.type='button';b['textContent']=txt;b.onclick=fn;return b};
   if(!items.length){
     if(closed){box.classList.add('closed');box.append(el('b',null,L('Day closed','Din band')),el('span',null,L(`${closeStreak()}-day streak. See you tomorrow.`,`${closeStreak()} din lagataar. Kal milte hain.`)));return box}
@@ -1755,6 +1863,31 @@ function phBuild(){
     board.addEventListener('scroll',on,{passive:true});addEventListener('scroll',on,{passive:true})}
 }
 function phRender(){if(!PH.tabs)return;for(const b of PH.tabs.children)b.setAttribute('aria-pressed',b.dataset.k===WS.view||(b.dataset.k==='day'&&WS.view==='week'));PH.ag.setAttribute('aria-pressed',wsNext.agent)}
+/* ---------- notes that age, and the sweep ----------
+   A wall dies when old notes pile up. Here a note that nobody has touched for a week starts to fade and says how old it is,
+   and the sweep walks through the old ones, one at a time: keep, tomorrow, or done. */
+const AGE_DAYS=7,ageOf=n=>Math.floor((Date.now()-(n.touch||Date.now()))/864e5),isOld=n=>ageOf(n)>=AGE_DAYS&&!n.seal&&!(n.type==='timer'&&n.end>Date.now())&&!(n.day&&n.day>=TODAY());
+function paintAge(d,n){const pp=d.firstChild;if(!pp)return;if(!n.touch)n.touch=Date.now();const old=isOld(n);d.classList.toggle('old',old);d.style.setProperty('--age',old?Math.min(1,(ageOf(n)-AGE_DAYS+3)/24).toFixed(2):0);
+  let a=pp.querySelector('.agep');if(old){if(!a){a=el('span','agep');pp.append(a)}a['textContent']=L(ageOf(n)+' days untouched',ageOf(n)+' din se chhua nahi')}else if(a)a.remove()}
+function touch(n){if(!n)return;const was=isOld(n);n.touch=Date.now();if(was){const d=dom(n);if(d)paintAge(d,n);renderCats()}}
+board.addEventListener('input',e=>{const d=e.target.closest&&e.target.closest('.note');if(d)touch(notes.find(x=>x.id===d.dataset.id))});
+board.addEventListener('click',e=>{const d=e.target.closest&&e.target.closest('.note');if(d&&e.target.closest('li b,.grow2 button,.kind,.tagain'))touch(notes.find(x=>x.id===d.dataset.id))});
+function openSweep(){
+  const list=notes.filter(isOld).sort((a,b)=>(a.touch||0)-(b.touch||0));if(!list.length)return;const ov=el('div','swp'),box=el('div','swpb'),card=el('div','swpc'),bar=el('div','swpa'),top=el('div','swpt');let i=0,kept=0,moved=0,done=0;
+  const close=()=>{ov.remove();removeEventListener('keydown',key,true)},key=e=>{if(e.key==='Escape')close()};addEventListener('keydown',key,true);
+  const btn=(t,cls,fn)=>{const b=el('button',cls);b.type='button';b['textContent']=t;b.onclick=fn;return b};
+  const show=()=>{card.textContent='';bar.textContent='';top.textContent='';
+    if(i>=list.length){top.append(el('b',null,L('The wall is fresh.','Wall saaf ho gayi.')));card.className='swpc end';card.append(el('p',null,L(`${done} done · ${moved} moved to tomorrow · ${kept} kept`,`${done} ho gaye · ${moved} kal pe · ${kept} rakhe`)));bar.append(btn(L('Close','Band karo'),'go',close));save();applyFilter();return}
+    const n=list[i],c=covered(n);top.append(el('b',null,L('Sweep','Safai')),el('span',null,(i+1)+' / '+list.length));top.append(btn('×','x',close));
+    card.className='swpc';card.style.setProperty('--c',n.color);card.style.setProperty('--ink',n.ink||inkFor(n.color,n.tex||'plain'));
+    const cat=CATS.find(x=>x[0]===n.cat);card.append(el('small',null,(cat?cat[1]+'  ·  ':'')+L(ageOf(n)+' days untouched',ageOf(n)+' din se chhua nahi')));
+    if(c){card.append(el('h4',null,c==='lock'?L('Private note','Private note'):L('Sealed note','Band note')))}
+    else{const lines=(n.text||'').split('\n'),h=el('h4');h['textContent']=lines[0]||L('Note','Note');card.append(h);
+      if(n.type==='todo'){const ul=el('ul');n.items.slice(0,6).forEach(it=>{const li=el('li',it.d?'d':'');li['textContent']=it.t;ul.append(li)});card.append(ul);if(n.items.length>6)card.append(el('em',null,'+'+(n.items.length-6)))}
+      else{const rest=lines.slice(1).join('\n').trim()||(n.data||'');if(rest){const pb=el('p');pb['textContent']=rest.slice(0,260);card.append(pb)}}}
+    const next=()=>{i++;show()};
+    bar.append(btn(L('Done','Ho gaya'),'',()=>{done++;finish(n,true);next()}),btn(L('Tomorrow','Kal'),'',()=>{moved++;n.day=dadd(TODAY(),1);n.touch=Date.now();const d=dom(n);if(d)paint(d,n);next()}),btn(L('Keep','Rakho'),'go',()=>{kept++;n.touch=Date.now();const d=dom(n);if(d)paint(d,n);next()}))};
+  box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.append(top,card,bar);ov.append(box);ov.addEventListener('pointerdown',e=>{if(e.target===ov)close()});document.body.append(ov);show()}
 /* ---------- backup and restore ----------
    Notes live in this browser only, so losing the browser's data would lose them. A backup is one file the person keeps:
    every note plus their look settings. Restoring reads that file back. Nothing is sent anywhere. */
@@ -1769,7 +1902,7 @@ function bkClean(raw){const hex=v=>typeof v==='string'&&/^#[0-9a-f]{3,8}$/i.test
     if(seen.has(n.id))n.id=uid();seen.add(n.id);
     ['tex','font','face','anim','song','mood','cat','shape','space','kind','from'].forEach(k=>{if(typeof x[k]==='string'&&/^[\w-]{0,40}$/.test(x[k]))n[k]=x[k]});
     if(hex(x.ink))n.ink=x.ink;if(typeof x.textH==='string')n.textH=x.textH.slice(0,60000);if(typeof x.data==='string')n.data=x.data.slice(0,4000);
-    if(typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day))n.day=x.day;if(x.agent===true)n.agent=true;if(x.fired===true)n.fired=true;
+    if(typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day))n.day=x.day;if(typeof x.seal==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.seal))n.seal=x.seal;if(x.lock===true)n.lock=true;['touch','sealedAt'].forEach(k=>{if(Number.isFinite(+x[k])&&x[k])n[k]=+x[k]});if(x.agent===true)n.agent=true;if(x.fired===true)n.fired=true;
     ['w','mh','size','end','total','cur'].forEach(k=>{if(Number.isFinite(+x[k])&&x[k]!==null&&x[k]!=='')n[k]=+x[k]});
     if(n.type==='todo')n.items=(Array.isArray(x.items)?x.items:[]).slice(0,300).map(i=>({t:str(i&&i.t,2000),d:!!(i&&i.d)}));
     if(n.type==='goal'){n.total=Math.max(1,num(x.total,10));n.cur=Math.max(0,Math.min(n.total,num(x.cur,0)))}
@@ -1785,6 +1918,7 @@ function bkRestore(list,replace,settings){
   save();applyFilter();return added}
 function wsBuild(){
   const B=document.body;B.classList.add('ws');
+  try{if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}
   {const fr=el('div','wframe'),dt=el('div','wdate'),dy=el('div','wday'),bar=el('i'),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;dy.append(bar);[fr,dt,dy].forEach(x=>x.setAttribute('aria-hidden','true'));B.append(fr,dt,dy);
     const tick=()=>{const d=new Date(),h=d.getHours();B.dataset.tod=h<5?'night':h<11?'morning':h<17?'day':h<21?'evening':'night';
       dy.style.setProperty('--dp',((h*60+d.getMinutes())/14.400).toFixed(1)+'%');dt.textContent='';const sm=el('small');sm['textContent']=d.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
@@ -1882,6 +2016,7 @@ function wsRender(){
   chip('',L('All notes','Saare notes'),'',pool.length);
   CATS.forEach(c=>{const k=pool.filter(n=>inCat(n,c[0])).length;if(k||activeCat===c[0]||wsEls.allTabs||c[0]==='quick')chip(c[0],c[1],c[2],k);else hiddenTabs++});
   if(hiddenTabs||wsEls.allTabs){const m=el('button',null,wsEls.allTabs?L('Fewer','Kam'):L('More','Aur'));m.type='button';m.onclick=()=>{wsEls.allTabs=!wsEls.allTabs;wsRender()};chips.append(m)}
+  {const o=notes.filter(isOld).length;if(o>=2){const sb=el('button','zsweep');sb.type='button';sb['textContent']=L(`Sweep ${o} old notes`,`${o} purane notes saaf karo`);sb.onclick=openSweep;chips.append(sb)}}
   /* today */
   const h=new Date().getHours(),hello=h<12?L('Good morning','Suprabhat'):h<17?L('Good afternoon','Namaste'):L('Good evening','Shubh sandhya');
   const left=notes.filter(n=>n.type==='todo').reduce((a,n)=>a+n.items.filter(i=>!i.d).length,0),run=notes.filter(n=>n.type==='timer'&&n.end>Date.now()).length;
