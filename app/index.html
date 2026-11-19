@@ -944,6 +944,44 @@ body.tv-week .agep{display:none}
 .swpa button:active{scale:.96}
 .swpa button.go{background:var(--mango);border-color:var(--mango);color:#1b1430}
 .swpa button:only-child{grid-column:1/-1}
+
+/* ---------- created date, links between notes, select many, pass a note ---------- */
+.paper>.made{display:block;margin-top:8px;font:500 10px var(--ui);letter-spacing:.03em;opacity:.46;text-align:right;color:var(--ink);pointer-events:auto;cursor:default}
+.lnks{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.lnks span{display:inline-flex;max-width:100%;border-radius:99px;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 26%,transparent);overflow:hidden}
+.lnks button{font:600 11px var(--ui);color:var(--ink);opacity:.7;padding:3px 8px;background:none;border:0;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+.lnks button:hover{opacity:1;background:color-mix(in srgb,var(--ink) 9%,transparent)}
+.lnks .lnkx{padding:3px 7px 3px 3px;opacity:.45}
+body.selmode .note{cursor:pointer}
+body.selmode .note .paper{outline:2px dashed rgba(255,255,255,.28);outline-offset:4px}
+body.selmode .note.sel .paper{outline:3px solid var(--mint);box-shadow:0 0 0 7px rgba(94,242,192,.16),0 18px 40px -14px rgba(0,0,0,.7)}
+body.selmode .note *{pointer-events:none}
+.zbtn.zsel[aria-pressed=true]{color:#0e1b16}
+.selbar{position:fixed;left:50%;bottom:calc(98px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:52;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;max-width:min(940px,calc(100vw - 20px));padding:9px 12px;border-radius:18px;background:rgba(20,15,40,.94);border:1px solid rgba(255,255,255,.14);box-shadow:0 22px 50px -12px rgba(0,0,0,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font:500 13px var(--ui);color:#efeaff}
+.selbar .selc{font-weight:700;margin-right:4px;white-space:nowrap}
+.selbar button,.selbar select{font:600 12.5px var(--ui);color:#efeaff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:7px 10px;cursor:pointer}
+.selbar select{appearance:none;-webkit-appearance:none;max-width:124px}
+.selbar select option{color:#15121f}
+.selbar button:hover:not(:disabled),.selbar select:hover:not(:disabled){background:rgba(255,255,255,.14)}
+.selbar button:disabled,.selbar select:disabled{opacity:.36;cursor:default}
+.selbar .go{background:var(--mint);color:#0e1b16;border-color:transparent}
+.selbar .bad[data-sure]{background:#ff4d4d;border-color:transparent;color:#fff}
+.selbar .sw{width:22px;height:22px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.5)}
+.selbar .swr{display:flex;gap:4px;align-items:center}
+.selbar .x{border-radius:50%;width:32px;height:32px;padding:0;font-size:16px}
+.pssb{width:min(430px,100%);max-height:calc(100dvh - 40px);overflow:auto;background:#17122a;border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:22px;color:#efeaff;font:500 14px/1.5 var(--ui);box-shadow:0 40px 90px -20px #000;text-align:center}
+.pssb h3{font:700 19px var(--disp,var(--ui));margin:0 0 6px}
+.pssb p{margin:0 0 12px;color:rgba(239,234,255,.74);font-size:13.5px}
+.pssb canvas{display:block;margin:6px auto 12px;border-radius:14px;background:#fff;max-width:100%;height:auto;image-rendering:pixelated}
+.pssb .pl{width:100%;font:500 12px ui-monospace,monospace;color:#cfc8ea;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:9px;margin-bottom:12px}
+.pssb .pa{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pssb .pa button{font:600 14px var(--ui);padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#efeaff;cursor:pointer}
+.pssb .pa .go{background:#ffc93c;color:#1b1430;border-color:transparent}
+.pssb small{display:block;margin-top:13px;color:rgba(239,234,255,.52);font-size:11.5px;line-height:1.45}
+.pssb ul{list-style:none;margin:0 0 14px;padding:0;text-align:left}
+.pssb li{padding:8px 11px;border-radius:10px;background:rgba(255,255,255,.06);margin-bottom:6px;font-size:13.5px;border-left:4px solid var(--c,#ffc93c);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){.selbar{left:8px;right:8px;transform:none;max-width:none;bottom:calc(74px + env(safe-area-inset-bottom,0px));gap:6px;padding:10px}body.selmode .zbar,body.selmode .pquick,body.selmode #pal{display:none!important}.selbar button,.selbar select{padding:8px 9px}body.ph .paper>.made{text-align:left}}
+@media print{.selbar,.swp{display:none!important}}
 </style>
 </head>
 <body>
@@ -1112,7 +1150,7 @@ const isPhone=()=>VIEW==='tidy'||matchMedia('(max-width:640px)').matches;
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const uid=()=>Math.random().toString(36).slice(2,9);
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=tr(x);return e};
-const ICON={say:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 8.5a5 5 0 0 1 0 7"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7"/>',del:'<path d="M6 6l12 12M18 6L6 18"/>',tilt:'<path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 4v5h-5"/>'};
+const ICON={pass:'<path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>',say:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 8.5a5 5 0 0 1 0 7"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7"/>',del:'<path d="M6 6l12 12M18 6L6 18"/>',tilt:'<path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 4v5h-5"/>'};
 const svg=k=>'<svg viewBox="0 0 24 24">'+ICON[k]+'</svg>';
 
 function save(){if(DESK){chipku.save({notes,sound,def,cat:activeCat});return}try{localStorage.setItem(KEY,JSON.stringify({notes,sound,def,cat:activeCat}))}catch(e){if(!save.w){save.w=1;setTimeout(()=>pal('Storage bhar gaya. Kuch photos hatao, warna naye badlav save nahi honge.',true))}}}
@@ -1192,7 +1230,7 @@ const TOPY=DESK?0:104;
 function place(){const w=board.clientWidth,h=board.clientHeight;return{x:Math.max(10,Math.random()*(w-260)),y:board.scrollTop+TOPY+Math.max(10,Math.random()*(h-TOPY-330))}}
 function add(n,fresh){
   const ac=CATS.find(c=>c[0]===activeCat),given=n;
-  n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,shape:def.shape||'',rot:DESK?+(Math.random()*8-4).toFixed(1):0,z:++zTop},place(),n);
+  n=Object.assign({id:uid(),type:'text',text:'',cat:activeCat,color:ac?ac[2]:def.color,tex:def.tex,font:def.font,size:def.size,ink:def.ink,face:def.face,anim:def.anim,song:def.song,mood:def.mood,shape:def.shape||'',rot:DESK?+(Math.random()*8-4).toFixed(1):0,z:++zTop,made:Date.now()},place(),n);
   if(n.cat==='quick')n.cat='';if(n.agent&&!n.w)n.w=300;if(!('day' in given)&&WS.view!=='all'){const m=monday(WS.date),t=TODAY();n.day=WS.view==='day'?WS.date:WS.view==='week'&&(t<m||t>dadd(m,6))?m:t}if(!('agent' in given)&&(WS.agent||wsNext.agent)){n.agent=true;if(!n.w)n.w=300}if(!('space' in given)&&WS.space)n.space=WS.space;
   n.text=tr(n.text);if(n.data)n.data=tr(n.data);if(n.items)n.items.forEach(i=>i.t=tr(i.t));notes.push(n);render(n,fresh);save();renderCats();tvSoon();return n;
 }
@@ -1301,6 +1339,7 @@ function render(n,fresh){
   mk('say','Bolo',()=>noteSays(n));
   mk('dot','Rang aur texture',e=>openPicker(e.currentTarget,n,st=>{const ch=(n.song||'')!==st.song;if(st.seal&&st.seal!==n.seal)n.sealedAt=Date.now();Object.assign(n,st);if(!n.seal)delete n.seal;if(!n.lock)delete n.lock;paint(d,n);save();renderCats();if(ch){stopNote();if(n.song)noteSong(n,true,0)}}));
   mk('tilt','Jhukaav',()=>{n.rot=n.rot===0?-4:n.rot===-4?4:0;d.style.setProperty('--r',n.rot+'deg');save()});
+  if(!DESK)mk('pass','Pass this note',()=>openPass([n]));
   mk('ok','Ho gaya',()=>finish(n,true));
   mk('del','Hatao',()=>finish(n,false));
   head.append(face,acts);p.append(head);
@@ -1345,7 +1384,7 @@ function render(n,fresh){
     const mv=ev=>{n.w=Math.round(Math.max(150,Math.min(640,sw+ev.clientX-sx)));n.mh=Math.round(Math.max(0,sh+ev.clientY-sy));d.style.setProperty('--w',n.w+'px');d.style.setProperty('--mh',n.mh+'px')};
     const up=()=>{rz.removeEventListener('pointermove',mv);rz.removeEventListener('pointerup',up);rz.removeEventListener('pointercancel',up);save()};
     rz.addEventListener('pointermove',mv);rz.addEventListener('pointerup',up);rz.addEventListener('pointercancel',up)});
-  d.append(p);paint(d,n);board.append(d);drag(d,n,DESK?head:p);
+  d.append(p);paint(d,n);board.append(d);drag(d,n,DESK?head:p);if(!DESK){paintMade(d,n);paintLinks(d,n)}
   d.addEventListener('pointerenter',()=>noteSong(n,true));d.addEventListener('pointerleave',()=>noteSong(n,false));
   d.addEventListener('focusin',()=>noteSong(n,true));d.addEventListener('focusout',e=>{if(!d.contains(e.relatedTarget)&&!d.matches(':hover'))noteSong(n,false)});
 }
@@ -1902,7 +1941,7 @@ function bkClean(raw){const hex=v=>typeof v==='string'&&/^#[0-9a-f]{3,8}$/i.test
     if(seen.has(n.id))n.id=uid();seen.add(n.id);
     ['tex','font','face','anim','song','mood','cat','shape','space','kind','from'].forEach(k=>{if(typeof x[k]==='string'&&/^[\w-]{0,40}$/.test(x[k]))n[k]=x[k]});
     if(hex(x.ink))n.ink=x.ink;if(typeof x.textH==='string')n.textH=x.textH.slice(0,60000);if(typeof x.data==='string')n.data=x.data.slice(0,4000);
-    if(typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day))n.day=x.day;if(typeof x.seal==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.seal))n.seal=x.seal;if(x.lock===true)n.lock=true;['touch','sealedAt'].forEach(k=>{if(Number.isFinite(+x[k])&&x[k])n[k]=+x[k]});if(x.agent===true)n.agent=true;if(x.fired===true)n.fired=true;
+    if(typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day))n.day=x.day;if(typeof x.seal==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.seal))n.seal=x.seal;if(x.lock===true)n.lock=true;['touch','sealedAt','made'].forEach(k=>{if(Number.isFinite(+x[k])&&x[k])n[k]=+x[k]});if(Array.isArray(x.links))n.links=x.links.slice(0,40).map(v=>str(v,40).replace(/[^\w-]/g,'')).filter(Boolean);if(x.agent===true)n.agent=true;if(x.fired===true)n.fired=true;
     ['w','mh','size','end','total','cur'].forEach(k=>{if(Number.isFinite(+x[k])&&x[k]!==null&&x[k]!=='')n[k]=+x[k]});
     if(n.type==='todo')n.items=(Array.isArray(x.items)?x.items:[]).slice(0,300).map(i=>({t:str(i&&i.t,2000),d:!!(i&&i.d)}));
     if(n.type==='goal'){n.total=Math.max(1,num(x.total,10));n.cur=Math.max(0,Math.min(n.total,num(x.cur,0)))}
@@ -1911,6 +1950,97 @@ function bkClean(raw){const hex=v=>typeof v==='string'&&/^#[0-9a-f]{3,8}$/i.test
     if(x.mail&&typeof x.mail==='object')n.mail={s:str(x.mail.s,300),b:str(x.mail.b,8000)};
     if(Array.isArray(x.trail))n.trail=x.trail.slice(-30).map(e=>({k:['ans','made','set'].includes(e&&e.k)?e.k:'ans',q:str(e&&e.q,400),t:str(e&&e.t,4000),id:str(e&&e.id,40).replace(/[^\w-]/g,'')||undefined,at:num(e&&e.at,0)}));
     return n}).filter(Boolean)}
+
+/* ---------- created date: set once, never moved by an edit ---------- */
+function paintMade(d,n){const pp=d.firstChild;if(!pp)return;if(!n.made)n.made=n.touch||Date.now();let m=pp.querySelector('.made');if(!m){m=el('span','made');pp.insertBefore(m,pp.querySelector('.rz'))}
+  const dt=new Date(n.made),y=dt.getFullYear()!==new Date().getFullYear();m['textContent']=dt.toLocaleDateString('en-GB',y?{day:'numeric',month:'short',year:'numeric'}:{day:'numeric',month:'short'});
+  m.title=L('Created ','Bana: ')+dt.toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'})+L('. Editing never changes this date.','. Edit karne se ye tareekh nahi badalti.')}
+/* ---------- links between notes ---------- */
+function paintLinks(d,n){const pp=d.firstChild;if(!pp)return;let box=pp.querySelector('.lnks');const ids=(n.links||[]).filter(id=>id!==n.id&&notes.some(x=>x.id===id));
+  if(!ids.length){if(box)box.remove();return}if(!box){box=el('div','lnks');pp.insertBefore(box,pp.querySelector('.made')||pp.querySelector('.rz'))}box.textContent='';
+  ids.forEach(id=>{const o=notes.find(x=>x.id===id),w=el('span'),b=el('button'),x=el('button','lnkx');b.type=x.type='button';b['textContent']='↔ '+(covered(o)?L('Private note','Private note'):agTitle(o));b.title=L('Show the linked note','Juda hua note dikhao');b.onclick=()=>agFlash(id);
+    x['textContent']='×';x.setAttribute('aria-label',L('Remove link','Link hatao'));x.onclick=()=>{n.links=(n.links||[]).filter(v=>v!==id);o.links=(o.links||[]).filter(v=>v!==n.id);save();paintLinks(d,n);const od=dom(o);if(od)paintLinks(od,o)};w.append(b,x);box.append(w)})}
+function linkNotes(list){list.forEach(a=>{a.links=[...new Set([...(a.links||[]),...list.filter(b=>b!==a).map(b=>b.id)])].slice(0,40)});save();list.forEach(a=>{const d=dom(a);if(d)paintLinks(d,a)})}
+/* ---------- select many, act once ---------- */
+const SEL=new Set();let selOn=false,selBar=null,selLp=0;
+const selList=()=>notes.filter(n=>SEL.has(n.id));
+const plainOf=n=>{const a=[n.text||''];if(n.type==='todo')(n.items||[]).forEach(i=>a.push((i.d?'[x] ':'[ ] ')+i.t));else if(n.data)a.push(n.data);if(n.type==='goal')a.push(n.cur+' / '+n.total);return a.filter(Boolean).join('\n')};
+function selPaint(){[...SEL].forEach(id=>{if(!notes.some(n=>n.id===id))SEL.delete(id)});notes.forEach(n=>{const d=dom(n);if(d)d.classList.toggle('sel',SEL.has(n.id))});if(!selBar)return;const c=SEL.size;
+  selBar.querySelector('.selc')['textContent']=c?L(c+' selected',c+' chune'):L('Tap notes to select','Notes pe tap karke chuno');
+  selBar.querySelectorAll('[data-need]').forEach(b=>b.disabled=c<+b.dataset.need);const del=selBar.querySelector('.bad');delete del.dataset.sure;del['textContent']=L('Delete','Hatao')}
+function selMode(on){selOn=!!on;document.body.classList.toggle('selmode',selOn);const zb=$('.zsel');if(zb)zb.setAttribute('aria-pressed',selOn);if(!selOn){SEL.clear();if(selBar){selBar.remove();selBar=null}selPaint();return}
+  if(typeof closePicker==='function')closePicker();if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+  const bar=selBar=el('div','selbar');bar.setAttribute('role','toolbar');bar.setAttribute('aria-label',L('Selected notes','Chune hue notes'));
+  const btn=(t,need,fn,cls)=>{const b=el('button',cls||'');b.type='button';b['textContent']=t;if(need)b.dataset.need=need;b.onclick=fn;bar.append(b);return b};
+  const after=()=>{save();applyFilter();selPaint()},each=fn=>selList().forEach(n=>{fn(n);const d=dom(n);if(d)paint(d,n)});
+  bar.append(el('span','selc'));
+  btn(L('Done','Ho gaya'),1,()=>{selList().forEach(n=>finish(n,true));SEL.clear();selPaint()},'go');
+  const day=document.createElement('select');day.dataset.need=1;day.setAttribute('aria-label',L('Move to a day','Din badlo'));[['',L('Day…','Din…')],['t',L('Today','Aaj')],['m',L('Tomorrow','Kal')],['n',L('No date','Bina tareekh')]].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o['textContent']=t;day.append(o)});
+  day.onchange=()=>{const v=day.value;day.value='';if(!v)return;each(n=>{if(v==='n')delete n.day;else n.day=v==='t'?TODAY():dadd(TODAY(),1)});after()};bar.append(day);
+  const cat=document.createElement('select');cat.dataset.need=1;cat.setAttribute('aria-label',L('Change category','Category badlo'));[['',L('Category…','Category…')],['-',L('None','Koi nahi')],...CATS.map(c=>[c[0],tr(c[1])])].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o['textContent']=t;cat.append(o)});
+  cat.onchange=()=>{const v=cat.value;cat.value='';if(!v)return;each(n=>{n.cat=v==='-'?'':v});after()};bar.append(cat);
+  const swr=el('div','swr');COLORS.slice(0,6).forEach(c=>{const b=el('button','sw');b.type='button';b.style.background=c;b.dataset.need=1;b.setAttribute('aria-label',L('Colour ','Rang ')+c);b.onclick=()=>{each(n=>{n.color=c;delete n.ink});after()};swr.append(b)});bar.append(swr);
+  btn(L('Link','Jodo'),2,()=>{const l=selList();linkNotes(l);pal(L(l.length+' notes linked. Tap the chip on one to jump to the other.',l.length+' notes jud gaye.'),true)});
+  btn(L('Pass','Pakdao'),1,()=>openPass(selList()));
+  btn(L('Copy text','Text copy'),1,()=>{const t=selList().filter(n=>!covered(n)).map(plainOf).join('\n\n---\n\n');const ok=()=>pal(L('Copied as plain text.','Text copy ho gaya.'),true);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,()=>pal(L('Could not copy here.','Yahan copy nahi hua.'),true));else pal(L('Could not copy here.','Yahan copy nahi hua.'),true)});
+  btn(L('Delete','Hatao'),1,e=>{const b=e.currentTarget;if(!b.dataset.sure){b.dataset.sure=1;b['textContent']=L('Delete '+SEL.size+'?','Pakka '+SEL.size+' hatao?');return}selList().forEach(n=>finish(n,false));SEL.clear();selPaint()},'bad');
+  btn(L('All','Sab'),0,()=>{notes.forEach(n=>{if(!isHid(n))SEL.add(n.id)});selPaint()});
+  const x=btn('×',0,()=>selMode(false),'x');x.setAttribute('aria-label',L('Stop selecting','Chunna band'));
+  document.body.append(bar);selPaint()}
+function selInit(){const tidy=$('.ztidy');if(tidy){const b=el('button','zbtn zsel');b.type='button';b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 12.5l3 3 5.5-6.500"/></svg>';b.append(el('span',null,L('Select','Chuno')));b.setAttribute('aria-pressed','false');b.title=L('Select several notes and act on them together','Kai notes chuno aur ek saath kaam karo');b.onclick=()=>selMode(!selOn);tidy.before(b)}
+  const stop=e=>{if(!selOn||!e.target.closest('.note'))return;e.preventDefault();e.stopPropagation()};
+  ['pointerdown','mousedown','touchstart','dblclick'].forEach(t=>board.addEventListener(t,stop,{capture:true,passive:false}));
+  board.addEventListener('click',e=>{const d=e.target.closest('.note');if(!d)return;if(!selOn){if(e.shiftKey&&!e.target.closest('button,input,select,a,[contenteditable]')){e.preventDefault();e.stopPropagation();selMode(true);SEL.add(d.dataset.id);selPaint()}return}
+    e.preventDefault();e.stopPropagation();if(Date.now()-selLp<450)return;const id=d.dataset.id;SEL.has(id)?SEL.delete(id):SEL.add(id);selPaint()},true);
+  /* phone: press and hold a note to start selecting */
+  let lt=0,lx=0,ly=0;const clr=()=>{clearTimeout(lt);lt=0};
+  board.addEventListener('pointerdown',e=>{if(selOn||!isPhone())return;const d=e.target.closest('.note');if(!d||e.target.closest('button,input,select,a,canvas,.tv'))return;const ed=e.target.closest('[contenteditable]');if(ed&&document.activeElement===ed)return;lx=e.clientX;ly=e.clientY;clr();
+    lt=setTimeout(()=>{lt=0;selLp=Date.now();selMode(true);SEL.add(d.dataset.id);selPaint();buzz(14);const g=getSelection();if(g)g.removeAllRanges()},560)},true);
+  board.addEventListener('pointermove',e=>{if(lt&&Math.abs(e.clientX-lx)+Math.abs(e.clientY-ly)>10)clr()},true);
+  ['pointerup','pointercancel','scroll'].forEach(t=>board.addEventListener(t,clr,true));
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&selOn&&!$('.pss'))selMode(false)})}
+/* ---------- pass a note: it travels inside the link itself, nothing is uploaded ---------- */
+const b64u=u=>{let t='';for(let i=0;i<u.length;i++)t+=String.fromCharCode(u[i]);return btoa(t).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')},
+  u64b=t=>{t=t.replace(/-/g,'+').replace(/_/g,'/');const b=atob(t),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+async function pipeZ(u,S,f){return new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new S(f))).arrayBuffer())}
+const PASS_KEYS=['type','text','textH','items','data','kind','color','tex','font','face','anim','mood','shape','ink','size','w','day','total','cur','end','agent','made'],canPass=n=>!covered(n)&&n.type!=='image'&&n.type!=='doodle';
+async function passLink(list){const pack=list.map(n=>{const o={};PASS_KEYS.forEach(k=>{if(n[k]!==undefined&&n[k]!==''&&n[k]!==null)o[k]=n[k]});return o}),raw=new TextEncoder().encode(JSON.stringify(pack));let tag='j',body=raw;
+  try{if(window.CompressionStream&&window.DecompressionStream){const z=await pipeZ(raw,CompressionStream,'deflate-raw');if(z.length<raw.length){tag='z';body=z}}}catch(e){}
+  return location.origin+location.pathname+'#note='+tag+b64u(body)}
+async function passRead(h){if(h.length>24000)return null;const tag=h[0],u=u64b(h.slice(1));let raw=u;if(tag==='z'){if(!window.DecompressionStream)return null;raw=await pipeZ(u,DecompressionStream,'deflate-raw')}else if(tag!=='j')return null;
+  if(raw.length>400000)return null;const arr=JSON.parse(new TextDecoder().decode(raw));return bkClean({app:'ChipZett',notes:Array.isArray(arr)?arr.slice(0,40):[]})}
+function pssBox(){const o=el('div','swp pss'),b=el('div','pssb');b.setAttribute('role','dialog');b.setAttribute('aria-modal','true');o.append(b);const close=()=>{o.remove();removeEventListener('keydown',key)},key=e=>{if(e.key==='Escape')close()};
+  o.addEventListener('pointerdown',e=>{if(e.target===o)close()});addEventListener('keydown',key);document.body.append(o);return{b,close}}
+let qrLoad=null;const qrLib=()=>window.qrcode?Promise.resolve():(qrLoad=qrLoad||new Promise((ok,no)=>{const t=document.createElement('script');t.src='qr.js';t.onload=ok;t.onerror=()=>{qrLoad=null;no()};document.head.append(t)}));
+async function openPass(list){const all=list.length;list=list.filter(canPass);if(!list.length){pal(L(all?'Photos, sketches and private or sealed notes cannot travel by link. Use the backup file for those.':'Pick a note first.',all?'Photo, sketch aur private ya sealed note link se nahi jaate. Unke liye backup file use karo.':'Pehle note chuno.'),true);return}
+  let url;try{url=await passLink(list)}catch(e){pal(L('Could not make the link.','Link nahi bana.'),true);return}
+  if(url.length>9000){pal(L('That is too much to fit in one link. Pass fewer notes, or use the backup file.','Itna ek link mein nahi aayega. Kam notes bhejo ya backup file use karo.'),true);return}
+  const {b,close}=pssBox(),h=el('h3'),p=el('p'),inp=document.createElement('input'),pa=el('div','pa'),sm=el('small'),n=list.length;
+  h['textContent']=n>1?L('Pass '+n+' notes','Ye '+n+' notes pakdao'):L('Pass this note','Ye note pakdao');
+  p['textContent']=L('Send the link, or let a phone camera scan the code. It opens in ChipZett with the note ready to add.','Link bhejo ya phone ke camera se code scan karo. ChipZett mein khulega aur note jodne ko tayyar hoga.')+(all>n?L(' '+(all-n)+' left out (photo, sketch or private).',' '+(all-n)+' chhoot gaye (photo, sketch ya private).'):'');
+  b.append(h,p);
+  if(url.length<=2300){const cv=document.createElement('canvas');cv.setAttribute('aria-label',L('QR code for this note','Is note ka QR code'));cv.width=cv.height=8;cv.hidden=true;b.append(cv);
+    qrLib().then(()=>{try{const q=window.qrcode(0,'L');q.addData(url,'Byte');q.make();const c=q.getModuleCount(),k=Math.max(3,Math.floor(300/(c+8))),m=4*k,S=c*k+2*m;cv.width=cv.height=S;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,S,S);x.fillStyle='#15121f';
+      for(let r=0;r<c;r++)for(let q2=0;q2<c;q2++)if(q.isDark(r,q2))x.fillRect(m+q2*k,m+r*k,k,k);cv.style.width=Math.min(300,S)+'px';cv.hidden=false}catch(e){}},()=>{})}
+  inp.className='pl';inp.readOnly=true;inp.value=url;inp.setAttribute('aria-label',L('Link to this note','Is note ka link'));inp.onfocus=()=>inp.select();b.append(inp);
+  const mk=(t,cls,fn)=>{const x=el('button',cls||'');x.type='button';x['textContent']=t;x.onclick=fn;pa.append(x);return x};
+  if(navigator.share)mk(L('Share','Share'),'go',()=>{navigator.share({title:'ChipZett',text:n>1?L(n+' notes for you',n+' notes tumhare liye'):agTitle(list[0]),url}).catch(()=>{})});
+  const cp=mk(L('Copy link','Link copy'),navigator.share?'':'go',()=>{const ok=()=>{cp['textContent']=L('Copied','Copy ho gaya')};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(ok,()=>{inp.focus();inp.select()});else{inp.focus();inp.select()}});
+  mk(L('Close','Band'),'',close);b.append(pa);
+  sm['textContent']=L('The note is written inside the link. Nothing is uploaded and there is no account. Anyone who has the link can read the note, and later edits do not travel.','Note link ke andar hi likha hai. Kuch upload nahi hota, koi account nahi. Jiske paas link hai woh note padh sakta hai, aur baad ke badlav saath nahi jaate.');b.append(sm)}
+async function passCheck(){const hs=location.hash||'';if(hs.indexOf('#note=')!==0)return;const h=hs.slice(6);try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+  let list=null;try{list=await passRead(h)}catch(e){}
+  if(!list||!list.length){pal(L('That note link could not be read.','Woh note link padha nahi gaya.'),true);return}
+  const {b,close}=pssBox(),hd=el('h3'),p=el('p'),ul=el('ul'),pa=el('div','pa'),n=list.length;hd['textContent']=n>1?L(n+' notes for you',n+' notes tumhare liye'):L('A note for you','Tumhare liye ek note');
+  p['textContent']=L('Someone passed this to you. Add it to your wall? It stays on this device.','Kisi ne ye tumhe pakdaya hai. Apni wall pe jodna hai? Ye isi device pe rahega.');
+  list.slice(0,6).forEach(x=>{const li=el('li');li.style.setProperty('--c',x.color);li['textContent']=agTitle(x)||L('Note','Note');ul.append(li)});if(n>6){const li=el('li');li['textContent']=L('and '+(n-6)+' more','aur '+(n-6));ul.append(li)}
+  const go=el('button','go'),no=el('button');go.type=no.type='button';go['textContent']=L('Add to my wall','Meri wall pe jodo');no['textContent']=L('No thanks','Nahi');no.onclick=close;
+  go.onclick=()=>{list.forEach(x=>{['id','x','y','z','rot','cat','space','from','links','trail','lock','seal','sealedAt','touch','fired'].forEach(k=>delete x[k]);if(x.type==='timer'&&x.end<Date.now())x.end=Date.now()+(x.total||3e5);add(x,true)});close();applyFilter();pal(L(n>1?n+' notes added to your wall.':'Added to your wall.',n>1?n+' notes wall pe aa gaye.':'Wall pe aa gaya.'))};
+  pa.append(go,no);b.append(hd,p,ul,pa)}
+/* shared into ChipZett from another app (installed app on Android), or opened with ?text= */
+function shareIn(){let q;try{q=new URLSearchParams(location.search)}catch(e){return}if(!(q.has('text')||q.has('url')||q.has('title')))return;const t=[q.get('title'),q.get('text'),q.get('url')].filter(Boolean).join('\n').slice(0,4000).trim();
+  try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}if(!t)return;add({text:t,day:TODAY()},true);pal(L('Saved as a note for today.','Aaj ke note mein save ho gaya.'))}
+function passInit(){selInit();shareIn();passCheck();addEventListener('hashchange',passCheck)}
 function bkRestore(list,replace,settings){
   if(replace){notes.forEach(n=>{const d=dom(n);if(d)d.remove()});notes=[]}
   const have=new Set(notes.map(n=>n.id));let added=0;list.forEach(n=>{if(have.has(n.id))return;notes.push(n);zTop=Math.max(zTop,n.z||0);render(n,true);added++});
@@ -2057,7 +2187,7 @@ function start(state){
      {type:'text',text:L('Welcome to ChipZett\nWrite in the bar below to add a note. Press a face to hear the note. Drag notes anywhere.','ChipZett mein swagat hai\nNeeche bar mein likh kar note banao. Chehra dabao to note bolta hai. Notes kahin bhi kheencho.'),color:'#ffe08a',...at(.5,.45)}].forEach(n=>add(n));
     setTimeout(()=>pal(L('These are sample notes. Write in the bar below to add your own.','Yeh sample notes hain. Apna note banane ke liye neeche bar mein likho.'),true),900)}
   $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
-  applyFilter();
+  applyFilter();if(!DESK)passInit();
   /* once a fortnight, remind people with a real wall that a backup file exists */
   if(!DESK)try{const at=+localStorage.getItem('chipzett-backup-at')||0,nag=+localStorage.getItem('chipzett-backup-nag')||0;if(notes.length>=10&&Date.now()-at>14*864e5&&Date.now()-nag>14*864e5){localStorage.setItem('chipzett-backup-nag',String(Date.now()));setTimeout(()=>pal(L('Tip: keep your notes safe. Appearance has a Download backup button.','Tip: apne notes bachao. Appearance mein Download backup ka button hai.'),true),4000)}}catch(e){}
   if(!DESK)setTimeout(()=>{notes.forEach(n=>{if(n.y<TOPY){n.y=TOPY+6;const d=dom(n);if(d)d.style.top=n.y+'px'}});
