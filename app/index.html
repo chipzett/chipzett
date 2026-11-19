@@ -873,6 +873,16 @@ body.ws:not(.st-play) .note.is-agent .paper{box-shadow:inset 0 1px 0 rgba(255,25
   @keyframes pflut{0%,100%{transform:rotateX(calc(var(--wind,0)*1.100deg)) rotateZ(-.18deg)}50%{transform:rotateX(calc(1.400deg + var(--wind,0)*1.100deg)) rotateZ(.22deg)}}
   body.ph.ws:not(.st-play) .note:not(.is-agent) .paper{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),inset 0 -22px 34px -30px rgba(27,20,48,.35),0 0 0 1px rgba(0,0,0,.06),0 3px 4px rgba(0,0,0,.2),0 calc(30px + var(--wind,0)*2px) 46px -22px rgba(0,0,0,.9)}
 }
+
+/* backup */
+.zbk{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.zbkb{font:600 13px var(--ui);padding:10px 8px;border-radius:11px;color:#f3efff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16)}
+.zbkb:hover{background:rgba(255,255,255,.14)}
+.zbkb.go{background:var(--mango);border-color:var(--mango);color:#1b1430}
+.zbkb.warn{border-color:rgba(255,111,156,.7);color:#ffb6cb}
+.zbki,.zbkq p{font:500 12.500px/1.45 var(--ui);color:#b9b2d6}
+.zbkq{display:grid;gap:8px}
+.zbkq:empty{display:none}
 </style>
 </head>
 <body>
@@ -1745,6 +1755,34 @@ function phBuild(){
     board.addEventListener('scroll',on,{passive:true});addEventListener('scroll',on,{passive:true})}
 }
 function phRender(){if(!PH.tabs)return;for(const b of PH.tabs.children)b.setAttribute('aria-pressed',b.dataset.k===WS.view||(b.dataset.k==='day'&&WS.view==='week'));PH.ag.setAttribute('aria-pressed',wsNext.agent)}
+/* ---------- backup and restore ----------
+   Notes live in this browser only, so losing the browser's data would lose them. A backup is one file the person keeps:
+   every note plus their look settings. Restoring reads that file back. Nothing is sent anywhere. */
+const BK_TYPES=new Set(['text','todo','timer','chart','flow','doodle','image','goal']),BK_KEYS=['chipzett-bg','chipzett-style','chipzett-pen','chipzett-profile','chipzett-closed'];
+function bkMake(){const set={};BK_KEYS.forEach(k=>{try{const v=localStorage.getItem(k);if(v!=null)set[k]=v}catch(e){}});return{app:'ChipZett',version:1,savedAt:new Date().toISOString(),notes,def,settings:set}}
+function bkDownload(){const data=JSON.stringify(bkMake()),a=document.createElement('a'),url=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.href=url;a.download='chipzett-backup-'+TODAY()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+  try{localStorage.setItem('chipzett-backup-at',String(Date.now()))}catch(e){}return notes.length}
+/* a backup file is outside input: keep only the fields a note can have, in the shapes they must have */
+function bkClean(raw){const hex=v=>typeof v==='string'&&/^#[0-9a-f]{3,8}$/i.test(v)?v:'',str=(v,m)=>typeof v==='string'?v.slice(0,m):'',num=(v,d)=>Number.isFinite(+v)?+v:d;
+  if(!raw||raw.app!=='ChipZett'||!Array.isArray(raw.notes))return null;const seen=new Set();
+  return raw.notes.slice(0,3000).map(x=>{if(!x||typeof x!=='object')return null;const n={id:str(x.id,40).replace(/[^\w-]/g,'')||uid(),type:BK_TYPES.has(x.type)?x.type:'text',text:str(x.text,20000),x:num(x.x,40),y:num(x.y,140),z:num(x.z,1),rot:Math.max(-8,Math.min(8,num(x.rot,0))),color:hex(x.color)||COLORS[0]};
+    if(seen.has(n.id))n.id=uid();seen.add(n.id);
+    ['tex','font','face','anim','song','mood','cat','shape','space','kind','from'].forEach(k=>{if(typeof x[k]==='string'&&/^[\w-]{0,40}$/.test(x[k]))n[k]=x[k]});
+    if(hex(x.ink))n.ink=x.ink;if(typeof x.textH==='string')n.textH=x.textH.slice(0,60000);if(typeof x.data==='string')n.data=x.data.slice(0,4000);
+    if(typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day))n.day=x.day;if(x.agent===true)n.agent=true;if(x.fired===true)n.fired=true;
+    ['w','mh','size','end','total','cur'].forEach(k=>{if(Number.isFinite(+x[k])&&x[k]!==null&&x[k]!=='')n[k]=+x[k]});
+    if(n.type==='todo')n.items=(Array.isArray(x.items)?x.items:[]).slice(0,300).map(i=>({t:str(i&&i.t,2000),d:!!(i&&i.d)}));
+    if(n.type==='goal'){n.total=Math.max(1,num(x.total,10));n.cur=Math.max(0,Math.min(n.total,num(x.cur,0)))}
+    if(n.type==='timer'){n.total=Math.max(1000,num(x.total,3e5));n.end=num(x.end,Date.now())}
+    if(typeof x.img==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(x.img))n.img=x.img;else if(n.type==='image')return null;
+    if(x.mail&&typeof x.mail==='object')n.mail={s:str(x.mail.s,300),b:str(x.mail.b,8000)};
+    if(Array.isArray(x.trail))n.trail=x.trail.slice(-30).map(e=>({k:['ans','made','set'].includes(e&&e.k)?e.k:'ans',q:str(e&&e.q,400),t:str(e&&e.t,4000),id:str(e&&e.id,40).replace(/[^\w-]/g,'')||undefined,at:num(e&&e.at,0)}));
+    return n}).filter(Boolean)}
+function bkRestore(list,replace,settings){
+  if(replace){notes.forEach(n=>{const d=dom(n);if(d)d.remove()});notes=[]}
+  const have=new Set(notes.map(n=>n.id));let added=0;list.forEach(n=>{if(have.has(n.id))return;notes.push(n);zTop=Math.max(zTop,n.z||0);render(n,true);added++});
+  if(replace&&settings&&typeof settings==='object')BK_KEYS.forEach(k=>{if(typeof settings[k]==='string'&&settings[k].length<20000)try{localStorage.setItem(k,settings[k])}catch(e){}});
+  save();applyFilter();return added}
 function wsBuild(){
   const B=document.body;B.classList.add('ws');
   {const fr=el('div','wframe'),dt=el('div','wdate'),dy=el('div','wday'),bar=el('i'),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;dy.append(bar);[fr,dt,dy].forEach(x=>x.setAttribute('aria-hidden','true'));B.append(fr,dt,dy);
@@ -1793,6 +1831,25 @@ function wsBuild(){
   WTOOLS.forEach(([k,name])=>{const b=el('button');b.type='button';b.dataset.v=k;if(k)b.innerHTML=PENSVG[k];else b.append(el('span','none'));b.append(document.createTextNode(name));
     b.onclick=()=>{TOOL=k;try{localStorage.setItem('chipzett-pen',k)}catch(e){}setTool();wsRender()};tools.append(b)});
   card.append(el('h5',null,L('Note style','Note ka style')),st,el('p',null,L('Clean keeps notes straight and plain. Playful brings back the tilt, glow and handwriting.','Clean mein notes seedhe aur saade. Playful mein tedhapan, chamak aur haath ki likhai wapas.')),el('h5',null,L('Background','Background')),bgs,cust,el('h5',null,L('Writing tool','Likhne ka tool')),tools);
+  {const bk=el('div','zbk'),info=el('p','zbki'),dl=el('button','zbkb go'),up=el('button','zbkb'),file=document.createElement('input'),ask=el('div','zbkq');
+    const ago=()=>{let t=0;try{t=+localStorage.getItem('chipzett-backup-at')||0}catch(e){}const d=Math.floor((Date.now()-t)/864e5);
+      info['textContent']=L('Your notes are saved in this browser only. A backup file keeps them safe if the browser is cleared or you change device. ','Tumhare notes sirf is browser mein hain. Backup file unhe bachati hai agar browser saaf ho jaye ya device badle. ')+(t?L('Last backup: ','Pichhla backup: ')+(d<1?L('today','aaj'):d===1?L('yesterday','kal'):L(d+' days ago',d+' din pehle'))+'.':L('No backup yet.','Abhi tak backup nahi.'))};
+    dl.type=up.type='button';dl['textContent']=L('Download backup','Backup download karo');up['textContent']=L('Restore from a file','File se wapas lao');file.type='file';file.accept='.json,application/json';file.hidden=true;file.id='zbkfile';
+    dl.onclick=()=>{const c=bkDownload();ago();pal(L(`Backup saved: ${c} notes in one file. Keep it somewhere safe.`,`Backup ban gaya: ${c} notes ek file mein. Ise sambhal ke rakho.`),true)};
+    up.onclick=()=>{ask.textContent='';file.value='';file.click()};
+    file.onchange=()=>{const f=file.files&&file.files[0];if(!f)return;const say=t=>{ask.textContent='';ask.append(el('p',null,t))};
+      if(f.size>40e6){say(L('That file is too large to be a ChipZett backup.','Yeh file ChipZett backup ke liye bahut badi hai.'));return}
+      const rd=new FileReader();rd.onerror=()=>say(L('The file could not be read.','File padhi nahi ja saki.'));
+      rd.onload=()=>{let raw=null,list=null;try{raw=JSON.parse(String(rd.result));list=bkClean(raw)}catch(e){}
+        if(!list){say(L('This is not a ChipZett backup file.','Yeh ChipZett ki backup file nahi hai.'));return}
+        if(!list.length){say(L('That backup has no notes in it.','Us backup mein koi note nahi hai.'));return}
+        const when=typeof raw.savedAt==='string'?new Date(raw.savedAt):null,ok=when&&!isNaN(when);ask.textContent='';
+        ask.append(el('p',null,L(`This backup has ${list.length} note${list.length>1?'s':''}`,`Is backup mein ${list.length} notes hain`)+(ok?L(', saved on ',', tareekh ')+when.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'')+L('. You have ',`. Abhi tumhare paas `)+notes.length+L(' now.',' hain.')));
+        const mk=(t,cls,fn)=>{const b=el('button','zbkb '+cls);b.type='button';b['textContent']=t;b.onclick=fn;ask.append(b)};
+        mk(L('Add them to my notes','Mere notes mein jodo'),'go',()=>{const c=bkRestore(list,false);say(L(`Added ${c} note${c===1?'':'s'}.`,`${c} notes jud gaye.`)+(c<list.length?L(` ${list.length-c} were already here.`,` ${list.length-c} pehle se the.`):''))});
+        mk(L(`Replace my ${notes.length} note${notes.length===1?'':'s'} with these`,`Mere ${notes.length} notes hata ke yeh rakho`),'warn',()=>{const c=bkRestore(list,true,raw.settings);say(L(`Restored ${c} notes. Reloading…`,`${c} notes wapas aa gaye. Reload ho raha hai…`));setTimeout(()=>location.reload(),900)});
+        mk(L('Cancel','Rehne do'),'',()=>{ask.textContent=''})};rd.readAsText(f)};
+    bk.append(dl,up,file);card.append(el('h5',null,L('Backup','Backup')),info,bk,ask);ago();wsEls.bkAgo=ago}
   wsEls.st=st;wsEls.bgs=bgs;wsEls.tools=tools;
   wall.onclick=()=>{const on=card.classList.contains('on');closePops();if(!on)card.classList.add('on')};
   addEventListener('pointerdown',e=>{if(!e.target.closest('.zpop,.zme,.zwall'))closePops()});
@@ -1866,6 +1923,8 @@ function start(state){
     setTimeout(()=>pal(L('These are sample notes. Write in the bar below to add your own.','Yeh sample notes hain. Apna note banane ke liye neeche bar mein likho.'),true),900)}
   $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
   applyFilter();
+  /* once a fortnight, remind people with a real wall that a backup file exists */
+  if(!DESK)try{const at=+localStorage.getItem('chipzett-backup-at')||0,nag=+localStorage.getItem('chipzett-backup-nag')||0;if(notes.length>=10&&Date.now()-at>14*864e5&&Date.now()-nag>14*864e5){localStorage.setItem('chipzett-backup-nag',String(Date.now()));setTimeout(()=>pal(L('Tip: keep your notes safe. Appearance has a Download backup button.','Tip: apne notes bachao. Appearance mein Download backup ka button hai.'),true),4000)}}catch(e){}
   if(!DESK)setTimeout(()=>{notes.forEach(n=>{if(n.y<TOPY){n.y=TOPY+6;const d=dom(n);if(d)d.style.top=n.y+'px'}});
     try{if(!localStorage.getItem('chipzett-tidy3')){localStorage.setItem('chipzett-tidy3','1');if(!isPhone())$('#tidy').click()}}catch(e){}},600);
 }
