@@ -805,7 +805,8 @@ body.ws:not(.st-play) .note.is-agent .paper{box-shadow:inset 0 1px 0 rgba(255,25
   /* write bar, quick starts and tabs live under the thumb */
   body.ph .zbar{left:10px;right:10px;transform:none;width:auto;bottom:calc(70px + env(safe-area-inset-bottom));padding:6px;border-radius:18px}
   body.ph .zbar input{font-size:16px;padding:11px 10px}
-  body.ph .zbar .zbtn:not(.zadd){display:none}
+  body.ph .zbar .zbtn:not(.zadd):not(.vmic){display:none}
+  body.ph .zbar .vmic{padding:11px 11px;color:#efeaff}
   body.ph .zbar .zadd{padding:12px 18px}
   body.ph .pquick{display:flex;position:fixed;left:10px;right:10px;bottom:calc(138px + env(safe-area-inset-bottom));z-index:6;gap:7px;overflow-x:auto;scrollbar-width:none}
   .pquick::-webkit-scrollbar{display:none}
@@ -1026,6 +1027,19 @@ body .ztop .zbtn.zexp{position:relative;color:#1b1430;background:#ffc93c;border-
 .agel a{font:700 11.500px var(--ui);color:#1b1430;text-decoration:none;padding:3px 9px;border-radius:99px;background:rgba(27,20,48,.09);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .agel a:hover{background:rgba(27,20,48,.17)}.agel a::after{content:" \2197"}
 .agweb{display:block;margin-top:7px;font:700 12px var(--ui);color:#fff;background:#1b1430;border:0;border-radius:99px;padding:6px 12px;cursor:pointer}
+
+/* ---------- voice ---------- */
+.zbar .vmic{padding:9px 10px}.zbar .vmic svg{width:17px;height:17px}
+.agmic{background:rgba(27,20,48,.1);color:#1b1430}.agmic svg{width:14px;height:14px}
+.vpill{position:fixed;left:50%;bottom:calc(104px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:59;display:flex;align-items:center;gap:12px;padding:10px 12px 10px 16px;border-radius:99px;background:#17122a;border:1px solid rgba(255,255,255,.18);color:#efeaff;font:600 14px var(--ui);box-shadow:0 22px 50px -12px #000;white-space:nowrap}
+.vpill .vdot{width:11px;height:11px;border-radius:50%;background:#ff4d4d;box-shadow:0 0 0 0 rgba(255,77,77,.6);animation:vpulse 1.2s ease-out infinite}
+.vpill.busy .vdot{background:var(--mint);animation:vspin 1s linear infinite;border-radius:3px}
+@keyframes vpulse{to{box-shadow:0 0 0 12px rgba(255,77,77,0)}}@keyframes vspin{to{rotate:360deg}}
+.vpill .vbars{display:flex;align-items:center;gap:3px;height:22px}.vpill .vbars i{width:3px;border-radius:2px;background:var(--mint);height:4px;transition:height .08s}
+.vpill b{font-variant-numeric:tabular-nums;font-weight:600;opacity:.7;min-width:34px}
+.vpill button{font:700 13px var(--ui);padding:8px 14px;border-radius:99px;border:0;cursor:pointer;background:#ffc93c;color:#1b1430}.vpill button.x{background:rgba(255,255,255,.1);color:#efeaff}
+@media (max-width:640px){.vpill{bottom:calc(150px + env(safe-area-inset-bottom,0px));gap:9px;padding:9px 10px 9px 14px}.vpill .vbars{display:none}}
+@media (prefers-reduced-motion:reduce){.vpill .vdot{animation:none}}
 </style>
 </head>
 <body>
@@ -1355,6 +1369,7 @@ function agentUI(n,p,d){
   if(!n.trail){n.trail=[];if(n.chat&&n.chat.length)for(let i=0;i+1<n.chat.length;i+=2)n.trail.push({k:'ans',q:n.chat[i].t,t:n.chat[i+1].t})}
   ic.innerHTML=AG_ICON.act;go.type='submit';go.innerHTML='<svg viewBox="0 0 16 16"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg>';go.setAttribute('aria-label',L('Send','Bhejo'));
   const PH=L('Ask, or tell this note what to do','Poochho, ya is note ko kaam do');line.className='agline';inp.type='text';inp.id='ag-'+n.id;inp.placeholder=PH;inp.setAttribute('aria-label',PH);inp.autocomplete='off';line.append(ic,inp,go);
+  if(!DESK&&voiceCan()){const mc=el('button','aggo agmic');mc.type='button';mc.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.500 11a6.500 6.500 0 0 0 13 0M12 17.500V21"/></svg>';mc.setAttribute('aria-label',L('Ask by voice','Bol ke poochho'));mc.title=L('Ask by voice. The answer is read aloud','Bol ke poochho. Jawab bol ke sunaya jaata hai');mc.onclick=()=>voiceGo(true,j=>{const t=(j.text||'').trim();if(t){sayAll=true;run('',t.slice(0,400))}});go.before(mc)}
   const drawMoves=()=>{mv.textContent='';agMoves(n).forEach(([id,label])=>{const b=el('button');b.type='button';b['textContent']=label;b.dataset.mv=id;b.onclick=()=>run(id,label);mv.append(b)})};
   const drawTrail=()=>{trl.textContent='';const all=d.classList.contains('ag-all');(all?n.trail:n.trail.slice(-1)).forEach(e=>{const c=el('div','age '+e.k);
       if(e.q){const q=el('div','ageq');q['textContent']=e.q;c.append(q)}const t=el('div','aget');t['textContent']=e.t;c.append(t);
@@ -1362,11 +1377,11 @@ function agentUI(n,p,d){
       if(e.web&&e===n.trail[n.trail.length-1]){const wb=el('button','agweb');wb.type='button';wb['textContent']=L('Search the web for this','Iske liye web pe khojo');wb.onclick=()=>run('',e.q,true);c.append(wb)}
       if(e.id&&notes.some(x=>x.id===e.id)){const o=el('button','ageo',L('Show','Dikhao'));o.type='button';o.onclick=()=>agFlash(e.id);c.append(o)}trl.append(c)});
     if(n.trail.length>1){const m=el('button','agmore');m.type='button';m['textContent']=all?L('Show less','Kam dikhao'):L(`Earlier: ${n.trail.length-1} more`,`Pehle ke: ${n.trail.length-1} aur`);m.onclick=()=>{d.classList.toggle('ag-all');drawTrail();tvSoon()};trl.append(m)}};
-  let busy=false;
+  let busy=false,sayAll=false;
   const drawFoot=()=>{foot.textContent='';const on=aiPref()==='on',t=el('span'),sw=el('button','agsw');t['textContent']=DESK?L('Works on this device from the words in this note.','Isi device par is note ke shabdon se chalta hai.'):on?L('AI is on. When you ask, this note is sent to an AI service to answer. Free: 10 asks and 3 web searches a day.','AI chalu hai. Poochhne par ye note jawab ke liye ek AI service ko jaata hai. Free: roz 10 sawaal aur 3 web khoj.')+(aiLeft>=0?L(' '+aiLeft+' left today.',' Aaj '+aiLeft+' baaki.'):''):L('AI is off. Answers come from the words in this note, on this device.','AI band hai. Jawab isi device par note ke shabdon se aate hain.');
     foot.append(t);if(!DESK){sw.type='button';sw['textContent']=on?L('Turn AI off','AI band karo'):L('Turn AI on','AI chalu karo');sw.onclick=()=>{try{localStorage.setItem('chipzett-ai',on?'off':'on')}catch(x){}drawFoot()};foot.append(sw)}};
   const done=(e,src)=>{busy=false;d.classList.remove('ag-busy');inp.placeholder=PH;e.at=Date.now();n.trail.push(e);if(n.trail.length>30)n.trail.splice(0,n.trail.length-30);
-      save();drawTrail();drawMoves();drawFoot();tvSoon();if(src)agMark(p,Array.isArray(src)?src:[src]);if(e.k==='ans'&&!e.links)speak(e.t,1.1);if(e.id)setTimeout(()=>agFlash(e.id),380)};
+      save();drawTrail();drawMoves();drawFoot();tvSoon();if(src)agMark(p,Array.isArray(src)?src:[src]);if((e.k==='ans'&&!e.links)||sayAll)speak(e.t.slice(0,600),1.1);sayAll=false;if(e.id)setTimeout(()=>agFlash(e.id),380)};
   const run=async(what,said,web)=>{if(busy)return;busy=true;d.classList.add('ag-busy');n.z=++zTop;d.style.zIndex=n.z;inp.value='';inp.placeholder=web?L('Searching the web…','Web pe khoj raha hoon…'):L('Reading the note…','Note padh raha hoon…');
     let e=null,src=null,why='';const t0=Date.now();
     if(!DESK&&!covered(n)&&navigator.onLine!==false){let ok=false;try{ok=await aiAskOk()}catch(x){}
@@ -2152,6 +2167,7 @@ function noteMenu(anchor,n){if(nmenu&&nmenu._id===n.id){nmClose();return}nmClose
     it(L('Link to another note','Doosre note se jodo'),L('Then tap the other note and press Link','Phir doosra note chuno aur Link dabao'),()=>{selMode(true);SEL.add(n.id);selPaint();pal(L('Now tap the note to link with, then press Link.','Ab jis note se jodna hai use chuno, phir Link dabao.'),true)});
     it(L('Duplicate','Ek aur copy'),'',()=>{const c=JSON.parse(JSON.stringify(n));['id','z','links','from','trail','rem','remFired','pin','made','touch'].forEach(k=>delete c[k]);c.x=(n.x||0)+26;c.y=(n.y||0)+26;add(c,true)});
     it(L('Copy as text','Text copy karo'),'',()=>{const ok=()=>pal(L('Copied.','Copy ho gaya.'),true);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(plainOf(n)).then(ok,()=>pal(L('Could not copy here.','Yahan copy nahi hua.'),true));else pal(L('Could not copy here.','Yahan copy nahi hua.'),true)})}
+  if(!cov&&voiceCan()&&(n.type==='text'||!n.type))it(L('Dictate into this note','Is note me bol ke likho'),L('Speak, and the words are added at the end','Bolo, shabd aakhir me jud jaate hain'),()=>voiceGo(false,j=>{const t=j.kind==='todo'?(j.items||[]).map(x=>'- '+x).join('\n'):(j.text||'').trim();if(!t)return;n.text=((n.text||'')+'\n'+t).trim();n.textH='';const b=d.querySelector('.body');if(b)b['textContent']=n.text;save();touch(n);agFlash(n.id)}));
   it(L('Colour, shape, private, seal…','Rang, shape, private, seal…'),L('Style it, hide it behind a PIN, or seal it until a date','Sajao, PIN ke peeche chhupao, ya tareekh tak seal karo'),()=>{const b=d.querySelectorAll('.acts button')[1];if(b)b.click()});
   m.append(document.createElement('hr'));
   it(L('Delete','Hatao'),cov?L('Private and sealed notes are erased for good','Private aur sealed note hamesha ke liye mit jaate hain'):L('Goes to Trash for 30 days','30 din Trash mein rehta hai'),()=>finish(n,false),'bad');
@@ -2215,6 +2231,31 @@ function aiApply(n,q,j){const ans=String(j.answer).slice(0,1600),m=j.make,kids=n
   else if(m&&m.kind==='remind'){const t=new Date(m.when).getTime();if(t>Date.now()){remSet(n,t);e={k:'set',q,t:ans+L(' Reminder set for ',' Reminder laga: ')+remFmt(t)+'.'}}}
   if(Array.isArray(j.links)){const l=j.links.filter(u=>typeof u==='string'&&/^https:\/\/\S+$/.test(u)&&u.length<400).slice(0,6);if(l.length){e.links=l;e.t=e.t.replace(/\s*\(?https?:\/\/[^\s)\]]+\)?/g,'').replace(/[ \t]+\n/g,'\n').trim()}}
   if(j.web===true)e.web=1;e.ai=1;return{e,src}}
+
+/* ---------- voice: speak, and it is written down clean. One short recording goes to ChipZett's server; nothing is kept. ---------- */
+const VOICE_URL='https://opffhensxeqbapcknykf.supabase.co/functions/v1/voice',VOICE_MAX=60;let vState=null;
+const voiceCan=()=>!DESK&&!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
+function voiceOk(){let pr='';try{pr=localStorage.getItem('chipzett-voice')||''}catch(e){}if(pr==='on')return Promise.resolve(true);
+  return new Promise(res=>{const {b,close}=pssBox(),h=el('h3'),p=el('p'),pa=el('div','pa'),sm=el('small'),yes=el('button','go'),no=el('button');let fin=false;const end=v=>{if(fin)return;fin=true;clearInterval(iv);if(v)try{localStorage.setItem('chipzett-voice','on')}catch(e){}close();res(v)};const iv=setInterval(()=>{if(!b.isConnected)end(false)},300);
+    h['textContent']=L('Speak your notes?','Bol ke note likhein?');p['textContent']=L('ChipZett records while you speak (up to one minute), sends that recording to an AI service through ChipZett to turn it into clean text, and then discards it. Nothing is recorded unless you press the microphone.','Jab tak bolte ho ChipZett record karta hai (ek minute tak), wo recording ChipZett ke zariye ek AI service ko bhejta hai jo use saaf text me badalti hai, phir use hata deta hai. Mic dabaye bina kuch record nahi hota.');
+    yes.type=no.type='button';yes['textContent']=L('Yes, use the microphone','Haan, mic chalao');no['textContent']=L('Not now','Abhi nahi');yes.onclick=()=>end(true);no.onclick=()=>end(false);pa.append(yes,no);sm['textContent']=L('Free: 20 recordings a day. Your browser will also ask for microphone permission.','Free: roz 20 recording. Browser bhi mic ki ijazat maangega.');b.append(h,p,pa,sm)})}
+async function voiceGo(raw,onText){if(vState){vState.stop(true);return}if(!voiceCan()){pal(L('This browser cannot record sound.','Ye browser awaaz record nahi kar sakta.'),true);return}if(navigator.onLine===false){pal(L('Voice needs a connection.','Voice ke liye internet chahiye.'),true);return}
+  if(!await voiceOk())return;if(vState)return;let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}})}catch(e){pal(L('The microphone is blocked. Allow it for this site in your browser, then try again.','Mic band hai. Browser me is site ke liye mic ki ijazat do, phir dobara karo.'),true);return}
+  const mime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus'].find(m=>{try{return MediaRecorder.isTypeSupported(m)}catch(e){return false}})||'';let rec;try{rec=new MediaRecorder(stream,mime?{mimeType:mime,audioBitsPerSecond:32000}:undefined)}catch(e){stream.getTracks().forEach(t=>t.stop());pal(L('Could not start recording.','Recording shuru nahi hui.'),true);return}
+  const pill=el('div','vpill'),dot=el('i','vdot'),lab=el('span'),bars=el('div','vbars'),tm=el('b'),stop=el('button'),x=el('button','x'),chunks=[];pill.setAttribute('role','status');for(let i=0;i<5;i++)bars.append(el('i'));lab['textContent']=L('Listening','Sun raha hoon');tm['textContent']='0:00';stop.type=x.type='button';stop['textContent']=L('Done','Ho gaya');x['textContent']=L('Cancel','Radd');pill.append(dot,lab,bars,tm,stop,x);document.body.append(pill);
+  let keep=true,t0=Date.now(),ac=null,raf=0;const tick=setInterval(()=>{const sec=Math.floor((Date.now()-t0)/1000);tm['textContent']=Math.floor(sec/60)+':'+pad2(sec%60);if(sec>=VOICE_MAX)end(true)},250);
+  try{const AC=window.AudioContext||window.webkitAudioContext;if(AC){ac=new AC();const an=ac.createAnalyser();an.fftSize=64;ac.createMediaStreamSource(stream).connect(an);const buf=new Uint8Array(an.frequencyBinCount),bs=[...bars.children];const draw=()=>{an.getByteFrequencyData(buf);bs.forEach((b,i)=>{b.style.height=Math.max(4,Math.min(22,buf[2+i*3]/9))+'px'});raf=requestAnimationFrame(draw)};draw()}}catch(e){}
+  const end=k=>{keep=k;try{if(rec.state!=='inactive')rec.stop()}catch(e){}};vState={stop:end};stop.onclick=()=>end(true);x.onclick=()=>end(false);const key=e=>{if(e.key==='Escape')end(false)};addEventListener('keydown',key);
+  rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  rec.onstop=async()=>{clearInterval(tick);cancelAnimationFrame(raf);removeEventListener('keydown',key);stream.getTracks().forEach(t=>t.stop());try{ac&&ac.close()}catch(e){}vState=null;if(!keep){pill.remove();return}
+    const type=(rec.mimeType||mime||'audio/webm').split(';')[0],blob=new Blob(chunks,{type});if(blob.size<800||Date.now()-t0<700){pill.remove();pal(L('That was too short to hear. Hold on a little longer.','Bahut chhota tha. Thoda aur bolo.'),true);return}
+    pill.classList.add('busy');lab['textContent']=L('Writing it down','Likh raha hoon');stop.remove();x.remove();bars.remove();tm.remove();let lang='en';try{lang=localStorage.getItem('chipku-lang')||'en'}catch(e){}
+    try{const c=new AbortController(),to=setTimeout(()=>c.abort(),70000);let r;try{r=await fetch(VOICE_URL,{method:'POST',headers:{'content-type':type,'x-cz-mode':raw?'raw':'tidy','x-cz-lang':lang==='hi'?'hi':(navigator.language||'en').slice(0,2)},body:blob,signal:c.signal})}finally{clearTimeout(to)}
+      const j=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error('v'),{code:j.error||'ai'});pill.remove();if(!String(j.text||'').trim()&&!(j.items&&j.items.length)){pal(L('I could not make out any words. Try again a little closer to the microphone.','Shabd samajh nahi aaye. Mic ke thoda paas bol ke dobara karo.'),true);return}onText(j)}
+    catch(err){pill.remove();const c=err&&err.code;pal(c==='user'?L('You have used today’s 20 free recordings. They come back tomorrow.','Aaj ki 20 free recording ho gayi. Kal phir milengi.'):c==='all'?L('Free voice is used up for today. Please type this one.','Aaj ka free voice poora ho gaya. Ye wala likh do.'):c==='nokey'?L('Voice is not switched on yet.','Voice abhi chalu nahi hua.'):L('Voice could not be reached. Please try again.','Voice tak pahunch nahi hui. Dobara karo.'),true)}};
+  try{rec.start(1000)}catch(e){end(false);pal(L('Could not start recording.','Recording shuru nahi hui.'),true)}}
+function voiceToNote(j){const ag=!!(wsNext&&wsNext.agent);let n;if(j.kind==='todo'&&Array.isArray(j.items)&&j.items.length>=2)n=add({type:'todo',text:String(j.title||L('To do','Karna hai')).slice(0,80),items:j.items.slice(0,20).map(t=>({t:String(t).slice(0,200),d:false}))},true);
+  else n=add({text:String(j.text).trim().slice(0,6000)},true);if(ag&&wsNext)wsNext.agent=false;const d=dom(n);if(d&&!d.classList.contains('hid')){d.scrollIntoView({block:'center',behavior:'smooth'});agFlash(n.id)}buzz(12);pal(L('Written down. Tap the note to change anything.','Likh diya. Kuch badalna ho to note pe tap karo.'),true);if(typeof phRender==='function')try{wsRender()}catch(e){}}
 function bkRestore(list,replace,settings){
   if(replace){notes.forEach(n=>{const d=dom(n);if(d)d.remove()});notes=[]}
   const have=new Set(notes.map(n=>n.id));let added=0;list.forEach(n=>{if(have.has(n.id))return;notes.push(n);zTop=Math.max(zTop,n.z||0);render(n,true);added++});
@@ -2242,6 +2283,7 @@ function wsBuild(){
   bar.className='zbar';bar.autocomplete='off';inp.id='zcap';inp.placeholder=L('Write a note','Note likho');inp.setAttribute('aria-label','New note');
   bAg.title=L('Preview you can try now: the next note gets Ask and Do. It answers from the note\'s own words. No AI is connected yet.','Preview jo abhi try kar sakte ho: agle note mein Ask aur Do aayega. Jawab note ke apne shabdon se banta hai. AI abhi juda nahi hai.');bTp.title=L('Ready-made notes','Bane-banaye notes');bAdd.type='submit';
   bar.append(inp,bAg,bTp,bAdd);
+  if(voiceCan()){const bMic=el('button','zbtn vmic');bMic.type='button';bMic.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.500 11a6.500 6.500 0 0 0 13 0M12 17.500V21"/></svg>';bMic.setAttribute('aria-label',L('Speak a note','Bol ke note banao'));bMic.title=L('Speak, and ChipZett writes it down as a clean note','Bolo, ChipZett saaf note likh dega');bMic.onclick=()=>voiceGo(false,voiceToNote);inp.after(bMic)}
   /* profile and appearance cards */
   const prof=el('div','zpop'),card=el('div','zpop');prof.id='zprof';card.id='wset';
   B.append(top,bar,prof,card,empty);
