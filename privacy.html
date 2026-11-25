@@ -159,12 +159,12 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
   <nav><a class="logo" href="index.html"><i></i>ChipZett</a><div class="links"><a href="index.html">Home</a></div><a class="btn go sm" href="app/index.html">Open ChipZett</a></nav>
   <main class="doc">
     <h1>Privacy</h1>
-    <p class="when">Last updated: 17 November 2026</p>
-    <p class="short">Your notes stay on your own device. ChipZett has no accounts and we do not collect, see or sell what you write.</p>
+    <p class="when">Last updated: 25 November 2026</p>
+    <p class="short">Your notes stay on your own device. ChipZett has no accounts and we do not collect or sell what you write. The one exception is the AI in agentic notes, which is off until you turn it on and is explained below.</p>
 
     <h2>What ChipZett stores, and where</h2>
     <ul>
-      <li><b>In the browser:</b> your notes, photos you add and your settings are saved in that browser's own storage on your device. They are not sent to us. Clearing your browser data deletes them.</li>
+      <li><b>In the browser:</b> your notes, photos you add and your settings are saved in that browser's own storage on your device. They are not sent to us, except as described under Agentic notes and AI. Clearing your browser data deletes them.</li>
       <li><b>In the Windows app:</b> your notes are saved in a file on your own PC, in your user folder.</li>
       <li>There is no sign-up, so we hold no name, email or password for you.</li>
     </ul>
@@ -181,6 +181,16 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
       <li><b>Fonts:</b> ChipZett loads its fonts from Google Fonts. When it does, Google receives a normal web request from your device, which includes your IP address.</li>
       <li><b>Reading notes aloud:</b> this uses the speech feature of your browser or of Windows. Some browsers offer voices that are processed online by the browser's maker. If you pick one of those, the text being read is sent to them. Turn Sound off in ChipZett to stop notes being read aloud.</li>
       <li><b>Hosting:</b> this website is served by a hosting company, which keeps standard visitor logs such as IP address and time of visit.</li>
+    </ul>
+
+    <h2>Agentic notes and AI</h2>
+    <ul>
+      <li>AI is off until you say yes. The first time you ask an agentic note something, ChipZett asks whether to use AI. If you say no, answers are worked out on your device from the words in the note.</li>
+      <li>If you say yes, then each time you ask an agentic note something, the text of <b>that one note</b>, your question, the current date and time, and your app language are sent to ChipZett's server, which passes them to an AI service (currently Groq) to write the answer. Web searches from a note are carried out by that service.</li>
+      <li>Your other notes are not sent. Private and sealed notes are never sent. Photos and sketches are not sent.</li>
+      <li>ChipZett's server does not store the note or the answer. To keep the free daily limits fair it stores a daily count against a scrambled code made from your IP address and the date. It does not store the IP address itself.</li>
+      <li>The AI service handles the text under its own terms and may keep it for a period. Do not put passwords, card numbers or other secrets in a note you ask AI about.</li>
+      <li>You can turn AI off at any time from the line under any agentic note.</li>
     </ul>
 
     <h2>Music and your own audio</h2>

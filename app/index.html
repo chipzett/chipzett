@@ -1017,6 +1017,15 @@ body .ztop .zbtn.zexp{position:relative;color:#1b1430;background:#ffc93c;border-
 .expc button{align-self:flex-start;margin-top:6px;font:700 12.5px var(--ui);padding:6px 13px;border-radius:99px;border:0;background:var(--k,#ffc93c);color:#17122a;cursor:pointer}
 .expc em{font:600 10.5px var(--ui);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--k);opacity:.9}
 @media (max-width:640px){.expb{padding:18px 14px}.expg{grid-template-columns:1fr 1fr;gap:8px}.expc{padding:11px}.undo{bottom:calc(150px + env(safe-area-inset-bottom,0px));white-space:nowrap}.nmenu{width:min(280px,calc(100vw - 16px))}}
+
+/* ---------- agentic note: real AI ---------- */
+.agfoot{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.note:focus-within .agfoot,.note.ag-all .agfoot{max-height:90px;opacity:.72}
+.agsw{font:700 10.500px var(--ui);color:var(--ink);text-decoration:underline;padding:0;background:none;border:0;cursor:pointer}
+.agel{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.agel a{font:700 11.500px var(--ui);color:#1b1430;text-decoration:none;padding:3px 9px;border-radius:99px;background:rgba(27,20,48,.09);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agel a:hover{background:rgba(27,20,48,.17)}.agel a::after{content:" \2197"}
+.agweb{display:block;margin-top:7px;font:700 12px var(--ui);color:#fff;background:#1b1430;border:0;border-radius:99px;padding:6px 12px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -1342,25 +1351,35 @@ function agAct(n,what,said){
   const x=add({type:'flow',text:title,data:L('Write it down > Find 3 people who need it > Build the smallest version > Ask what they think','Likh lo > 3 log dhundo jinhe chahiye > Sabse chhota version banao > Unse poochho'),...beside()},true);return{k:'made',q:said,t:L('First steps laid out as a flow. In this preview the steps are a sample.','Pehle kadam flow mein rakh diye. Is preview mein kadam namoona hain.'),id:x.id}}
 function agentUI(n,p,d){
   const box=el('div','agx'),mv=el('div','agmv'),line=document.createElement('form'),ic=el('span','agic'),inp=document.createElement('input'),go=el('button','aggo'),trl=el('div','agtr'),
-    foot=el('div','agfoot',L('Preview. Works on this device from the words in this note. No AI is connected yet.','Preview. Isi device par is note ke shabdon se chalta hai. AI abhi juda nahi hai.'));
+    foot=el('div','agfoot');
   if(!n.trail){n.trail=[];if(n.chat&&n.chat.length)for(let i=0;i+1<n.chat.length;i+=2)n.trail.push({k:'ans',q:n.chat[i].t,t:n.chat[i+1].t})}
   ic.innerHTML=AG_ICON.act;go.type='submit';go.innerHTML='<svg viewBox="0 0 16 16"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg>';go.setAttribute('aria-label',L('Send','Bhejo'));
   const PH=L('Ask, or tell this note what to do','Poochho, ya is note ko kaam do');line.className='agline';inp.type='text';inp.id='ag-'+n.id;inp.placeholder=PH;inp.setAttribute('aria-label',PH);inp.autocomplete='off';line.append(ic,inp,go);
   const drawMoves=()=>{mv.textContent='';agMoves(n).forEach(([id,label])=>{const b=el('button');b.type='button';b['textContent']=label;b.dataset.mv=id;b.onclick=()=>run(id,label);mv.append(b)})};
   const drawTrail=()=>{trl.textContent='';const all=d.classList.contains('ag-all');(all?n.trail:n.trail.slice(-1)).forEach(e=>{const c=el('div','age '+e.k);
       if(e.q){const q=el('div','ageq');q['textContent']=e.q;c.append(q)}const t=el('div','aget');t['textContent']=e.t;c.append(t);
+      if(Array.isArray(e.links)&&e.links.length){const lk=el('div','agel');e.links.forEach(u=>{if(typeof u!=='string'||!/^https:\/\//.test(u))return;const a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener noreferrer nofollow';let h=u;try{h=new URL(u).hostname.replace(/^www\./,'')}catch(x){}a['textContent']=h;a.title=u;lk.append(a)});c.append(lk)}
+      if(e.web&&e===n.trail[n.trail.length-1]){const wb=el('button','agweb');wb.type='button';wb['textContent']=L('Search the web for this','Iske liye web pe khojo');wb.onclick=()=>run('',e.q,true);c.append(wb)}
       if(e.id&&notes.some(x=>x.id===e.id)){const o=el('button','ageo',L('Show','Dikhao'));o.type='button';o.onclick=()=>agFlash(e.id);c.append(o)}trl.append(c)});
     if(n.trail.length>1){const m=el('button','agmore');m.type='button';m['textContent']=all?L('Show less','Kam dikhao'):L(`Earlier: ${n.trail.length-1} more`,`Pehle ke: ${n.trail.length-1} aur`);m.onclick=()=>{d.classList.toggle('ag-all');drawTrail();tvSoon()};trl.append(m)}};
   let busy=false;
-  const run=(what,said)=>{if(busy)return;busy=true;d.classList.add('ag-busy');n.z=++zTop;d.style.zIndex=n.z;inp.value='';inp.placeholder=L('Reading the note…','Note padh raha hoon…');
-    setTimeout(()=>{busy=false;d.classList.remove('ag-busy');inp.placeholder=PH;const e=agAct(n,what,said),src=e.src;delete e.src;e.at=Date.now();n.trail.push(e);if(n.trail.length>30)n.trail.splice(0,n.trail.length-30);
-      save();drawTrail();drawMoves();tvSoon();if(src)agMark(p,src);if(e.k==='ans')speak(e.t,1.1);if(e.id)setTimeout(()=>agFlash(e.id),380)},640)};
+  const drawFoot=()=>{foot.textContent='';const on=aiPref()==='on',t=el('span'),sw=el('button','agsw');t['textContent']=DESK?L('Works on this device from the words in this note.','Isi device par is note ke shabdon se chalta hai.'):on?L('AI is on. When you ask, this note is sent to an AI service to answer. Free: 10 asks and 3 web searches a day.','AI chalu hai. Poochhne par ye note jawab ke liye ek AI service ko jaata hai. Free: roz 10 sawaal aur 3 web khoj.')+(aiLeft>=0?L(' '+aiLeft+' left today.',' Aaj '+aiLeft+' baaki.'):''):L('AI is off. Answers come from the words in this note, on this device.','AI band hai. Jawab isi device par note ke shabdon se aate hain.');
+    foot.append(t);if(!DESK){sw.type='button';sw['textContent']=on?L('Turn AI off','AI band karo'):L('Turn AI on','AI chalu karo');sw.onclick=()=>{try{localStorage.setItem('chipzett-ai',on?'off':'on')}catch(x){}drawFoot()};foot.append(sw)}};
+  const done=(e,src)=>{busy=false;d.classList.remove('ag-busy');inp.placeholder=PH;e.at=Date.now();n.trail.push(e);if(n.trail.length>30)n.trail.splice(0,n.trail.length-30);
+      save();drawTrail();drawMoves();drawFoot();tvSoon();if(src)agMark(p,Array.isArray(src)?src:[src]);if(e.k==='ans'&&!e.links)speak(e.t,1.1);if(e.id)setTimeout(()=>agFlash(e.id),380)};
+  const run=async(what,said,web)=>{if(busy)return;busy=true;d.classList.add('ag-busy');n.z=++zTop;d.style.zIndex=n.z;inp.value='';inp.placeholder=web?L('Searching the web…','Web pe khoj raha hoon…'):L('Reading the note…','Note padh raha hoon…');
+    let e=null,src=null,why='';const t0=Date.now();
+    if(!DESK&&!covered(n)&&navigator.onLine!==false){let ok=false;try{ok=await aiAskOk()}catch(x){}
+      if(ok){try{const j=await aiCall(n,said||what,web);const r=aiApply(n,said||what,j);e=r.e;src=r.src;if(!web&&Number.isFinite(j.left))aiLeft=j.left}catch(err){why=aiWhy(err,web)}}}
+    if(!e&&web){e={k:'ans',q:said,t:why||L('Web search needs AI turned on and a connection.','Web khoj ke liye AI chalu aur internet chahiye.')}}
+    if(!e){const w=640-(Date.now()-t0);if(w>0)await new Promise(r=>setTimeout(r,w));e=agAct(n,what,said);src=e.src;delete e.src;if(why)pal(why,true)}
+    done(e,src)};
   line.onsubmit=ev=>{ev.preventDefault();const v=inp.value.trim();if(v)run('',v)};
   let mt=0;p.addEventListener('input',e=>{if(e.target===inp||!n.agent)return;clearTimeout(mt);mt=setTimeout(drawMoves,450)});
   if(n.mail){const m=el('button','mailb',L('Open in mail','Mail mein kholo'));m.type='button';m.onclick=()=>{location.href='mailto:?subject='+encodeURIComponent(n.mail.s)+'&body='+encodeURIComponent(n.mail.b)};p.append(m)}
   if(n.from){const par=notes.find(x=>x.id===n.from);if(par){const f=el('button','agfrom');f.type='button';f['textContent']=L('From: ','Yahan se: ')+agTitle(par);f.title=L('Show the note this came from','Jis note se bana woh dikhao');f.onclick=()=>agFlash(n.from);p.append(f)}}
   {const sp=el('span','spk');sp.innerHTML=AG_ICON.act;sp.title=L('Agentic note','Agentic note');queueMicrotask(()=>d.append(sp))}
-  box.append(mv,line,trl,foot);p.append(box);drawMoves();drawTrail();
+  box.append(mv,line,trl,foot);p.append(box);drawMoves();drawTrail();drawFoot();
 }
 function render(n,fresh){
   const d=el('div','note');d.dataset.id=n.id;
@@ -1992,16 +2011,16 @@ function bkClean(raw){const hex=v=>typeof v==='string'&&/^#[0-9a-f]{3,8}$/i.test
     if(n.type==='timer'){n.total=Math.max(1000,num(x.total,3e5));n.end=num(x.end,Date.now())}
     if(typeof x.img==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(x.img))n.img=x.img;else if(n.type==='image')return null;
     if(x.mail&&typeof x.mail==='object')n.mail={s:str(x.mail.s,300),b:str(x.mail.b,8000)};
-    if(Array.isArray(x.trail))n.trail=x.trail.slice(-30).map(e=>({k:['ans','made','set'].includes(e&&e.k)?e.k:'ans',q:str(e&&e.q,400),t:str(e&&e.t,4000),id:str(e&&e.id,40).replace(/[^\w-]/g,'')||undefined,at:num(e&&e.at,0)}));
+    if(Array.isArray(x.trail))n.trail=x.trail.slice(-30).map(e=>({k:['ans','made','set'].includes(e&&e.k)?e.k:'ans',q:str(e&&e.q,400),t:str(e&&e.t,4000),id:str(e&&e.id,40).replace(/[^\w-]/g,'')||undefined,at:num(e&&e.at,0),links:Array.isArray(e&&e.links)?e.links.filter(u=>typeof u==='string'&&/^https:\/\/\S+$/.test(u)&&u.length<400).slice(0,6):undefined}));
     return n}).filter(Boolean)}
 
 /* ---------- created date: set once, never moved by an edit ---------- */
-function paintMade(d,n){const pp=d.querySelector('.paper');if(!pp)return;if(!n.made)n.made=n.touch||Date.now();let m=pp.querySelector('.made');if(!m){m=el('span','made');pp.insertBefore(m,pp.querySelector('.rz'))}
+function paintMade(d,n){const pp=d.querySelector('.paper');if(!pp)return;if(!n.made)n.made=n.touch||Date.now();let m=pp.querySelector(':scope>.made');if(!m){m=el('span','made');pp.insertBefore(m,pp.querySelector(':scope>.rz'))}
   const dt=new Date(n.made),y=dt.getFullYear()!==new Date().getFullYear();m['textContent']=dt.toLocaleDateString('en-GB',y?{day:'numeric',month:'short',year:'numeric'}:{day:'numeric',month:'short'});
   m.title=L('Created ','Bana: ')+dt.toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'})+L('. Editing never changes this date.','. Edit karne se ye tareekh nahi badalti.')}
 /* ---------- links between notes ---------- */
-function paintLinks(d,n){const pp=d.querySelector('.paper');if(!pp)return;let box=pp.querySelector('.lnks');const ids=(n.links||[]).filter(id=>id!==n.id&&notes.some(x=>x.id===id));
-  if(!ids.length){if(box)box.remove();return}if(!box){box=el('div','lnks');pp.insertBefore(box,pp.querySelector('.made')||pp.querySelector('.rz'))}box.textContent='';
+function paintLinks(d,n){const pp=d.querySelector('.paper');if(!pp)return;let box=pp.querySelector(':scope>.lnks');const ids=(n.links||[]).filter(id=>id!==n.id&&notes.some(x=>x.id===id));
+  if(!ids.length){if(box)box.remove();return}if(!box){box=el('div','lnks');pp.insertBefore(box,pp.querySelector(':scope>.made')||pp.querySelector(':scope>.rz'))}box.textContent='';
   ids.forEach(id=>{const o=notes.find(x=>x.id===id),w=el('span'),b=el('button'),x=el('button','lnkx');b.type=x.type='button';b['textContent']='↔ '+(covered(o)?L('Private note','Private note'):agTitle(o));b.title=L('Show the linked note','Juda hua note dikhao');b.onclick=()=>agFlash(id);
     x['textContent']='×';x.setAttribute('aria-label',L('Remove link','Link hatao'));x.onclick=()=>{n.links=(n.links||[]).filter(v=>v!==id);o.links=(o.links||[]).filter(v=>v!==n.id);save();paintLinks(d,n);const od=dom(o);if(od)paintLinks(od,o)};w.append(b,x);box.append(w)})}
 function linkNotes(list){list.forEach(a=>{a.links=[...new Set([...(a.links||[]),...list.filter(b=>b!==a).map(b=>b.id)])].slice(0,40)});save();list.forEach(a=>{const d=dom(a);if(d)paintLinks(d,a)})}
@@ -2088,10 +2107,10 @@ function passInit(){expInit();remInit();selInit();shareIn();passCheck();addEvent
 
 /* ---------- pin ---------- */
 const pinFirst=(a,b)=>(b.pin?1:0)-(a.pin?1:0);
-function paintPin(d,n){const pp=d.querySelector('.paper');if(!pp)return;d.classList.toggle('pinned',!!n.pin);let m=pp.querySelector('.pinm');if(n.pin&&!m){m=el('i','pinm');m.setAttribute('aria-hidden','true');pp.append(m)}else if(!n.pin&&m)m.remove()}
+function paintPin(d,n){const pp=d.querySelector('.paper');if(!pp)return;d.classList.toggle('pinned',!!n.pin);let m=pp.querySelector(':scope>.pinm');if(n.pin&&!m){m=el('i','pinm');m.setAttribute('aria-hidden','true');pp.append(m)}else if(!n.pin&&m)m.remove()}
 /* ---------- a reminder at a time you pick ---------- */
 const remFmt=t=>{const d=new Date(t),k=dkey(d),tm=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});return(k===TODAY()?L('Today','Aaj'):k===dadd(TODAY(),1)?L('Tomorrow','Kal'):d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}))+', '+tm};
-function paintRem(d,n){const pp=d.querySelector('.paper');if(!pp)return;let b=pp.querySelector('.reml');if(!n.rem){if(b)b.remove();return}if(!b){b=el('button','reml');b.type='button';b.onclick=()=>openRemind(n);pp.insertBefore(b,pp.querySelector('.lnks')||pp.querySelector('.made')||pp.querySelector('.rz'))}
+function paintRem(d,n){const pp=d.querySelector('.paper');if(!pp)return;let b=pp.querySelector(':scope>.reml');if(!n.rem){if(b)b.remove();return}if(!b){b=el('button','reml');b.type='button';b.onclick=()=>openRemind(n);pp.insertBefore(b,pp.querySelector(':scope>.lnks')||pp.querySelector(':scope>.made')||pp.querySelector(':scope>.rz'))}
   b.textContent='';b.append(el('i'),document.createTextNode((n.remFired?L('Reminded · ','Yaad dilaya · '):L('Reminder · ','Reminder · '))+remFmt(n.rem)));b.classList.toggle('rang',!!n.remFired);b.title=L('Change or clear this reminder','Reminder badlo ya hatao')}
 function remSet(n,t){if(t){n.rem=t;delete n.remFired}else{delete n.rem;delete n.remFired}save();const d=dom(n);if(d)paintRem(d,n);touch(n)}
 function openRemind(n){const {b,close}=pssBox(),h=el('h3'),p=el('p'),rq=el('div','rq'),inp=document.createElement('input'),pa=el('div','pa'),sm=el('small');h['textContent']=L('Remind me','Yaad dilao');p['textContent']=agTitle(n);
@@ -2175,6 +2194,27 @@ function openExplore(){try{localStorage.setItem('chipzett-explored','1')}catch(e
   o.append(b);document.body.append(o)}
 function expInit(){const tidy=$('.ztidy');if(!tidy)return;const b=el('button','zbtn zexp');b.type='button';b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.200 5.800L20 11l-5.800 2.200L12 19l-2.200-5.800L4 11l5.800-2.200z"/></svg>';b.append(el('span',null,L('Explore','Explore')));b.title=L('See everything ChipZett can do, and try it','ChipZett kya-kya kar sakta hai, dekho aur aazmao');b.onclick=openExplore;
   try{if(!localStorage.getItem('chipzett-explored'))b.classList.add('new')}catch(e){}tidy.before(b)}
+
+/* ---------- agentic note: real AI through ChipZett's own small server (it holds the key and the free daily limits) ---------- */
+const AI_URL='https://opffhensxeqbapcknykf.supabase.co/functions/v1/agent';let aiLeft=-1;
+const aiPref=()=>{try{return localStorage.getItem('chipzett-ai')||''}catch(e){return''}};
+function aiAskOk(){const pr=aiPref();if(pr==='on')return Promise.resolve(true);if(pr==='off')return Promise.resolve(false);
+  return new Promise(res=>{const {b,close}=pssBox(),h=el('h3'),p=el('p'),pa=el('div','pa'),sm=el('small'),yes=el('button','go'),no=el('button');let fin=false;const end=(v,keep)=>{if(fin)return;fin=true;clearInterval(iv);if(keep)try{localStorage.setItem('chipzett-ai',v?'on':'off')}catch(e){}close();res(v)};
+    const iv=setInterval(()=>{if(!b.isConnected)end(false,false)},300);
+    h['textContent']=L('Let AI work on this note?','Is note pe AI lagayein?');p['textContent']=L('To answer, the text of the agentic note you ask is sent to an AI service through ChipZett. Your other notes stay on this device, and private notes are never sent.','Jawab ke liye, jis agentic note se poochho uska text ChipZett ke zariye ek AI service ko jaata hai. Baaki notes isi device pe rehte hain, aur private notes kabhi nahi bheje jaate.');
+    yes.type=no.type='button';yes['textContent']=L('Yes, use AI','Haan, AI lagao');no['textContent']=L('No, keep it on this device','Nahi, device pe hi rakho');yes.onclick=()=>end(true,true);no.onclick=()=>end(false,true);pa.append(yes,no);
+    sm['textContent']=L('Free: 10 asks and 3 web searches a day. No account. You can switch this off on any agentic note.','Free: roz 10 sawaal aur 3 web khoj. Koi account nahi. Kisi bhi agentic note pe ise band kar sakte ho.');b.append(h,p,pa,sm)})}
+async function aiCall(n,ask,web){const d=new Date(),now=dkey(d)+'T'+pad2(d.getHours())+':'+pad2(d.getMinutes())+' '+d.toLocaleDateString('en-GB',{weekday:'long'});let lang='en';try{lang=localStorage.getItem('chipku-lang')||'en'}catch(e){}
+  const c=new AbortController(),tm=setTimeout(()=>c.abort(),web?60000:30000);let r;try{r=await fetch(AI_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({note:plainOf(n).slice(0,6000),ask:String(ask||'').slice(0,400),web:!!web,now,lang}),signal:c.signal})}finally{clearTimeout(tm)}
+  const j=await r.json().catch(()=>({}));if(!r.ok||typeof j.answer!=='string'||!j.answer.trim())throw Object.assign(new Error('ai'),{code:j.error||'ai'});return j}
+function aiWhy(err,web){const c=err&&err.code;return c==='user'?(web?L('You have used today’s 3 free web searches. They come back tomorrow.','Aaj ki 3 free web khoj ho gayi. Kal phir milengi.'):L('You have used today’s 10 free AI asks, so this answer comes from the note itself. They come back tomorrow.','Aaj ke 10 free AI sawaal ho gaye, isliye ye jawab note se hi hai. Kal phir milenge.')):c==='all'?L('The free AI is busy for today, so this answer comes from the note itself.','Aaj ka free AI poora ho gaya, isliye ye jawab note se hi hai.'):c==='nokey'?L('The AI is not switched on yet, so this answer comes from the note itself.','AI abhi chalu nahi hua, isliye ye jawab note se hi hai.'):L('The AI could not be reached, so this answer comes from the note itself.','AI tak pahunch nahi hui, isliye ye jawab note se hi hai.')}
+function aiApply(n,q,j){const ans=String(j.answer).slice(0,1600),m=j.make,kids=notes.filter(x=>x.from===n.id).length,near={x:(n.x||0)+(n.w||232)+34+kids*22,y:(n.y||0)+kids*46};let e={k:'ans',q,t:ans},src=null;
+  if(typeof j.source==='string'&&j.source.trim().length>2)src=[j.source.trim()];
+  if(m&&m.kind==='todo'&&Array.isArray(m.items)&&m.items.length){const c=add({type:'todo',text:String(m.title||L('To do','Karna hai')).slice(0,80),items:m.items.slice(0,8).map(t=>({t:String(t).slice(0,160),d:false})),from:n.id,cat:n.cat,day:n.day,...near},true);e={k:'made',q,t:ans,id:c.id}}
+  else if(m&&m.kind==='note'&&m.text){const c=add({text:(String(m.title||'').slice(0,80)+'\n'+String(m.text).slice(0,1500)).trim(),from:n.id,cat:n.cat,...near},true);e={k:'made',q,t:ans,id:c.id}}
+  else if(m&&m.kind==='remind'){const t=new Date(m.when).getTime();if(t>Date.now()){remSet(n,t);e={k:'set',q,t:ans+L(' Reminder set for ',' Reminder laga: ')+remFmt(t)+'.'}}}
+  if(Array.isArray(j.links)){const l=j.links.filter(u=>typeof u==='string'&&/^https:\/\/\S+$/.test(u)&&u.length<400).slice(0,6);if(l.length){e.links=l;e.t=e.t.replace(/\s*\(?https?:\/\/[^\s)\]]+\)?/g,'').replace(/[ \t]+\n/g,'\n').trim()}}
+  if(j.web===true)e.web=1;e.ai=1;return{e,src}}
 function bkRestore(list,replace,settings){
   if(replace){notes.forEach(n=>{const d=dom(n);if(d)d.remove()});notes=[]}
   const have=new Set(notes.map(n=>n.id));let added=0;list.forEach(n=>{if(have.has(n.id))return;notes.push(n);zTop=Math.max(zTop,n.z||0);render(n,true);added++});
