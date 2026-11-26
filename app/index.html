@@ -1221,6 +1221,16 @@ body.ph .note:not(.open) .lv.sc canvas{height:74px}body.ph .note:not(.open) .lv.
 .lvc{display:flex;justify-content:space-between;gap:10px;margin-top:3px;font:700 9.5px/1.3 var(--ui);letter-spacing:.11em;text-transform:uppercase;color:var(--ink);opacity:.62;font-variant-numeric:tabular-nums;white-space:nowrap}
 .lvc span:first-child{overflow:hidden;text-overflow:ellipsis}
 body.ph .note:not(.open) .lv:not(.sc){margin-top:6px}body.ph .note:not(.open) .lv:not(.sc) canvas{height:34px}
+.pssb.rdb{width:min(520px,100%);text-align:left}
+.rdl{display:grid;gap:10px;margin:4px 0 16px}
+.rdn{background:var(--c);color:#1b1430;border-radius:14px;padding:16px 18px;font:500 15.5px/1.5 var(--ui);overflow-wrap:anywhere}
+.rdn h4{font:700 18px/1.25 var(--ui);margin:0 0 6px;color:#1b1430}
+.pssb .rdn p{margin:0 0 6px;white-space:pre-wrap;color:#1b1430;font-size:15.5px}
+.pssb .rdn ul{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:5px}
+.pssb .rdn li{position:relative;padding:0 0 0 28px;margin:0;background:none;border:0;border-radius:0;white-space:normal;overflow:visible;text-overflow:clip;font:500 15.5px/1.45 var(--ui);color:#1b1430}
+.pssb .rdn li::before{content:"";position:absolute;left:0;top:3px;width:16px;height:16px;border-radius:5px;box-shadow:inset 0 0 0 2px #1b1430}
+.pssb .rdn li.dn{opacity:.6;text-decoration:line-through}.pssb .rdn li.dn::before{background:#1b1430}
+.pssb .rdn ul.pl li{padding-left:0}.pssb .rdn ul.pl li::before{display:none}
 .zmm{z-index:40}
 .pfp{position:fixed;inset:0;z-index:55;background:rgba(10,7,22,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:28px 16px}
 .pfb{width:min(780px,100%);background:#17122a;border:1px solid rgba(255,255,255,.13);border-radius:26px;padding:28px;color:#efeaff;font:500 14.5px/1.45 var(--ui);box-shadow:0 40px 90px -20px #000}
@@ -1568,6 +1578,7 @@ function agWhen(text){const t=' '+String(text).toLowerCase()+' ',now=new Date();
   if(!hasDay&&h<0)return null;if(!d)d=new Date(now);d.setHours(h<0?9:h,mi,0,0);
   if(d<=now){if(!hasDay)d.setDate(d.getDate()+1);else if(named)d.setDate(d.getDate()+7);else if(h<0)d=new Date(now.getTime()+36e5);else return null}
   return{d,label:agLab(d)}}
+const agExact=d=>{d=new Date(d);const k=dkey(d),rel=k===TODAY()?L(' (today)',' (aaj)'):k===dadd(TODAY(),1)?L(' (tomorrow)',' (kal)'):'';return d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+', '+pad2(d.getHours())+':'+pad2(d.getMinutes())+rel};
 function agLab(d){const k=dkey(d),t=TODAY();return(k===t?L('today','aaj'):k===dadd(t,1)?L('tomorrow','kal'):d.toLocaleDateString('en-GB',k<=dadd(t,6)?{weekday:'short'}:{weekday:'short',day:'numeric',month:'short'}))+' '+d.getHours()+':'+pad2(d.getMinutes())}
 const agTitle=n=>(agSents(n.text||'')[0]||L('Note','Note')).replace(/[.:]$/,'').slice(0,40);
 const agPairs=n=>n.type==='chart'?[]:rows((n.text||'').split('\n').slice(1).join(','));
@@ -1598,7 +1609,7 @@ function agAct(n,what,said){
   if(what==='list'){const it=agItems(n);if(!it.length)return{k:'ans',q:said,t:L('I found nothing here to turn into tasks.','Yahan kaam banane layak kuch nahi mila.')};
     const x=add({type:'todo',text:title+': '+L('actions','kaam'),items:it.map(t=>({t,d:false})),...beside()},true);return{k:'made',q:said,t:L(`Checklist made · ${it.length} items`,`Checklist ban gayi · ${it.length} kaam`),id:x.id}}
   if(what==='remind'){if(!w)return{k:'ans',q:said,t:L('I could not find a day or time. Try: remind me Friday 4pm.','Din ya samay nahi mila. Aise likho: remind me Friday 4pm.')};
-    const x=add({type:'timer',text:title,end:+w.d,total:w.d-Date.now(),day:dkey(w.d),face:'ringer',...beside(),color:'#ff6f9c'},true);return{k:'made',q:said,t:L('Reminder set · ','Reminder lag gaya · ')+w.label,id:x.id}}
+    const x=add({type:'timer',text:title,end:+w.d,total:w.d-Date.now(),day:dkey(w.d),face:'ringer',...beside(),color:'#ff6f9c'},true);return{k:'made',q:said,t:L('Reminder set for ','Reminder laga: ')+agExact(w.d)+L('. Check the date is right.','. Tareekh sahi hai, dekh lo.'),id:x.id}}
   if(what==='plan'){if(!w)return{k:'ans',q:said,t:L('I could not find a day in that. Try: put this on Friday.','Usme din nahi mila. Aise likho: put this on Friday.')};n.day=dkey(w.d);const d=dom(n);if(d)paint(d,n);return{k:'set',q:said,t:L('Placed on ','Is din rakha: ')+dfmt(n.day,{weekday:'long',day:'numeric',month:'short'})+L('. See it in Week.','. Week mein dekho.')}}
   if(what==='chart'){const pr=agPairs(n);if(pr.length<2)return{k:'ans',q:said,t:L('I need at least two lines like "Rent 40" to draw a chart.','Chart ke liye kam se kam do line chahiye, jaise "Rent 40".')};
     const x=add({type:'chart',kind:'pie',text:title,data:pr.map(r=>r.l+' '+r.v).join(', '),tex:'grid',...beside(),color:'#fff4d6'},true);return{k:'made',q:said,t:L(`Chart made · ${pr.length} parts`,`Chart ban gaya · ${pr.length} hisse`),id:x.id}}
@@ -2357,10 +2368,16 @@ async function openPass(list){const all=list.length;list=list.filter(canPass);if
 async function passCheck(){const hs=location.hash||'';if(hs.indexOf('#note=')!==0)return;const h=hs.slice(6);try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
   let list=null;try{list=await passRead(h)}catch(e){}
   if(!list||!list.length){pal(L('That note link could not be read.','Woh note link padha nahi gaya.'),true);return}
-  const {b,close}=pssBox(),hd=el('h3'),p=el('p'),ul=el('ul'),pa=el('div','pa'),n=list.length;hd['textContent']=n>1?L(n+' notes for you',n+' notes tumhare liye'):L('A note for you','Tumhare liye ek note');
-  p['textContent']=L('Someone passed this to you. Add it to your wall? It stays on this device.','Kisi ne ye tumhe pakdaya hai. Apni wall pe jodna hai? Ye isi device pe rahega.');
-  list.slice(0,6).forEach(x=>{const li=el('li');li.style.setProperty('--c',x.color);li['textContent']=agTitle(x)||L('Note','Note');ul.append(li)});if(n>6){const li=el('li');li['textContent']=L('and '+(n-6)+' more','aur '+(n-6));ul.append(li)}
-  const go=el('button','go'),no=el('button');go.type=no.type='button';go['textContent']=L('Add to my wall','Meri wall pe jodo');no['textContent']=L('No thanks','Nahi');no.onclick=close;
+  const {b,close}=pssBox(),hd=el('h3'),p=el('p'),ul=el('div','rdl'),pa=el('div','pa'),n=list.length;b.classList.add('rdb');hd['textContent']=n>1?L(n+' notes for you',n+' notes tumhare liye'):L('A note for you','Tumhare liye ek note');
+  p['textContent']=L('Someone passed this to you. This is a copy: if they change their note later, this one stays as it is.','Kisi ne ye tumhe pakdaya hai. Ye ek copy hai: wo baad me apna note badlein to ye waisa hi rahega.');
+  list.forEach(x=>{const c=el('article','rdn'),ls=String(x.text||'').split('\n'),t=el('h4');c.style.setProperty('--c',x.color||'#ffc93c');t['textContent']=ls[0]||L('Note','Note');c.append(t);
+    if(ls.length>1){const bd=el('p');bd['textContent']=ls.slice(1).join('\n');c.append(bd)}
+    if(x.type==='todo'){const u=el('ul');(x.items||[]).forEach(i=>{const li=el('li',i.d?'dn':'');li['textContent']=i.t;u.append(li)});c.append(u)}
+    else if(x.type==='table'){const u=el('ul','pl');(x.rows||[]).forEach(r=>{const li=el('li');li['textContent']=(r||[]).filter(Boolean).join('  ·  ');if(li.textContent)u.append(li)});c.append(u)}
+    else if(x.type==='goal'){const bd=el('p');bd['textContent']=x.cur+' / '+x.total;c.append(bd)}
+    else if(x.data){const bd=el('p');bd['textContent']=x.data;c.append(bd)}
+    ul.append(c)});
+  const go=el('button','go'),no=el('button');go.type=no.type='button';go['textContent']=L(n>1?'Save these to my wall':'Save to my wall',n>1?'Inhe meri wall pe rakho':'Meri wall pe rakho');no['textContent']=L('Close','Band karo');no.onclick=close;
   go.onclick=()=>{list.forEach(x=>{['id','x','y','z','rot','cat','space','from','links','trail','lock','seal','sealedAt','touch','fired'].forEach(k=>delete x[k]);if(x.type==='timer'&&x.end<Date.now())x.end=Date.now()+(x.total||3e5);add(x,true)});close();applyFilter();pal(L(n>1?n+' notes added to your wall.':'Added to your wall.',n>1?n+' notes wall pe aa gaye.':'Wall pe aa gaya.'))};
   pa.append(go,no);b.append(hd,p,ul,pa)}
 /* shared into ChipZett from another app (installed app on Android), or opened with ?text= */
@@ -2486,7 +2503,7 @@ function aiApply(n,q,j){const ans=String(j.answer).slice(0,1600),m=j.make,kids=n
   if(m&&m.kind==='todo'&&Array.isArray(m.items)&&m.items.length){const c=add({type:'todo',text:String(m.title||L('To do','Karna hai')).slice(0,80),items:m.items.slice(0,8).map(t=>({t:String(t).slice(0,160),d:false})),from:n.id,cat:n.cat,day:n.day,...near},true);e={k:'made',q,t:ans,id:c.id}}
   else if(m&&m.kind==='note'&&m.text){const c=add({text:(String(m.title||'').slice(0,80)+'\n'+String(m.text).slice(0,1500)).trim(),from:n.id,cat:n.cat,...near},true);e={k:'made',q,t:ans,id:c.id}}
   else if(m&&m.kind==='flow'&&Array.isArray(m.steps)&&m.steps.length>=2){const c=add({type:'flow',text:String(m.title||L('Outline','Outline')).slice(0,80),data:m.steps.slice(0,7).map(t=>String(t).replace(/>/g,' ').slice(0,40)).join(' > '),from:n.id,cat:n.cat,...near},true);e={k:'made',q,t:ans,id:c.id}}
-  else if(m&&m.kind==='remind'){const t=new Date(m.when).getTime();if(t>Date.now()){remSet(n,t);e={k:'set',q,t:ans+L(' Reminder set for ',' Reminder laga: ')+remFmt(t)+'.'}}}
+  else if(m&&m.kind==='remind'){const t=new Date(m.when).getTime();if(t>Date.now()){remSet(n,t);e={k:'set',q,t:ans+L(' Reminder set for ',' Reminder laga: ')+agExact(t)+L('. Check the date is right.','. Tareekh sahi hai, dekh lo.')}}}
   if(Array.isArray(j.links)){const l=j.links.filter(u=>typeof u==='string'&&/^https:\/\/\S+$/.test(u)&&u.length<400).slice(0,6);if(l.length){e.links=l;e.t=e.t.replace(/\s*\(?https?:\/\/[^\s)\]]+\)?/g,'').replace(/[ \t]+\n/g,'\n').trim()}}
   if(j.web===true)e.web=1;e.ai=1;return{e,src}}
 
