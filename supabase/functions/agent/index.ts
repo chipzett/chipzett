@@ -11,7 +11,7 @@ const USER_CAP = num("AGENT_USER_DAILY", 10), ALL_CAP = num("AGENT_ALL_DAILY", 8
 const WEB_USER_CAP = num("AGENT_WEB_USER_DAILY", 3), WEB_ALL_CAP = num("AGENT_WEB_ALL_DAILY", 200);
 const URL_ = Deno.env.get("AI_URL") || "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = Deno.env.get("AI_MODEL") || "openai/gpt-oss-120b";
-const WEB_MODEL = Deno.env.get("AI_WEB_MODEL") || "groq/compound";
+const WEB_MODEL = Deno.env.get("AI_WEB_MODEL") || "openai/gpt-oss-120b"; // web search uses this model's built-in browser_search tool
 
 const cors = (o: string | null) => ({
   "Access-Control-Allow-Origin": o && ALLOWED.has(o) ? o : "https://www.chipzett.com",
@@ -109,7 +109,7 @@ Deno.serve(async (req: Request) => {
     ? head + wall.map((t, i) => `<note number="${i + 1}">\n${t}\n</note>`).join("\n") + `\n\n<request>\n${ask}\n</request>`
     : head + `<note>\n${note}\n</note>\n\n<request>\n${ask}\n</request>`;
   const payload: Record<string, unknown> = web
-    ? { model: WEB_MODEL, max_tokens: 700, messages: [{ role: "system", content: WEB_SYSTEM }, { role: "user", content: user }] }
+    ? { model: WEB_MODEL, max_completion_tokens: 2048, tool_choice: "required", tools: [{ type: "browser_search" }], messages: [{ role: "system", content: WEB_SYSTEM }, { role: "user", content: user }] }
     : { model: MODEL, max_tokens: 800, response_format: { type: "json_object" }, messages: [{ role: "system", content: wall ? WALL_SYSTEM : SYSTEM }, { role: "user", content: user }] };
   let r: Response;
   try {
