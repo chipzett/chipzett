@@ -1207,6 +1207,11 @@ body.ws:not(.fullbar):not(.st-play):not(.ph) .pal{left:50%;right:auto;top:66px;b
 body.ws:not(.fullbar):not(.st-play):not(.ph) .pal .say{border-radius:14px;text-align:center;box-shadow:0 14px 34px -10px rgba(0,0,0,.8)}
 body.wel .ztop .zrow:not(.r1){display:none}
 body.wel.ph .pplan,body.wel.ph .pquick,body.wel.ph .pfocus{display:none!important}
+.note.sh-odd>.acts{position:absolute;right:4px;top:-38px;z-index:6;padding:3px 5px;border-radius:99px;background:rgba(22,17,42,.95);border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 24px -10px #000;opacity:0!important;pointer-events:none;transition:opacity .15s}
+.note.sh-odd>.acts::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
+.note.sh-odd:hover>.acts,.note.sh-odd:focus-within>.acts,.note.sh-odd>.acts:hover{opacity:1!important;pointer-events:auto}
+.note.sh-odd>.acts button{color:#fff}.note.sh-odd>.acts button:hover{background:rgba(255,255,255,.16)}
+.note.sh-odd>.acts .dot{box-shadow:0 0 0 1.5px #fff}
 .zmm{z-index:40}
 .pfp{position:fixed;inset:0;z-index:55;background:rgba(10,7,22,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:28px 16px}
 .pfb{width:min(780px,100%);background:#17122a;border:1px solid rgba(255,255,255,.13);border-radius:26px;padding:28px;color:#efeaff;font:500 14.5px/1.45 var(--ui);box-shadow:0 40px 90px -20px #000}
@@ -1696,7 +1701,7 @@ function paint(d,n){const t=n.tex||'plain';d.style.cssText=`left:${n.x}px;top:${
   {const pp=d.firstChild;if(pp){let dp=pp.querySelector('.dayp');if(n.day){if(!dp){dp=el('span','dayp');pp.append(dp)}dp['textContent']=n.day===TODAY()?L('Today','Aaj'):dfmt(n.day,{weekday:'short',day:'numeric',month:'short'})}else if(dp)dp.remove()}}
   paintCover(d,n);paintAge(d,n);
   if(WS.view!=='all')tvSoon();
-  setSky(d,n);SHAPES.forEach(x=>{if(x[0])d.classList.toggle('sh-'+x[0],n.shape===x[0])});ANIMS.forEach(a=>d.classList.remove('an-'+a[0]));d.classList.add('an-'+(n.anim||'still'));
+  setSky(d,n);SHAPES.forEach(x=>{if(x[0])d.classList.toggle('sh-'+x[0],n.shape===x[0])});{const odd=!isPhone()&&['oval','circle','cloud','ticket','label'].includes(n.shape),ac=d.querySelector('.acts'),hd=d.querySelector('.head');d.classList.toggle('sh-odd',odd);if(ac&&hd){if(odd&&ac.parentElement!==d)d.append(ac);else if(!odd&&ac.parentElement===d)hd.append(ac)}}ANIMS.forEach(a=>d.classList.remove('an-'+a[0]));d.classList.add('an-'+(n.anim||'still'));
   const p=d.firstChild;if(p){TEX.forEach(x=>p.classList.remove('tx-'+x[0]));p.classList.add('tx-'+t)}}
 
 /* ---------- colour + texture picker ---------- */
@@ -2561,7 +2566,7 @@ function welCheck(){if(DESK)return;const B=document.body;let w=$('.zwel');if(not
   [[L('Write','Likho'),L('Type in the bar below and press Enter.','Neeche bar me likho aur Enter dabao.')],[L('Ask','Poochho'),L('Switch on Agentic, then ask the note or tell it what to make.','Agentic on karo, phir note se poochho ya batao kya banana hai.')],[L('Present','Dikhao'),L('Open Studio to see notes as a mind map, slides or one page.','Studio kholo: notes mind map, slides ya ek panne me.')]].forEach(([t,d])=>{const li=el('li'),b=el('b'),s=el('span');b['textContent']=t;s['textContent']=d;li.append(b,s);ol.append(li)});
   const btn=(t,cls,fn)=>{const b=el('button',cls);b.type='button';b['textContent']=t;b.onclick=fn;return b},inp=()=>$('.zbar input[type=text],.zbar input:not([type])')||$('.zbar input');
   acts.append(btn(L('Write my first note','Pehla note likho'),'go',()=>{const i=inp();if(i)i.focus()}),btn(L('Try an agentic note','Agentic note aazmao'),'',()=>{const n=add({text:L('Client call\nThey want the revised quote and a signed timeline by Friday. Budget is fixed. Call Meera tomorrow at 10.','Client call\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai. Kal 10 baje Meera ko call.'),agent:true,day:TODAY(),color:'#5ef2c0'},true);applyFilter();setTimeout(()=>{const d=dom(n);if(d){if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center'});agFlash(n.id)}},120)}));
-  more.append(btn(L('Show sample notes','Namoone ke notes dikhao'),'',()=>{seedDemo();applyFilter()}),btn(L('Browse templates','Templates dekho'),'',()=>openGallery()));if(!PROFILE)more.append(btn(L('Create a profile','Profile banao'),'',()=>{if(wsEls&&wsEls.me)wsEls.me.click()}));
+  more.append(btn(L('Show sample notes','Namoone ke notes dikhao'),'',()=>{seedThree();applyFilter()}),btn(L('Browse templates','Templates dekho'),'',()=>openGallery()));if(!PROFILE)more.append(btn(L('Create a profile','Profile banao'),'',()=>{if(wsEls&&wsEls.me)wsEls.me.click()}));
   c.append(h,p,ol,acts,more);w.append(c);board.append(w);B.classList.add('wel')}
 /* ---------- studio: mind map, slides and infographic built on the device from the note's own lines ---------- */
 const STC=['#6c5ce7','#00a37a','#ff7a59','#0984e3','#e84393','#d98a00','#00a8a8','#8e6bff'];
@@ -2808,6 +2813,11 @@ function start(state){
   if(s&&s.def){Object.assign(def,s.def);sb.style.setProperty('--c',def.color);$('#pal').className='blob av-'+def.face}
   if(s&&s.notes&&s.notes.length){sound=s.sound!==false;s.notes.forEach(n=>{notes.push(n);zTop=Math.max(zTop,n.z||0);render(n)})}
   else{let demo=DESK;try{demo=demo||localStorage.getItem('chipzett-demo')==='1'}catch(e){}if(demo)seedDemo()}
+  function seedThree(){const w=board.clientWidth,T=TODAY(),x0=Math.max(16,(w-3*262)/2);
+    [{type:'text',text:L('Client call\nThey want the revised quote and a signed timeline by Friday. Budget is fixed. Call Meera tomorrow at 10.','Client call\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai. Kal 10 baje Meera ko call.'),agent:true,color:'#5ef2c0',day:T,space:'work'},
+     {type:'todo',text:L('Today\'s tasks','Aaj ke kaam'),items:[{t:L('Send the revised quote','Revised quote bhejo'),d:false},{t:L('Book the meeting room','Meeting room book karo'),d:false},{t:L('Reply to Meera','Meera ko jawab do'),d:true}],color:'#ffc93c',day:T,space:'work'},
+     {type:'text',text:L('Weekend plan\nSaturday: market, then lunch with family\nSunday: long walk, plan the week','Weekend ka plan\nShanivaar: bazaar, phir parivaar ke saath khana\nRavivaar: lambi sair, hafte ka plan'),color:'#74ccff',day:dadd(T,2),space:'personal'}].forEach((n,i)=>add(Object.assign({x:x0+i*262,y:70,face:'none',anim:'still',mood:'',font:'outfit'},n)))}
+  window.seedThree=seedThree;
   function seedDemo(){const w=board.clientWidth,h=board.clientHeight,at=(fx,fy)=>({x:Math.max(10,Math.min(w-242,w*fx)),y:Math.max(10,h*fy)});
     [{type:'todo',text:L('Launch checklist','Launch checklist'),items:[{t:L('Review homepage','Homepage dekho'),d:true},{t:L('Approve launch copy','Launch copy approve karo'),d:false},{t:L('Share the update','Update share karo'),d:false}],cat:'work',color:'#ffc93c',tex:'lined',day:TODAY(),...at(.05,.05)},
      {type:'text',text:L('Client meeting\nThey want the revised quote and a signed timeline by Friday. Budget is fixed.','Client meeting\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai.'),agent:true,cat:'work',color:'#5ef2c0',day:TODAY(),...at(.27,.05)},
