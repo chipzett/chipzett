@@ -1199,6 +1199,32 @@ body .ztop .zbtn.zask{color:var(--mint);border-color:rgba(94,242,192,.45)}
 body.ph .zstu{display:none}
 @page{margin:8mm}
 @media print{body.stp{display:block!important;overflow:visible!important;background:#fff!important;height:auto!important}body.stp>*:not(.stu){display:none!important}body.stp .stu{position:static!important;background:#fff!important;display:block!important}body.stp .stu>*:not(.stall){display:none!important}body.stp .stall{display:block!important}body.stp .stall .stsl{--u:2.5mm;width:250mm;margin:0 auto 6mm;break-after:page;break-inside:avoid;border:1px solid #ddd;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.pfp{position:fixed;inset:0;z-index:55;background:rgba(10,7,22,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:28px 16px}
+.pfb{width:min(780px,100%);background:#17122a;border:1px solid rgba(255,255,255,.13);border-radius:26px;padding:28px;color:#efeaff;font:500 14.5px/1.45 var(--ui);box-shadow:0 40px 90px -20px #000}
+.pfb>header{display:flex;align-items:center;gap:14px}
+.pfb>header>i{flex:none;width:54px;height:54px;border-radius:50%;background:#ffc93c;color:#1b1430;display:grid;place-items:center;font:700 23px var(--ui);font-style:normal}
+.pfb>header>div{flex:1;min-width:0}
+.pfb h2{font:700 24px/1.2 var(--ui);letter-spacing:-.02em;margin:0;color:#fff;overflow-wrap:anywhere}
+.pfb header small{font-size:13.5px;color:rgba(239,234,255,.62)}
+.pfx{flex:none;font:600 13px var(--ui);padding:8px 13px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#efeaff;cursor:pointer}
+.pfs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:22px}
+.pfs div{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);display:grid;gap:2px}
+.pfs b{font:700 26px/1.1 var(--ui);color:#fff}.pfs span{font-size:12.5px;color:rgba(239,234,255,.62)}
+.pfb h3{font:700 12px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:rgba(239,234,255,.5);margin:26px 0 10px}
+.pft{display:grid;gap:6px}.pft p{margin:0;color:rgba(239,234,255,.62)}
+.pft button{display:flex;align-items:center;gap:10px;text-align:left;padding:11px 14px;border-radius:12px;border:0;border-left:4px solid var(--c);background:rgba(255,255,255,.06);color:#efeaff;font:600 14.5px var(--ui);cursor:pointer}
+.pft button span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pft em{font-style:normal;font-size:12px;color:rgba(239,234,255,.6)}
+.pfg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pfg button{display:grid;gap:3px;text-align:left;align-content:start;padding:14px 15px;border-radius:15px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#efeaff;cursor:pointer;min-height:76px}
+.pfg button:hover,.pft button:hover{background:rgba(255,255,255,.1)}
+.pfg b{font:600 15px var(--ui);color:#fff}.pfg span{font-size:12.5px;line-height:1.35;color:rgba(239,234,255,.62)}
+.pfseg{display:inline-flex;gap:4px;background:rgba(255,255,255,.07);padding:4px;border-radius:12px}
+.pfseg button{font:600 13.5px var(--ui);padding:8px 16px;border-radius:9px;border:0;background:none;color:#cfc8ea;cursor:pointer}.pfseg button[aria-pressed=true]{background:#fff;color:#1b1430}
+.pfk{display:flex;flex-wrap:wrap;gap:8px}
+.pfk button{font:600 13.5px var(--ui);padding:9px 14px;border-radius:11px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#efeaff;cursor:pointer}
+.pff{margin:22px 0 0;font-size:12.5px;color:rgba(239,234,255,.5)}
+.pfin{width:100%;font:500 16px var(--ui);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;margin:6px 0 14px;outline:0}
+@media(max-width:640px){.pfp{padding:0}.pfb{border-radius:0;border:0;min-height:100dvh;padding:18px 16px calc(24px + env(safe-area-inset-bottom))}.pfs{grid-template-columns:repeat(2,minmax(0,1fr))}.pfg{grid-template-columns:repeat(2,minmax(0,1fr))}.pfb h2{font-size:20px}.pfb>header>i{width:46px;height:46px;font-size:20px}.pfseg{display:flex}.pfseg button{flex:1}}
 .zwel{position:absolute;inset:0;z-index:2;display:grid;place-items:center;padding:16px;pointer-events:none}
 .zwelc{pointer-events:auto;width:min(560px,100%);background:rgba(22,17,42,.92);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:30px 30px 24px;color:#efeaff;font:500 15px/1.5 var(--ui);box-shadow:0 30px 80px -30px #000;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .zwelc h2{font:700 28px/1.15 var(--ui);letter-spacing:-.02em;margin:0 0 6px;color:#fff}
@@ -2483,13 +2509,36 @@ function gridInit(){if(DESK)return;board.addEventListener('mousedown',e=>{if(!do
   addEventListener('resize',()=>{if(nOpen&&!isPhone())noteClose()})}
 
 /* ---------- ask your wall: one question across your notes ---------- */
+/* ---------- profile page: the person's own home, with today and every feature one press away. Saved on this device. ---------- */
+function openProfile(){if(!PROFILE)return;const old=$('.pfp');if(old&&old._close)old._close();const o=el('div','pfp'),box=el('div','pfb'),hd=el('header'),av=el('i'),who=el('div'),nm=el('h2'),sub=el('small'),x=el('button','pfx');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label',L('Your profile','Tumhara profile'));
+  const close=()=>{o.remove();removeEventListener('keydown',key,true)},key=e=>{if(e.key==='Escape'&&!$('.pss')&&!$('.stu')){e.stopPropagation();close()}};o._close=close;addEventListener('keydown',key,true);o.addEventListener('pointerdown',e=>{if(e.target===o)close()});
+  const hr=new Date().getHours(),hello=hr<12?L('Good morning','Suprabhat'):hr<17?L('Good afternoon','Namaste'):L('Good evening','Shubh sandhya');
+  av['textContent']=PROFILE.name[0].toUpperCase();nm['textContent']=hello+', '+PROFILE.name;sub['textContent']=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'});x.type='button';x['textContent']=L('Close','Band');x.onclick=close;who.append(nm,sub);hd.append(av,who,x);box.append(hd);
+  const live=notes.filter(n=>!covered(n)),today=live.filter(n=>n.day===TODAY()),left=today.reduce((a,n)=>a+(n.type==='todo'?(n.items||[]).filter(i=>!i.d).length:0),0),rem=notes.filter(n=>n.rem&&!n.remFired).length,st=el('div','pfs');
+  [[today.length,L('notes today','aaj ke notes')],[left,L('tasks left today','aaj ke baaki kaam')],[rem,L('reminders set','reminder lage')],[notes.length,L('notes in all','kul notes')]].forEach(([v,t])=>{const d=el('div'),b=el('b'),sp=el('span');b['textContent']=v;sp['textContent']=t;d.append(b,sp);st.append(d)});box.append(st);
+  const sec=t=>{const h=el('h3');h['textContent']=t;box.append(h)},go=n=>{close();if(isHid(n))tvGo('all');setTimeout(()=>{const d=dom(n);if(!d)return;if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center',behavior:'smooth'});agFlash(n.id)},120)};
+  sec(L('Today','Aaj'));const tl=el('div','pft');if(today.length)today.slice(0,6).forEach(n=>{const b=el('button'),t=el('span'),m=el('em');b.type='button';b.style.setProperty('--c',n.color||'#ffc93c');t['textContent']=stClip(String(n.text||'').split('\n')[0]||L('Note','Note'),60);if(n.type==='todo'){const a=(n.items||[]),dn=a.filter(i=>i.d).length;m['textContent']=dn+'/'+a.length}else if(n.rem&&!n.remFired)m['textContent']=L('reminder','reminder');b.append(t,m);b.onclick=()=>go(n);tl.append(b)});
+  else{const e=el('p');e['textContent']=L('Nothing is planned for today yet.','Aaj ke liye abhi kuch plan nahi.');tl.append(e)}box.append(tl);
+  sec(L('Do something','Kuch karo'));const g=el('div','pfg'),act=(t,d,fn)=>{const b=el('button'),bt=el('b'),sp=el('span');b.type='button';bt['textContent']=t;sp['textContent']=d;b.append(bt,sp);b.onclick=()=>{close();fn()};g.append(b)},bar=()=>{const i=wsEls&&wsEls.inp;if(i)i.focus()},mk=o2=>{if(WS.view!=='all'&&WS.view!=='day')tvGo('all');const n=add(Object.assign({day:TODAY()},o2),true);applyFilter();setTimeout(()=>{const d=dom(n);if(d){if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center'})}},120)};
+  act(L('New note','Naya note'),L('Write it in the bar','Bar me likho'),bar);act(L('Checklist','Checklist'),L('A list you tick off','Tick karne wali list'),()=>mk({type:'todo',text:L('To do','Karna hai'),items:[{t:'',d:false}]}));
+  act(L('Agentic note','Agentic note'),L('A note you can ask and instruct','Note jisse poochh aur karwa sako'),()=>{wsNext.agent=true;applyFilter();bar();pal(L('Agentic is on. Write the note, then ask it.','Agentic on hai. Note likho, phir usse poochho.'),true)});
+  if(!DESK&&typeof voiceCan==='function'&&voiceCan())act(L('Speak a note','Bol ke note'),L('Say it, ChipZett writes it','Bolo, ChipZett likhega'),()=>voiceGo(false,voiceToNote));
+  if(!DESK)act(L('Ask your wall','Wall se poochho'),L('One question across your notes','Saare notes pe ek sawaal'),()=>openAsk());
+  act('Studio',L('Mind map, slides, infographic','Mind map, slides, infographic'),()=>openStudio(stWall()));act(L('Templates','Templates'),L('Ready-made notes','Bane-banaye notes'),()=>openGallery());act(L('Calendar','Calendar'),L('Your notes by day','Din ke hisaab se notes'),()=>tvGo('month',WS.date));
+  box.append(g);
+  sec(L('Your space','Tumhari jagah'));const sp=el('div','pfseg');[['',L('Everything','Sab')],['personal',L('Personal','Personal')],['work',L('Work','Kaam')]].forEach(([k,t])=>{const b=el('button');b.type='button';b['textContent']=t;b.setAttribute('aria-pressed',WS.space===k);b.onclick=()=>{WS.space=k;applyFilter();[...sp.children].forEach(c=>c.setAttribute('aria-pressed',c===b))};sp.append(b)});box.append(sp);
+  sec(L('Look after it','Sambhal ke rakho'));const k=el('div','pfk'),lk=(t,fn)=>{const b=el('button');b.type='button';b['textContent']=t;b.onclick=fn;k.append(b)};lk(L('Download a backup','Backup download karo'),()=>bkDownload());lk(L('Trash','Trash'),()=>{close();openTrash()});lk(L('All features','Saare features'),()=>{close();openExplore()});
+  lk(L('Change name','Naam badlo'),()=>{const {b,close:c2}=pssBox(),h=el('h3'),i=document.createElement('input'),pa=el('div','pa'),ok=el('button','go'),no=el('button');h['textContent']=L('Your name','Tumhara naam');i.type='text';i.maxLength=24;i.value=PROFILE.name;i.className='pfin';i.setAttribute('aria-label',L('Your name','Tumhara naam'));ok.type=no.type='button';ok['textContent']=L('Save','Save');no['textContent']=L('Cancel','Rehne do');const sv=()=>{const v=i.value.trim();if(!v){i.focus();return}PROFILE.name=v;try{localStorage.setItem('chipzett-profile',JSON.stringify(PROFILE))}catch(e){}c2();applyFilter();close();openProfile()};ok.onclick=sv;no.onclick=c2;i.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();sv()}};pa.append(ok,no);b.append(h,i,pa);setTimeout(()=>i.focus(),50)});
+  lk(L('Remove profile','Profile hatao'),()=>{close();if(wsEls&&wsEls.pOut)wsEls.pOut.click()});box.append(k);
+  const ft=el('p','pff');ft['textContent']=L('Your profile and notes are saved on this device. Signing in, so they follow you to another device, is being built.','Profile aur notes isi device pe save hain. Sign-in, jisse ye doosre device pe bhi milein, ban raha hai.');box.append(ft);
+  o.append(box);document.body.append(o);x.focus({preventScroll:true})}
 /* ---------- first visit: an empty wall with three steps, instead of sample notes ---------- */
 function welCheck(){if(DESK)return;const B=document.body;let w=$('.zwel');if(notes.length){if(w)w.remove();B.classList.remove('wel');return}if(w||!board)return;
   w=el('div','zwel');const c=el('div','zwelc'),h=el('h2'),p=el('p'),ol=el('ol'),acts=el('div','zwela'),more=el('div','zwelm');h['textContent']=L('Start with one note.','Ek note se shuru karo.');p['textContent']=L('Your wall is empty. Nothing to set up and no account needed.','Tumhari wall khaali hai. Koi setup nahi, koi account nahi.');
   [[L('Write','Likho'),L('Type in the bar below and press Enter.','Neeche bar me likho aur Enter dabao.')],[L('Ask','Poochho'),L('Switch on Agentic, then ask the note or tell it what to make.','Agentic on karo, phir note se poochho ya batao kya banana hai.')],[L('Present','Dikhao'),L('Open Studio to see notes as a mind map, slides or one page.','Studio kholo: notes mind map, slides ya ek panne me.')]].forEach(([t,d])=>{const li=el('li'),b=el('b'),s=el('span');b['textContent']=t;s['textContent']=d;li.append(b,s);ol.append(li)});
   const btn=(t,cls,fn)=>{const b=el('button',cls);b.type='button';b['textContent']=t;b.onclick=fn;return b},inp=()=>$('.zbar input[type=text],.zbar input:not([type])')||$('.zbar input');
   acts.append(btn(L('Write my first note','Pehla note likho'),'go',()=>{const i=inp();if(i)i.focus()}),btn(L('Try an agentic note','Agentic note aazmao'),'',()=>{const n=add({text:L('Client call\nThey want the revised quote and a signed timeline by Friday. Budget is fixed. Call Meera tomorrow at 10.','Client call\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai. Kal 10 baje Meera ko call.'),agent:true,day:TODAY(),color:'#5ef2c0'},true);applyFilter();setTimeout(()=>{const d=dom(n);if(d){if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center'});agFlash(n.id)}},120)}));
-  more.append(btn(L('Show sample notes','Namoone ke notes dikhao'),'',()=>{seedDemo();applyFilter()}),btn(L('Browse templates','Templates dekho'),'',()=>openGallery()));
+  more.append(btn(L('Show sample notes','Namoone ke notes dikhao'),'',()=>{seedDemo();applyFilter()}),btn(L('Browse templates','Templates dekho'),'',()=>openGallery()));if(!PROFILE)more.append(btn(L('Create a profile','Profile banao'),'',()=>{if(wsEls&&wsEls.me)wsEls.me.click()}));
   c.append(h,p,ol,acts,more);w.append(c);board.append(w);B.classList.add('wel')}
 /* ---------- studio: mind map, slides and infographic built on the device from the note's own lines ---------- */
 const STC=['#6c5ce7','#00a37a','#ff7a59','#0984e3','#e84393','#d98a00','#00a8a8','#8e6bff'];
@@ -2633,17 +2682,17 @@ function wsBuild(){
   const saveP=()=>{try{PROFILE?localStorage.setItem('chipzett-profile',JSON.stringify(PROFILE)):localStorage.removeItem('chipzett-profile')}catch(e){}};
   const pn=document.createElement('input'),pSave=zb('zpri','',L('Save','Save')),pOut=zb('','',L('Remove profile','Profile hatao')),pRow=el('div','zrow');
   pn.type='text';pn.id='zname';pn.maxLength=24;pn.autocomplete='off';pn.placeholder=L('Your name','Aapka naam');pn.setAttribute('aria-label','Your name');
-  pRow.append(pSave,pOut);prof.append(el('h5',null,L('Profile','Profile')),pn,el('p',null,L('A profile gives you Personal and Work spaces and agentic notes. It is saved on this device only. Sign-in and sync are coming.','Profile se Personal aur Work space aur agentic notes milte hain. Yeh sirf is device pe save hota hai. Sign-in aur sync aane wale hain.')),pRow);
+  pRow.append(pSave,pOut);prof.append(el('h5',null,L('Profile','Profile')),pn,el('p',null,L('A profile gives you your own page: today at a glance, Personal and Work spaces, and every feature in one place. It is saved on this device only.','Profile se tumhara apna panna milta hai: aaj ek nazar me, Personal aur Work space, aur har feature ek jagah. Yeh sirf is device pe save hota hai.')),pRow);
   wsEls.pn=pn;wsEls.pOut=pOut;
   const setName=()=>{const v=pn.value.trim(),had=!!PROFILE;if(!v){pn.focus();return}
     PROFILE={name:v,face:(PROFILE&&PROFILE.face)||'classic'};saveP();closePops();
     if(!had){pal(L(`Welcome, ${v}. Personal and Work spaces and agentic notes are on.`,`Swagat hai, ${v}. Personal aur Work space aur agentic notes chalu hain.`),true);
       let seeded=false;try{seeded=!!localStorage.getItem('chipzett-agent-seed');localStorage.setItem('chipzett-agent-seed','1')}catch(e){}
       if(!seeded)add({type:'text',text:L('Client meeting\nMet Tuesday. They want the revised quote, sample board photos and a signed timeline by Friday. Budget is fixed. Riya owns the photos.','Client meeting\nMangal ko mile. Unhe Friday tak revised quote, sample board photos aur signed timeline chahiye. Budget fix hai. Photos Riya ke paas hain.'),cat:'work',space:'work',agent:true,color:'#ffc93c',tex:'lined',face:'boss',w:300},true)}
-    applyFilter()};
+    applyFilter();if(!had)setTimeout(openProfile,350)};
   pSave.onclick=setName;pn.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();setName()}};
   pOut.onclick=()=>{PROFILE=null;saveP();WS.space='';WS.agent=false;wsNext.agent=false;closePops();applyFilter()};
-  me.onclick=()=>{const on=prof.classList.contains('on');closePops();if(!on){pn.value=PROFILE?PROFILE.name:'';prof.classList.add('on');pn.focus()}};
+  me.onclick=()=>{if(PROFILE){closePops();openProfile();return}const on=prof.classList.contains('on');closePops();if(!on){pn.value=PROFILE?PROFILE.name:'';prof.classList.add('on');pn.focus()}};
   /* appearance */
   const st=el('div','zseg'),bgs=el('div','wbgs'),tools=el('div','wtools'),cust=el('label','wcust'),ci=document.createElement('input');
   [['clean',L('Clean','Saaf')],['play',L('Playful','Masti')]].forEach(([k,t])=>{const b=el('button',null,t);b.type='button';b.dataset.v=k;b.onclick=()=>{STYLE=k;try{localStorage.setItem('chipzett-style',k)}catch(e){}wsRender()};st.append(b)});
