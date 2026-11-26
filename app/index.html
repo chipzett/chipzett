@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ChipZett">
 <meta name="theme-color" content="#0d0a1b">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>ChipZett Notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Outfit:wght@400;500;600&family=Kalam:wght@400;700&family=Caveat:wght@500;700&family=Permanent+Marker&family=Pacifico&family=Special+Elite&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -1040,6 +1040,43 @@ body .ztop .zbtn.zexp{position:relative;color:#1b1430;background:#ffc93c;border-
 .vpill button{font:700 13px var(--ui);padding:8px 14px;border-radius:99px;border:0;cursor:pointer;background:#ffc93c;color:#1b1430}.vpill button.x{background:rgba(255,255,255,.1);color:#efeaff}
 @media (max-width:640px){.vpill{bottom:calc(150px + env(safe-area-inset-bottom,0px));gap:9px;padding:9px 10px 9px 14px}.vpill .vbars{display:none}}
 @media (prefers-reduced-motion:reduce){.vpill .vdot{animation:none}}
+
+/* ---------- phone, second pass: room to read, room to type ---------- */
+@media (max-width:640px){
+  body.ph .ztop .zsel{display:none}
+  body.ph .ztop .zbtn{padding:9px 11px}
+  /* the mascot stays off the page; what it says shows as a short line under the header */
+  body.ph .pal{left:12px;right:12px;top:calc(58px + env(safe-area-inset-top,0px));bottom:auto;align-items:center;z-index:30}
+  body.ph .pal .blob{display:none}
+  body.ph .pal .say{max-width:100%;border-radius:14px;font-size:14px;padding:10px 14px;text-align:center;box-shadow:0 14px 34px -10px rgba(0,0,0,.8)}
+  /* quick starts appear only while you are writing a new note */
+  body.ph .pquick{display:none}
+  body.ph.kb-bar .pquick{display:flex;bottom:calc(var(--kb,0px) + 70px)}
+  body.ph .board{padding-bottom:calc(150px + env(safe-area-inset-bottom))!important}
+  body.ph .wframe::after{height:calc(150px + env(safe-area-inset-bottom))}
+  /* a note shows two clear buttons: more, and done */
+  body.ph .acts{opacity:.85!important;gap:2px}
+  body.ph.ws .acts button,body.ph .acts button{width:40px;height:40px}
+  body.ph.ws .acts,body.ph.ws:not(.st-play) .acts{opacity:.85!important}
+  body.ph .acts button:nth-child(1),body.ph .acts button:nth-child(2),body.ph .acts button:nth-child(3),body.ph .acts button:nth-child(6){display:none}
+  body.ph .acts svg{width:20px;height:20px}
+  body.ph .head{min-height:40px}
+  body.ph .tvnav h3{font-size:17px;line-height:1.25}
+  body.ph .tvb{width:36px;height:36px}
+  body.ph .pstrip{margin-top:8px;gap:4px}
+  .pstrip button{padding:6px 0 10px}
+  body.ph .psum{margin-top:9px;font-size:13px}
+  body.ph .pfocus{margin-top:9px;padding:12px}
+  /* keyboard open: everything that is not the thing being typed gets out of the way */
+  body.ph.kb .ptabs,body.ph.kb .wframe::after,body.ph.kb .undo,body.ph.kb .psweep{display:none}
+  body.ph.kb .zbar{bottom:calc(var(--kb,0px) + 8px)}
+  body.ph.kb-note .zbar,body.ph.kb-note .pquick{display:none}
+  body.ph.kb .board{padding-bottom:calc(var(--kb,0px) + 110px)!important}
+  body.ph.kb-note .ztop{display:none}
+  body.ph.kb-note .board{padding-top:14px!important}
+  body.ph .nmenu{left:10px!important;right:10px;width:auto;top:auto!important;bottom:calc(10px + env(safe-area-inset-bottom));max-height:calc(100dvh - 80px);border-radius:20px;padding:8px}
+  body.ph .nmenu button{padding:11px 14px;font-size:15.500px}body.ph .nmenu button small{display:none}body.ph .nmenu hr{margin:3px 8px}
+}
 </style>
 </head>
 <body>
@@ -2072,7 +2109,7 @@ function selInit(){const tidy=$('.ztidy');if(tidy){const b=el('button','zbtn zse
     e.preventDefault();e.stopPropagation();if(Date.now()-selLp<450)return;const id=d.dataset.id;SEL.has(id)?SEL.delete(id):SEL.add(id);selPaint()},true);
   /* phone: press and hold a note to start selecting */
   let lt=0,lx=0,ly=0;const clr=()=>{clearTimeout(lt);lt=0};
-  board.addEventListener('pointerdown',e=>{if(selOn||!isPhone())return;const d=e.target.closest('.note');if(!d||e.target.closest('button,input,select,a,canvas,.tv'))return;const ed=e.target.closest('[contenteditable]');if(ed&&document.activeElement===ed)return;lx=e.clientX;ly=e.clientY;clr();
+  board.addEventListener('pointerdown',e=>{return;const d=e.target.closest('.note');if(!d||e.target.closest('button,input,select,a,canvas,.tv'))return;const ed=e.target.closest('[contenteditable]');if(ed&&document.activeElement===ed)return;lx=e.clientX;ly=e.clientY;clr();
     lt=setTimeout(()=>{lt=0;selLp=Date.now();selMode(true);SEL.add(d.dataset.id);selPaint();buzz(14);const g=getSelection();if(g)g.removeAllRanges()},560)},true);
   board.addEventListener('pointermove',e=>{if(lt&&Math.abs(e.clientX-lx)+Math.abs(e.clientY-ly)>10)clr()},true);
   ['pointerup','pointercancel','scroll'].forEach(t=>board.addEventListener(t,clr,true));
@@ -2118,7 +2155,7 @@ async function passCheck(){const hs=location.hash||'';if(hs.indexOf('#note=')!==
 /* shared into ChipZett from another app (installed app on Android), or opened with ?text= */
 function shareIn(){let q;try{q=new URLSearchParams(location.search)}catch(e){return}if(!(q.has('text')||q.has('url')||q.has('title')))return;const t=[q.get('title'),q.get('text'),q.get('url')].filter(Boolean).join('\n').slice(0,4000).trim();
   try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}if(!t)return;add({text:t,day:TODAY()},true);pal(L('Saved as a note for today.','Aaj ke note mein save ho gaya.'))}
-function passInit(){expInit();remInit();selInit();shareIn();passCheck();addEventListener('hashchange',passCheck)}
+function passInit(){kbInit();expInit();remInit();selInit();shareIn();passCheck();addEventListener('hashchange',passCheck)}
 
 /* ---------- pin ---------- */
 const pinFirst=(a,b)=>(b.pin?1:0)-(a.pin?1:0);
@@ -2165,6 +2202,7 @@ function noteMenu(anchor,n){if(nmenu&&nmenu._id===n.id){nmClose();return}nmClose
   m.append(document.createElement('hr'));
   if(!cov){it(L('Pass this note','Ye note pakdao'),L('Send it by link or QR code. No account','Link ya QR se bhejo. Koi account nahi'),()=>openPass([n]));
     it(L('Link to another note','Doosre note se jodo'),L('Then tap the other note and press Link','Phir doosra note chuno aur Link dabao'),()=>{selMode(true);SEL.add(n.id);selPaint();pal(L('Now tap the note to link with, then press Link.','Ab jis note se jodna hai use chuno, phir Link dabao.'),true)});
+    it(L('Select notes…','Notes chuno…'),L('Pick several, then finish, move or delete them together','Kai chuno, phir ek saath poore karo, hatao ya din badlo'),()=>{selMode(true);SEL.add(n.id);selPaint()});
     it(L('Duplicate','Ek aur copy'),'',()=>{const c=JSON.parse(JSON.stringify(n));['id','z','links','from','trail','rem','remFired','pin','made','touch'].forEach(k=>delete c[k]);c.x=(n.x||0)+26;c.y=(n.y||0)+26;add(c,true)});
     it(L('Copy as text','Text copy karo'),'',()=>{const ok=()=>pal(L('Copied.','Copy ho gaya.'),true);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(plainOf(n)).then(ok,()=>pal(L('Could not copy here.','Yahan copy nahi hua.'),true));else pal(L('Could not copy here.','Yahan copy nahi hua.'),true)})}
   if(!cov&&voiceCan()&&(n.type==='text'||!n.type))it(L('Dictate into this note','Is note me bol ke likho'),L('Speak, and the words are added at the end','Bolo, shabd aakhir me jud jaate hain'),()=>voiceGo(false,j=>{const t=j.kind==='todo'?(j.items||[]).map(x=>'- '+x).join('\n'):(j.text||'').trim();if(!t)return;n.text=((n.text||'')+'\n'+t).trim();n.textH='';const b=d.querySelector('.body');if(b)b['textContent']=n.text;save();touch(n);agFlash(n.id)}));
@@ -2256,6 +2294,13 @@ async function voiceGo(raw,onText){if(vState){vState.stop(true);return}if(!voice
   try{rec.start(1000)}catch(e){end(false);pal(L('Could not start recording.','Recording shuru nahi hui.'),true)}}
 function voiceToNote(j){const ag=!!(wsNext&&wsNext.agent);let n;if(j.kind==='todo'&&Array.isArray(j.items)&&j.items.length>=2)n=add({type:'todo',text:String(j.title||L('To do','Karna hai')).slice(0,80),items:j.items.slice(0,20).map(t=>({t:String(t).slice(0,200),d:false}))},true);
   else n=add({text:String(j.text).trim().slice(0,6000)},true);if(ag&&wsNext)wsNext.agent=false;const d=dom(n);if(d&&!d.classList.contains('hid')){d.scrollIntoView({block:'center',behavior:'smooth'});agFlash(n.id)}buzz(12);pal(L('Written down. Tap the note to change anything.','Likh diya. Kuch badalna ho to note pe tap karo.'),true);if(typeof phRender==='function')try{wsRender()}catch(e){}}
+
+/* ---------- phone: the keyboard. Lift the write bar above it and clear the screen while typing. ---------- */
+function kbInit(){if(DESK)return;const B=document.body,vv=window.visualViewport,ed=t=>t&&t.closest&&(t.closest('input:not([type=checkbox]):not([type=file]):not([type=range]),textarea,[contenteditable="true"]'));
+  const fit=()=>{const k=vv?Math.max(0,Math.round(innerHeight-vv.height-vv.offsetTop)):0;B.style.setProperty('--kb',(k>80?k:0)+'px')};if(vv){vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit)}
+  let out=0;document.addEventListener('focusin',e=>{if(!isPhone())return;const t=ed(e.target);if(!t)return;clearTimeout(out);const bar=!!t.closest('.zbar'),note=!!t.closest('.note');B.classList.add('kb');B.classList.toggle('kb-bar',bar);B.classList.toggle('kb-note',note&&!bar);fit();
+    if(note)setTimeout(()=>{try{t.scrollIntoView({block:'center',behavior:'smooth'})}catch(x){}},320)});
+  document.addEventListener('focusout',()=>{clearTimeout(out);out=setTimeout(()=>{if(!ed(document.activeElement))B.classList.remove('kb','kb-bar','kb-note')},180)})}
 function bkRestore(list,replace,settings){
   if(replace){notes.forEach(n=>{const d=dom(n);if(d)d.remove()});notes=[]}
   const have=new Set(notes.map(n=>n.id));let added=0;list.forEach(n=>{if(have.has(n.id))return;notes.push(n);zTop=Math.max(zTop,n.z||0);render(n,true);added++});
