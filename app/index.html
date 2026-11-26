@@ -1110,6 +1110,50 @@ body .ztop .zbtn.zexp{position:relative;color:#1b1430;background:#ffc93c;border-
   body.ph .board{padding-bottom:calc(132px + env(safe-area-inset-bottom))!important}
   body.ph .wframe::after{height:calc(128px + env(safe-area-inset-bottom))}
 }
+
+/* ---------- phone: a grid of small cards; tap one to open it full screen ---------- */
+@media (max-width:640px){
+  body.ph .board{justify-content:flex-start;align-items:flex-start;gap:10px}
+  body.ph .board .note:not(.open){width:calc(50% - 5px)!important;cursor:pointer}
+  body.ph .note:not(.open) .paper{max-height:178px;min-height:92px;overflow:hidden;padding:11px 12px 12px;border-radius:14px!important;clip-path:none!important;-webkit-mask:none!important;mask:none!important}
+  body.ph .note:not(.open) .paper>*{pointer-events:none}
+  body.ph .note:not(.open) .paper::after{content:"";position:absolute;left:0;right:0;bottom:0;height:26px;background:linear-gradient(transparent,var(--c));pointer-events:none;border-radius:0 0 14px 14px}
+  body.ph .note:not(.open) .acts,body.ph .note:not(.open) .agx,body.ph .note:not(.open) .rz,body.ph .note:not(.open) .made,body.ph .note:not(.open) .lnks,body.ph .note:not(.open) .addi,body.ph .note:not(.open) .lx,body.ph .note:not(.open) .tblb,body.ph .note:not(.open) .agfrom,body.ph .note:not(.open) .mailb,body.ph .note:not(.open) .tagain,body.ph .note:not(.open) .grow2 button{display:none!important}
+  body.ph .note:not(.open) .head{min-height:0;margin-bottom:4px}
+  body.ph .note:not(.open) .face{scale:.78;transform-origin:0 50%}
+  body.ph.ws:not(.st-play) .note.fk:not(.open) .ttl{font-size:14.500px;line-height:1.25}
+  body.ph.ws:not(.st-play) .note.fk:not(.open) .body{font-size:13.500px;line-height:1.38}
+  body.ph.ws:not(.st-play) .note.fk:not(.open) .paper li,body.ph.ws:not(.st-play) .note.fk:not(.open) .paper li span{font-size:13.500px}
+  body.ph.ws:not(.st-play) .note:not(.open) .paper li{padding:2px 0;gap:8px}
+  body.ph.ws:not(.st-play) .note:not(.open) .paper li b{width:16px;height:16px;border-radius:5px}
+  body.ph .note:not(.open) .reml{font-size:10px;padding:3px 8px;margin-top:6px}
+  body.ph .note:not(.open) .tw{scale:.72;transform-origin:0 0;margin-bottom:-24px}
+  body.ph .note:not(.open) .spk{scale:.8}
+  body.ph .note:not(.open) .dayp{display:none}
+  /* open */
+  /* the day plan starts as one line and opens when you start typing in it */
+  body.ph .pplan{gap:6px}
+  body.ph .pplan b{font-size:13.500px;font-weight:600;opacity:.8;margin:0}
+  body.ph .pplan input{padding:9px 11px;font-size:16px;border-radius:10px}
+  body.ph .pplan:not(:focus-within) input:nth-of-type(n+2),body.ph .pplan:not(:focus-within) .pgo{display:none}
+  body.ph .pplan .pgo{padding:10px}
+  body.ph .undo{bottom:calc(122px + env(safe-area-inset-bottom,0px))}
+  body.nopen .board{perspective:none!important}
+  body.ph .board .note.open{position:fixed!important;left:0!important;top:0!important;right:0;bottom:0;width:100%!important;height:100dvh;z-index:45!important;overflow-y:auto;transform:none!important;rotate:0deg;background:rgba(10,7,22,.93);padding:calc(56px + env(safe-area-inset-top,0px)) 12px calc(18px + var(--kb,0px));animation:nopen .18s ease-out;touch-action:pan-y;overscroll-behavior:contain}
+  @keyframes nopen{from{opacity:0;translate:0 14px}}
+  body.ph .note.open .paper{animation:none!important;transform:none!important;min-height:min(46dvh,420px);padding:16px 18px 20px;border-radius:18px!important;clip-path:none!important;-webkit-mask:none!important;mask:none!important}
+  body.ph.ws:not(.st-play) .note.fk.open .ttl{font-size:19px}
+  body.ph.ws:not(.st-play) .note.fk.open .body{font-size:17px;line-height:1.5;min-height:120px}
+  body.ph .note.open .acts button:nth-child(n){display:grid}
+  body.ph .note.open .acts button:nth-child(3){display:none}
+  body.ph.ws .note.open .acts button{width:38px;height:38px}
+  body.ph .rz{display:none!important}
+  .nback{display:none}
+  body.ph .note.open .nback{display:flex;position:fixed;left:10px;top:calc(8px + env(safe-area-inset-top,0px));z-index:46;align-items:center;gap:6px;font:600 15px var(--ui);color:#efeaff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:99px;padding:9px 16px 9px 12px}
+  body.nopen .ztop,body.nopen .zbar,body.nopen .ptabs,body.nopen .pquick,body.nopen .wframe{display:none!important}
+  body.ph.kb-note .note.open{padding-top:calc(52px + env(safe-area-inset-top,0px))}
+  body.selmode.ph .note:not(.open) .paper{outline-offset:2px}
+}
 </style>
 </head>
 <body>
@@ -2034,7 +2078,7 @@ function phBuild(){
   PH.mq.addEventListener('change',sync);sync(true);
   /* swipe a card: right finishes it, left moves it to tomorrow */
   let sw=null;const reset=d=>{d.style.transition='transform .2s';d.style.transform='';d.classList.remove('sw');delete d.dataset.sw;setTimeout(()=>d.style.transition='',220)};
-  board.addEventListener('pointerdown',e=>{if(!B.classList.contains('ph')||e.button)return;const d=e.target.closest('.note');if(!d||e.target.closest('input,button,canvas,.agx,li b')||(document.activeElement&&document.activeElement.isContentEditable&&d.contains(document.activeElement)))return;sw={d,x:e.clientX,y:e.clientY,on:false,dx:0}});
+  board.addEventListener('pointerdown',e=>{if(!B.classList.contains('ph')||e.button)return;const d=e.target.closest('.note');if(!d||d.classList.contains('open')||e.target.closest('input,button,canvas,.agx,li b')||(document.activeElement&&document.activeElement.isContentEditable&&d.contains(document.activeElement)))return;sw={d,x:e.clientX,y:e.clientY,on:false,dx:0}});
   board.addEventListener('pointermove',e=>{if(!sw)return;const dx=e.clientX-sw.x,dy=e.clientY-sw.y;if(!sw.on){if(Math.abs(dy)>16&&Math.abs(dy)>Math.abs(dx)){sw=null;return}if(Math.abs(dx)<16||Math.abs(dx)<Math.abs(dy)*1.5)return;sw.on=true;sw.d.classList.add('sw');if(document.activeElement)document.activeElement.blur()}
     sw.dx=dx;sw.d.style.transform='translateX('+dx+'px) rotate('+(dx/40).toFixed(2)+'deg)';sw.d.dataset.sw=dx>0?'done':'later';const g=Math.abs(dx)>96;if(g&&!sw.d.classList.contains('go'))buzz(8);sw.d.classList.toggle('go',g)});
   const end=e=>{if(!sw)return;const q=sw;sw=null;if(!q.on)return;const n=notes.find(x=>x.id===q.d.dataset.id);
@@ -2136,8 +2180,8 @@ function selMode(on){selOn=!!on;document.body.classList.toggle('selmode',selOn);
   const x=btn('×',0,()=>selMode(false),'x');x.setAttribute('aria-label',L('Stop selecting','Chunna band'));
   document.body.append(bar);selPaint()}
 function selInit(){const tidy=$('.ztidy');if(tidy){const b=el('button','zbtn zsel');b.type='button';b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 12.5l3 3 5.5-6.500"/></svg>';b.append(el('span',null,L('Select','Chuno')));b.setAttribute('aria-pressed','false');b.title=L('Select several notes and act on them together','Kai notes chuno aur ek saath kaam karo');b.onclick=()=>selMode(!selOn);tidy.before(b)}
-  const stop=e=>{if(!selOn||!e.target.closest('.note'))return;e.preventDefault();e.stopPropagation()};
-  ['pointerdown','mousedown','touchstart','dblclick'].forEach(t=>board.addEventListener(t,stop,{capture:true,passive:false}));
+  const stop=e=>{if(!selOn||!e.target.closest('.note'))return;if(e.type==='mousedown'||e.type==='dblclick')e.preventDefault();e.stopPropagation()};
+  ['pointerdown','mousedown','dblclick'].forEach(t=>board.addEventListener(t,stop,{capture:true}));
   board.addEventListener('click',e=>{const d=e.target.closest('.note');if(!d)return;if(!selOn){if(e.shiftKey&&!e.target.closest('button,input,select,a,[contenteditable]')){e.preventDefault();e.stopPropagation();selMode(true);SEL.add(d.dataset.id);selPaint()}return}
     e.preventDefault();e.stopPropagation();if(Date.now()-selLp<450)return;const id=d.dataset.id;SEL.has(id)?SEL.delete(id):SEL.add(id);selPaint()},true);
   /* phone: press and hold a note to start selecting */
@@ -2188,7 +2232,7 @@ async function passCheck(){const hs=location.hash||'';if(hs.indexOf('#note=')!==
 /* shared into ChipZett from another app (installed app on Android), or opened with ?text= */
 function shareIn(){let q;try{q=new URLSearchParams(location.search)}catch(e){return}if(!(q.has('text')||q.has('url')||q.has('title')))return;const t=[q.get('title'),q.get('text'),q.get('url')].filter(Boolean).join('\n').slice(0,4000).trim();
   try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}if(!t)return;add({text:t,day:TODAY()},true);pal(L('Saved as a note for today.','Aaj ke note mein save ho gaya.'))}
-function passInit(){kbInit();expInit();remInit();selInit();shareIn();passCheck();addEventListener('hashchange',passCheck)}
+function passInit(){kbInit();gridInit();expInit();remInit();selInit();shareIn();passCheck();addEventListener('hashchange',passCheck)}
 
 /* ---------- pin ---------- */
 const pinFirst=(a,b)=>(b.pin?1:0)-(a.pin?1:0);
@@ -2234,8 +2278,8 @@ function noteMenu(anchor,n){if(nmenu&&nmenu._id===n.id){nmClose();return}nmClose
   it(n.day===dadd(TODAY(),1)?L('Move to today','Aaj pe lao'):L('Move to tomorrow','Kal pe daalo'),L('Shows up in Today, Week and Month','Today, Week aur Month mein dikhega'),()=>{n.day=n.day===dadd(TODAY(),1)?TODAY():dadd(TODAY(),1);paint(d,n);save();applyFilter()});
   m.append(document.createElement('hr'));
   if(!cov){it(L('Pass this note','Ye note pakdao'),L('Send it by link or QR code. No account','Link ya QR se bhejo. Koi account nahi'),()=>openPass([n]));
-    it(L('Link to another note','Doosre note se jodo'),L('Then tap the other note and press Link','Phir doosra note chuno aur Link dabao'),()=>{selMode(true);SEL.add(n.id);selPaint();pal(L('Now tap the note to link with, then press Link.','Ab jis note se jodna hai use chuno, phir Link dabao.'),true)});
-    it(L('Select notes…','Notes chuno…'),L('Pick several, then finish, move or delete them together','Kai chuno, phir ek saath poore karo, hatao ya din badlo'),()=>{selMode(true);SEL.add(n.id);selPaint()});
+    it(L('Link to another note','Doosre note se jodo'),L('Then tap the other note and press Link','Phir doosra note chuno aur Link dabao'),()=>{noteClose();selMode(true);SEL.add(n.id);selPaint();pal(L('Now tap the note to link with, then press Link.','Ab jis note se jodna hai use chuno, phir Link dabao.'),true)});
+    it(L('Select notes…','Notes chuno…'),L('Pick several, then finish, move or delete them together','Kai chuno, phir ek saath poore karo, hatao ya din badlo'),()=>{noteClose();selMode(true);SEL.add(n.id);selPaint()});
     it(L('Duplicate','Ek aur copy'),'',()=>{const c=JSON.parse(JSON.stringify(n));['id','z','links','from','trail','rem','remFired','pin','made','touch'].forEach(k=>delete c[k]);c.x=(n.x||0)+26;c.y=(n.y||0)+26;add(c,true)});
     it(L('Copy as text','Text copy karo'),'',()=>{const ok=()=>pal(L('Copied.','Copy ho gaya.'),true);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(plainOf(n)).then(ok,()=>pal(L('Could not copy here.','Yahan copy nahi hua.'),true));else pal(L('Could not copy here.','Yahan copy nahi hua.'),true)})}
   if(!cov&&voiceCan()&&(n.type==='text'||!n.type))it(L('Dictate into this note','Is note me bol ke likho'),L('Speak, and the words are added at the end','Bolo, shabd aakhir me jud jaate hain'),()=>voiceGo(false,j=>{const t=j.kind==='todo'?(j.items||[]).map(x=>'- '+x).join('\n'):(j.text||'').trim();if(!t)return;n.text=((n.text||'')+'\n'+t).trim();n.textH='';const b=d.querySelector('.body');if(b)b['textContent']=n.text;save();touch(n);agFlash(n.id)}));
@@ -2334,6 +2378,17 @@ function kbInit(){if(DESK)return;const B=document.body,vv=window.visualViewport,
   let out=0;document.addEventListener('focusin',e=>{if(!isPhone())return;const t=ed(e.target);if(!t)return;clearTimeout(out);const bar=!!t.closest('.zbar'),note=!!t.closest('.note');B.classList.add('kb');B.classList.toggle('kb-bar',bar);B.classList.toggle('kb-note',note&&!bar);fit();
     if(note)setTimeout(()=>{try{t.scrollIntoView({block:'center',behavior:'smooth'})}catch(x){}},320)});
   document.addEventListener('focusout',()=>{clearTimeout(out);out=setTimeout(()=>{if(!ed(document.activeElement))B.classList.remove('kb','kb-bar','kb-note')},180)})}
+
+/* ---------- phone: tap a card to open it, Back (or the phone's back button) to close ---------- */
+let nOpen=null;
+function noteClose(fromPop){if(!nOpen)return;const d=nOpen;nOpen=null;if(document.activeElement&&d.contains(document.activeElement))document.activeElement.blur();d.classList.remove('open');document.body.classList.remove('nopen');const b=d.querySelector(':scope>.nback');if(b)b.remove();if(!fromPop)try{if(history.state&&history.state.cz==='note')history.back()}catch(e){}
+  try{d.scrollIntoView({block:'center'})}catch(e){}}
+function noteOpen(d){if(nOpen===d)return;if(nOpen)noteClose();nOpen=d;d.classList.add('open');document.body.classList.add('nopen');d.scrollTop=0;const b=el('button','nback');b.type='button';b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';b.append(el('span',null,L('Back','Wapas')));b.onclick=e=>{e.stopPropagation();noteClose()};d.prepend(b);
+  try{history.pushState({cz:'note'},'')}catch(e){}}
+function gridInit(){if(DESK)return;board.addEventListener('click',e=>{if(!e.isTrusted||!document.body.classList.contains('ph')||!isPhone()||selOn)return;const d=e.target.closest('.note');if(!d||d.classList.contains('open')||d.classList.contains('sw'))return;e.preventDefault();e.stopPropagation();noteOpen(d)},true);
+  addEventListener('popstate',()=>{if(nOpen)noteClose(true)});addEventListener('keydown',e=>{if(e.key==='Escape'&&nOpen&&!$('.pss')&&!nmenu&&!pk)noteClose()},true);
+  new MutationObserver(()=>{if(nOpen&&!nOpen.isConnected){nOpen=null;document.body.classList.remove('nopen');try{if(history.state&&history.state.cz==='note')history.back()}catch(e){}}}).observe(board,{childList:true});
+  addEventListener('resize',()=>{if(nOpen&&!isPhone())noteClose()})}
 function bkRestore(list,replace,settings){
   if(replace){notes.forEach(n=>{const d=dom(n);if(d)d.remove()});notes=[]}
   const have=new Set(notes.map(n=>n.id));let added=0;list.forEach(n=>{if(have.has(n.id))return;notes.push(n);zTop=Math.max(zTop,n.z||0);render(n,true);added++});
