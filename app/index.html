@@ -1631,7 +1631,7 @@ function agMoves(n){const txt=agText(n),mv=[],w=agWhen(txt),it=n.type==='todo'?[
 const MAIL_NOT=/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|January|February|March|April|May|June|July|August|September|October|November|December|Budget|Client|Call|Send|Email|Meet|The|They|She|He|We|It|RM|USD|Follow|Today|Tomorrow|Team|Draft|Quote|Project|Next|This|That|Please|Deadline|Note|Notes|Meeting)$/;
 const MAIL_DO=/^(call|email|send|meet|book|share|confirm|schedule|follow up|check|ring|text|message|remind|prepare|review|update|pay|invoice|deliver|finish|submit|arrange|set up|order|ask|tell)\b/i;
 function mailWho(t){const T=String(t||''),pick=re=>{let m;re.lastIndex=0;while((m=re.exec(T))){if(!MAIL_NOT.test(m[1]))return m[1]}return ''};
-  return pick(/\b(?:with|call|email|meet|ring|message|text|tell|ask)\s+([A-Z][a-z]{1,18})\b/g)||pick(/(?:^|[.!?\n]\s*)([A-Z][a-z]{1,18})\s+(?:wants|needs|asked|said|expects|requested)\b/g)||(/\b(they|she|he)\b/i.test(T)?'':pick(/\bto\s+([A-Z][a-z]{1,18})\b/g))}
+  return pick(/\b(?:[Ww]ith|[Cc]all|[Ee]mail|[Mm]eet|[Rr]ing|[Mm]essage|[Tt]ext|[Tt]ell|[Aa]sk)\s+([A-Z][a-z]{1,18})\b/g)||pick(/(?:^|[.!?\n]\s*)([A-Z][a-z]{1,18})\s+(?:wants|needs|asked|said|expects|requested)\b/g)||(/\b(they|she|he)\b/i.test(T)?'':pick(/\b[Tt]o\s+([A-Z][a-z]{1,18})\b/g))}
 function mailLine(x,who){let t=String(x||'').trim();const wre=who?new RegExp('\\b'+who+'\\b','g'):null;
   const m=t.match(/^(?:they|she|he|the client|client|[A-Z][a-z]+)\s+(?:wants?|needs?|asked for|requested|expects?)\s+(.+)$/i);
   if(m&&(/^(they|she|he|the client|client)\b/i.test(t)||(who&&t.indexOf(who)===0)))return 'You asked for '+m[1].replace(/[.]*$/,'.');
