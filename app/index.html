@@ -242,6 +242,10 @@ li.d span{background-size:0 2px;text-decoration:line-through;text-decoration-thi
 .pens button[aria-pressed=true]{border-color:var(--ink);transform:scale(1.25)}
 .pens .txt{width:auto;height:auto;border-radius:999px;background:color-mix(in srgb,var(--ink) 12%,transparent);font:600 11px var(--ui);padding:2px 8px;margin-left:auto;color:var(--ink)}
 .pic{width:100%;border-radius:4px 12px 4px 12px;display:block;margin-bottom:6px}
+.seeb{align-self:flex-start;margin-top:4px;font:600 12px var(--ui);padding:6px 12px;border-radius:99px;border:0;background:#1b1430;color:#fff;cursor:pointer}
+.seew{display:none;font:600 12px var(--ui);color:var(--ink);opacity:.7;margin-top:4px}
+.note.see-busy .seeb{display:none}.note.see-busy .seew{display:block}.note.see-busy .pic{opacity:.55}
+body.ph .seeb{font-size:14px;padding:10px 16px}
 .gb{height:16px;border-radius:999px;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden;margin:6px 0}
 .gb i{display:block;height:100%;width:var(--w);background:var(--ink);border-radius:999px;transition:width .5s cubic-bezier(.3,1.5,.5,1)}
 .grow2{display:flex;align-items:center;gap:6px;font:600 13px var(--ui);font-variant-numeric:tabular-nums}
@@ -1938,7 +1942,7 @@ const EXTRA={
       b.onclick=()=>{col=k;pens.querySelectorAll('button:not(.txt)').forEach(q=>q.setAttribute('aria-pressed',q===b))};pens.append(b)});
     const clr=el('button','txt','Mitao');clr.type='button';clr.onclick=()=>{x.clearRect(0,0,408,300);n.img='';save()};pens.append(clr);
     const cap=el('div','body',n.text);edit(cap,n);p.append(c,pens,cap)},
-  image(n,p){const im=el('img','pic');im.src=n.img;im.alt=n.text||'Photo';im.draggable=false;const cap=el('div','body',n.text);edit(cap,n);p.append(im,cap)},
+  image(n,p){const im=el('img','pic');im.src=n.img;im.alt=n.text||'Photo';im.draggable=false;const cap=el('div','body',n.text);edit(cap,n);p.append(im,cap);if(!DESK&&!n.text&&!n.seen){const b=el('button','seeb',L('Read this picture','Ye picture padho'));b.type='button';b.onclick=()=>seeAsk(n);const w=el('div','seew',L('Reading the picture…','Picture padh raha hoon…'));p.append(b,w)}},
   goal(n,p,d){titleOf(n,p);const bar=el('div','gb'),fill=el('i'),row=el('div','grow2'),lab=el('span'),step=Math.max(1,Math.round(n.total/20));bar.append(fill);
     const draw=()=>{const pc=Math.min(100,Math.round(n.cur/n.total*100));fill.style.setProperty('--w',pc+'%');lab.textContent=tr(`${n.cur} / ${n.total} (${pc}%)`)};
     const btn=(t,dl,label)=>{const b=el('button',null,t);b.type='button';b.setAttribute('aria-label',label);
@@ -1952,11 +1956,28 @@ const EXTRA={
       w.addEventListener('focusout',e=>{if(!w.contains(e.relatedTarget))done()})};
     row.append(btn('-',-step,'Kam karo'),lab,btn('+',step,'Badhao'));p.append(bar,row);draw()}
 };
-function addImage(file){if(!file||!/^image\//.test(file.type))return;const fr=new FileReader();
-  fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,520/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;
-    c.getContext('2d').drawImage(im,0,0,c.width,c.height);add({type:'image',text:'',img:c.toDataURL('image/jpeg',.82)},true);pal('Photo chipka di!')};im.src=fr.result};fr.readAsDataURL(file)}
+/* a picture becomes a note: the picture is kept, and what it says is written under it by the picture reader */
+const SEE_URL='https://nzgpwwquxqgjcoswythp.supabase.co/functions/v1/see',SEEBIG=new WeakMap();
+const seePref=()=>{try{return localStorage.getItem('chipzett-see')||''}catch(e){return ''}};
+async function seeRead(n){const d0=dom(n);if(d0)d0.classList.add('see-busy');let j=null,code='';
+  try{const c=new AbortController(),tm=setTimeout(()=>c.abort(),45000);let r;try{r=await fetch(SEE_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({image:SEEBIG.get(n)||n.img,today:dkey(new Date())}),signal:c.signal})}finally{clearTimeout(tm)}
+    j=await r.json().catch(()=>({}));if(!r.ok||typeof j.text!=='string'||!j.text.trim()){code=j.error||'ai';j=null}}catch(e){code='ai'}
+  if(!notes.includes(n))return;const d1=dom(n);
+  if(!j){if(d1)d1.classList.remove('see-busy');pal(code==='user'?L('You have used today’s 10 free picture reads. They come back tomorrow.','Aaj ki 10 free picture reading ho gayi. Kal phir milengi.'):navigator.onLine===false?L('Reading a picture needs a connection.','Picture padhne ke liye internet chahiye.'):L('The picture could not be read. Please try again.','Picture padhi nahi ja saki. Dobara karo.'),true);return}
+  n.text=((j.title?String(j.title).slice(0,80)+'\n':'')+String(j.text)).slice(0,2000);n.seen=1;n.touch=Date.now();if((n.w||232)<290)n.w=290;
+  if(typeof j.when==='string'&&/^\d{4}-\d{2}-\d{2}T/.test(j.when))n.seeWhen=j.when;
+  SEEBIG.delete(n);if(d1)d1.remove();render(n,true);save();applyFilter();pal(L('Read from the picture. Check it before you rely on it.','Picture se padh liya. Bharosa karne se pehle ek baar dekh lo.'),true)}
+function seeAsk(n){if(DESK)return;if(seePref()==='auto'){seeRead(n);return}const {b,close}=pssBox(),h=el('h3'),p=el('p'),pa=el('div','pa'),sm=el('small'),all=el('button','go'),one=el('button'),no=el('button');
+  h['textContent']=L('Read this picture into the note?','Is picture ko note mein padhein?');p['textContent']=L('To read it, the picture is sent to an AI service through ChipZett. It is not stored.','Padhne ke liye picture ChipZett ke zariye ek AI service ko jaati hai. Ye store nahi hoti.');
+  all.type=one.type=no.type='button';all['textContent']=L('Yes, and read pictures I paste from now on','Haan, aur aage jo paste karun wo bhi padho');one['textContent']=L('Only this one','Sirf ye wali');no['textContent']=L('Not now','Abhi nahi');
+  all.onclick=()=>{try{localStorage.setItem('chipzett-see','auto')}catch(e){}close();seeRead(n)};one.onclick=()=>{close();seeRead(n)};no.onclick=()=>close();pa.append(all,one,no);
+  sm['textContent']=L('Free: 10 pictures a day. No account.','Free: roz 10 picture. Koi account nahi.');b.append(h,p,pa,sm)}
+function addImage(file,pasted){if(!file||!/^image\//.test(file.type))return;const fr=new FileReader();
+  fr.onload=()=>{const im=new Image();im.onload=()=>{const shot=(max,q)=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)};
+    const n=add({type:'image',text:'',img:shot(520,.82)},true);if(!DESK){let big=shot(1500,.85);if(big.length>1800000)big=shot(1100,.72);if(big.length<=1800000)SEEBIG.set(n,big)}
+    if(pasted&&!DESK&&seePref()==='auto'&&aiPref()!=='off')seeRead(n);else pal(DESK?'Photo chipka di!':L('Picture added. Press Read this picture to turn it into a note.','Picture lag gayi. Note banane ke liye Read this picture dabao.'),true)};im.src=fr.result};fr.readAsDataURL(file)}
 $('#file').onchange=e=>{addImage(e.target.files[0]);e.target.value=''};
-addEventListener('paste',e=>{const f=[...(e.clipboardData?.files||[])].find(f=>/^image\//.test(f.type));if(f){e.preventDefault();addImage(f)}});
+addEventListener('paste',e=>{const f=[...(e.clipboardData?.files||[])].find(f=>/^image\//.test(f.type));if(f){e.preventDefault();addImage(f,true)}});
 board.addEventListener('dragover',e=>e.preventDefault());
 board.addEventListener('drop',e=>{e.preventDefault();addImage(e.dataTransfer.files[0])});
 const MENU=[['Pie chart','Hisson ka gol chart',()=>({type:'chart',kind:'pie',text:'Mahine ka kharcha',data:'Rent 40, Khana 25, Masti 15, Bachat 20'})],
