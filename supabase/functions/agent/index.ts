@@ -11,7 +11,7 @@ const USER_CAP = num("AGENT_USER_DAILY", 10), ALL_CAP = num("AGENT_ALL_DAILY", 8
 const WEB_USER_CAP = num("AGENT_WEB_USER_DAILY", 3), WEB_ALL_CAP = num("AGENT_WEB_ALL_DAILY", 200);
 const URL_ = Deno.env.get("AI_URL") || "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = Deno.env.get("AI_MODEL") || "openai/gpt-oss-120b";
-const WEB_MODEL = Deno.env.get("AI_WEB_MODEL") || "openai/gpt-oss-120b"; // web search uses this model's built-in browser_search tool
+const WEB_MODEL = Deno.env.get("AI_WEB_MODEL") || "openai/gpt-oss-20b"; // web search uses this model's built-in browser_search tool; the smaller model answers sooner
 
 const cors = (o: string | null) => ({
   "Access-Control-Allow-Origin": o && ALLOWED.has(o) ? o : "https://www.chipzett.com",
@@ -51,7 +51,7 @@ ${MAKE}
 
 const WEB_SYSTEM = `You help the owner of a sticky note by searching the web for what the note asks.
 Rules:
-- Search, then give up to 4 concrete options. One option per line, starting with "- ". Each line: what it is, the key figure (price, date, time) exactly as the source shows it, and the source page URL in full.
+- Be quick: one search, open at most two result pages, then answer. Give up to 4 concrete options. One option per line, starting with "- ". Each line: what it is, the key figure (price, date, time) exactly as the source shows it, and the source page URL in full.
 - Start with one short sentence that sums up what you found. End with one short sentence on what to check before acting.
 - Only state figures you actually found on a page. If you could not find live figures, say so plainly and give the best pages to check instead.
 - You cannot book, buy or pay for anything, and you must not say that you did.
@@ -109,11 +109,11 @@ Deno.serve(async (req: Request) => {
     ? head + wall.map((t, i) => `<note number="${i + 1}">\n${t}\n</note>`).join("\n") + `\n\n<request>\n${ask}\n</request>`
     : head + `<note>\n${note}\n</note>\n\n<request>\n${ask}\n</request>`;
   const payload: Record<string, unknown> = web
-    ? { model: WEB_MODEL, max_completion_tokens: 2048, tool_choice: "required", tools: [{ type: "browser_search" }], messages: [{ role: "system", content: WEB_SYSTEM }, { role: "user", content: user }] }
+    ? { model: WEB_MODEL, max_completion_tokens: 1600, reasoning_effort: "low", tool_choice: "required", tools: [{ type: "browser_search" }], messages: [{ role: "system", content: WEB_SYSTEM }, { role: "user", content: user }] }
     : { model: MODEL, max_tokens: 800, response_format: { type: "json_object" }, messages: [{ role: "system", content: wall ? WALL_SYSTEM : SYSTEM }, { role: "user", content: user }] };
   let r: Response;
   try {
-    r = await fetch(URL_, { method: "POST", headers: { "authorization": "Bearer " + key, "content-type": "application/json" }, body: JSON.stringify(payload), signal: AbortSignal.timeout(web ? 55000 : 28000) });
+    r = await fetch(URL_, { method: "POST", headers: { "authorization": "Bearer " + key, "content-type": "application/json" }, body: JSON.stringify(payload), signal: AbortSignal.timeout(web ? 42000 : 28000) });
   } catch { return out(origin, 502, { error: "ai" }); }
   if (!r.ok) { console.error("ai status", r.status, web ? "web" : wall ? "wall" : "ask"); return out(origin, r.status === 429 ? 429 : 502, { error: r.status === 429 ? "all" : "ai", status: r.status, web }); }
   const j = await r.json().catch(() => null);
@@ -121,7 +121,9 @@ Deno.serve(async (req: Request) => {
 
   if (web) {
     const links = Array.from(new Set((text.match(/https?:\/\/[^\s)\]>"']+/g) || []).map((u) => u.replace(/[.,;:]+$/, "")))).filter((u) => u.startsWith("https://") && u.length < 400).slice(0, 6);
-    return out(origin, 200, { answer: text.slice(0, 1600), source: "", web: false, make: null, links, left, searched: true });
+    const clean = text.replace(/\u3010[^\u3011]*\u3011/g, "").trim();
+    if (!clean) return out(origin, 502, { error: "ai", web });
+    return out(origin, 200, { answer: clean.slice(0, 1600), source: "", web: false, make: null, links: links.map((u) => u.replace(/\u3010.*$/, "")), left, searched: true });
   }
   let o: Record<string, unknown> | null = null;
   try { const a = text.indexOf("{"), b = text.lastIndexOf("}"); o = JSON.parse(text.slice(a, b + 1)); } catch { o = null; }
