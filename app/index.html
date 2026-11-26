@@ -1536,7 +1536,7 @@ const AG_ICON={ask:'<svg viewBox="0 0 16 16"><path d="M2.5 3h11v7.5H7.5L4.500 13
 const AG_STOP=new Set('the a an and or of to in on at by for with is are was were be do does did what who when where which how we they it this that have has i you our my me us them their there'.split(' '));
 const agWords=t=>(t.toLowerCase().match(/[a-z0-9]+/g)||[]).filter(w=>!AG_STOP.has(w));
 function agText(n){let t=n.text||'';if(n.items)t+='. '+n.items.map(i=>i.t+(i.d?' (done)':'')).join('. ');if(n.data)t+='. '+n.data;return t}
-const agSents=t=>t.split(/\n+|(?<=[.!?])\s+/).map(x=>x.trim()).filter(x=>x.length>2);
+const agSents=t=>String(t).replace(/([.!?])\s+/g,'$1\n').split(/\n+/).map(x=>x.trim()).filter(x=>x.length>2);
 function agItems(n){
   if(n.items&&n.items.length)return n.items.filter(i=>!i.d).map(i=>i.t);
   const ss=agSents(n.text||''),body=ss.length>1?ss.slice(1):ss,TR=/\b(want|wants|need|needs|must|should|have to|has to|deliver|send|bring|buy|get|chahiye|karna hai|lana hai|bhejna hai)\b/i;
@@ -1593,7 +1593,7 @@ function agAct(n,what,said){
   if(what==='plan'){if(!w)return{k:'ans',q:said,t:L('I could not find a day in that. Try: put this on Friday.','Usme din nahi mila. Aise likho: put this on Friday.')};n.day=dkey(w.d);const d=dom(n);if(d)paint(d,n);return{k:'set',q:said,t:L('Placed on ','Is din rakha: ')+dfmt(n.day,{weekday:'long',day:'numeric',month:'short'})+L('. See it in Week.','. Week mein dekho.')}}
   if(what==='chart'){const pr=agPairs(n);if(pr.length<2)return{k:'ans',q:said,t:L('I need at least two lines like "Rent 40" to draw a chart.','Chart ke liye kam se kam do line chahiye, jaise "Rent 40".')};
     const x=add({type:'chart',kind:'pie',text:title,data:pr.map(r=>r.l+' '+r.v).join(', '),tex:'grid',...beside(),color:'#fff4d6'},true);return{k:'made',q:said,t:L(`Chart made · ${pr.length} parts`,`Chart ban gaya · ${pr.length} hisse`),id:x.id}}
-  if(what==='mail'){const pts=agItems(n),b=L('Hello,\nThank you for your time. Here is where things stand:\n','Namaste,\nAapke samay ke liye dhanyavaad. Abhi ki sthiti:\n')+pts.map(x=>'- '+x).join('\n')+L('\nI will follow up soon.\nRegards','\nMain jald update dunga.\nDhanyavaad');
+  if(what==='mail'){const all=agSents(plainOf(n)),pts=(all.length>1?all.slice(1):all).map(x=>x.replace(/^\[[ x]\]\s*/,'').replace(/^[-*\u2022]\s*/,'')).filter(Boolean).slice(0,14),b=L('Hello,\nThank you for your time. Here is where things stand:\n','Namaste,\nAapke samay ke liye dhanyavaad. Abhi ki sthiti:\n')+pts.map(x=>'- '+x).join('\n')+L('\nI will follow up soon.\nRegards','\nMain jald update dunga.\nDhanyavaad');
     const x=add({type:'text',text:L('Follow-up: ','Follow-up: ')+title+'\n'+b,mail:{s:L('Follow-up: ','Follow-up: ')+title,b},tex:'lined',...beside(),color:'#fff4d6',w:300},true);return{k:'made',q:said,t:L('Follow-up drafted. Nothing is sent until you send it.','Follow-up draft ho gaya. Jab tak tum na bhejo, kuch nahi jayega.'),id:x.id}}
   if(what==='total'){const nums=(agText(n).match(/\d+(?:\.\d+)?/g)||[]).map(Number);return{k:'ans',q:said,t:nums.length?L(`${nums.length} numbers. Total ${+nums.reduce((a,b)=>a+b,0).toFixed(2)}.`,`${nums.length} numbers. Total ${+nums.reduce((a,b)=>a+b,0).toFixed(2)}.`):L('There are no numbers in this note.','Is note mein koi number nahi.')}}
   if(what==='sum'){const ss=agSents(agText(n));if(!ss.length)return{k:'ans',q:said,t:L('This note is empty.','Yeh note khaali hai.')};
@@ -2578,7 +2578,7 @@ function stNode(n){const lines=String(n.text||'').split('\n').map(x=>x.trim()).f
   else if(n.type==='table')(n.rows||[]).forEach(r=>{const c=(r||[]).map(x=>String(x||'').trim()).filter(Boolean);if(c.length)kids.push({t:c[0],kids:c.slice(1).map(s=>({t:s}))})});
   else if(n.type==='goal')kids.push({t:n.cur+' / '+n.total});
   else if(lines.length===1){const ss=(t.match(/[^.!?]+[.!?]*\s*/g)||[t]).map(s=>s.trim()).filter(Boolean);t=ss[0]||t;kids=ss.slice(1).map(s=>({t:s}))}
-  else{const ls=lines.slice(1),mix=ls.some(l=>bul.test(l))&&ls.some(l=>!bul.test(l));let cur=null;ls.forEach(l=>{if(mix&&bul.test(l)&&cur)cur.kids.push({t:l.replace(bul,'')});else{cur={t:l.replace(bul,''),kids:[]};kids.push(cur)}})}
+  else{const fluff=/^(hello|hi|hey|dear|namaste|thanks|thank you|regards|best regards|kind regards|best|cheers|sincerely|dhanyavaad|i will follow up soon|main jald update dunga)\b/i,ls=lines.slice(1).filter(l=>!(l.length<70&&fluff.test(l))),mix=ls.some(l=>bul.test(l))&&ls.some(l=>!bul.test(l));let cur=null;ls.forEach(l=>{if(mix&&bul.test(l)&&cur)cur.kids.push({t:l.replace(bul,'')});else{cur={t:l.replace(bul,''),kids:[]};kids.push(cur)}})}
   kids=kids.filter(k=>String(k.t||'').trim()).slice(0,12);kids.forEach(k=>{if(k.kids)k.kids=k.kids.slice(0,8)});
   return{t:t.replace(bul,'').replace(/[.:]$/,'')||L('Note','Note'),kids}}
 function stTree(list){if(list.length===1)return stNode(list[0]);return{t:L('My wall','Meri wall'),kids:list.slice(0,12).map(n=>{const k=stNode(n);k.kids=k.kids.slice(0,8).map(c=>({t:c.t,d:c.d}));return k})}}
