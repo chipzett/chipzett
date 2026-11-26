@@ -420,18 +420,20 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 /* everyday */
 .fxpill{margin-bottom:22px}
 .fxg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:44px}
-.fx{padding:26px 26px 22px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
-.fx h3{font:700 19px var(--ui);letter-spacing:-.02em;line-height:1.2;color:#fff;display:flex;align-items:center;gap:10px}
-.fx h3::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--k);flex:none}
+.fx{padding:26px 26px 22px;border-radius:20px;background:#fffaf0;border:1px solid rgba(27,20,48,.16)}
+.fx h3{font:700 19px var(--ui);letter-spacing:-.02em;line-height:1.2;color:var(--ink);display:flex;align-items:center;gap:10px}
+.fx h3::before{content:"";width:11px;height:11px;border-radius:4px;background:var(--k);box-shadow:inset 0 0 0 1px rgba(27,20,48,.25);flex:none}
 .fx ul{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:13px}
 .fx li{display:grid;gap:2px}
-.fx li b{font:600 15.5px var(--ui);color:#f3efff}
-.fx li span{font-size:14.5px;line-height:1.45;color:rgba(239,234,255,.66)}
-.fx.lead{grid-column:1/-1;background:linear-gradient(135deg,rgba(94,242,192,.13),rgba(116,204,255,.07));border-color:rgba(94,242,192,.32)}
+.fx li b{font:600 15.5px var(--ui);color:var(--ink)}
+.fx li span{font-size:14.5px;line-height:1.45;color:var(--ink-2)}
+.fx.lead{grid-column:1/-1;background:var(--mango);border-color:rgba(27,20,48,.3)}
+.fx.lead li span{color:rgba(27,20,48,.78)}
 .fx.lead h3{font-size:23px}
 .fx.lead ul{grid-template-columns:repeat(5,minmax(0,1fr));gap:22px;margin-top:20px}
-.fxnote{margin-top:22px;font-size:13.5px;color:rgba(239,234,255,.55);max-width:none}
-.fxnote a{color:#cfc8ea}
+.fxnote{margin-top:22px;font-size:13.5px;color:var(--ink-2);max-width:none}
+.fxnote a{color:var(--ink)}
+.paper .fxpill{color:var(--ink);border-color:rgba(27,20,48,.25);background:rgba(27,20,48,.05)}
 @media (max-width:980px){.fxg{grid-template-columns:repeat(2,minmax(0,1fr))}.fx.lead ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.fxg{grid-template-columns:minmax(0,1fr);margin-top:26px}.fx.lead ul{grid-template-columns:minmax(0,1fr);gap:13px}.fx{padding:22px 20px 18px}}
 .evg{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
@@ -521,7 +523,7 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
   </div>
 </div></header>
 
-<section class="band dark" id="features"><div class="wrap">
+<section class="band paper" id="features"><div class="wrap">
   <a class="newpill fxpill" href="app/index.html"><b>New</b>Agentic notes: ask a note a question, or tell it what to make.</a>
   <h2>Everything on one wall</h2>
   <p class="lede">Write, plan, ask and present without leaving your notes. Every feature below is live in the app today.</p>
