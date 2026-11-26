@@ -1289,6 +1289,10 @@ body.ph .agst{font-size:14.5px}body.ph .agst button{font-size:14px;padding:10px 
 .pfg b{font:600 15px var(--ui);color:#fff}.pfg span{font-size:12.5px;line-height:1.35;color:rgba(239,234,255,.62)}
 .pfseg{display:inline-flex;gap:4px;background:rgba(255,255,255,.07);padding:4px;border-radius:12px}
 .pfseg button{font:600 13.5px var(--ui);padding:8px 16px;border-radius:9px;border:0;background:none;color:#cfc8ea;cursor:pointer}.pfseg button[aria-pressed=true]{background:#fff;color:#1b1430}
+.pfa{margin:14px 0 4px;padding:13px 14px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;justify-content:space-between}
+.pfa[hidden]{display:none}.pfa>div:first-child{flex:1 1 240px;min-width:0}.pfa b{display:block;font:700 14px var(--ui);color:#fff;overflow:hidden;text-overflow:ellipsis}.pfa span{display:block;font:500 12.5px/1.4 var(--ui);color:#cfc6ea;margin-top:3px}
+.pfab{display:flex;gap:8px;flex-wrap:wrap}.pfab button{font:600 13px var(--ui);padding:9px 14px;border-radius:11px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#efeaff;cursor:pointer}.pfab button.go{background:#ffc93c;border-color:#ffc93c;color:#1b1430}
+#zprof .zgo{width:100%;margin-bottom:6px}#zprof .zgp{margin:0 0 10px}#zprof [hidden]{display:none}
 .pfk{display:flex;flex-wrap:wrap;gap:8px}
 .pfk button{font:600 13.5px var(--ui);padding:9px 14px;border-radius:11px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#efeaff;cursor:pointer}
 .pff{margin:22px 0 0;font-size:12.5px;color:rgba(239,234,255,.5)}
@@ -1503,7 +1507,7 @@ const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=nu
 const ICON={more:'<circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/>',pass:'<path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>',say:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 8.5a5 5 0 0 1 0 7"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7"/>',del:'<path d="M6 6l12 12M18 6L6 18"/>',tilt:'<path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 4v5h-5"/>'};
 const svg=k=>'<svg viewBox="0 0 24 24">'+ICON[k]+'</svg>';
 
-function save(){welCheck();lvQueue();if(DESK){chipku.save({notes,sound,def,cat:activeCat});return}try{localStorage.setItem(KEY,JSON.stringify({notes,sound,def,cat:activeCat}))}catch(e){if(!save.w){save.w=1;setTimeout(()=>pal('Storage bhar gaya. Kuch photos hatao, warna naye badlav save nahi honge.',true))}}}
+function save(){welCheck();lvQueue();if(typeof accSoon==='function')accSoon();if(DESK){chipku.save({notes,sound,def,cat:activeCat});return}try{localStorage.setItem(KEY,JSON.stringify({notes,sound,def,cat:activeCat}))}catch(e){if(!save.w){save.w=1;setTimeout(()=>pal('Storage bhar gaya. Kuch photos hatao, warna naye badlav save nahi honge.',true))}}}
 function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
 
 /* ---------- voice ---------- */
@@ -2750,6 +2754,60 @@ function fxApply(n,S){const rp=txt=>{let T=String(txt==null?'':txt);if(S.monCh)T
     const dx=dom(x);if(dx)dx.remove();render(x,true)});
   n.sync=n.text;if(S.dateCh)n.syncW=S.t1;save();applyFilter()}
 function fxMark(n,e){if(!n||DESK)return;if(e&&!(e.id||e.k==='set'||e.k==='made'))return;if(fxStale(n))return;n.sync=n.text||'';const w=e&&e.k==='set'&&n.rem?n.rem:(agWhen(n.text||'')||{}).d;n.syncW=w?+w:0}
+/* ---------- account: sign in with Google and the wall follows you to every device. Without it, everything stays on this device as before ---------- */
+const SB='https://nzgpwwquxqgjcoswythp.supabase.co',SBK='sb_publishable_eJVgWBYGVg_a1WPQ9EW_4A_IMQIseIy',ACC_KEY='chipzett-acc',SYNC_KEY='chipzett-sync';
+let ACC=null;const accState={busy:false,at:0,err:'',t:0,can:null,typed:0,skip:0};
+try{if(!DESK)ACC=JSON.parse(localStorage.getItem(ACC_KEY)||'null')}catch(e){}
+const accSave=()=>{try{ACC?localStorage.setItem(ACC_KEY,JSON.stringify(ACC)):localStorage.removeItem(ACC_KEY)}catch(e){}};
+const accTell=()=>{try{dispatchEvent(new Event('cz-acc'))}catch(e){}};
+async function accCan(){if(DESK)return false;if(accState.can!==null)return accState.can;try{const r=await fetch(SB+'/auth/v1/settings',{headers:{apikey:SBK}}),j=await r.json();accState.can=!!(j&&j.external&&j.external.google)}catch(e){accState.can=false;setTimeout(()=>{accState.can=null},8000)}return accState.can}
+function accSignIn(){location.href=SB+'/auth/v1/authorize?provider=google&redirect_to='+encodeURIComponent(location.origin+location.pathname)}
+function accDrop(){ACC=null;accSave();accState.err='auth';accTell();pal(L('Please sign in again to keep your notes in sync.','Sync chalu rakhne ke liye dobara sign in karo.'),true)}
+async function accToken(){if(!ACC)return '';if(ACC.exp-60>Date.now()/1000)return ACC.at;if(accToken.p)return accToken.p;
+  accToken.p=(async()=>{try{const r=await fetch(SB+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:SBK,'content-type':'application/json'},body:JSON.stringify({refresh_token:ACC.rt})});
+      if(r.status===400||r.status===401||r.status===403){let o=null;try{o=JSON.parse(localStorage.getItem(ACC_KEY)||'null')}catch(e){}if(o&&o.rt&&o.rt!==ACC.rt&&o.exp-60>Date.now()/1000){ACC=o;return ACC.at}accDrop();return ''}
+      if(!r.ok)return '';const j=await r.json();if(!j||!j.access_token||!j.refresh_token)return '';ACC.at=j.access_token;ACC.rt=j.refresh_token;ACC.exp=Math.floor(Date.now()/1000)+(+j.expires_in||3600);accSave();return ACC.at}catch(e){return ''}finally{accToken.p=null}})();return accToken.p}
+async function accApi(path,opt){const tk=await accToken();if(!tk)throw Object.assign(new Error('auth'),{code:ACC?'net':'auth'});const r=await fetch(SB+'/rest/v1/'+path,Object.assign({},opt,{headers:Object.assign({apikey:SBK,authorization:'Bearer '+tk,'content-type':'application/json'},(opt&&opt.headers)||{})}));
+  if(!r.ok){const e=new Error('api');e.status=r.status;throw e}return r.status===204||r.status===201&&!(r.headers.get('content-type')||'').includes('json')?null:r.json().catch(()=>null)}
+const syncGet=()=>{try{const v=JSON.parse(localStorage.getItem(SYNC_KEY)||'null');if(v&&ACC&&v.uid===ACC.uid&&v.h&&typeof v.h==='object')return v}catch(e){}return{uid:ACC?ACC.uid:'',cur:'',h:{}}};
+const syncSet=v=>{try{localStorage.setItem(SYNC_KEY,JSON.stringify(v))}catch(e){}};
+const noteHash=n=>{const o={};Object.keys(n).sort().forEach(k=>{if(k!=='z')o[k]=n[k]});const t=JSON.stringify(o);let a=5381,b=52711;for(let i=0;i<t.length;i++){const c=t.charCodeAt(i);a=((a<<5)+a^c)>>>0;b=((b<<5)+b+c)>>>0}return t.length.toString(36)+'.'+a.toString(36)+'.'+b.toString(36)};
+function accSoon(ms){if(DESK||!ACC||!ACC.uid)return;clearTimeout(accState.t);accState.t=setTimeout(accSync,ms==null?2500:ms)}
+async function accSync(){if(DESK||!ACC||!ACC.uid||accState.busy)return;if(navigator.onLine===false){accState.err='offline';accTell();return}
+  const ae=document.activeElement;if(ae&&ae.closest&&ae.closest('.note')&&Date.now()-accState.typed<2000){accSoon(2000);return}
+  accState.busy=true;accTell();const S=syncGet(),OKID=/^[A-Za-z0-9_-]{1,40}$/;let pulled=0,skip=0;
+  try{
+    /* up: every note that changed here, and every note removed here */
+    const ids=new Set(notes.map(n=>n.id)),rows=[];
+    notes.forEach(n=>{if(!OKID.test(n.id))return;const h=noteHash(n);if(S.h[n.id]!==h)rows.push({id:n.id,data:JSON.parse(JSON.stringify(n)),deleted:false,h})});
+    Object.keys(S.h).forEach(id=>{if(!ids.has(id))rows.push({id,data:{},deleted:true,h:null})});
+    const send=async list=>{await accApi('wall_notes?on_conflict=user_id,id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(list.map(r=>({id:r.id,data:r.data,deleted:r.deleted})))});list.forEach(r=>{if(r.h)S.h[r.id]=r.h;else delete S.h[r.id]})};
+    for(let i=0;i<rows.length;i+=12){const part=rows.slice(i,i+12);try{await send(part)}catch(e){if(!e.status||e.status===401||e.status===403||e.status>=500)throw e;for(const r of part){try{await send([r])}catch(e2){if(!e2.status||e2.status===401||e2.status===403||e2.status>=500)throw e2;skip++}}}syncSet(S)}
+    /* down: whatever changed on the account since last time. A few seconds of overlap; applying the same row twice changes nothing */
+    let cur=S.cur||'',from=cur?new Date(Date.parse(cur)-10000).toISOString():'1970-01-01T00:00:00Z',guard=0;
+    while(guard++<40){const list=await accApi('wall_notes?select=id,data,deleted,updated_at&updated_at=gte.'+encodeURIComponent(from)+'&order=updated_at.asc,id.asc&limit=400')||[];
+      for(const r of list){const loc=notes.find(n=>n.id===r.id),known=S.h[r.id];
+        if(r.deleted){if(loc&&known&&noteHash(loc)===known){const dx=dom(loc);if(typeof noteClose==='function'&&dx&&dx.classList.contains('open'))noteClose();notes=notes.filter(x=>x!==loc);if(dx)dx.remove();delete S.h[r.id];pulled++}else if(!loc)delete S.h[r.id];continue}
+        const d=r.data;if(!d||typeof d!=='object'||d.id!==r.id||!BK_TYPES.has(d.type))continue;const rh=noteHash(d);
+        if(!loc){if(known)continue;notes.push(d);zTop=Math.max(zTop,d.z||0);render(d,true);S.h[r.id]=rh;pulled++}
+        else{const lh=noteHash(loc);if(lh===rh)S.h[r.id]=rh;else if(lh===known){const dx=dom(loc);if(dx&&dx.contains(document.activeElement)&&document.activeElement!==document.body)continue;Object.keys(loc).forEach(k=>{delete loc[k]});Object.assign(loc,d);if(dx)dx.remove();render(loc,true);S.h[r.id]=rh;pulled++}}}
+      if(list.length)cur=list[list.length-1].updated_at;if(list.length<400)break;const nf=list[list.length-1].updated_at;if(nf===from)break;from=nf}
+    S.cur=cur;syncSet(S);accState.at=Date.now();accState.err='';accState.skip=skip;
+    if(pulled){save();applyFilter();clearTimeout(accState.t)}
+  }catch(e){accState.err=e&&e.code==='auth'?'auth':'net'}
+  finally{accState.busy=false;accTell()}}
+async function accSignOut(){clearTimeout(accState.t);try{await accSync()}catch(e){}const tk=ACC&&ACC.at;if(tk)try{await fetch(SB+'/auth/v1/logout?scope=local',{method:'POST',headers:{apikey:SBK,authorization:'Bearer '+tk}})}catch(e){}
+  ACC=null;accSave();accTell();pal(L('Signed out. Your notes stay on this device.','Sign out ho gaya. Notes is device pe rahenge.'),true)}
+const accLine=()=>!ACC?'':accState.busy?L('Syncing…','Sync ho raha hai…'):accState.err==='offline'?L('Offline. Changes will sync when you are back online.','Offline. Internet aate hi sync hoga.'):accState.err?L('Could not sync just now. It will try again.','Abhi sync nahi hua. Dobara koshish hogi.'):accState.at?L('All notes are synced.','Saare notes sync hain.')+(accState.skip?L(' '+accState.skip+' could not be saved to the account (too large).',' '+accState.skip+' account me save nahi hue (bahut bade).'):''):L('Getting ready to sync…','Sync ki taiyari…');
+async function accBoot(){if(DESK)return;const h=location.hash||'';
+  if(/[#&]access_token=/.test(h)){const q=new URLSearchParams(h.slice(1)),at=q.get('access_token'),rt=q.get('refresh_token');try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+    if(at&&rt){try{const r=await fetch(SB+'/auth/v1/user',{headers:{apikey:SBK,authorization:'Bearer '+at}});if(!r.ok)throw 0;const u=await r.json(),m=u.user_metadata||{};if(!u.id)throw 0;
+        ACC={at,rt,exp:Math.floor(Date.now()/1000)+(+q.get('expires_in')||3600),uid:u.id,email:String(u.email||'').slice(0,120),name:String(m.full_name||m.name||'').slice(0,60)};accSave();
+        if(!PROFILE){PROFILE={name:((ACC.name||ACC.email.split('@')[0]||'Me').split(' ')[0]||'Me').slice(0,24),face:'classic'};try{localStorage.setItem('chipzett-profile',JSON.stringify(PROFILE))}catch(e){}applyFilter()}
+        pal(L('Signed in. Your notes now follow you to every device.','Sign in ho gaya. Ab notes har device pe milenge.'),true)}catch(e){ACC=null;accSave();pal(L('Sign-in did not finish. Please try again.','Sign in poora nahi hua. Dobara karo.'),true)}}}
+  else if(/[#&]error_description=/.test(h)){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}pal(L('Sign-in was cancelled or did not work. Please try again.','Sign in cancel hua ya nahi chala. Dobara karo.'),true)}
+  accTell();addEventListener('input',()=>{accState.typed=Date.now()},true);addEventListener('visibilitychange',()=>{if(!document.hidden)accSoon(400)});addEventListener('online',()=>accSoon(400));setInterval(()=>{if(!document.hidden)accSoon(0)},45000);if(ACC&&ACC.uid)accSync()}
+if(!DESK)setTimeout(accBoot,0);
 /* ---------- a calm top bar: the tools live behind one More button unless the person asks to keep them in the bar ---------- */
 function moreInit(){if(DESK)return;const B=document.body,me=$('.ztop .zme');if(!me)return;let full=false;try{full=localStorage.getItem('chipzett-fullbar')==='1'}catch(e){}B.classList.toggle('fullbar',full);
   const b=el('button','zbtn zmore');b.type='button';b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>';b.append(el('span',null,L('More','Aur')));b.setAttribute('aria-label',L('More tools','Aur tools'));b.setAttribute('aria-haspopup','menu');me.before(b);let m=null;
@@ -2774,6 +2832,10 @@ function openProfile(){if(!PROFILE)return;const old=$('.pfp');if(old&&old._close
   const close=()=>{o.remove();removeEventListener('keydown',key,true)},key=e=>{if(e.key==='Escape'&&!$('.pss')&&!$('.stu')){e.stopPropagation();close()}};o._close=close;addEventListener('keydown',key,true);o.addEventListener('pointerdown',e=>{if(e.target===o)close()});
   const hr=new Date().getHours(),hello=hr<12?L('Good morning','Suprabhat'):hr<17?L('Good afternoon','Namaste'):L('Good evening','Shubh sandhya');
   av['textContent']=PROFILE.name[0].toUpperCase();nm['textContent']=hello+', '+PROFILE.name;sub['textContent']=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'});x.type='button';x['textContent']=L('Close','Band');x.onclick=close;who.append(nm,sub);hd.append(av,who,x);box.append(hd);
+  if(!DESK){const ac=el('div','pfa');let born=false;const draw=()=>{if(born&&!o.isConnected){removeEventListener('cz-acc',draw);return}ac.textContent='';const t=el('div'),b1=el('b'),s1=el('span'),bt=el('div','pfab'),mk2=(tx,cls,fn)=>{const b=el('button',cls,tx);b.type='button';b.onclick=fn;bt.append(b)};t.append(b1,s1);
+      if(ACC){b1['textContent']=L('Signed in as ','Sign in: ')+(ACC.email||ACC.name||'');s1['textContent']=accLine();mk2(L('Sync now','Abhi sync karo'),'',()=>accSync());mk2(L('Sign out','Sign out'),'',()=>accSignOut());ac.append(t,bt);ac.hidden=false}
+      else{ac.hidden=true;accCan().then(v=>{if(!v||ACC)return;b1['textContent']=L('Keep your notes on every device','Notes har device pe rakho');s1['textContent']=L('Sign in and this wall is saved to your account, so it opens on your phone and your computer. Without signing in, notes stay on this device only.','Sign in karo to ye wall account me save hoti hai aur phone aur computer dono pe khulti hai. Bina sign in ke notes sirf is device pe rehte hain.');mk2(L('Continue with Google','Google se jaari rakho'),'go',()=>accSignIn());ac.append(t,bt);ac.hidden=false})}};
+    addEventListener('cz-acc',draw);draw();box.append(ac);setTimeout(()=>{born=true},0)}
   const live=notes.filter(n=>!covered(n)),today=live.filter(n=>n.day===TODAY()),left=today.reduce((a,n)=>a+(n.type==='todo'?(n.items||[]).filter(i=>!i.d).length:0),0),rem=notes.filter(n=>n.rem&&!n.remFired).length,st=el('div','pfs');
   [[today.length,L('notes today','aaj ke notes')],[left,L('tasks left today','aaj ke baaki kaam')],[rem,L('reminders set','reminder lage')],[notes.length,L('notes in all','kul notes')]].forEach(([v,t])=>{const d=el('div'),b=el('b'),sp=el('span');b['textContent']=v;sp['textContent']=t;d.append(b,sp);st.append(d)});box.append(st);
   const sec=t=>{const h=el('h3');h['textContent']=t;box.append(h)},go=n=>{close();if(isHid(n))tvGo('all');setTimeout(()=>{const d=dom(n);if(!d)return;if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center',behavior:'smooth'});agFlash(n.id)},120)};
@@ -2790,7 +2852,7 @@ function openProfile(){if(!PROFILE)return;const old=$('.pfp');if(old&&old._close
   sec(L('Look after it','Sambhal ke rakho'));const k=el('div','pfk'),lk=(t,fn)=>{const b=el('button');b.type='button';b['textContent']=t;b.onclick=fn;k.append(b)};lk(L('Download a backup','Backup download karo'),()=>bkDownload());lk(L('Trash','Trash'),()=>{close();openTrash()});lk(L('All features','Saare features'),()=>{close();openExplore()});
   lk(L('Change name','Naam badlo'),()=>{const {b,close:c2}=pssBox(),h=el('h3'),i=document.createElement('input'),pa=el('div','pa'),ok=el('button','go'),no=el('button');h['textContent']=L('Your name','Tumhara naam');i.type='text';i.maxLength=24;i.value=PROFILE.name;i.className='pfin';i.setAttribute('aria-label',L('Your name','Tumhara naam'));ok.type=no.type='button';ok['textContent']=L('Save','Save');no['textContent']=L('Cancel','Rehne do');const sv=()=>{const v=i.value.trim();if(!v){i.focus();return}PROFILE.name=v;try{localStorage.setItem('chipzett-profile',JSON.stringify(PROFILE))}catch(e){}c2();applyFilter();close();openProfile()};ok.onclick=sv;no.onclick=c2;i.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();sv()}};pa.append(ok,no);b.append(h,i,pa);setTimeout(()=>i.focus(),50)});
   lk(L('Remove profile','Profile hatao'),()=>{close();if(wsEls&&wsEls.pOut)wsEls.pOut.click()});box.append(k);
-  const ft=el('p','pff');ft['textContent']=L('Your profile and notes are saved on this device. Signing in, so they follow you to another device, is being built.','Profile aur notes isi device pe save hain. Sign-in, jisse ye doosre device pe bhi milein, ban raha hai.');box.append(ft);
+  const ft=el('p','pff');ft['textContent']=ACC?L('Your notes are saved on this device and in your ChipZett account.','Notes is device pe aur tumhare ChipZett account me save hain.'):L('Your profile and notes are saved on this device.','Profile aur notes isi device pe save hain.');box.append(ft);
   o.append(box);document.body.append(o);x.focus({preventScroll:true})}
 /* ---------- first visit: an empty wall with three steps, instead of sample notes ---------- */
 function welCheck(){if(DESK)return;const B=document.body;let w=$('.zwel');if(notes.length){if(w)w.remove();B.classList.remove('wel');return}if(w||!board)return;
@@ -2944,6 +3006,8 @@ function wsBuild(){
   pn.type='text';pn.id='zname';pn.maxLength=24;pn.autocomplete='off';pn.placeholder=L('Your name','Aapka naam');pn.setAttribute('aria-label','Your name');
   pRow.append(pSave,pOut);prof.append(el('h5',null,L('Profile','Profile')),pn,el('p',null,L('A profile gives you your own page: today at a glance, Personal and Work spaces, and every feature in one place. It is saved on this device only.','Profile se tumhara apna panna milta hai: aaj ek nazar me, Personal aur Work space, aur har feature ek jagah. Yeh sirf is device pe save hota hai.')),pRow);
   wsEls.pn=pn;wsEls.pOut=pOut;
+  {const gb=zb('zpri zgo','',L('Continue with Google','Google se jaari rakho')),gp=el('p','zgp',L('Sign in to keep your notes on every device. Or just add a name below to stay on this device.','Notes har device pe rakhne ke liye sign in karo. Ya neeche sirf naam daal ke isi device pe raho.'));gb.hidden=gp.hidden=true;gb.onclick=()=>accSignIn();prof.insertBefore(gp,pn);prof.insertBefore(gb,gp);
+    const chk=()=>{if(ACC){gb.hidden=gp.hidden=true;return}accCan().then(v=>{gb.hidden=gp.hidden=!v||!!ACC})};me.addEventListener('click',chk);addEventListener('cz-acc',chk)}
   const setName=()=>{const v=pn.value.trim(),had=!!PROFILE;if(!v){pn.focus();return}
     PROFILE={name:v,face:(PROFILE&&PROFILE.face)||'classic'};saveP();closePops();
     if(!had){pal(L(`Welcome, ${v}. Personal and Work spaces and agentic notes are on.`,`Swagat hai, ${v}. Personal aur Work space aur agentic notes chalu hain.`),true);

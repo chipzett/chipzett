@@ -20,3 +20,19 @@ begin
 end $function$;
 revoke all on function public.agent_take(text, text, integer, integer) from public, anon, authenticated;
 grant execute on function public.agent_take(text, text, integer, integer) to service_role;
+
+-- ---------- account sync: a signed-in person's notes, one row per note (migration wall_notes_sync) ----------
+create table if not exists public.wall_notes (
+  user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  id text not null check (id ~ '^[A-Za-z0-9_-]{1,40}$'),
+  data jsonb not null default '{}'::jsonb check (pg_column_size(data) < 450000),
+  deleted boolean not null default false,
+  updated_at timestamptz not null default now(),
+  primary key (user_id, id)
+);
+create index if not exists wall_notes_user_updated on public.wall_notes (user_id, updated_at);
+alter table public.wall_notes enable row level security;
+revoke all on public.wall_notes from anon, public;
+grant select, insert, update, delete on public.wall_notes to authenticated;
+-- policies: each of select / insert / update / delete is allowed only where (select auth.uid()) = user_id
+-- trigger wall_notes_stamp: the server sets updated_at, and one account holds at most 3000 notes
