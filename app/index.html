@@ -1077,6 +1077,39 @@ body .ztop .zbtn.zexp{position:relative;color:#1b1430;background:#ffc93c;border-
   body.ph .nmenu{left:10px!important;right:10px;width:auto;top:auto!important;bottom:calc(10px + env(safe-area-inset-bottom));max-height:calc(100dvh - 80px);border-radius:20px;padding:8px}
   body.ph .nmenu button{padding:11px 14px;font-size:15.500px}body.ph .nmenu button small{display:none}body.ph .nmenu hr{margin:3px 8px}
 }
+
+/* ---------- phone, third pass: less chrome above the notes ---------- */
+@media (max-width:640px){
+  body.ph:not(.tv-on) .board{padding-top:104px!important}
+  body.ph .board{padding-left:12px!important;padding-right:12px!important;gap:10px}
+  body.ph .tvnav{padding:0}
+  body.ph .tvnav h3{font:700 16px var(--ui);letter-spacing:0;white-space:nowrap}
+  body.ph .tvb{width:32px;height:32px;font-size:15px}
+  body.ph .pstrip{margin-top:6px;gap:4px}
+  .pstrip button{padding:4px 0 8px;border-radius:11px;gap:1px}
+  .pstrip span{font-size:10px}.pstrip b{font-size:14.500px}.pstrip i{bottom:3px;width:4px;height:4px}
+  body.ph .psum{margin:7px 2px 0;font-size:12.500px}
+  body.ph .pfocus{margin:8px 0 2px;padding:9px 11px;border-radius:15px;gap:8px 11px}
+  body.ph .pring{width:38px;height:38px;font-size:11px}
+  body.ph .pfocus .pdone{padding:8px 14px;font-size:13.500px}
+  body.ph .pfocus small,body.ph .pfocus .plab{font-size:10px}
+  body.ph .pfocus b,body.ph .pfocus .pnext{font-size:14.500px;line-height:1.25}
+  body.ph .paper{padding:12px 14px 13px}
+  body.ph .head{min-height:34px;margin-bottom:2px}
+  body.ph.ws .acts button,body.ph .acts button{width:38px;height:36px}
+  body.ph.ws:not(.st-play) .note.fk .ttl{font-size:16.500px}
+  body.ph.ws:not(.st-play) .note.fk .body{font-size:15.500px;line-height:1.42}
+  body.ph .paper>.made{margin-top:5px}
+  body.ph .note .paper>.tag,body.ph.ws .note .paper>.tag{display:none!important}
+  body.ph .ztop{padding-top:8px;padding-bottom:8px}
+  body.ph .zbar{bottom:calc(64px + env(safe-area-inset-bottom));padding:5px}
+  body.ph .zbar input{padding:9px 10px}
+  body.ph .zbar .zadd{padding:10px 16px}
+  body.ph .ptabs{padding-top:4px;padding-bottom:calc(4px + env(safe-area-inset-bottom))}
+  .ptabs button{padding:4px 2px;gap:2px;font-size:11px}.ptabs svg{width:21px;height:21px}
+  body.ph .board{padding-bottom:calc(132px + env(safe-area-inset-bottom))!important}
+  body.ph .wframe::after{height:calc(128px + env(safe-area-inset-bottom))}
+}
 </style>
 </head>
 <body>
@@ -1909,7 +1942,7 @@ function tvLayout(){
   const nav=el('div','tvnav'),ttl=el('h3'),step=v==='day'?1:v==='week'?7:0;
   const move=dir=>{if(v==='month'){const d=dparse(WS.date);d.setDate(1);d.setMonth(d.getMonth()+dir);WS.date=dkey(d)}else WS.date=dadd(WS.date,dir*step);applyFilter()};
   const m0=monday(WS.date);
-  ttl['textContent']=v==='day'?(WS.date===t?L('Today','Aaj')+'  ·  ':'')+dfmt(WS.date,{weekday:'long',day:'numeric',month:'long'}):v==='week'?dfmt(m0,{day:'numeric',month:'short'})+' – '+dfmt(dadd(m0,6),{day:'numeric',month:'short',year:'numeric'}):dfmt(WS.date,{month:'long',year:'numeric'});
+  ttl['textContent']=v==='day'?(WS.date===t?L('Today','Aaj')+'  ·  ':'')+dfmt(WS.date,phone?{weekday:'short',day:'numeric',month:'short'}:{weekday:'long',day:'numeric',month:'long'}):v==='week'?dfmt(m0,{day:'numeric',month:'short'})+' – '+dfmt(dadd(m0,6),{day:'numeric',month:'short',year:'numeric'}):dfmt(WS.date,{month:'long',year:'numeric'});
   nav.append(btn('‹',L('Earlier','Pehle'),()=>move(-1)),ttl,btn('›',L('Later','Baad'),()=>move(1)));
   const inNow=v==='day'?WS.date===t:v==='week'?(t>=m0&&t<=dadd(m0,6)):WS.date.slice(0,7)===t.slice(0,7);
   if(!inNow){const b=btn(v==='day'?L('Today','Aaj'):v==='week'?L('This week','Yeh hafta'):L('This month','Yeh mahina'),'',()=>{WS.date=t;applyFilter()});b.classList.add('wide');nav.append(b)}
