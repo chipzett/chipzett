@@ -2401,7 +2401,7 @@ function expInit(){const tidy=$('.ztidy');if(!tidy)return;const b=el('button','z
   try{if(!localStorage.getItem('chipzett-explored'))b.classList.add('new')}catch(e){}tidy.before(b)}
 
 /* ---------- agentic note: real AI through ChipZett's own small server (it holds the key and the free daily limits) ---------- */
-const AI_URL='https://opffhensxeqbapcknykf.supabase.co/functions/v1/agent';let aiLeft=-1;
+const AI_URL='https://nzgpwwquxqgjcoswythp.supabase.co/functions/v1/agent';let aiLeft=-1;
 const aiPref=()=>{try{return localStorage.getItem('chipzett-ai')||''}catch(e){return''}};
 function aiAskOk(){const pr=aiPref();if(pr==='on')return Promise.resolve(true);if(pr==='off')return Promise.resolve(false);
   return new Promise(res=>{const {b,close}=pssBox(),h=el('h3'),p=el('p'),pa=el('div','pa'),sm=el('small'),yes=el('button','go'),no=el('button');let fin=false;const end=(v,keep)=>{if(fin)return;fin=true;clearInterval(iv);if(keep)try{localStorage.setItem('chipzett-ai',v?'on':'off')}catch(e){}close();try{dispatchEvent(new Event('cz-ai'))}catch(e){}res(v)};
@@ -2423,7 +2423,7 @@ function aiApply(n,q,j){const ans=String(j.answer).slice(0,1600),m=j.make,kids=n
   if(j.web===true)e.web=1;e.ai=1;return{e,src}}
 
 /* ---------- voice: speak, and it is written down clean. One short recording goes to ChipZett's server; nothing is kept. ---------- */
-const VOICE_URL='https://opffhensxeqbapcknykf.supabase.co/functions/v1/voice',VOICE_MAX=60;let vState=null;
+const VOICE_URL='https://nzgpwwquxqgjcoswythp.supabase.co/functions/v1/voice',VOICE_MAX=60;let vState=null;
 const voiceCan=()=>!DESK&&!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
 function voiceOk(){let pr='';try{pr=localStorage.getItem('chipzett-voice')||''}catch(e){}if(pr==='on')return Promise.resolve(true);
   return new Promise(res=>{const {b,close}=pssBox(),h=el('h3'),p=el('p'),pa=el('div','pa'),sm=el('small'),yes=el('button','go'),no=el('button');let fin=false;const end=v=>{if(fin)return;fin=true;clearInterval(iv);if(v)try{localStorage.setItem('chipzett-voice','on')}catch(e){}close();res(v)};const iv=setInterval(()=>{if(!b.isConnected)end(false)},300);
