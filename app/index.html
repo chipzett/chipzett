@@ -812,7 +812,7 @@ body.ws:not(.st-play) .note.is-agent .paper{box-shadow:inset 0 1px 0 rgba(255,25
   .pquick::-webkit-scrollbar{display:none}
   .pquick button{flex:none;font:600 13.500px var(--ui);padding:8px 14px;border-radius:999px;color:#e9e4ff;background:rgba(24,18,48,.92);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .pquick button.ag[aria-pressed=true]{background:var(--mint);border-color:var(--mint);color:#1b1430}
-  body.ph .ptabs{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:7;padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:rgba(13,10,27,.96);border-top:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  body.ph .ptabs{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:7;padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:rgba(13,10,27,.96);border-top:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
   .ptabs button{display:grid;justify-items:center;gap:3px;padding:6px 2px;border-radius:12px;font:600 11.500px var(--ui);color:#9d95c0}
   .ptabs svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.800;stroke-linecap:round;stroke-linejoin:round}
   .ptabs button[aria-pressed=true]{color:var(--mango)}
@@ -2135,6 +2135,7 @@ function phBuild(){
   tab('month','<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4M8 14h2M14 14h2M8 17h2"/>',L('Calendar','Calendar'),()=>tvGo('month',WS.date));
   tab('all','<rect x="4" y="4" width="7" height="8" rx="2"/><rect x="13" y="4" width="7" height="5" rx="2"/><rect x="13" y="11" width="7" height="9" rx="2"/><rect x="4" y="14" width="7" height="6" rx="2"/>',L('Wall','Wall'),()=>tvGo('all'));
   tab('tpl','<rect x="5" y="4" width="14" height="16" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/>',L('Templates','Templates'),()=>openGallery());
+  tab('stu','<circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="6" r="2.2"/><circle cx="18" cy="12" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8.5 11.200C12 10 12 6 15.800 6M8.600 12h7.200M8.500 12.800C12 14 12 18 15.800 18"/>','Studio',()=>openStudio(stWall()));
   tabs.setAttribute('aria-label',L('Views','Views'));
   const chip=(label,fn)=>{const b=el('button');b.type='button';b['textContent']=label;b.onclick=()=>fn(b);quick.append(b);return b},inp=wsEls.inp,start=t=>{inp.value=t;inp.focus();try{inp.setSelectionRange(t.length,t.length)}catch(e){}};
   chip(L('List','List'),()=>start('todo: '));chip(L('Reminder','Reminder'),()=>start(L('remind me in 10 min ','remind me in 10 min ')));chip(L('Goal','Goal'),()=>start('goal: '));
@@ -2537,7 +2538,7 @@ function openStudio(list,tab){list=(list||[]).filter(n=>!covered(n)&&n.type!=='i
   [['map',L('Mind map','Mind map')],['deck',L('Slides','Slides')],['info',L('Infographic','Infographic')]].forEach(([k,t])=>{const b=el('button');b.type='button';b.dataset.k=k;b['textContent']=t;b.onclick=()=>show(k);nav.append(b)});
   const key=e=>{if(e.key==='Escape'&&!document.fullscreenElement){close();return}if(keyNav)keyNav(e)},rs=()=>{if(o._fit)o._fit()},close=()=>{o.remove();removeEventListener('keydown',key,true);removeEventListener('resize',rs);document.removeEventListener('fullscreenchange',rs);document.body.classList.remove('stp')};o._close=close;x.onclick=close;addEventListener('keydown',key,true);addEventListener('resize',rs);document.addEventListener('fullscreenchange',rs);
   hd.append(tt,nav,acts,x);o.append(hd,hint,main,all);document.body.append(o);show(tab||'map')}
-const stWall=()=>notes.filter(n=>!isHid(n)&&!covered(n)).sort((a,b)=>(b.touch||b.made||0)-(a.touch||a.made||0));
+const stWall=()=>{const s=(a,b)=>(b.touch||b.made||0)-(a.touch||a.made||0),v=notes.filter(n=>!isHid(n)&&!covered(n)&&plainOf(n).trim()).sort(s);return v.length?v:notes.filter(n=>!covered(n)).sort(s)};
 /* ---------- open a note in the person's own AI app (no ChipZett server, no key) ---------- */
 const OUT=[['ChatGPT','https://chatgpt.com/?q='],['Claude','https://claude.ai/new?q='],['Perplexity','https://www.perplexity.ai/search?q=']];
 function openOut(n){if(covered(n))return;const {b,close}=pssBox(),h=el('h3'),p=el('p'),pa=el('div','pa outp'),sm=el('small'),txt=plainOf(n).trim().slice(0,1800);
