@@ -1239,6 +1239,17 @@ body.ph .board .note.open .head .face{display:none!important}
 body.ph .note.open .acts button:nth-child(1),body.ph .note.open .acts button:nth-child(2),body.ph .note.open .acts button:nth-child(3),body.ph .note.open .acts button:nth-child(6){display:none}
 body.ph .note.open .acts{margin-left:auto;opacity:1!important}
 body.ph .note.open .head{min-height:0;margin-bottom:2px}
+.agst:empty,.agk:empty{display:none}
+.agst{margin:0 0 9px;padding:11px 12px;border-radius:12px;background:#1b1430;color:#fff;font:500 13px/1.4 var(--ui);box-shadow:0 8px 20px -10px rgba(0,0,0,.6)}
+.agst p{margin:0 0 9px}
+.agst button{font:600 12.5px var(--ui);padding:7px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.3);background:none;color:#fff;cursor:pointer;margin-right:6px}
+.agst button.go{background:#ffc93c;border-color:#ffc93c;color:#1b1430}
+.agk{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:8px}
+.agk span{font:700 9.5px var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink);opacity:.55;margin-right:2px;flex-basis:100%}
+.agk button{font:600 11.5px var(--ui);padding:4px 10px;border-radius:99px;border:0;background:color-mix(in srgb,var(--ink) 10%,transparent);color:var(--ink);cursor:pointer;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agk button.old{background:#1b1430;color:#ffc93c}
+.agk button.old::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#ffc93c;margin-right:6px;vertical-align:1px}
+body.ph .agst{font-size:14.5px}body.ph .agst button{font-size:14px;padding:10px 14px}body.ph .agk button{font-size:13px;padding:7px 12px}
 .zmm{z-index:40}
 .pfp{position:fixed;inset:0;z-index:55;background:rgba(10,7,22,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:28px 16px}
 .pfb{width:min(780px,100%);background:#17122a;border:1px solid rgba(255,255,255,.13);border-radius:26px;padding:28px;color:#efeaff;font:500 14.5px/1.45 var(--ui);box-shadow:0 40px 90px -20px #000}
@@ -1645,9 +1656,19 @@ function agentUI(n,p,d){
       if(e.id&&notes.some(x=>x.id===e.id)){const o=el('button','ageo',L('Open what it made','Jo bana wo kholo'));o.type='button';o.onclick=()=>agFlash(e.id);c.append(o)}trl.append(c)});
     if(n.trail.length>1){const m=el('button','agmore');m.type='button';m['textContent']=all?L('Show less','Kam dikhao'):L(`Earlier: ${n.trail.length-1} more`,`Pehle ke: ${n.trail.length-1} aur`);m.onclick=()=>{d.classList.toggle('ag-all');drawTrail();tvSoon()};trl.append(m)}};
   let busy=false,sayAll=false;
+  const kd=el('div','agk'),stl=el('div','agst');
+  const drawKids=()=>{kd.textContent='';stl.textContent='';if(DESK)return;const S=fxStale(n),old=new Set(S?S.hit.map(h=>h.x?h.x.id:'rem'):[]),chip=(t,fn,isOld)=>{const b=el('button',isOld?'old':'');b.type='button';b['textContent']=t;b.onclick=fn;kd.append(b)},go=x=>{if(isPhone()&&typeof noteOpen==='function'){noteClose();setTimeout(()=>{const dx=dom(x);if(dx)noteOpen(dx)},220)}else agFlash(x.id)};
+    notes.forEach(x=>{if(x.from!==n.id)return;const lab=x.type==='todo'?L((x.items||[]).length+' tasks',(x.items||[]).length+' kaam'):x.mail?L('Draft','Draft'):x.type==='timer'?L('Reminder ','Reminder ')+agLab(new Date(x.end)):x.type==='flow'?L('Outline','Outline'):stClip(String(x.text||'').split('\n')[0],18)||L('Note','Note');chip(lab,()=>go(x),old.has(x.id))});
+    if(n.rem&&!n.remFired)chip(L('Reminder ','Reminder ')+agLab(new Date(n.rem)),()=>openRemind(n),old.has('rem'));
+    if(kd.children.length){const l=el('span');l['textContent']=L('Made from this note','Is note se bana');kd.prepend(l)}
+    if(!S)return;const cnt=k=>S.hit.filter(h=>k.includes(h.k)).length,parts=[],r=cnt(['rem','timer']),c=cnt(['todo']),m=cnt(['mail','note']);if(r)parts.push(L(r+(r>1?' reminders':' reminder'),r+' reminder'));if(c)parts.push(L(c+(c>1?' checklists':' checklist'),c+' checklist'));if(m)parts.push(L(m+(m>1?' drafts':' draft'),m+' draft'));
+    const t=el('p'),was=S.dateCh?agExact(S.t0).replace(/ \(.*\)$/,''):S.monCh[0],now=S.dateCh?agExact(S.t1).replace(/ \(.*\)$/,''):S.monCh[1],many=S.hit.length>1;
+    t['textContent']=L('This note now says '+now+'. '+(parts.length>1?parts.slice(0,-1).join(', ')+' and '+parts[parts.length-1]:parts[0])+(many?' still say ':' still says ')+was+'.','Note me ab '+now+' hai. '+(parts.length>1?parts.slice(0,-1).join(', ')+' aur '+parts[parts.length-1]:parts[0])+' me abhi '+was+' hai.');
+    const up=el('button','go'),keep=el('button');up.type=keep.type='button';up['textContent']=L(many?'Update all '+S.hit.length:'Update it',many?'Sab '+S.hit.length+' update karo':'Update karo');keep['textContent']=L('Leave as they are','Aise hi rehne do');
+    up.onclick=()=>{fxApply(n,S);drawKids();pal(L('Updated to '+now+'.',now+' pe update ho gaya.'),true)};keep.onclick=()=>{n.sync=n.text;if(S.dateCh)n.syncW=S.t1;save();drawKids()};stl.append(t,up,keep)};
   const drawFoot=()=>{foot.textContent='';const on=aiPref()==='on',t=el('span'),sw=el('button','agsw');t['textContent']=DESK?L('Works on this device from the words in this note.','Isi device par is note ke shabdon se chalta hai.'):on?L('AI is on','AI chalu hai')+(aiLeft>=0?L(' \u00b7 '+aiLeft+' free asks left today',' \u00b7 aaj '+aiLeft+' free sawaal baaki'):L(' \u00b7 10 free asks a day',' \u00b7 roz 10 free sawaal'))+'.':L('AI is off. Answers come from the words in this note, on this device.','AI band hai. Jawab isi device par note ke shabdon se aate hain.');
     foot.append(t);if(!DESK){sw.type='button';sw['textContent']=on?L('Turn off','Band karo'):L('Turn AI on','AI chalu karo');sw.title=L('When AI is on, the note you ask about is sent to an AI service to answer','AI chalu ho to jis note pe poochho wo jawab ke liye AI service ko jaata hai');sw.onclick=()=>{try{localStorage.setItem('chipzett-ai',on?'off':'on')}catch(x){}drawFoot();drawMoves()};foot.append(sw)}};
-  const done=(e,src)=>{busy=false;d.classList.remove('ag-busy');inp.placeholder=PH;e.at=Date.now();n.trail.push(e);if(n.trail.length>30)n.trail.splice(0,n.trail.length-30);
+  const done=(e,src)=>{busy=false;d.classList.remove('ag-busy');inp.placeholder=PH;e.at=Date.now();fxMark(n,e);setTimeout(drawKids,60);n.trail.push(e);if(n.trail.length>30)n.trail.splice(0,n.trail.length-30);
       save();drawTrail();drawMoves();drawFoot();tvSoon();if(src)agMark(p,Array.isArray(src)?src:[src]);if((e.k==='ans'&&!e.links)||sayAll)speak(e.t.slice(0,600),1.1);sayAll=false;if(e.id)setTimeout(()=>agFlash(e.id),380)};
   const run=async(what,said,web)=>{if(busy)return;busy=true;d.classList.add('ag-busy');n.z=++zTop;d.style.zIndex=n.z;inp.value='';inp.placeholder=web?L('Searching the web…','Web pe khoj raha hoon…'):L('Reading the note…','Note padh raha hoon…');
     {const w=el('div','age wait');const q=el('div','ageq');q['textContent']=said||'';const t=el('div','aget');t['textContent']=web?L('Searching the web. This can take up to 40 seconds.','Web pe khoj raha hoon. Isme 40 second tak lag sakte hain.'):L('Working on it…','Kaam chal raha hai…');w.append(q,t);trl.prepend(w)}
@@ -1658,11 +1679,11 @@ function agentUI(n,p,d){
     if(!e){const w=640-(Date.now()-t0);if(w>0)await new Promise(r=>setTimeout(r,w));e=agAct(n,what,said);src=e.src;delete e.src;if(why)pal(why,true)}
     done(e,src)};
   line.onsubmit=ev=>{ev.preventDefault();const v=inp.value.trim();if(v)run('',v)};
-  let mt=0;p.addEventListener('input',e=>{if(e.target===inp||!n.agent)return;clearTimeout(mt);mt=setTimeout(drawMoves,450)});
+  let mt=0;p.addEventListener('input',e=>{if(e.target===inp||!n.agent)return;clearTimeout(mt);mt=setTimeout(()=>{drawMoves();drawKids()},450)});
   if(n.mail){const m=el('button','mailb',L('Open in mail','Mail mein kholo'));m.type='button';m.onclick=()=>{location.href='mailto:?subject='+encodeURIComponent(n.mail.s)+'&body='+encodeURIComponent(n.mail.b)};p.append(m)}
   if(n.from){const par=notes.find(x=>x.id===n.from);if(par){const f=el('button','agfrom');f.type='button';f['textContent']=L('From: ','Yahan se: ')+agTitle(par);f.title=L('Show the note this came from','Jis note se bana woh dikhao');f.onclick=()=>agFlash(n.from);p.append(f)}}
   {const sp=el('span','spk');sp.innerHTML=AG_ICON.act;sp.title=L('Agentic note','Agentic note');queueMicrotask(()=>d.append(sp))}
-  box.append(mv,line,trl,foot);p.append(box);drawMoves();drawTrail();drawFoot();addEventListener('cz-ai',()=>{if(d.isConnected){drawMoves();drawFoot()}});
+  box.append(stl,mv,line,trl,kd,foot);p.append(box);drawMoves();drawTrail();drawFoot();setTimeout(drawKids,0);addEventListener('cz-ai',()=>{if(d.isConnected){drawMoves();drawFoot()}});
 }
 function render(n,fresh){
   const d=el('div','note');d.dataset.id=n.id;
@@ -2651,6 +2672,22 @@ function lvDraw(st,now,W,H){const c=st.c,dpr=Math.min(2,window.devicePixelRatio|
       if(full>26&&e>.6){x.fillStyle=ink(.78*Math.min(1,(e-.6)/.4));x.font='600 10px system-ui,sans-serif';x.textAlign='left';const pc=Math.round(r.v/sp.tot*100)+'%',fl=r.l+' '+pc;x.fillText(x.measureText(fl).width<=full-2?fl:pc,px+1,y+bh+15)}
       px+=full+gap});
     const sw=((t*.2)%1.6)*(bw+140)-70,sg=x.createLinearGradient(sw-40,0,sw+40,0);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(.5,'rgba(255,255,255,.55)');sg.addColorStop(1,'rgba(255,255,255,0)');x.save();x.beginPath();x.rect(x0,y,bw*eo,bh);x.clip();x.fillStyle=sg;x.fillRect(sw-40,y,80,bh);x.restore()}}
+/* ---------- keeping what a note made in step with the note: when a date, time or amount in the note changes,
+   the reminder, checklist or draft that came from it is flagged on the note, and one press updates them ---------- */
+const FX_MONEY=/(?:RM|MYR|Rs\.?|INR|USD|EUR|\$|€|£|₹)\s?\d[\d,]*(?:\.\d+)?k?|\d[\d,]*(?:\.\d+)?\s?(?:RM|MYR|ringgit|rupees|dollars)\b/gi,fxMoney=t=>[...new Set((String(t).match(FX_MONEY)||[]).map(x=>x.trim()))],fxEsc=x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function fxVars(d){d=new Date(d);const wd=d.toLocaleDateString('en-GB',{weekday:'long'}),mo=d.toLocaleDateString('en-GB',{month:'long'}),ms=mo.slice(0,3),dn=d.getDate(),H=d.getHours(),M=d.getMinutes(),h=H%12||12,ap=H<12?'am':'pm',mm=pad2(M);
+  return{day:[wd,wd.slice(0,3)],date:[dn+' '+mo,dn+' '+ms,mo+' '+dn,ms+' '+dn],time:M?[h+':'+mm+' '+ap,h+':'+mm+ap,pad2(H)+':'+mm,H+':'+mm]:[h+' '+ap,h+ap,h+':00 '+ap,pad2(H)+':00',H+':00']}}
+function fxStale(n){if(!n||n.sync==null||n.sync===n.text)return null;const nw=agWhen(n.text||''),t0=n.syncW||0,t1=nw?+nw.d:0,dateCh=!!(t0&&t1&&Math.abs(t1-t0)>=6e4),m0=fxMoney(n.sync),m1=fxMoney(n.text||''),gone=m0.filter(x=>!m1.includes(x)),came=m1.filter(x=>!m0.includes(x)),monCh=gone.length===1&&came.length===1?[gone[0],came[0]]:null;
+  if(!dateCh&&!monCh)return null;const ov=dateCh?fxVars(t0):null,nv=dateCh?fxVars(t1):null,same=dateCh&&dkey(new Date(t0))===dkey(new Date(t1)),lists=!dateCh?[]:(same?[]:[ov.date,ov.day]).concat(ov.time[0]!==nv.time[0]?[ov.time]:[]),
+    has=txt=>{const T=String(txt);if(monCh&&T.toLowerCase().includes(monCh[0].toLowerCase()))return true;return lists.some(l=>l.some(v=>new RegExp('\\b'+fxEsc(v)+'\\b','i').test(T)))},hit=[];
+  if(dateCh&&n.rem&&!n.remFired&&Math.abs(n.rem-t0)<9e4)hit.push({k:'rem'});
+  notes.forEach(x=>{if(x.from!==n.id||covered(x))return;if(x.type==='timer'){if(dateCh&&Math.abs((x.end||0)-t0)<9e4)hit.push({k:'timer',x})}else if(has(plainOf(x)))hit.push({k:x.type==='todo'?'todo':x.mail?'mail':'note',x})});
+  return hit.length?{hit,t0,t1,ov,nv,same,monCh,dateCh}:null}
+function fxApply(n,S){const rp=txt=>{let T=String(txt==null?'':txt);if(S.monCh)T=T.replace(new RegExp(fxEsc(S.monCh[0]),'gi'),S.monCh[1]);if(S.dateCh){const sub=(a,b)=>a.forEach((v,i)=>{T=T.replace(new RegExp('\\b'+fxEsc(v)+'\\b','gi'),b[Math.min(i,b.length-1)])});if(!S.same){sub(S.ov.date,S.nv.date);sub(S.ov.day,S.nv.day)}if(S.ov.time[0]!==S.nv.time[0])sub(S.ov.time,S.nv.time)}return T};
+  S.hit.forEach(h=>{if(h.k==='rem'){remSet(n,S.t1);return}const x=h.x;if(h.k==='timer'){x.end=S.t1;x.total=Math.max(1000,S.t1-Date.now());x.day=dkey(new Date(S.t1));delete x.fired}else{x.text=rp(x.text);if(Array.isArray(x.items))x.items.forEach(i=>{i.t=rp(i.t)});if(x.mail){x.mail.s=rp(x.mail.s);x.mail.b=rp(x.mail.b)}if(typeof x.data==='string')x.data=rp(x.data)}
+    const dx=dom(x);if(dx)dx.remove();render(x,true)});
+  n.sync=n.text;if(S.dateCh)n.syncW=S.t1;save();applyFilter()}
+function fxMark(n,e){if(!n||DESK)return;if(e&&!(e.id||e.k==='set'||e.k==='made'))return;if(fxStale(n))return;n.sync=n.text||'';const w=e&&e.k==='set'&&n.rem?n.rem:(agWhen(n.text||'')||{}).d;n.syncW=w?+w:0}
 /* ---------- a calm top bar: the tools live behind one More button unless the person asks to keep them in the bar ---------- */
 function moreInit(){if(DESK)return;const B=document.body,me=$('.ztop .zme');if(!me)return;let full=false;try{full=localStorage.getItem('chipzett-fullbar')==='1'}catch(e){}B.classList.toggle('fullbar',full);
   const b=el('button','zbtn zmore');b.type='button';b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>';b.append(el('span',null,L('More','Aur')));b.setAttribute('aria-label',L('More tools','Aur tools'));b.setAttribute('aria-haspopup','menu');me.before(b);let m=null;
