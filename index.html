@@ -418,8 +418,28 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 .say2{position:absolute;right:14px;top:12px;background:#fff;color:var(--ink);border-radius:12px 12px 12px 3px;padding:5px 10px;font:500 12.5px var(--ui);box-shadow:0 8px 18px -10px rgba(0,0,0,.5)}
 
 /* everyday */
-.fxpill{margin-bottom:22px}
-.fxg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:44px}
+.eyebrow{font:700 13px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--mint);margin-bottom:14px}
+.plilac .eyebrow,.paper .eyebrow{color:#6a4fd0}
+.shot{margin:0;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:#120e24;box-shadow:0 50px 90px -40px #000}
+.shot img{display:block;width:100%;height:auto}
+.shot figcaption{padding:12px 16px;font:600 14.5px var(--ui);color:#efeaff;border-top:1px solid rgba(255,255,255,.1)}
+.showg{position:relative;margin-top:48px;padding-right:9%}
+.shot.phone{position:absolute;right:0;bottom:-34px;width:19%;border-radius:26px;border:6px solid #0c0918;outline:1px solid rgba(255,255,255,.2);box-shadow:0 40px 70px -24px #000}
+.show{padding-bottom:120px}
+.exg{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);align-items:center;gap:18px;margin:44px 0 34px}
+.exn{background:var(--c);color:var(--ink);border-radius:18px;padding:24px 26px 26px;box-shadow:0 26px 50px -28px rgba(27,20,48,.55);border:1px solid rgba(27,20,48,.12);align-self:stretch}
+.exn small{font:700 11.5px var(--ui);letter-spacing:.12em;text-transform:uppercase;color:rgba(27,20,48,.55)}
+.exn h3{font:700 22px/1.2 var(--ui);letter-spacing:-.02em;margin:8px 0 10px}
+.exn p{font-size:16.5px;line-height:1.5}.exn ul{margin:8px 0;padding-left:20px;font-size:16.5px;line-height:1.5}
+.exask{display:inline-block;margin-top:18px;font:600 14px var(--ui);padding:8px 14px;border-radius:99px;background:var(--ink);color:#fff}
+.exar{width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center}.exar svg{width:22px;height:22px}
+.stg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:44px}
+.stg .shot img{aspect-ratio:4/3;object-fit:contain;padding:20px;box-sizing:border-box}
+@media (max-width:860px){.exg{grid-template-columns:minmax(0,1fr);gap:14px}.exar{margin:0 auto;transform:rotate(90deg);width:46px;height:46px}.stg{grid-template-columns:minmax(0,1fr);gap:14px;margin-top:28px}.showg{margin-top:30px;padding-right:0}.shot.phone{position:relative;right:auto;bottom:auto;width:46%;margin:-40px 6% 0 auto}.show{padding-bottom:60px}.exn{padding:20px}.exn p,.exn ul{font-size:15.5px}}
+.fxg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;margin-top:44px}
+.fxg .fx{grid-column:span 2}
+.fxg .fx:nth-last-child(-n+2){grid-column:span 3}
+.fxg .fx:nth-last-child(-n+2) ul{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}
 .fx{padding:26px 26px 22px;border-radius:20px;background:#fffaf0;border:1px solid rgba(27,20,48,.16)}
 .fx h3{font:700 19px var(--ui);letter-spacing:-.02em;line-height:1.2;color:var(--ink);display:flex;align-items:center;gap:10px}
 .fx h3::before{content:"";width:11px;height:11px;border-radius:4px;background:var(--k);box-shadow:inset 0 0 0 1px rgba(27,20,48,.25);flex:none}
@@ -434,8 +454,8 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 .fxnote{margin-top:22px;font-size:13.5px;color:var(--ink-2);max-width:none}
 .fxnote a{color:var(--ink)}
 .paper .fxpill{color:var(--ink);border-color:rgba(27,20,48,.25);background:rgba(27,20,48,.05)}
-@media (max-width:980px){.fxg{grid-template-columns:repeat(2,minmax(0,1fr))}.fx.lead ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:560px){.fxg{grid-template-columns:minmax(0,1fr);margin-top:26px}.fx.lead ul{grid-template-columns:minmax(0,1fr);gap:13px}.fx{padding:22px 20px 18px}}
+@media (max-width:980px){.fxg{grid-template-columns:repeat(2,minmax(0,1fr))}.fxg .fx,.fxg .fx:nth-last-child(-n+2){grid-column:span 1}.fxg .fx:last-child{grid-column:1/-1}.fxg .fx:nth-last-child(2) ul{grid-template-columns:minmax(0,1fr)}.fx.lead ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.fxg{grid-template-columns:minmax(0,1fr);margin-top:26px}.fxg .fx,.fxg .fx:last-child{grid-column:1/-1}.fxg .fx:nth-last-child(-n+2) ul{grid-template-columns:minmax(0,1fr)}.fx.lead ul{grid-template-columns:minmax(0,1fr);gap:13px}.fx{padding:22px 20px 18px}}
 .evg{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .evg li{display:flex;flex-direction:column;gap:8px;padding:20px 20px 22px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-top:3px solid var(--k)}
 .evg b{font:700 16.500px var(--ui);letter-spacing:-.02em;color:#fff}
@@ -448,7 +468,7 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 <div class="top" id="topbar"><div class="wrap">
   <nav>
     <a class="logo" href="#top"><i></i>ChipZett</a>
-    <div class="links"><a href="#features">Features</a><a href="#templates">Templates</a><a href="#roadmap">Roadmap</a><a href="#faq">FAQ</a></div>
+    <div class="links"><a href="#features">Features</a><a href="#studio">Studio</a><a href="#templates">Templates</a><a href="#faq">FAQ</a></div>
     <a class="navopen" href="app/index.html" tabindex="-1" aria-hidden="true">Open app <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
   </nav>
 </div></div>
@@ -456,17 +476,17 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 <header class="hero" id="top"><div class="wrap">
   <div>
     <h1>Make a note.<br><span class="nb">Make it <em>yours.</em><span class="eyes" aria-hidden="true"><b data-look></b><b data-look></b></span></span></h1>
-    <p class="lede">Write it down once. ChipZett turns it into a checklist, a reminder, a plan or a deck, and answers questions about what you wrote.</p>
+    <p class="lede">Notes that become tasks, reminders, plans and slides, with AI built in to answer questions and take the next step.</p>
     <div class="cta">
       <a class="btn go" href="app/index.html">Open ChipZett <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
-      <a class="btn line" href="#features">See everything it does</a>
+      <a class="btn line" href="#features">View features</a>
       <a class="btn line" id="dl-top" hidden>Download for Windows</a>
     </div>
-    <div class="facts"><span>Free to use</span><span>No account needed</span><span>Works on phone and computer</span></div>
+    <div class="facts"><span>Free to use</span><span>No account required</span><span>Private by default</span></div>
   </div>
   <div class="stage">
     <div class="board" id="boardbox">
-      <div class="bar"><i></i><i></i><i></i><b>ChipZett preview</b><span>Tick a task or press a face.</span></div>
+      <div class="bar"><i></i><i></i><i></i><b>ChipZett</b><span>Interactive preview</span></div>
       <div class="bcols" id="board">
         <div class="bcol">
           <div class="n lined" style="--c:#ffc93c" id="todo" data-say="Launch checklist.">
@@ -523,25 +543,57 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
   </div>
 </div></header>
 
-<section class="band paper" id="features"><div class="wrap">
-  <a class="newpill fxpill" href="app/index.html"><b>New</b>Agentic notes: ask a note a question, or tell it what to make.</a>
-  <h2>Everything on one wall</h2>
-  <p class="lede">Write, plan, ask and present without leaving your notes. Every feature below is live in the app today.</p>
-  <div class="fxg">
-    <article class="fx lead" style="--k:#5ef2c0"><h3>AI that works on your notes</h3><ul><li><b>Agentic notes</b><span>Ask a note a question, or tell it to make the checklist, the summary or the reminder.</span></li><li><b>Ask your wall</b><span>One question across all your notes, with the notes the answer came from.</span></li><li><b>Web search from a note</b><span>Write what you need to find. The note looks it up and brings back options with links.</span></li><li><b>Voice</b><span>Speak, and ChipZett writes it down cleanly. A spoken list becomes a checklist.</span></li><li><b>Your own AI app</b><span>Open any note in ChatGPT, Claude or Perplexity in one press.</span></li></ul></article>
-    <article class="fx" style="--k:#ffc93c"><h3>Capture</h3><ul><li><b>Notes and checklists</b><span>Write freely, or keep a list you tick off and edit.</span></li><li><b>Tables</b><span>Rows and columns for who, what and when.</span></li><li><b>Charts and flows</b><span>Type the numbers or the steps, get the picture.</span></li><li><b>Photos and sketches</b><span>Stick a picture on the wall or draw with a finger.</span></li><li><b>100+ templates</b><span>Ready-made notes for work, home and travel.</span></li></ul></article>
-    <article class="fx" style="--k:#74ccff"><h3>Plan the day</h3><ul><li><b>Today, Week, Month</b><span>The same notes as a day plan, a week or a calendar.</span></li><li><b>Reminders</b><span>Any note can ring at the date and time you pick.</span></li><li><b>Countdowns and goals</b><span>A timer that rings, a number you count towards.</span></li><li><b>Next up</b><span>The one thing to do now, always at the top.</span></li><li><b>Close the day</b><span>Finish what is done and move the rest to tomorrow.</span></li></ul></article>
-    <article class="fx" style="--k:#bda4ff"><h3>Studio</h3><ul><li><b>Mind map</b><span>See a note, or your whole wall, as branches you can fold.</span></li><li><b>Slides</b><span>Notes become a deck you can present or save as PDF.</span></li><li><b>Infographic</b><span>One clean page you can send as a picture.</span></li><li><b>Made on your device</b><span>Studio needs no connection and sends nothing anywhere.</span></li></ul></article>
-    <article class="fx" style="--k:#ff6f9c"><h3>Organise</h3><ul><li><b>Search</b><span>Find any note as you type.</span></li><li><b>Pin, link and select</b><span>Keep one on top, join related notes, change many at once.</span></li><li><b>Personal and Work</b><span>Two spaces on one wall, switched in one press.</span></li><li><b>Trash with undo</b><span>Finished and deleted notes come back for 30 days.</span></li></ul></article>
-    <article class="fx" style="--k:#ffc93c"><h3>Share and protect</h3><ul><li><b>Pass a note</b><span>Send it by link or QR code. The note travels inside the link.</span></li><li><b>Private and sealed</b><span>Hide a note behind a PIN, or seal it until a date.</span></li><li><b>Backup</b><span>All your notes in one file you can restore.</span></li><li><b>Works offline</b><span>Opens without a connection. No ads.</span></li></ul></article>
+<section class="band dark show" id="product"><div class="wrap">
+  <p class="eyebrow">The workspace</p>
+  <h2>Your working day, on one wall.</h2>
+  <p class="lede">Notes, tasks, numbers and plans side by side. Ask any of them a question and the answer arrives as the next note.</p>
+  <div class="showg">
+    <figure class="shot win"><img src="img/app-agent.webp" width="1800" height="1125" alt="The ChipZett wall on a computer: a client meeting note has answered a question and created a checklist beside it." loading="lazy" decoding="async"></figure>
+    <figure class="shot phone p1"><img src="img/phone-wall.webp" width="520" height="1125" alt="The same wall on a phone, as a grid of note cards for today." loading="lazy" decoding="async"></figure>
   </div>
-  <p class="fxnote">AI features send the note you ask about to an AI service and are free within a daily limit. Everything else stays on your device. <a href="privacy.html">How your data is handled</a></p>
+</div></section>
+
+<section class="band plilac" id="example"><div class="wrap">
+  <p class="eyebrow">Agentic notes</p>
+  <h2>A note that writes the follow-up.</h2>
+  <p class="lede">Write what happened and ask for what comes next. ChipZett works only from what is in the note.</p>
+  <div class="exg">
+    <article class="exn" style="--c:#5ef2c0"><small>Your note</small><h3>Client call</h3><p>They want the revised quote and a signed timeline by Friday. Budget is fixed. Call Meera tomorrow at 10.</p><span class="exask">Draft a follow-up</span></article>
+    <div class="exar" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></div>
+    <article class="exn" style="--c:#fff4d6"><small>Drafted by the note</small><h3>Follow-up: Client call</h3><p>Hello,<br>Thank you for your time. Here is where things stand:</p><ul><li>They want the revised quote and a signed timeline by Friday.</li><li>Budget is fixed.</li><li>Call Meera tomorrow at 10.</li></ul><p>I will follow up soon.<br>Regards</p></article>
+  </div>
+  <a class="btn inkbtn" href="app/index.html#try=client-call">Try this note <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+</div></section>
+
+<section class="band dark" id="studio"><div class="wrap">
+  <p class="eyebrow">Studio</p>
+  <h2>From notes to a presentation.</h2>
+  <p class="lede">Turn any note into a mind map, a slide deck or a one-page summary. Generated on your device.</p>
+  <div class="stg">
+    <figure class="shot"><img src="img/studio-map.webp" width="1200" height="615" alt="A launch plan note shown as a mind map with three branches." loading="lazy" decoding="async"><figcaption>Mind map</figcaption></figure>
+    <figure class="shot"><img src="img/studio-deck.webp" width="1200" height="683" alt="The same note as a presentation slide." loading="lazy" decoding="async"><figcaption>Slides</figcaption></figure>
+    <figure class="shot"><img src="img/studio-info.webp" width="900" height="1035" alt="The same note as a one-page summary." loading="lazy" decoding="async"><figcaption>Infographic</figcaption></figure>
+  </div>
+</div></section>
+
+<section class="band paper" id="features"><div class="wrap">
+  <h2>Everything on one wall</h2>
+  <p class="lede">Capture, planning, AI and presentation in a single workspace.</p>
+  <div class="fxg">
+    <article class="fx lead" style="--k:#5ef2c0"><h3>Built-in AI</h3><ul><li><b>Agentic notes</b><span>Ask a note a question, or have it draft the checklist, summary or reminder.</span></li><li><b>Ask your wall</b><span>Query every note at once. Answers cite the notes they come from.</span></li><li><b>Web search from a note</b><span>Research from inside a note and get results with source links.</span></li><li><b>Voice</b><span>Dictate a note. Spoken lists are converted to checklists.</span></li><li><b>Your own assistant</b><span>Send any note to the AI assistant you already use.</span></li></ul></article>
+    <article class="fx" style="--k:#ffc93c"><h3>Capture</h3><ul><li><b>Notes and checklists</b><span>Free-form notes and editable task lists.</span></li><li><b>Tables</b><span>Structured rows and columns inside a note.</span></li><li><b>Charts and flows</b><span>Turn figures into a chart and steps into a diagram.</span></li><li><b>Photos and sketches</b><span>Add images or sketch by hand.</span></li><li><b>Templates</b><span>More than 100, for work, home and travel.</span></li></ul></article>
+    <article class="fx" style="--k:#74ccff"><h3>Plan the day</h3><ul><li><b>Today, Week, Month</b><span>Day, week and month views of the same notes.</span></li><li><b>Reminders</b><span>Set a date and time on any note.</span></li><li><b>Countdowns and goals</b><span>Timers, and progress tracked against a target.</span></li><li><b>Next up</b><span>Your next task, always in view.</span></li><li><b>Close the day</b><span>Complete the day and carry unfinished work forward.</span></li></ul></article>
+    <article class="fx" style="--k:#bda4ff"><h3>Studio</h3><ul><li><b>Mind map</b><span>View a note, or the whole wall, as a collapsible map.</span></li><li><b>Slides</b><span>Generate a deck from your notes. Present it or export a PDF.</span></li><li><b>Infographic</b><span>A one-page summary, exported as an image.</span></li><li><b>On-device</b><span>Generated locally. Nothing is uploaded.</span></li></ul></article>
+    <article class="fx" style="--k:#ff6f9c"><h3>Organise</h3><ul><li><b>Search</b><span>Instant search across every note.</span></li><li><b>Pin, link and select</b><span>Pin priorities, link related notes and edit in bulk.</span></li><li><b>Personal and Work</b><span>Separate spaces for personal and professional notes.</span></li><li><b>Trash with undo</b><span>Recover completed and deleted notes for 30 days.</span></li></ul></article>
+    <article class="fx" style="--k:#ffc93c"><h3>Share and protect</h3><ul><li><b>Pass a note</b><span>Share by link or QR code, with no upload.</span></li><li><b>Private and sealed</b><span>Lock a note with a PIN, or seal it until a set date.</span></li><li><b>Backup</b><span>Export everything to a single file and restore it at any time.</span></li><li><b>Offline</b><span>Available without a connection. No advertising.</span></li></ul></article>
+  </div>
+  <p class="fxnote">AI features process the note you select through an AI service and include a free daily allowance. Everything else runs on your device. <a href="privacy.html">How your data is handled</a></p>
 </div></section>
 
 <section class="band dark" id="templates"><div class="wrap tpl">
   <div>
     <h2>Start with a template</h2>
-    <p class="lede">Explore 100+ ready-to-use templates across work, home, travel, feelings, and the things you do for yourself.</p>
+    <p class="lede">More than 100 ready-made templates for work, home, travel and personal goals.</p>
     <div class="chips" id="chips"></div>
   </div>
   <div class="panel" aria-live="polite">
@@ -550,30 +602,12 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
   </div>
 </div></section>
 
-<section class="band plilac" id="roadmap"><div class="wrap road">
-  <div>
-    <h2>What's next for ChipZett</h2>
-    <dl class="rows">
-      <div><dt>Available now</dt><dd>Notes, checklists, reminders, agentic notes with real AI, voice, and Studio, in your browser on phone and computer.</dd></div>
-      <div><dt>Next</dt><dd>A profile you sign in to, so your notes follow you from phone to computer.</dd></div>
-      <div><dt>In development</dt><dd>Apps for Windows and Android.</dd></div>
-      <div><dt>On the roadmap</dt><dd>Shared walls for teams.</dd></div>
-    </dl>
-  </div>
-  <div class="concept">
-    <header><h3>Meeting notes</h3><span class="badge">Agentic note</span></header>
-    <p class="ask">"Draft a follow-up with the decisions and next steps."</p>
-    <p class="ans">I grouped the decisions and added the owner and deadline for each action item.</p>
-    <small>Draft ready for review</small>
-  </div>
-</div></section>
-
 <section class="band dark" id="faq"><div class="wrap faqg">
-  <h2>Good to know</h2>
+  <h2>Frequently asked questions</h2>
   <div class="faq">
     <details><summary>What is an agentic note?</summary><p>A note you can ask and instruct. Switch on Agentic in the write bar and the note gets its own line: ask it a question, or tell it to make a checklist, a summary, a reminder or a web search. The first time, ChipZett asks whether to use AI. If you say no, it answers from the note's own words on your device.</p></details>
-    <details><summary>Is the AI free?</summary><p>Yes, within a daily limit: 10 questions, 3 web searches and 20 voice notes a day. No account and no card.</p></details>
-    <details><summary>Is ChipZett free to use?</summary><p>Yes. There is no payment, no trial and no account. You open it and use it.</p></details>
+    <details><summary>Is the AI free?</summary><p>Yes. The free allowance is 10 questions, 3 web searches and 20 voice notes per day, with no account or payment details required.</p></details>
+    <details><summary>Is ChipZett free to use?</summary><p>Yes. ChipZett is free, with no trial period and no account required.</p></details>
     <details><summary>Where are my notes saved?</summary><p>On your own device, inside the browser you are using. They are not sent to us. If you clear your browser data, the notes go with it, so keep a backup: in the app, Appearance has a Download backup button that saves all your notes to one file you can restore later.</p></details>
     <details><summary>Who can see my notes?</summary><p>Your notes are kept on your device and are not sent to us. The exception is AI: when you ask an agentic note, use Ask your wall, or dictate, that text or recording is sent to an AI service to produce the answer and is not stored by ChipZett. Private and sealed notes are never sent. The <a href="privacy.html">privacy page</a> has the details.</p></details>
     <details><summary>Can I use it on my phone?</summary><p>Yes. It opens in a phone browser, where notes appear as cards you tap to open. You can add it to your home screen so it opens like an app.</p></details>
@@ -587,7 +621,7 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 <section class="get" id="get"><div class="wrap">
   <div>
     <h2>Start with one note.</h2>
-    <p>No sign-up. Open ChipZett and write the first thing on your mind.</p>
+    <p>Free to use. No sign-up required.</p>
   </div>
   <div class="acts">
     <a class="btn inkbtn" href="app/index.html">Open ChipZett <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
@@ -597,7 +631,7 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 
 <footer><div class="wrap">
   <div class="brand"><a class="logo" href="#top"><i></i>ChipZett</a><p>A little personality for your everyday notes.</p></div>
-  <div class="fl"><a href="#roadmap">Roadmap</a><a href="#faq">FAQ</a><a href="privacy.html">Privacy</a><a href="mailto:chipzett.official@gmail.com?subject=ChipZett%20feedback">Feedback</a></div>
+  <div class="fl"><a href="#features">Features</a><a href="#faq">FAQ</a><a href="privacy.html">Privacy</a><a href="mailto:chipzett.official@gmail.com?subject=ChipZett%20feedback">Feedback</a></div>
 </div></footer>
 
 <script>

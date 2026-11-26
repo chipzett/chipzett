@@ -2357,7 +2357,7 @@ async function passCheck(){const hs=location.hash||'';if(hs.indexOf('#note=')!==
 /* shared into ChipZett from another app (installed app on Android), or opened with ?text= */
 function shareIn(){let q;try{q=new URLSearchParams(location.search)}catch(e){return}if(!(q.has('text')||q.has('url')||q.has('title')))return;const t=[q.get('title'),q.get('text'),q.get('url')].filter(Boolean).join('\n').slice(0,4000).trim();
   try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}if(!t)return;add({text:t,day:TODAY()},true);pal(L('Saved as a note for today.','Aaj ke note mein save ho gaya.'))}
-function passInit(){kbInit();gridInit();expInit();askInit();remInit();selInit();moreInit();deSample();shareIn();passCheck();addEventListener('hashchange',passCheck)}
+function passInit(){kbInit();gridInit();expInit();askInit();remInit();selInit();moreInit();deSample();tryIn();shareIn();passCheck();addEventListener('hashchange',passCheck)}
 
 /* ---------- pin ---------- */
 const pinFirst=(a,b)=>(b.pin?1:0)-(a.pin?1:0);
@@ -2532,6 +2532,11 @@ function moreInit(){if(DESK)return;const B=document.body,me=$('.ztop .zme');if(!
     it(L('Tidy up','Saaf karo'),L('Line the notes up','Notes line me lagao'),cl('.ztop .ztidy'));it(L('Appearance','Roop'),L('Background, style, backup','Background, style, backup'),cl('.ztop .zwall'));it(L('Trash','Trash'),'',()=>openTrash());it(L('All features','Saare features'),'',()=>openExplore());
     document.body.append(m);const r=b.getBoundingClientRect();m.style.left=Math.max(8,Math.min(innerWidth-m.offsetWidth-8,r.right-m.offsetWidth))+'px';m.style.top=(r.bottom+6)+'px';b.setAttribute('aria-expanded','true')};
   addEventListener('pointerdown',e=>{if(m&&!m.contains(e.target)&&!b.contains(e.target))shut()},true);addEventListener('keydown',e=>{if(e.key==='Escape')shut()});addEventListener('resize',shut)}
+/* the homepage's "Try this note" button lands here: the example note is put on the wall, ready to be asked */
+function tryIn(){if(DESK||location.hash!=='#try=client-call')return;try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+  const t=L('Client call\nThey want the revised quote and a signed timeline by Friday. Budget is fixed. Call Meera tomorrow at 10.','Client call\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai. Kal 10 baje Meera ko call.');let n=notes.find(q=>q.text===t&&q.agent);
+  if(!n){n=add({text:t,agent:true,day:TODAY(),color:'#5ef2c0',face:'none',font:'outfit'},true);applyFilter()}
+  setTimeout(()=>{const d=dom(n);if(!d)return;if(isHid(n))tvGo('all');if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center'});agFlash(n.id);pal(L('Press Draft a follow-up, or ask the note anything.','Draft a follow-up dabao, ya note se kuch bhi poochho.'),true)},400)}
 /* sample notes that an earlier version put on the wall, and that were never changed, go to Trash once */
 function deSample(){if(DESK)return;try{if(localStorage.getItem('chipzett-desample'))return;localStorage.setItem('chipzett-desample','1');if(localStorage.getItem('chipzett-demo')==='1')return}catch(e){return}
   const T=new Set(['Launch checklist','Morning routine\n6:30  Wake up\n7:00  Run\n8:00  Plan the day','Subah ka routine\n6:30  Utho\n7:00  Daud\n8:00  Din ka plan','Trip budget','Trip ka budget','Stretch break','Sleep goal','Neend ka goal','Client meeting\nThey want the revised quote and a signed timeline by Friday. Budget is fixed.','Client meeting\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai.','Welcome to ChipZett\nWrite in the bar below to add a note. Press a face to hear the note. Drag notes anywhere.','ChipZett mein swagat hai\nNeeche bar mein likh kar note banao. Chehra dabao to note bolta hai. Notes kahin bhi kheencho.','Client meeting\nMet Tuesday. They want the revised quote, sample board photos and a signed timeline by Friday. Budget is fixed. Riya owns the photos.','Client meeting\nMangal ko mile. Unhe Friday tak revised quote, sample board photos aur signed timeline chahiye. Budget fix hai. Photos Riya ke paas hain.']);
