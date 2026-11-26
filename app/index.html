@@ -1159,6 +1159,7 @@ body .ztop .zbtn.zexp{position:relative;color:#1b1430;background:#ffc93c;border-
 .agmv .aic{box-shadow:inset 0 0 0 1.500px color-mix(in srgb,var(--ink) 55%,transparent);background:none}
 .agmv .aic::before{content:"\2726  ";font-size:.8em}
 body .ztop .zbtn.zask{color:var(--mint);border-color:rgba(94,242,192,.45)}
+.pssb .outp{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .askb{width:min(620px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:#17122a;border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:22px;color:#efeaff;font:500 14.500px/1.5 var(--ui);box-shadow:0 40px 90px -20px #000;text-align:left}
 .askb h3{font:700 20px var(--disp,var(--ui));margin:0 0 4px}.askb>p{margin:0 0 14px;color:rgba(239,234,255,.62);font-size:13px}
 .askf{display:flex;gap:8px}.askf input{flex:1;min-width:0;font:500 16px var(--ui);padding:12px 14px;border-radius:13px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#efeaff;outline:0}.askf input:focus{border-color:var(--mint)}
@@ -2307,6 +2308,7 @@ function noteMenu(anchor,n){if(nmenu&&nmenu._id===n.id){nmClose();return}nmClose
     it(L('Select notes…','Notes chuno…'),L('Pick several, then finish, move or delete them together','Kai chuno, phir ek saath poore karo, hatao ya din badlo'),()=>{noteClose();selMode(true);SEL.add(n.id);selPaint()});
     it(L('Duplicate','Ek aur copy'),'',()=>{const c=JSON.parse(JSON.stringify(n));['id','z','links','from','trail','rem','remFired','pin','made','touch'].forEach(k=>delete c[k]);c.x=(n.x||0)+26;c.y=(n.y||0)+26;add(c,true)});
     it(L('Copy as text','Text copy karo'),'',()=>{const ok=()=>pal(L('Copied.','Copy ho gaya.'),true);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(plainOf(n)).then(ok,()=>pal(L('Could not copy here.','Yahan copy nahi hua.'),true));else pal(L('Could not copy here.','Yahan copy nahi hua.'),true)})}
+  if(!cov&&!DESK&&plainOf(n).trim())it(L('Open in ChatGPT, Claude…','ChatGPT, Claude me kholo…'),L('Your own AI app opens with this note typed in','Tumhara AI app is note ke saath khulta hai'),()=>openOut(n));
   if(!cov&&voiceCan()&&(n.type==='text'||!n.type))it(L('Dictate into this note','Is note me bol ke likho'),L('Speak, and the words are added at the end','Bolo, shabd aakhir me jud jaate hain'),()=>voiceGo(false,j=>{const t=j.kind==='todo'?(j.items||[]).map(x=>'- '+x).join('\n'):(j.text||'').trim();if(!t)return;n.text=((n.text||'')+'\n'+t).trim();n.textH='';const b=d.querySelector('.body');if(b)b['textContent']=n.text;save();touch(n);agFlash(n.id)}));
   it(L('Colour, shape, private, seal…','Rang, shape, private, seal…'),L('Style it, hide it behind a PIN, or seal it until a date','Sajao, PIN ke peeche chhupao, ya tareekh tak seal karo'),()=>{const b=d.querySelectorAll('.acts button')[1];if(b)b.click()});
   m.append(document.createElement('hr'));
@@ -2418,6 +2420,12 @@ function gridInit(){if(DESK)return;board.addEventListener('click',e=>{if(!e.isTr
   addEventListener('resize',()=>{if(nOpen&&!isPhone())noteClose()})}
 
 /* ---------- ask your wall: one question across your notes ---------- */
+/* ---------- open a note in the person's own AI app (no ChipZett server, no key) ---------- */
+const OUT=[['ChatGPT','https://chatgpt.com/?q='],['Claude','https://claude.ai/new?q='],['Perplexity','https://www.perplexity.ai/search?q=']];
+function openOut(n){if(covered(n))return;const {b,close}=pssBox(),h=el('h3'),p=el('p'),pa=el('div','pa outp'),sm=el('small'),txt=plainOf(n).trim().slice(0,1800);
+  h['textContent']=L('Open this note in your AI app','Ye note apne AI app me kholo');p['textContent']=L('The text of this one note is typed into the app you pick, in a new tab. It goes straight from your browser to that app, not through ChipZett. Nothing is sent until you press a button.','Is ek note ka text tumhare chune app me naye tab me likh diya jaata hai. Ye seedha tumhare browser se us app ko jaata hai, ChipZett se hoke nahi. Button dabane tak kuch nahi jaata.');
+  OUT.forEach(o=>{const a=el('button','go');a.type='button';a['textContent']=o[0];a.onclick=()=>{const q=L('Here is a note of mine. Help me with it: tell me what matters and what to do next.','Ye mera ek note hai. Isme meri madad karo: kya zaroori hai aur aage kya karna hai.')+'\n\n'+txt;try{window.open(o[1]+encodeURIComponent(q),'_blank','noopener')}catch(e){}close()};pa.append(a)});
+  const c=el('button');c.type='button';c['textContent']=L('Cancel','Rehne do');c.onclick=close;pa.append(c);sm['textContent']=L('Free, with no daily limit here. You need your own account in that app.','Free, yahan koi roz ki limit nahi. Us app me tumhara apna account chahiye.');b.append(h,p,pa,sm)}
 function wallPack(){const list=notes.filter(n=>!covered(n)&&n.type!=='image'&&n.type!=='doodle'&&plainOf(n).trim()).sort((a,b)=>(b.touch||b.made||0)-(a.touch||a.made||0)).slice(0,40);
   return{list,texts:list.map(n=>((n.day?'[day '+n.day+'] ':'')+(n.rem&&!n.remFired?'[reminder '+new Date(n.rem).toISOString().slice(0,16)+'] ':'')+plainOf(n)).slice(0,600))}}
 function wallOk(){let pr='';try{pr=localStorage.getItem('chipzett-ai-wall')||''}catch(e){}if(pr==='on')return Promise.resolve(true);
