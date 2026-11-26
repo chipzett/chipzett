@@ -1199,6 +1199,15 @@ body .ztop .zbtn.zask{color:var(--mint);border-color:rgba(94,242,192,.45)}
 body.ph .zstu{display:none}
 @page{margin:8mm}
 @media print{body.stp{display:block!important;overflow:visible!important;background:#fff!important;height:auto!important}body.stp>*:not(.stu){display:none!important}body.stp .stu{position:static!important;background:#fff!important;display:block!important}body.stp .stu>*:not(.stall){display:none!important}body.stp .stall{display:block!important}body.stp .stall .stsl{--u:2.5mm;width:250mm;margin:0 auto 6mm;break-after:page;break-inside:avoid;border:1px solid #ddd;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+body.ws:not(.fullbar) .ztop .zexp,body.ws:not(.fullbar) .ztop .zstu,body.ws:not(.fullbar) .ztop .zsel,body.ws:not(.fullbar) .ztop .ztidy,body.ws:not(.fullbar) .ztop .zwall,body.ws:not(.fullbar) .ztop .zsegw{display:none!important}
+body.ws:not(.fullbar) .zbar .ztpl{display:none}
+body.fullbar .zmore{display:none!important}
+body.ws:not(.fullbar):not(.st-play) .pal .blob{display:none}
+body.ws:not(.fullbar):not(.st-play):not(.ph) .pal{left:50%;right:auto;top:66px;bottom:auto;transform:translateX(-50%);align-items:center;z-index:30}
+body.ws:not(.fullbar):not(.st-play):not(.ph) .pal .say{border-radius:14px;text-align:center;box-shadow:0 14px 34px -10px rgba(0,0,0,.8)}
+body.wel .ztop .zrow:not(.r1){display:none}
+body.wel.ph .pplan,body.wel.ph .pquick,body.wel.ph .pfocus{display:none!important}
+.zmm{z-index:40}
 .pfp{position:fixed;inset:0;z-index:55;background:rgba(10,7,22,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:28px 16px}
 .pfb{width:min(780px,100%);background:#17122a;border:1px solid rgba(255,255,255,.13);border-radius:26px;padding:28px;color:#efeaff;font:500 14.5px/1.45 var(--ui);box-shadow:0 40px 90px -20px #000}
 .pfb>header{display:flex;align-items:center;gap:14px}
@@ -2343,7 +2352,7 @@ async function passCheck(){const hs=location.hash||'';if(hs.indexOf('#note=')!==
 /* shared into ChipZett from another app (installed app on Android), or opened with ?text= */
 function shareIn(){let q;try{q=new URLSearchParams(location.search)}catch(e){return}if(!(q.has('text')||q.has('url')||q.has('title')))return;const t=[q.get('title'),q.get('text'),q.get('url')].filter(Boolean).join('\n').slice(0,4000).trim();
   try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}if(!t)return;add({text:t,day:TODAY()},true);pal(L('Saved as a note for today.','Aaj ke note mein save ho gaya.'))}
-function passInit(){kbInit();gridInit();expInit();askInit();remInit();selInit();shareIn();passCheck();addEventListener('hashchange',passCheck)}
+function passInit(){kbInit();gridInit();expInit();askInit();remInit();selInit();moreInit();deSample();shareIn();passCheck();addEventListener('hashchange',passCheck)}
 
 /* ---------- pin ---------- */
 const pinFirst=(a,b)=>(b.pin?1:0)-(a.pin?1:0);
@@ -2509,6 +2518,20 @@ function gridInit(){if(DESK)return;board.addEventListener('mousedown',e=>{if(!do
   addEventListener('resize',()=>{if(nOpen&&!isPhone())noteClose()})}
 
 /* ---------- ask your wall: one question across your notes ---------- */
+/* ---------- a calm top bar: the tools live behind one More button unless the person asks to keep them in the bar ---------- */
+function moreInit(){if(DESK)return;const B=document.body,me=$('.ztop .zme');if(!me)return;let full=false;try{full=localStorage.getItem('chipzett-fullbar')==='1'}catch(e){}B.classList.toggle('fullbar',full);
+  const b=el('button','zbtn zmore');b.type='button';b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>';b.append(el('span',null,L('More','Aur')));b.setAttribute('aria-label',L('More tools','Aur tools'));b.setAttribute('aria-haspopup','menu');me.before(b);let m=null;
+  const shut=()=>{if(m){m.remove();m=null;b.setAttribute('aria-expanded','false')}},cl=q=>()=>{const x=$(q);if(x)x.click()};
+  b.onclick=()=>{if(m){shut();return}m=el('div','nmenu zmm');m.setAttribute('role','menu');const it=(t,h,fn)=>{const x=el('button'),bt=el('b');x.type='button';x.setAttribute('role','menuitem');bt['textContent']=t;x.append(bt);if(h){const sm=el('small');sm['textContent']=h;x.append(sm)}x.onclick=()=>{shut();fn()};m.append(x)};
+    it('Studio',L('Mind map, slides, infographic','Mind map, slides, infographic'),()=>openStudio(stWall()));it(L('Templates','Templates'),L('Ready-made notes','Bane-banaye notes'),()=>openGallery());it(L('Select notes','Notes chuno'),L('Change several at once','Kai ek saath badlo'),()=>selMode(true));
+    it(L('Tidy up','Saaf karo'),L('Line the notes up','Notes line me lagao'),cl('.ztop .ztidy'));it(L('Appearance','Roop'),L('Background, style, backup','Background, style, backup'),cl('.ztop .zwall'));it(L('Trash','Trash'),'',()=>openTrash());it(L('All features','Saare features'),'',()=>openExplore());
+    document.body.append(m);const r=b.getBoundingClientRect();m.style.left=Math.max(8,Math.min(innerWidth-m.offsetWidth-8,r.right-m.offsetWidth))+'px';m.style.top=(r.bottom+6)+'px';b.setAttribute('aria-expanded','true')};
+  addEventListener('pointerdown',e=>{if(m&&!m.contains(e.target)&&!b.contains(e.target))shut()},true);addEventListener('keydown',e=>{if(e.key==='Escape')shut()});addEventListener('resize',shut)}
+/* sample notes that an earlier version put on the wall, and that were never changed, go to Trash once */
+function deSample(){if(DESK)return;try{if(localStorage.getItem('chipzett-desample'))return;localStorage.setItem('chipzett-desample','1');if(localStorage.getItem('chipzett-demo')==='1')return}catch(e){return}
+  const T=new Set(['Launch checklist','Morning routine\n6:30  Wake up\n7:00  Run\n8:00  Plan the day','Subah ka routine\n6:30  Utho\n7:00  Daud\n8:00  Din ka plan','Trip budget','Trip ka budget','Stretch break','Sleep goal','Neend ka goal','Client meeting\nThey want the revised quote and a signed timeline by Friday. Budget is fixed.','Client meeting\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai.','Welcome to ChipZett\nWrite in the bar below to add a note. Press a face to hear the note. Drag notes anywhere.','ChipZett mein swagat hai\nNeeche bar mein likh kar note banao. Chehra dabao to note bolta hai. Notes kahin bhi kheencho.','Client meeting\nMet Tuesday. They want the revised quote, sample board photos and a signed timeline by Friday. Budget is fixed. Riya owns the photos.','Client meeting\nMangal ko mile. Unhe Friday tak revised quote, sample board photos aur signed timeline chahiye. Budget fix hai. Photos Riya ke paas hain.']);
+  const gone=notes.filter(n=>T.has(n.text||'')&&!n.lock&&!n.seal&&!n.pin&&!n.rem&&!(n.trail&&n.trail.length)&&(n.type!=='todo'||((n.items||[]).length===3&&/^(Review homepage|Homepage dekho)$/.test(n.items[0].t))));if(!gone.length)return;
+  gone.forEach(n=>{trashPut(n,false);const d=dom(n);if(d)d.remove()});notes=notes.filter(n=>!gone.includes(n));save();applyFilter()}
 /* ---------- profile page: the person's own home, with today and every feature one press away. Saved on this device. ---------- */
 function openProfile(){if(!PROFILE)return;const old=$('.pfp');if(old&&old._close)old._close();const o=el('div','pfp'),box=el('div','pfb'),hd=el('header'),av=el('i'),who=el('div'),nm=el('h2'),sub=el('small'),x=el('button','pfx');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label',L('Your profile','Tumhara profile'));
   const close=()=>{o.remove();removeEventListener('keydown',key,true)},key=e=>{if(e.key==='Escape'&&!$('.pss')&&!$('.stu')){e.stopPropagation();close()}};o._close=close;addEventListener('keydown',key,true);o.addEventListener('pointerdown',e=>{if(e.target===o)close()});
@@ -2669,9 +2692,9 @@ function wsBuild(){
   search.oninput=()=>{const o=$('#search');o.value=search.value;o.dispatchEvent(new Event('input'))};
   segw.append(seg,ag);r1.append(brand,vseg,segw,el('div','zgrow'),search,tidy,wall,me);vseg.setAttribute('role','group');vseg.setAttribute('aria-label',L('View','View'));r2.append(chips,today);top.append(r1,r2);
   /* command bar */
-  const bar=document.createElement('form'),inp=document.createElement('input'),bAg=zb('zbag',ZI.bolt,L('Agentic','Agentic')),bTp=zb('',ZI.tpl,L('Templates','Templates')),bAdd=el('button','zbtn zadd',L('Add note','Note banao'));
+  const bar=document.createElement('form'),inp=document.createElement('input'),bAg=zb('zbag',ZI.bolt,L('Agentic','Agentic')),bTp=zb('ztpl',ZI.tpl,L('Templates','Templates')),bAdd=el('button','zbtn zadd',L('Add note','Note banao'));
   bar.className='zbar';bar.autocomplete='off';inp.id='zcap';inp.placeholder=L('Write a note','Note likho');inp.setAttribute('aria-label','New note');
-  bAg.title=L('Preview you can try now: the next note gets Ask and Do. It answers from the note\'s own words. No AI is connected yet.','Preview jo abhi try kar sakte ho: agle note mein Ask aur Do aayega. Jawab note ke apne shabdon se banta hai. AI abhi juda nahi hai.');bTp.title=L('Ready-made notes','Bane-banaye notes');bAdd.type='submit';
+  bAg.title=L('The next note can be asked questions and given tasks','Agle note se sawaal poochh sakte ho aur kaam de sakte ho');bTp.title=L('Ready-made notes','Bane-banaye notes');bAdd.type='submit';
   bar.append(inp,bAg,bTp,bAdd);
   if(voiceCan()){const bMic=el('button','zbtn vmic');bMic.type='button';bMic.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.500 11a6.500 6.500 0 0 0 13 0M12 17.500V21"/></svg>';bMic.setAttribute('aria-label',L('Speak a note','Bol ke note banao'));bMic.title=L('Speak, and ChipZett writes it down as a clean note','Bolo, ChipZett saaf note likh dega');bMic.onclick=()=>voiceGo(false,voiceToNote);inp.after(bMic)}
   /* profile and appearance cards */
