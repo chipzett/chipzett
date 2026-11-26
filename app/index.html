@@ -1885,8 +1885,66 @@ function clean(html){const t=document.createElement('template');t.innerHTML=html
 function edit(e,n){e.contentEditable='true';e.spellcheck=false;if(n.textH)e.innerHTML=clean(n.textH);else e['textContent']=n.text;
   e.oninput=()=>{n.text=e.innerText.trim();const h=clean(e.innerHTML);n.textH=/<(span|b|i|u|font|strong|em)\b/i.test(h)?h:'';save()};
   e.onpaste=ev=>{ev.preventDefault();document.execCommand('insertText',false,ev.clipboardData?ev.clipboardData.getData('text/plain'):'')}}
+/* ---------- the burn, drawn on the graphics card: the note is photographed into a texture, then fire eats it from one corner ---------- */
+function fxShot(d,W,H,dpr){const c=document.createElement('canvas');c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);const x=c.getContext('2d'),r0=d.getBoundingClientRect(),pp=d.querySelector('.paper')||d,cs=getComputedStyle(pp);x.scale(dpr,dpr);
+  const rad=Math.min(parseFloat(cs.borderTopLeftRadius)||12,W/2,H/2),bg=cs.backgroundColor&&cs.backgroundColor!=='rgba(0, 0, 0, 0)'?cs.backgroundColor:(getComputedStyle(d).getPropertyValue('--c')||'#ffc93c').trim();
+  x.fillStyle=bg;x.beginPath();if(x.roundRect)x.roundRect(0,0,W,H,rad);else x.rect(0,0,W,H);x.fill();
+  {const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'rgba(255,255,255,.10)');g.addColorStop(1,'rgba(0,0,0,.07)');x.fillStyle=g;x.fill()}
+  const shown=e=>{for(let a=e;a&&a!==d.parentNode;a=a.parentNode){if(a.nodeType!==1)continue;const s=getComputedStyle(a);if(s.display==='none'||s.visibility==='hidden'||+s.opacity<.15)return false}return true};
+  try{d.querySelectorAll('img,canvas').forEach(im=>{if(!shown(im))return;const r=im.getBoundingClientRect();if(r.width<4||r.height<4)return;try{x.drawImage(im,r.left-r0.left,r.top-r0.top,r.width,r.height)}catch(e){}});
+    d.querySelectorAll('input[type=checkbox]').forEach(b=>{if(!shown(b))return;const r=b.getBoundingClientRect();if(r.width<4)return;x.strokeStyle='rgba(20,14,40,.7)';x.lineWidth=1.5;x.strokeRect(r.left-r0.left,r.top-r0.top,r.width,r.height)});
+    const tw=document.createTreeWalker(d,NodeFilter.SHOW_TEXT),rg=document.createRange();let node,count=0;
+    while((node=tw.nextNode())&&count<600){const t=node.nodeValue;if(!t||!t.trim())continue;const par=node.parentElement;if(!par||par.closest('button,.acts,.agline,.agm,.nbar,select,svg')||!shown(par))continue;const st=getComputedStyle(par);x.font=st.fontStyle+' '+st.fontWeight+' '+st.fontSize+' '+st.fontFamily;x.fillStyle=st.color;x.textBaseline='middle';
+      const re=/\S+/g;let m;while((m=re.exec(t))&&count<600){rg.setStart(node,m.index);rg.setEnd(node,m.index+m[0].length);const r=rg.getBoundingClientRect();if(r.width<1||r.height<1||r.top>r0.bottom||r.bottom<r0.top)continue;x.fillText(m[0],r.left-r0.left,r.top-r0.top+r.height/2+1);count++}}}catch(e){}
+  return {c,rad}}
+const FX_VS='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
+const FX_FS=`precision highp float;uniform sampler2D uTex,uField;uniform vec2 uRes,uSize,uPad;uniform float uT,uP,uMax,uSeed,uRad,uFade,uDpr;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1.,0.)),f.x),mix(h(i+vec2(0.,1.)),h(i+vec2(1.,1.)),f.x),f.y);}
+float fbm(vec2 p){return n(p)*.55+n(p*2.03+7.)*.3+n(p*4.1+3.)*.15;}
+float field(vec2 p){return texture2D(uField,clamp(p/uSize,0.,1.)).r*uMax+(n(p*.33+uSeed)-.5)*.022;}
+float inside(vec2 p){vec2 q=abs(p-uSize*.5)-uSize*.5+uRad;return 1.-smoothstep(-.8,.8,length(max(q,0.))+min(max(q.x,q.y),0.)-uRad);}
+void main(){vec2 p=vec2(gl_FragCoord.x,uRes.y-gl_FragCoord.y)/uDpr-uPad;float th=mix(-.32,uMax+.22,uP),m=inside(p),s=field(p)-th;vec3 col=vec3(0.);float a=0.;
+  if(m>0.){float near=smoothstep(.34,0.,s);vec2 q=p+vec2(n(p*.07+uT*3.1)-.5,n(p*.07-uT*2.6+9.)-.5)*near*6.;vec3 tex=texture2D(uTex,clamp(q/uSize,0.,1.)).rgb;
+    float ch=smoothstep(.26,0.,s);vec3 paper=mix(tex,tex*vec3(.40,.24,.12),ch*.92);paper=mix(paper,vec3(.03,.02,.014),smoothstep(.085,.006,s));
+    float fl=.72+.28*n(vec2(p.x*.05,uT*9.));paper+=vec3(1.,.40,.07)*smoothstep(.34,0.,s)*.34*fl;
+    float pa=step(0.,s),ashA=smoothstep(-.2,0.,s)*(1.-pa)*smoothstep(.22,.62,fbm(p*.1+uSeed)+s*3.6)*.92;
+    float crack=pow(1.-abs(fbm(p*.12+uSeed+uT*.12)*2.-1.),7.);vec3 ash=vec3(.045,.04,.04)+vec3(1.,.36,.05)*crack*smoothstep(-.15,0.,s)*1.9;
+    col=(paper*pa+ash*ashA)*m;a=(pa+ashA)*m;
+    float em=exp(-abs(s)*64.)*(.75+.55*n(p*.28+uT*6.));col+=mix(vec3(1.,.33,.04),vec3(1.,.92,.62),clamp(em*1.25-.3,0.,1.))*em*1.5*m;}
+  float f=0.,jit=h(p+uT)*.9;for(int i=0;i<14;i++){float fi=float(i)+jit;vec2 pp=p+vec2((n(vec2(p.x*.03,uT*2.1+fi*.45))-.5)*fi*3.2,fi*7.+2.);float w=1.-fi/15.;f+=exp(-abs(field(pp)-th)*17.)*inside(pp)*w*w;}f=clamp(f*.36,0.,1.);
+  float fn=fbm(vec2(p.x*.042,p.y*.028+uT*3.4)+uSeed),fn2=n(vec2(p.x*.11,p.y*.07+uT*5.2));float flame=smoothstep(.3,.98,f*(.5+fn*1.05+fn2*.25));
+  vec3 fc=mix(vec3(.85,.13,.02),vec3(1.,.58,.08),smoothstep(0.,.5,flame));fc=mix(fc,vec3(1.,.93,.66),smoothstep(.78,1.,flame));
+  col+=fc*flame*.98+vec3(1.,.38,.07)*f*f*.2;a=max(a,flame*.8);
+  gl_FragColor=vec4(col*uFade,clamp(a,0.,1.)*uFade);}`;
+function fxBurnGL(d,n){const r=d.getBoundingClientRect(),W=r.width,H=r.height;if(W<24||H<24||FXRUN>=2)return false;
+  const dpr=Math.min(isPhone()?1.5:2,devicePixelRatio||1),PX=70,PT=Math.min(240,Math.max(150,H*.6)),PB=40,cv=document.createElement('canvas'),gl=cv.getContext('webgl',{premultipliedAlpha:true,alpha:true,antialias:false});if(!gl)return false;
+  const CW=W+PX*2,CH=H+PT+PB;cv.width=Math.round(CW*dpr);cv.height=Math.round(CH*dpr);cv.style.cssText='position:fixed;left:'+(r.left-PX)+'px;top:'+(r.top-PT)+'px;width:'+CW+'px;height:'+CH+'px;pointer-events:none;z-index:2147483000';
+  const sh=(t,src)=>{const o=gl.createShader(t);gl.shaderSource(o,src);gl.compileShader(o);return gl.getShaderParameter(o,gl.COMPILE_STATUS)?o:null},vs=sh(gl.VERTEX_SHADER,FX_VS),fs=sh(gl.FRAGMENT_SHADER,FX_FS);if(!vs||!fs)return false;
+  const pr=gl.createProgram();gl.attachShader(pr,vs);gl.attachShader(pr,fs);gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return false;gl.useProgram(pr);
+  const shot=fxShot(d,W,H,dpr),seed=Math.random()*50,ig=[W*(.15+Math.random()*.7),H+6];
+  /* how soon each point catches: distance from where it was lit, pushed around by slow noise so the front is never a straight line */
+  const G=256,hh=(a,b)=>{const v=Math.sin(a*127.1+b*311.7)*43758.5453;return v-Math.floor(v)},vn=(x,y)=>{const i=Math.floor(x),j=Math.floor(y);let fx=x-i,fy=y-j;fx=fx*fx*(3-2*fx);fy=fy*fy*(3-2*fy);return (hh(i,j)*(1-fx)+hh(i+1,j)*fx)*(1-fy)+(hh(i,j+1)*(1-fx)+hh(i+1,j+1)*fx)*fy},fb=(x,y)=>vn(x,y)*.55+vn(x*2.03+7,y*2.03+7)*.3+vn(x*4.1+3,y*4.1+3)*.15;
+  const raw=new Float32Array(G*G);let mx=0;for(let j=0;j<G;j++)for(let i=0;i<G;i++){const px=i/(G-1)*W,py=j/(G-1)*H,dx=(px-ig[0])*.62,dy=py-ig[1],v=Math.max(0,Math.hypot(dx,dy)/H+(fb(px*.011+seed,py*.011)-.5)*.62+(fb(px*.04,py*.04+seed)-.5)*.16);raw[j*G+i]=v;if(v>mx)mx=v}
+  const fd=new Uint8Array(G*G*4);for(let k=0;k<G*G;k++){const b=Math.round(raw[k]/mx*255);fd[k*4]=fd[k*4+1]=fd[k*4+2]=b;fd[k*4+3]=255}
+  const tex=(unit,src,w,h)=>{const t=gl.createTexture();gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,t);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);if(w)gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,src);else gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,src);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)};
+  try{tex(0,shot.c);tex(1,fd,G,G)}catch(e){return false}
+  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);const la=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
+  const U=k=>gl.getUniformLocation(pr,k);gl.uniform1i(U('uTex'),0);gl.uniform1i(U('uField'),1);gl.uniform2f(U('uRes'),cv.width,cv.height);gl.uniform2f(U('uSize'),W,H);gl.uniform2f(U('uPad'),PX,PT);gl.uniform1f(U('uMax'),mx);gl.uniform1f(U('uSeed'),seed);gl.uniform1f(U('uRad'),shot.rad);gl.uniform1f(U('uDpr'),dpr);
+  const uT=U('uT'),uP=U('uP'),uF=U('uFade');gl.viewport(0,0,cv.width,cv.height);gl.clearColor(0,0,0,0);
+  /* sparks ride on a second, lighter layer */
+  const sp=document.createElement('canvas'),sx=sp.getContext('2d'),SP=[];sp.width=Math.round(CW*dpr);sp.height=Math.round(CH*dpr);sp.style.cssText=cv.style.cssText+';mix-blend-mode:screen';sx.scale(dpr,dpr);sx.translate(PX,PT);
+  document.body.append(cv,sp);FXRUN++;const T=FXMS.burn,TAIL=650,t0=performance.now();let hid=false;d.style.pointerEvents='none';
+  const done=()=>{if(!cv.isConnected)return;cv.remove();sp.remove();FXRUN=Math.max(0,FXRUN-1);const ext=gl.getExtension('WEBGL_lose_context');if(ext)ext.loseContext()};
+  function frame(now){const el2=window.__fxt!=null?window.__fxt:now-t0,rawP=Math.min(1,el2/T),P=Math.pow(rawP,1.12),fade=el2<=T?1:Math.max(0,1-(el2-T)/TAIL),th=-.32+(mx+.54)*P;
+    gl.uniform1f(uT,el2/1000);gl.uniform1f(uP,P);gl.uniform1f(uF,fade);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    if(!hid){hid=true;d.style.visibility='hidden'}
+    sx.clearRect(-PX,-PT,CW,CH);if(rawP<.97)for(let k=0;k<26&&SP.length<260;k++){const i=Math.floor(Math.random()*G),j=Math.floor(Math.random()*G);if(Math.abs(raw[j*G+i]-th)<.018&&Math.random()<.5)SP.push({x:i/(G-1)*W,y:j/(G-1)*H,vx:(Math.random()-.5)*.9,vy:-(.8+Math.random()*2.6),l:0,m:500+Math.random()*1100,s:.6+Math.random()*1.5,w:Math.random()*6})}
+    for(let k=SP.length-1;k>=0;k--){const q=SP[k];q.l+=16;const al=1-q.l/q.m;if(al<=0){SP.splice(k,1);continue}q.vx+=Math.sin(q.l/120+q.w)*.06;q.x+=q.vx;q.y+=q.vy;q.vy*=.994;sx.fillStyle=al>.5?'rgba(255,224,150,'+al*fade+')':'rgba(255,110,30,'+al*fade+')';sx.beginPath();sx.arc(q.x,q.y,q.s*(.5+al*.7),0,6.3);sx.fill()}
+    if(el2<T+TAIL)requestAnimationFrame(frame);else done()}
+  requestAnimationFrame(frame);setTimeout(done,T+TAIL+1500);return true}
 /* ---------- how a note leaves: it burns from the bottom, turns to dust, or is washed away; a finished note is signed off with light ---------- */
-const FXMS={burn:1500,dust:1250,wash:1350,seal:1250};let FXRUN=0,FXSEQ=0;
+const FXMS={burn:2600,dust:1250,wash:1350,seal:1250};let FXRUN=0,FXSEQ=0;
 const fxOn=()=>{if(DESK)return false;try{if(localStorage.getItem('chipzett-fx')==='off')return false}catch(e){}return !matchMedia('(prefers-reduced-motion:reduce)').matches};
 const fxPick=()=>['burn','dust','burn','wash'][FXSEQ++%4];
 function fxLeave(d,kind,n){const r=d.getBoundingClientRect(),W=r.width,H=r.height;if(W<20||H<20||FXRUN>=3)return false;FXRUN++;
@@ -1947,7 +2005,7 @@ function fxLeave(d,kind,n){const r=d.getBoundingClientRect(),W=r.width,H=r.heigh
   requestAnimationFrame(frame);setTimeout(()=>{if(cv.isConnected){cv.remove();FXRUN=Math.max(0,FXRUN-1)}},T+1500);return true}
 function finish(n,done){
   const d=dom(n);if(!d)return;if(noteOn===n.id)stopNote();SK.delete(n.id);const p=d.firstChild;p.style.animationDelay='0s';
-  const fxk=fxOn()?(done?'seal':fxPick()):'',fxDid=!!fxk&&fxLeave(d,fxk,n);if(!fxDid)p.classList.add(done?'crumple':'fall');if(done){if(!fxDid)boom(d);pal(DESK?rnd(['Shabash! Ek kaam kam.','Ho gaya? Mast.','Tick! Chai banti hai.']):L('Done. It is in Trash if you need it back.','Ho gaya. Wapas chahiye to Trash mein hai.'),!DESK)}else pal(DESK?rnd(['Gaya kachre mein.','Bye bye note.','Theek hai, uda diya.']):L('Moved to Trash.','Trash mein gaya.'),true);
+  const fxk=fxOn()?(done?'seal':'burn'):'',fxDid=!!fxk&&((fxk==='burn'&&fxBurnGL(d,n))||fxLeave(d,fxk,n));if(!fxDid)p.classList.add(done?'crumple':'fall');if(done){if(!fxDid)boom(d);pal(DESK?rnd(['Shabash! Ek kaam kam.','Ho gaya? Mast.','Tick! Chai banti hai.']):L('Done. It is in Trash if you need it back.','Ho gaya. Wapas chahiye to Trash mein hai.'),!DESK)}else pal(DESK?rnd(['Gaya kachre mein.','Bye bye note.','Theek hai, uda diya.']):L('Moved to Trash.','Trash mein gaya.'),true);
   trashPut(n,done);notes=notes.filter(x=>x!==n);save();renderCats();setTimeout(()=>{d.remove();tvSoon()},fxDid?FXMS[fxk]+440:700);
 }
 function drag(d,n,handle){
