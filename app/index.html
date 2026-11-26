@@ -1199,6 +1199,23 @@ body .ztop .zbtn.zask{color:var(--mint);border-color:rgba(94,242,192,.45)}
 body.ph .zstu{display:none}
 @page{margin:8mm}
 @media print{body.stp{display:block!important;overflow:visible!important;background:#fff!important;height:auto!important}body.stp>*:not(.stu){display:none!important}body.stp .stu{position:static!important;background:#fff!important;display:block!important}body.stp .stu>*:not(.stall){display:none!important}body.stp .stall{display:block!important}body.stp .stall .stsl{--u:2.5mm;width:250mm;margin:0 auto 6mm;break-after:page;break-inside:avoid;border:1px solid #ddd;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.zwel{position:absolute;inset:0;z-index:2;display:grid;place-items:center;padding:16px;pointer-events:none}
+.zwelc{pointer-events:auto;width:min(560px,100%);background:rgba(22,17,42,.92);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:30px 30px 24px;color:#efeaff;font:500 15px/1.5 var(--ui);box-shadow:0 30px 80px -30px #000;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.zwelc h2{font:700 28px/1.15 var(--ui);letter-spacing:-.02em;margin:0 0 6px;color:#fff}
+.zwelc p{margin:0;color:rgba(239,234,255,.7)}
+.zwelc ol{list-style:none;counter-reset:w;padding:0;margin:20px 0 22px;display:grid;gap:12px}
+.zwelc ol li{counter-increment:w;display:grid;grid-template-columns:30px 1fr;column-gap:12px;align-items:start;background:none;border:0;padding:0;margin:0;white-space:normal}
+.zwelc ol li::before{content:counter(w);grid-row:1/3;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:700 14px var(--ui);background:rgba(255,255,255,.1);color:#fff}
+.zwelc ol b{font:600 15.5px/1.9 var(--ui);color:#fff}
+.zwelc ol span{grid-column:2;font:500 14px/1.45 var(--ui);color:rgba(239,234,255,.68)}
+.zwela{display:flex;gap:8px;flex-wrap:wrap}
+.zwela button{flex:1;min-width:150px;font:600 15px var(--ui);padding:13px 16px;border-radius:13px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#efeaff;cursor:pointer}
+.zwela button.go{background:#ffc93c;border-color:#ffc93c;color:#1b1430}
+.zwelm{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px}
+.zwelm button{font:600 13.5px var(--ui);color:rgba(239,234,255,.72);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+body.ph .zwel{position:static;width:100%;padding:4px 0 0;display:block}
+body.ph .zwelc{width:100%;padding:22px 18px 18px;border-radius:20px}
+body.ph .zwelc h2{font-size:23px}
 .pssb .outp{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .askb{width:min(620px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:#17122a;border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:22px;color:#efeaff;font:500 14.500px/1.5 var(--ui);box-shadow:0 40px 90px -20px #000;text-align:left}
 .askb h3{font:700 20px var(--disp,var(--ui));margin:0 0 4px}.askb>p{margin:0 0 14px;color:rgba(239,234,255,.62);font-size:13px}
@@ -1390,7 +1407,7 @@ const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=nu
 const ICON={more:'<circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/>',pass:'<path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>',say:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 8.5a5 5 0 0 1 0 7"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7"/>',del:'<path d="M6 6l12 12M18 6L6 18"/>',tilt:'<path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 4v5h-5"/>'};
 const svg=k=>'<svg viewBox="0 0 24 24">'+ICON[k]+'</svg>';
 
-function save(){if(DESK){chipku.save({notes,sound,def,cat:activeCat});return}try{localStorage.setItem(KEY,JSON.stringify({notes,sound,def,cat:activeCat}))}catch(e){if(!save.w){save.w=1;setTimeout(()=>pal('Storage bhar gaya. Kuch photos hatao, warna naye badlav save nahi honge.',true))}}}
+function save(){welCheck();if(DESK){chipku.save({notes,sound,def,cat:activeCat});return}try{localStorage.setItem(KEY,JSON.stringify({notes,sound,def,cat:activeCat}))}catch(e){if(!save.w){save.w=1;setTimeout(()=>pal('Storage bhar gaya. Kuch photos hatao, warna naye badlav save nahi honge.',true))}}}
 function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
 
 /* ---------- voice ---------- */
@@ -2381,7 +2398,7 @@ function openExplore(){try{localStorage.setItem('chipzett-explored','1')}catch(e
     [L('Slides','Slides'),L('Notes become a deck you can present or save as PDF','Notes se deck bane, present karo ya PDF banao'),()=>openStudio(stWall(),'deck'),L('New','Naya')],
     [L('Infographic','Infographic'),L('One clean page you can send as a picture','Ek saaf panna jo tasveer ki tarah bhejo'),()=>openStudio(stWall(),'info'),L('New','Naya')],
     [L('Ask your wall','Wall se poochho'),L('One question across all your notes, with the notes it came from','Saare notes pe ek sawaal, saath me kin notes se jawab aaya'),()=>openAsk(),L('AI','AI')],
-    [L('Agentic note','Agentic note'),L('Ask the note, or let it make the next note','Note se poocho, ya use agla note banane do'),()=>mk({text:L('Client call\nThey want the quote by Friday. Budget is fixed. Call Meera tomorrow at 10.','Client call\nUnhe Friday tak quote chahiye. Budget fixed hai. Kal 10 baje Meera ko call.'),agent:true}),L('Preview','Preview')]]],
+    [L('Agentic note','Agentic note'),L('Ask the note, or let it make the next note','Note se poocho, ya use agla note banane do'),()=>mk({text:L('Client call\nThey want the quote by Friday. Budget is fixed. Call Meera tomorrow at 10.','Client call\nUnhe Friday tak quote chahiye. Budget fixed hai. Kal 10 baje Meera ko call.'),agent:true}),L('AI','AI')]]],
    [L('Keep it tidy','Saaf rakho'),'#5ef2c0',[
     [L('Pin to the top','Upar pin karo'),L('A red pin keeps a note first','Laal pin note ko sabse pehle rakhta hai'),()=>{const n=pick();n.pin=true;save();const d=show(n);if(d)paintPin(d,n)}],
     [L('Select many','Kai chuno'),L('Finish, move, colour or delete several at once','Kai notes ek saath poore karo, hatao ya rang badlo'),()=>{wall();selMode(true)}],
@@ -2466,6 +2483,14 @@ function gridInit(){if(DESK)return;board.addEventListener('mousedown',e=>{if(!do
   addEventListener('resize',()=>{if(nOpen&&!isPhone())noteClose()})}
 
 /* ---------- ask your wall: one question across your notes ---------- */
+/* ---------- first visit: an empty wall with three steps, instead of sample notes ---------- */
+function welCheck(){if(DESK)return;const B=document.body;let w=$('.zwel');if(notes.length){if(w)w.remove();B.classList.remove('wel');return}if(w||!board)return;
+  w=el('div','zwel');const c=el('div','zwelc'),h=el('h2'),p=el('p'),ol=el('ol'),acts=el('div','zwela'),more=el('div','zwelm');h['textContent']=L('Start with one note.','Ek note se shuru karo.');p['textContent']=L('Your wall is empty. Nothing to set up and no account needed.','Tumhari wall khaali hai. Koi setup nahi, koi account nahi.');
+  [[L('Write','Likho'),L('Type in the bar below and press Enter.','Neeche bar me likho aur Enter dabao.')],[L('Ask','Poochho'),L('Switch on Agentic, then ask the note or tell it what to make.','Agentic on karo, phir note se poochho ya batao kya banana hai.')],[L('Present','Dikhao'),L('Open Studio to see notes as a mind map, slides or one page.','Studio kholo: notes mind map, slides ya ek panne me.')]].forEach(([t,d])=>{const li=el('li'),b=el('b'),s=el('span');b['textContent']=t;s['textContent']=d;li.append(b,s);ol.append(li)});
+  const btn=(t,cls,fn)=>{const b=el('button',cls);b.type='button';b['textContent']=t;b.onclick=fn;return b},inp=()=>$('.zbar input[type=text],.zbar input:not([type])')||$('.zbar input');
+  acts.append(btn(L('Write my first note','Pehla note likho'),'go',()=>{const i=inp();if(i)i.focus()}),btn(L('Try an agentic note','Agentic note aazmao'),'',()=>{const n=add({text:L('Client call\nThey want the revised quote and a signed timeline by Friday. Budget is fixed. Call Meera tomorrow at 10.','Client call\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai. Kal 10 baje Meera ko call.'),agent:true,day:TODAY(),color:'#5ef2c0'},true);applyFilter();setTimeout(()=>{const d=dom(n);if(d){if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center'});agFlash(n.id)}},120)}));
+  more.append(btn(L('Show sample notes','Namoone ke notes dikhao'),'',()=>{seedDemo();applyFilter()}),btn(L('Browse templates','Templates dekho'),'',()=>openGallery()));
+  c.append(h,p,ol,acts,more);w.append(c);board.append(w);B.classList.add('wel')}
 /* ---------- studio: mind map, slides and infographic built on the device from the note's own lines ---------- */
 const STC=['#6c5ce7','#00a37a','#ff7a59','#0984e3','#e84393','#d98a00','#00a8a8','#8e6bff'];
 const stClip=(t,k)=>{t=String(t==null?'':t).replace(/\s+/g,' ').trim();return t.length>k?t.slice(0,k-1)+'…':t};
@@ -2595,7 +2620,7 @@ function wsBuild(){
   search.oninput=()=>{const o=$('#search');o.value=search.value;o.dispatchEvent(new Event('input'))};
   segw.append(seg,ag);r1.append(brand,vseg,segw,el('div','zgrow'),search,tidy,wall,me);vseg.setAttribute('role','group');vseg.setAttribute('aria-label',L('View','View'));r2.append(chips,today);top.append(r1,r2);
   /* command bar */
-  const bar=document.createElement('form'),inp=document.createElement('input'),bAg=zb('zbag',ZI.bolt,L('Agentic (preview)','Agentic (preview)')),bTp=zb('',ZI.tpl,L('Templates','Templates')),bAdd=el('button','zbtn zadd',L('Add note','Note banao'));
+  const bar=document.createElement('form'),inp=document.createElement('input'),bAg=zb('zbag',ZI.bolt,L('Agentic','Agentic')),bTp=zb('',ZI.tpl,L('Templates','Templates')),bAdd=el('button','zbtn zadd',L('Add note','Note banao'));
   bar.className='zbar';bar.autocomplete='off';inp.id='zcap';inp.placeholder=L('Write a note','Note likho');inp.setAttribute('aria-label','New note');
   bAg.title=L('Preview you can try now: the next note gets Ask and Do. It answers from the note\'s own words. No AI is connected yet.','Preview jo abhi try kar sakte ho: agle note mein Ask aur Do aayega. Jawab note ke apne shabdon se banta hai. AI abhi juda nahi hai.');bTp.title=L('Ready-made notes','Bane-banaye notes');bAdd.type='submit';
   bar.append(inp,bAg,bTp,bAdd);
@@ -2688,7 +2713,7 @@ function wsRender(){
   today.textContent=bits.join('  ·  ');today.setAttribute('aria-pressed',WS.daily);today.title=L('Show only lists, reminders and goals','Sirf lists, reminders aur goals dikhao');
   [[wsEls.st,STYLE],[wsEls.bgs,/^#/.test(BG)?'custom':BG],[wsEls.tools,TOOL]].forEach(([g,v])=>{for(const b of g.children)b.setAttribute('aria-pressed',b.dataset.v===v)});
   phRender();
-  empty.textContent=WS.view!=='all'||notes.some(n=>!isHid(n))?'':L('No notes here yet. Write one in the bar below.','Yahan abhi koi note nahi. Neeche bar mein likho.');
+  empty.textContent=WS.view!=='all'||!notes.length||notes.some(n=>!isHid(n))?'':L('No notes here yet. Write one in the bar below.','Yahan abhi koi note nahi. Neeche bar mein likho.');
 }
 if(!DESK)wsBuild();
 /* pen writing: while you type on a note, a pen sits at the caret and jots with each letter */
@@ -2710,7 +2735,8 @@ function start(state){
   if(s&&s.cat&&CATS.some(c=>c[0]===s.cat))activeCat=s.cat;
   if(s&&s.def){Object.assign(def,s.def);sb.style.setProperty('--c',def.color);$('#pal').className='blob av-'+def.face}
   if(s&&s.notes&&s.notes.length){sound=s.sound!==false;s.notes.forEach(n=>{notes.push(n);zTop=Math.max(zTop,n.z||0);render(n)})}
-  else{const w=board.clientWidth,h=board.clientHeight,at=(fx,fy)=>({x:Math.max(10,Math.min(w-242,w*fx)),y:Math.max(10,h*fy)});
+  else{let demo=DESK;try{demo=demo||localStorage.getItem('chipzett-demo')==='1'}catch(e){}if(demo)seedDemo()}
+  function seedDemo(){const w=board.clientWidth,h=board.clientHeight,at=(fx,fy)=>({x:Math.max(10,Math.min(w-242,w*fx)),y:Math.max(10,h*fy)});
     [{type:'todo',text:L('Launch checklist','Launch checklist'),items:[{t:L('Review homepage','Homepage dekho'),d:true},{t:L('Approve launch copy','Launch copy approve karo'),d:false},{t:L('Share the update','Update share karo'),d:false}],cat:'work',color:'#ffc93c',tex:'lined',day:TODAY(),...at(.05,.05)},
      {type:'text',text:L('Client meeting\nThey want the revised quote and a signed timeline by Friday. Budget is fixed.','Client meeting\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai.'),agent:true,cat:'work',color:'#5ef2c0',day:TODAY(),...at(.27,.05)},
      {type:'text',text:L('Morning routine\n6:30  Wake up\n7:00  Run\n8:00  Plan the day','Subah ka routine\n6:30  Utho\n7:00  Daud\n8:00  Din ka plan'),mood:'sun',face:'cool',cat:'home',color:'#74ccff',day:dadd(TODAY(),1),...at(.5,.05)},
@@ -2719,8 +2745,8 @@ function start(state){
      {type:'goal',text:L('Sleep goal','Neend ka goal'),cur:5,total:7,face:'cat',cat:'reminders',color:'#bda4ff',day:dadd(TODAY(),2),...at(.27,.45)},
      {type:'text',text:L('Welcome to ChipZett\nWrite in the bar below to add a note. Press a face to hear the note. Drag notes anywhere.','ChipZett mein swagat hai\nNeeche bar mein likh kar note banao. Chehra dabao to note bolta hai. Notes kahin bhi kheencho.'),color:'#ffe08a',...at(.5,.45)}].forEach(n=>add(n));
     setTimeout(()=>pal(L('These are sample notes. Write in the bar below to add your own.','Yeh sample notes hain. Apna note banane ke liye neeche bar mein likho.'),true),900)}
-  $('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
-  applyFilter();if(!DESK)passInit();
+  window.seedDemo=seedDemo;$('#snd').textContent=tr(tr('Awaaz: ')+(sound?'on':'off'));$('#snd').setAttribute('aria-pressed',sound);
+  applyFilter();if(!DESK)passInit();welCheck();
   /* once a fortnight, remind people with a real wall that a backup file exists */
   if(!DESK)try{const at=+localStorage.getItem('chipzett-backup-at')||0,nag=+localStorage.getItem('chipzett-backup-nag')||0;if(notes.length>=10&&Date.now()-at>14*864e5&&Date.now()-nag>14*864e5){localStorage.setItem('chipzett-backup-nag',String(Date.now()));setTimeout(()=>pal(L('Tip: keep your notes safe. Appearance has a Download backup button.','Tip: apne notes bachao. Appearance mein Download backup ka button hai.'),true),4000)}}catch(e){}
   if(!DESK)setTimeout(()=>{notes.forEach(n=>{if(n.y<TOPY){n.y=TOPY+6;const d=dom(n);if(d)d.style.top=n.y+'px'}});
