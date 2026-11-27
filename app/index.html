@@ -2052,7 +2052,7 @@ function fxLeave(d,kind,n){const r=d.getBoundingClientRect(),W=r.width,H=r.heigh
 function finish(n,done){
   const d=dom(n);if(!d)return;if(noteOn===n.id)stopNote();SK.delete(n.id);const p=d.firstChild;p.style.animationDelay='0s';
   const fxk=fxOn()?(done?'seal':'burn'):'',fxDid=!!fxk&&((fxk==='burn'&&fxBurnGL(d,n))||fxLeave(d,fxk,n));if(!fxDid)p.classList.add(done?'crumple':'fall');if(done){if(!fxDid)boom(d);pal(DESK?rnd(['Shabash! Ek kaam kam.','Ho gaya? Mast.','Tick! Chai banti hai.']):L('Done. It is in Trash if you need it back.','Ho gaya. Wapas chahiye to Trash mein hai.'),!DESK)}else pal(DESK?rnd(['Gaya kachre mein.','Bye bye note.','Theek hai, uda diya.']):L('Moved to Trash.','Trash mein gaya.'),true);
-  trashPut(n,done);notes=notes.filter(x=>x!==n);save();renderCats();setTimeout(()=>{d.remove();tvSoon()},fxDid?FXMS[fxk]+440:700);
+  trashPut(n,done);notes=notes.filter(x=>x!==n);d.removeAttribute('data-id');d.classList.add('leaving');save();renderCats();setTimeout(()=>{d.remove();tvSoon()},fxDid?FXMS[fxk]+440:700);
 }
 function drag(d,n,handle){
   /* Press and move anywhere on the note to drag it. A plain click on the text puts the cursor there. */
