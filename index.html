@@ -439,6 +439,16 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 .agtabs button[aria-selected=true] b{opacity:1}.agtabs button[aria-selected=true] span{max-height:60px;opacity:1;margin:4px 0 10px}.agtabs button[aria-selected=true] i{opacity:1}
 .agtabs button:hover b{opacity:1}
 .agbig{position:relative;display:grid;justify-items:center}
+.agstage.inhero{grid-template-columns:1fr;gap:20px;margin:0}
+.inhero .agtabs{flex-direction:row;flex-wrap:wrap;gap:8px;justify-content:center}
+.inhero .agtabs small{display:none}
+.inhero .agtabs button{flex:none;padding:10px 16px 13px;background:rgba(255,255,255,.08);color:#fff;border-radius:99px}
+.inhero .agtabs button b{font-size:15px;white-space:nowrap;opacity:.75}
+.inhero .agtabs button span{display:none}
+.inhero .agtabs button i{left:16px;right:16px;bottom:6px;height:2px;background:rgba(27,20,48,.15)}
+.inhero .agtabs button[aria-selected=true]{background:#fff;color:#1b1430;box-shadow:none}
+.inhero .agbig .agph{background:#1d1738;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 80px -30px rgba(0,0,0,.8);zoom:1.3;width:340px}
+.inhero .agbig .agph.on{box-shadow:0 40px 80px -30px rgba(0,0,0,.8)}
 .agbig .agph{display:none;width:330px;zoom:1.45;min-height:340px;border-radius:24px}
 .agbig .agph.on{display:flex;transform:none;box-shadow:0 30px 60px -34px rgba(27,20,48,.75)}
 .agsh{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(27,20,48,.1);font:500 13px var(--ui)}.agsh span{flex:1;min-width:0}.agsh em{font:600 12px var(--ui);font-style:normal;background:#fff;border-radius:7px;padding:3px 7px;font-variant-numeric:tabular-nums}.agsh u{text-decoration:none;font:600 11px var(--ui);background:#1b1430;color:#fff;border-radius:99px;padding:3px 9px}
@@ -502,7 +512,7 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 .aghi b{display:block;font:700 16px var(--ui);color:var(--ink);margin-bottom:4px}.aghi span{font:500 14.5px/1.45 var(--ui);color:var(--ink-2)}
 @media (max-width:1100px){.agshow{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(250px,30%);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;margin-right:-20px;padding-right:20px;scrollbar-width:none}.agshow::-webkit-scrollbar{display:none}.agsc{scroll-snap-align:start}.aghi{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:1100px){.agstage{grid-template-columns:1fr;gap:26px}.agtabs{flex-direction:row;overflow-x:auto;gap:8px;scrollbar-width:none;margin-right:-20px;padding-right:20px}.agtabs::-webkit-scrollbar{display:none}.agtabs small{display:none}.agtabs button{flex:none;padding:10px 16px 13px;background:rgba(27,20,48,.07)}.agtabs button b{font-size:15.5px;white-space:nowrap}.agtabs button span{display:none}.agtabs button i{left:14px;right:14px;bottom:5px}}
-@media (max-width:640px){.agbig .agph{width:100%;max-width:340px;zoom:1.12}.agstage{margin:30px 0 36px}}
+@media (max-width:640px){.inhero .agtabs{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;margin-right:-18px;padding-right:18px}.inhero .agtabs::-webkit-scrollbar{display:none}.inhero .agbig .agph{width:100%;max-width:none;zoom:1.08}.agbig .agph{width:100%;max-width:340px;zoom:1.12}.agstage{margin:30px 0 36px}}
 @media (max-width:640px){.agshow{grid-auto-columns:78%;gap:14px;margin:30px -18px 30px 0;padding-right:18px}.agph{min-height:350px}.aghi{grid-template-columns:1fr;gap:16px;padding-top:22px}}
 .exg{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);align-items:center;gap:18px;margin:44px 0 34px}
 .exn{background:var(--c);color:var(--ink);border-radius:18px;padding:24px 26px 26px;box-shadow:0 26px 50px -28px rgba(27,20,48,.55);border:1px solid rgba(27,20,48,.12);align-self:stretch}
@@ -553,89 +563,15 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 
 <header class="hero" id="top"><div class="wrap">
   <div>
-    <h1>Make a note.<br><span class="nb">Make it <em>yours.</em><span class="eyes" aria-hidden="true"><b data-look></b><b data-look></b></span></span></h1>
-    <p class="lede">Notes that become tasks, reminders, plans and slides, with AI built in to answer questions and take the next step.</p>
+    <h1>Make a note.<br><span class="nb">Make it <em>yours.</em></span></h1>
+    <p class="lede">Write it once. Your note prepares the follow-up, plans the day, checks the flight and prices the grocery list.</p>
     <div class="cta">
       <a class="btn go" href="app/index.html">Open ChipZett <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
       <a class="btn line" href="#features">View features</a>
       <a class="btn line" id="dl-top" hidden>Download for Windows</a>
     </div>
-    <div class="facts"><span>Free to use</span><span>No account required</span><span>Private by default</span></div>
   </div>
-  <div class="stage">
-    <div class="board" id="boardbox">
-      <div class="bar"><i></i><i></i><i></i><b>ChipZett</b><span>Interactive preview</span></div>
-      <div class="bcols" id="board">
-        <div class="bcol">
-          <div class="n lined" style="--c:#ffc93c" id="todo" data-say="Launch checklist.">
-            <span class="tag">Work</span>
-            <div class="nt"><button type="button" class="fc" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
-            <h4>Launch checklist</h4>
-            <ul><li><label><input type="checkbox" checked><span>Review homepage</span></label></li><li><label><input type="checkbox"><span>Approve launch copy</span></label></li><li><label><input type="checkbox"><span>Share the update</span></label></li></ul>
-            <div class="more">+ one more task</div>
-          </div>
-          <div class="n sq wide-only" style="--c:#fff4d6" data-say="Trip budget. The biggest share is Flights, 45 percent.">
-            <span class="tag">Travel</span>
-            <div class="nt"><button type="button" class="fc f-one" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye"></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
-            <h4>Trip budget</h4>
-            <div class="chart"><div class="pie draw"></div><div class="leg"><span><i style="background:#ff4d6d"></i>Flights 45%</span><span><i style="background:#3d7bff"></i>Hotel 35%</span><span><i style="background:#22c58b"></i>Food 20%</span></div></div>
-          </div>
-          <div class="n wide-only" style="--c:#ff6f9c" id="timer" data-say="Stretch break.">
-            <span class="tag">Reminders</span>
-            <div class="nt"><button type="button" class="fc f-robot" aria-label="Hear this note"><span class="eye"></span><span class="eye"></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
-            <div class="tm"><div class="ring" id="ring"><span id="clock">9:58</span></div><b>Stretch break</b></div>
-          </div>
-        </div>
-        <div class="bcol">
-          <div class="n agn" style="--c:#5ef2c0" data-say="Client meeting. They want the revised quote and a signed timeline by Friday. Budget is fixed.">
-            <span class="agb">Agentic</span>
-            <div class="nt"><button type="button" class="fc" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
-            <h4>Client meeting</h4>
-            <p>They want the revised quote and a signed timeline by Friday. Budget is fixed.</p>
-            <div class="agseg" id="agseg" aria-hidden="true"><span data-m="ask" class="on">Ask</span><span data-m="do">Do</span></div>
-            <div class="agsug" aria-hidden="true"><span>Summarise</span><span>What is next?</span><span>Draft a reply</span></div>
-            <div class="agchat" id="agchat" aria-hidden="true"></div>
-            <div class="agin" aria-hidden="true"><span id="agin"></span><b><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M3.500 7.500 8 3l4.500 4.500"/></svg></b></div>
-          </div>
-        </div>
-        <div class="bcol">
-          <div class="n day" style="--c:#74ccff" data-say="Morning routine. Wake up at 6 30, run at 7, plan the day at 8.">
-            <span class="tag">Home</span>
-            <div class="scene sky" aria-hidden="true"><i class="rays"></i><i class="sun"></i><i class="cloud"></i><i class="cloud c2"></i><i class="hill"></i></div>
-            <div class="nt"><button type="button" class="fc f-cool" aria-label="Hear this note"><span class="eye"></span><span class="eye"></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
-            <h4>Morning routine</h4>
-            <div class="sched"><span><b>6:30</b>Wake up</span><span><b>7:00</b>Run</span><span><b>8:00</b>Plan the day</span></div>
-          </div>
-          <div class="n night wide-only" style="--c:#2f2766" data-say="Wind down. Screens off at 10, lights out at 10 30. 5 of 7 nights this week.">
-            <span class="tag">Reminders</span>
-            <div class="scene dark" aria-hidden="true"><i class="moon"></i><i class="st s1"></i><i class="st s2"></i><i class="st s3"></i><i class="st s4"></i><i class="st s5"></i><i class="shoot"></i></div>
-            <div class="nt"><button type="button" class="fc f-cat" aria-label="Hear this note"><span class="eye" data-look></span><span class="eye" data-look></span><span class="mo"></span></button><span class="tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
-            <h4>Wind down</h4>
-            <div class="sched"><span><b>10:00</b>Screens off</span><span><b>10:30</b>Lights out</span></div>
-            <div class="gb"><i style="width:71%"></i></div>
-            <div class="pm"><span>Sleep goal</span><span>5 / 7 nights</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div></header>
-
-<section class="band dark show" id="product"><div class="wrap">
-  <p class="eyebrow">The workspace</p>
-  <h2>Your working day, on one wall.</h2>
-  <p class="lede">Notes, tasks, numbers and plans side by side. Ask any of them a question and the answer arrives as the next note.</p>
-  <div class="showg">
-    <figure class="shot win"><img src="img/app-agent.webp" width="1800" height="1125" alt="The ChipZett wall on a computer: a client meeting note has answered a question and created a checklist beside it." loading="lazy" decoding="async"></figure>
-    <figure class="shot phone p1"><img src="img/phone-wall.webp" width="520" height="1125" alt="The same wall on a phone, as a grid of note cards for today." loading="lazy" decoding="async"></figure>
-  </div>
-</div></section>
-
-<section class="band plilac" id="example"><div class="wrap">
-  <p class="eyebrow">Agentic notes</p>
-  <h2>Write it down. The note handles what comes next.</h2>
-  <p class="lede">You write the way you always have. The note understands what it is about and prepares what comes next. Watch it work:</p>
-  <div class="agstage">
+  <div class="agstage inhero">
     <div class="agtabs" role="tablist" aria-label="Examples">
       <small>At work</small>
       <button type="button" role="tab" aria-selected="true" data-i="0"><b>Meeting notes</b><span>The follow-up, the dates and the tasks, written for you.</span><i></i></button>
@@ -653,6 +589,22 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
       <div class="agph" data-t="Grocery list" data-x="Dettol handwash&#10;Milo 1kg&#10;Eggs 30" data-b="Find prices"><span class="agtag">Shopping</span><div class="agn" style="--c:#fff6dc"><b>Grocery list</b><div class="agsh"><span>Dettol handwash</span><em>RM 10.00</em><u>Buy</u></div><div class="agsh"><span>Milo 1kg</span><em>RM 25.00</em><u>Buy</u></div><div class="agsh"><span>Eggs 30</span><em>RM 14.80</em><u>Buy</u></div><div class="agtot"><span>Total</span><b>RM 49.80</b></div></div></div></div>
     </div>
   </div>
+</div></header>
+
+<section class="band dark show" id="product"><div class="wrap">
+  <p class="eyebrow">The workspace</p>
+  <h2>Your working day, on one wall.</h2>
+  <p class="lede">Notes, tasks, numbers and plans side by side. Ask any of them a question and the answer arrives as the next note.</p>
+  <div class="showg">
+    <figure class="shot win"><img src="img/app-agent.webp" width="1800" height="1125" alt="The ChipZett wall on a computer: a client meeting note has answered a question and created a checklist beside it." loading="lazy" decoding="async"></figure>
+    <figure class="shot phone p1"><img src="img/phone-wall.webp" width="520" height="1125" alt="The same wall on a phone, as a grid of note cards for today." loading="lazy" decoding="async"></figure>
+  </div>
+</div></section>
+
+<section class="band plilac" id="example"><div class="wrap">
+  <p class="eyebrow">Agentic notes</p>
+  <h2>Write it down. The note handles what comes next.</h2>
+  <p class="lede">You write the way you always have. The note understands what it is about and prepares what comes next.</p>
   <div class="aghi">
     <div><b>Understands what you wrote</b><span>People, days, times and amounts are picked out as you type.</span></div>
     <div><b>Follows your changes</b><span>Move a date in the note and the reminders made from it move too.</span></div>
@@ -768,30 +720,9 @@ document.addEventListener('click',e=>{const f=e.target.closest('button.fc');if(!
   if(boxes.length){const left=[...boxes].filter(b=>!b.checked).map(b=>b.nextElementSibling.textContent);t=left.length?(boxes.length-left.length)+' of '+boxes.length+' done. Left: '+left.join(', ')+'.':'All done, boss.'}
   speak(n,f,t)});
 
-/* Preview board: an agent that answers, a list that ticks, a countdown that runs. */
-{const calm=matchMedia('(prefers-reduced-motion:reduce)').matches,fine=matchMedia('(hover:hover) and (pointer:fine)').matches,wait=ms=>new Promise(r=>setTimeout(r,ms));
- /* the agentic note plays a short exchange in a loop: a question is typed, the note answers from its own text. It is a recording, not a live AI. */
- const box=$('#agchat'),inp=$('#agin'),seg=$('#agseg'),S=[['ask','What is due Friday?','Two things: the revised quote and the signed timeline.'],['do','Make a checklist','Done. 3 action items added.',['Revised quote','Signed timeline','Confirm budget']]];
- const mode=m=>[...seg.children].forEach(b=>b.classList.toggle('on',b.dataset.m===m));
- if(calm)box.append(el('div','q',S[0][1]),el('div','a',S[0][2]));
- else{const type=async(node,t,ms)=>{for(let k=1;k<=t.length;k++){node.textContent=t.slice(0,k);await wait(ms)}};
-  (async()=>{for(let i=0;;i=(i+1)%S.length){const[m,q,a,items]=S[i];inp.textContent='';inp.classList.add('typing');
-    await wait(900);await type(inp,q,45);await wait(380);inp.classList.remove('typing');inp.textContent='';box.textContent='';mode(m);
-    box.append(el('div','q',q));await wait(450);
-    const d=el('div','a dots3');d.append(el('i'),el('i'),el('i'));box.append(d);await wait(1100);d.remove();
-    const an=el('div','a');box.append(an);await type(an,a,22);
-    if(items){const ul=el('ul','agl');box.append(ul);for(const t of items){await wait(280);ul.append(el('li','',t))}}
-    await wait(3800)}})();
-  /* one task ticks itself once, to show the list is live */
-  const todo=$('#todo'),bx=todo.querySelectorAll('input');let touched=false;todo.addEventListener('change',()=>touched=true);
-  setTimeout(()=>{if(!touched&&!bx[1].checked){bx[1].checked=true;bx[1].classList.add('pop')}},3200)}
- /* the first screen answers the pointer: a soft light, and the board leans a little */
- if(fine&&!calm){const hero=$('.hero'),bd=$('#boardbox');hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect(),b=bd.getBoundingClientRect();
-   hero.style.setProperty('--mx',(e.clientX-r.left)+'px');hero.style.setProperty('--my',(e.clientY-r.top)+'px');
-   bd.style.setProperty('--gx',(e.clientX-b.left)+'px');bd.style.setProperty('--gy',(e.clientY-b.top)+'px');
-   const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;bd.style.transform='rotateY('+(x*5).toFixed(2)+'deg) rotateX('+(-y*4).toFixed(2)+'deg)'});
-  hero.addEventListener('pointerleave',()=>bd.style.transform='')}}
-let left=598;if(!matchMedia('(prefers-reduced-motion:reduce)').matches)setInterval(()=>{left=left>0?left-1:600;$('#clock').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');$('#ring').style.setProperty('--p',left/6+'%')},1000);
+/* the first screen answers the pointer with a soft light */
+{const calm=matchMedia('(prefers-reduced-motion:reduce)').matches,fine=matchMedia('(hover:hover) and (pointer:fine)').matches,hero=$('.hero');
+ if(fine&&!calm&&hero)hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();hero.style.setProperty('--mx',(e.clientX-r.left)+'px');hero.style.setProperty('--my',(e.clientY-r.top)+'px')})}
 
 /* Paper colour dots on the third feature card. */
 if($('#sw'))$('#sw').onclick=e=>{const b=e.target.closest('button');if(!b)return;for(const x of $('#sw').children)x.setAttribute('aria-pressed',x===b);$('#moodnote').style.setProperty('--c',getComputedStyle(b).getPropertyValue('--k'))};
