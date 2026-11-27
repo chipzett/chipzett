@@ -426,6 +426,22 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 .showg{position:relative;margin-top:48px;padding-right:9%}
 .shot.phone{position:absolute;right:0;bottom:-34px;width:19%;border-radius:26px;border:6px solid #0c0918;outline:1px solid rgba(255,255,255,.2);box-shadow:0 40px 70px -24px #000}
 .show{padding-bottom:120px}
+.agstage{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:center;margin:48px 0 52px}
+.agtabs{display:flex;flex-direction:column;gap:6px}
+.agtabs small{font:700 11.5px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:#6a4fd0;margin:10px 0 4px 18px}
+.agtabs small:first-child{margin-top:0}
+.agtabs button{position:relative;text-align:left;border:0;background:none;border-radius:18px;padding:15px 18px 16px;cursor:pointer;color:var(--ink);overflow:hidden;transition:background .25s}
+.agtabs button b{display:block;font:700 20px var(--ui);letter-spacing:-.01em;opacity:.5;transition:opacity .25s}
+.agtabs button span{display:block;font:500 15px/1.4 var(--ui);color:var(--ink-2);max-height:0;opacity:0;overflow:hidden;transition:max-height .3s,opacity .3s,margin .3s}
+.agtabs button i{position:absolute;left:18px;right:18px;bottom:7px;height:3px;border-radius:2px;background:rgba(27,20,48,.12);opacity:0;overflow:hidden}
+.agtabs button i::after{content:"";position:absolute;inset:0;background:#1b1430;transform:scaleX(var(--p,0));transform-origin:0 50%}
+.agtabs button[aria-selected=true]{background:#fff;box-shadow:0 18px 40px -26px rgba(27,20,48,.5)}
+.agtabs button[aria-selected=true] b{opacity:1}.agtabs button[aria-selected=true] span{max-height:60px;opacity:1;margin:4px 0 10px}.agtabs button[aria-selected=true] i{opacity:1}
+.agtabs button:hover b{opacity:1}
+.agbig{position:relative;display:grid;justify-items:center}
+.agbig .agph{display:none;width:330px;zoom:1.45;min-height:340px;border-radius:24px}
+.agbig .agph.on{display:flex;transform:none;box-shadow:0 30px 60px -34px rgba(27,20,48,.75)}
+.aglk{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.aglk i{font:600 11.5px var(--ui);font-style:normal;background:#1b1430;color:#fff;padding:6px 11px;border-radius:99px}
 .agshow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;margin:44px 0 40px}
 .agsc{margin:0;min-width:0}
 .agph{position:relative;border-radius:26px;background:#17122c;padding:44px 12px 14px;min-height:330px;box-shadow:0 30px 60px -34px rgba(27,20,48,.7);display:flex;flex-direction:column;gap:10px}
@@ -483,6 +499,8 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 .aghi{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 28px;margin:0 0 34px;padding-top:28px;border-top:1px solid rgba(27,20,48,.14)}
 .aghi b{display:block;font:700 16px var(--ui);color:var(--ink);margin-bottom:4px}.aghi span{font:500 14.5px/1.45 var(--ui);color:var(--ink-2)}
 @media (max-width:1100px){.agshow{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(250px,30%);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;margin-right:-20px;padding-right:20px;scrollbar-width:none}.agshow::-webkit-scrollbar{display:none}.agsc{scroll-snap-align:start}.aghi{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:1100px){.agstage{grid-template-columns:1fr;gap:26px}.agtabs{flex-direction:row;overflow-x:auto;gap:8px;scrollbar-width:none;margin-right:-20px;padding-right:20px}.agtabs::-webkit-scrollbar{display:none}.agtabs small{display:none}.agtabs button{flex:none;padding:10px 16px 13px;background:rgba(27,20,48,.07)}.agtabs button b{font-size:15.5px;white-space:nowrap}.agtabs button span{display:none}.agtabs button i{left:14px;right:14px;bottom:5px}}
+@media (max-width:640px){.agbig .agph{width:100%;max-width:340px;zoom:1.12}.agstage{margin:30px 0 36px}}
 @media (max-width:640px){.agshow{grid-auto-columns:78%;gap:14px;margin:30px -18px 30px 0;padding-right:18px}.agph{min-height:350px}.aghi{grid-template-columns:1fr;gap:16px;padding-top:22px}}
 .exg{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);align-items:center;gap:18px;margin:44px 0 34px}
 .exn{background:var(--c);color:var(--ink);border-radius:18px;padding:24px 26px 26px;box-shadow:0 26px 50px -28px rgba(27,20,48,.55);border:1px solid rgba(27,20,48,.12);align-self:stretch}
@@ -614,43 +632,24 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 <section class="band plilac" id="example"><div class="wrap">
   <p class="eyebrow">Agentic notes</p>
   <h2>Write it down. The note handles what comes next.</h2>
-  <p class="lede">A birthday, a flight, the month's spending, class notes, a meeting. You write it the way you always have, and the note prepares what comes next.</p>
-  <div class="agshow" role="list">
-
-    <figure class="agsc" role="listitem"><div class="agph" data-t="Mum's birthday" data-x="Mum's birthday on Saturday. Order the cake, call Aunty Rina, buy flowers." data-b="Prepare it"><span class="agtag">Family</span>
-      <div class="agn" style="--c:#ffb3c9"><i class="agk">Reminder</i><b>Mum's birthday</b>
-        <div class="aghero"><span><small>Reminder set</small>Saturday</span><em>9:00<small>in 2 days</small></em></div>
-        <div class="agck"><i></i>Order the cake</div><div class="agck"><i></i>Call Aunty Rina</div><div class="agck d"><i></i>Buy flowers</div>
-      </div></div>
-      <figcaption><b>Never drop the small things.</b> Write it the way you think it. The note sets the reminder and makes the list.</figcaption></figure>
-
-    <figure class="agsc" role="listitem"><div class="agph" data-t="Flight to Delhi" data-pic="1" data-x="" data-b="Read this picture"><span class="agtag">Travel</span>
-      <div class="agn" style="--c:#8fd6ff"><div class="agtk"><i></i><span>SkyLine Air · E-ticket</span><span>KUL → DEL</span></div>
-        <b>Flight to Delhi</b>
-        <dl><dt>Flight</dt><dd>SL 482</dd><dt>Date</dt><dd>3 Dec, 21:40</dd><dt>Seat</dt><dd>14C · Gate H6</dd><dt>Ref</dt><dd>QX7P2M</dd></dl>
-      </div></div>
-      <figcaption><b>Screenshot the ticket. Done.</b> Paste the picture and the note keeps the flight, the time and the booking reference.</figcaption></figure>
-
-    <figure class="agsc" role="listitem"><div class="agph" data-t="This month" data-x="Rent 1,200&#10;Groceries 450&#10;Petrol 200" data-b="Total and chart"><span class="agtag">Money</span>
-      <div class="agn" style="--c:#7df0c6"><b>This month</b><p>Rent 1,200<br>Groceries 450<br>Petrol 200</p>
-        <div class="agpie"><i></i><span><small>Total</small>1,850</span></div>
-      </div></div>
-      <figcaption><b>See where the money goes.</b> List what you spent. Ask for the total or a chart and it is there.</figcaption></figure>
-
-    <figure class="agsc" role="listitem"><div class="agph" data-t="Biology · Cell division" data-x="Mitosis has four stages. Prophase, metaphase, anaphase, telophase." data-b="Mind map"><span class="agtag">Study</span>
-      <div class="agn" style="--c:#cdbcff"><b>Biology · Cell division</b><p>Mitosis has four stages. Prophase, metaphase, anaphase, telophase…</p></div>
-      <div class="agmm"><i>Mitosis</i><span>Prophase</span><span>Metaphase</span><span>Anaphase</span></div>
-      </div>
-      <figcaption><b>Turn notes into something you can revise.</b> Class notes become a mind map, slides or a one-page summary.</figcaption></figure>
-
-    <figure class="agsc" role="listitem"><div class="agph" data-t="Design review" data-x="Dev wants the new photos by Tuesday. Homepage copy is approved. Call him on Friday." data-b="Prepare it"><span class="agtag">Work</span>
-      <div class="agn" style="--c:#ffd66b"><i class="agk">Meeting</i><b>Design review · Dev</b>
-        <div class="agrow"><u>1</u>Follow-up<s>Ready</s></div>
-        <div class="agrow"><u>2</u>Send the photos<s>Tue</s></div>
-        <div class="agrow"><u>3</u>Checklist<s>1 of 3</s></div>
-      </div></div>
-      <figcaption><b>Leave the meeting with the follow-up written.</b> One tap prepares the message, the dates and the tasks.</figcaption></figure>
-
+  <p class="lede">You write the way you always have. The note understands what it is about and prepares what comes next. Watch it work:</p>
+  <div class="agstage">
+    <div class="agtabs" role="tablist" aria-label="Examples">
+      <small>At work</small>
+      <button type="button" role="tab" aria-selected="true" data-i="0"><b>Meeting notes</b><span>The follow-up, the dates and the tasks, written for you.</span><i></i></button>
+      <button type="button" role="tab" aria-selected="false" data-i="1"><b>Plan the day</b><span>A rough list becomes a checklist with its reminder set.</span><i></i></button>
+      <button type="button" role="tab" aria-selected="false" data-i="2"><b>Weekly update</b><span>Four lines turn into slides you can present.</span><i></i></button>
+      <small>In life</small>
+      <button type="button" role="tab" aria-selected="false" data-i="3"><b>Flight ticket</b><span>Paste the ticket. The details are kept where you can find them.</span><i></i></button>
+      <button type="button" role="tab" aria-selected="false" data-i="4"><b>Find a hotel</b><span>Say what you need. The note searches and hands you the links.</span><i></i></button>
+    </div>
+    <div class="agbig">
+      <div class="agph" data-t="Budget review" data-x="Farah wants the Q1 numbers by Wednesday. Hiring freeze stays. Call her on Friday at 3 pm." data-b="Prepare it"><span class="agtag">Meeting notes</span><div class="agn" style="--c:#ffd66b"><i class="agk">Meeting</i><b>Budget review · Farah</b><div class="aghero"><span><small>Next</small>Q1 numbers due</span><em>Wed<small>in 5 days</small></em></div><div class="agrow"><u>1</u>Follow-up to Farah<s>Ready to send</s></div><div class="agrow"><u>2</u>Call Farah<s>Fri 15:00</s></div><div class="agrow"><u>3</u>Checklist<s>0 of 2</s></div></div></div>
+      <div class="agph" data-t="Today" data-x="Finish the proposal&#10;Review Amir's design at 2 pm&#10;Send the invoices&#10;Book Monday's flight" data-b="Prepare it"><span class="agtag">Plan the day</span><div class="agn" style="--c:#cdbcff"><i class="agk">Tasks</i><b>Today</b><div class="aghero"><span><small>Next</small>Review Amir's design</span><em>14:00<small>in 3 h</small></em></div><div class="agck"><i></i>Finish the proposal</div><div class="agck"><i></i>Review Amir's design</div><div class="agck"><i></i>Send the invoices</div><div class="agck"><i></i>Book Monday's flight</div></div></div>
+      <div class="agph" data-t="Weekly update" data-x="Pricing page is live. Sign-ups up 18%. Two bugs still open. Next week: test the phone app." data-b="Make slides"><span class="agtag">Weekly update</span><div class="agsl"><small>Slide 1 of 4</small><b>Weekly update</b><ul><li>Pricing page is live</li><li>Sign-ups up 18%</li><li>Two bugs still open</li></ul></div><div class="agmm"><i>This week</i><span>Shipped</span><span>Numbers</span><span>Next</span></div></div>
+      <div class="agph" data-t="Flight to Delhi" data-pic="1" data-x="" data-b="Read this picture"><span class="agtag">Flight ticket</span><div class="agn" style="--c:#8fd6ff"><div class="agtk"><i></i><span>SkyLine Air · E-ticket</span><span>KUL → DEL</span></div><b>Flight to Delhi</b><dl><dt>Flight</dt><dd>SL 482</dd><dt>Departs</dt><dd>3 Dec, 21:40</dd><dt>Seat</dt><dd>14C · Gate H6</dd><dt>Booking ref</dt><dd>QX7P2M</dd></dl></div></div>
+      <div class="agph" data-t="Hotel in Penang" data-x="12 to 14 December, two people, RM 200 to 350 a night, near Gurney Drive." data-b="Find it on the web"><span class="agtag">Find a hotel</span><div class="agn" style="--c:#7df0c6"><b>Hotel in Penang</b><p>12 to 14 December, two people, RM 200 to 350 a night, near Gurney Drive.</p><div class="aga">Here is where to look for your dates and budget. Rates change through the day, so check the live price before you book.<span>From the web</span></div><div class="aglk"><i>Google Hotels ↗</i><i>Search Google ↗</i></div></div></div>
+    </div>
   </div>
   <div class="aghi">
     <div><b>Understands what you wrote</b><span>People, days, times and amounts are picked out as you type.</span></div>
@@ -831,23 +830,24 @@ function show(i){const[name,,list]=CATS[i];[...chips.children].forEach((b,j)=>b.
 CATS.forEach(([name],i)=>{const b=el('button','',name);b.type='button';b.onclick=()=>show(i);chips.append(b)});
 show(0);
 </script>
-<script>/* the five agentic examples play from scratch: the note is written, one button is pressed, the result arrives */
-(function(){var show=document.querySelector('.agshow');if(!show||matchMedia('(prefers-reduced-motion:reduce)').matches||!('IntersectionObserver' in window))return;
-var fr=[].slice.call(show.querySelectorAll('.agph')),run=0,cur=-1,seen=false,wait=function(ms,id){return new Promise(function(ok,no){setTimeout(function(){id===run?ok():no()},ms)})};
-fr.forEach(function(f){var n=f.querySelector('.agn'),w=document.createElement('div'),b=document.createElement('b'),p=document.createElement('p'),u=document.createElement('u'),sm=document.createElement('small'),bt=document.createElement('i');w.className='agw';if(n)w.style.setProperty('--c',n.style.getPropertyValue('--c'));
-  b.textContent=f.dataset.t||'';sm.textContent=f.dataset.pic?'Picture pasted':'Looks like a note it can help with';bt.textContent=f.dataset.b||'';u.appendChild(sm);u.appendChild(bt);
+<script>/* the agentic examples play from scratch: the note is written, one button is pressed, the result arrives */
+(function(){var st=document.querySelector('.agstage');if(!st)return;var fr=[].slice.call(st.querySelectorAll('.agph')),tabs=[].slice.call(st.querySelectorAll('.agtabs button')),still=matchMedia('(prefers-reduced-motion:reduce)').matches||!('IntersectionObserver' in window),run=0,seen=false,
+  wait=function(ms,id){return new Promise(function(ok,no){setTimeout(function(){id===run?ok():no()},ms)})};
+fr.forEach(function(f){var n=f.querySelector('.agn'),w=document.createElement('div'),b=document.createElement('b'),p=document.createElement('p'),u=document.createElement('u'),sm=document.createElement('small'),bt=document.createElement('i');w.className='agw';w.style.setProperty('--c',n?n.style.getPropertyValue('--c'):'#fff6dc');
+  b.textContent=f.dataset.t||'';sm.textContent=f.dataset.pic?'Picture pasted':'';bt.textContent=f.dataset.b||'';u.appendChild(sm);u.appendChild(bt);
   if(f.dataset.pic){var tk=f.querySelector('.agtk');if(tk)w.appendChild(tk.cloneNode(true));p.style.display='none'}else w.appendChild(b);w.appendChild(p);w.appendChild(u);f.appendChild(w);f._w=w;f._p=p});
-function play(i){var id=++run,f=fr[i],w=f._w,p=f._p,tx=f.dataset.x||'';cur=i;fr.forEach(function(x){x.classList.remove('on','w');x.classList.add('r');x._w.className='agw'});
-  f.classList.add('on','w');f.classList.remove('r');p.textContent='';
-  var step=Math.max(14,Math.min(34,1900/Math.max(1,tx.length))),k=0;
+function show(i,final){fr.forEach(function(x,k){x.classList.toggle('on',k===i);x.classList.remove('w');x.classList.add('r');x._w.className='agw'});tabs.forEach(function(t,k){t.setAttribute('aria-selected',k===i);t.querySelector('i').style.setProperty('--p',k===i&&final?1:0)})}
+function bar(i,id,ms){var t0=performance.now(),el=tabs[i].querySelector('i');(function tick(n){if(id!==run)return;el.style.setProperty('--p',Math.min(1,(n-t0)/ms));if(n-t0<ms)requestAnimationFrame(tick)})(t0)}
+function play(i){var id=++run,f=fr[i],w=f._w,p=f._p,tx=f.dataset.x||'';show(i);f.classList.add('w');f.classList.remove('r');p.textContent='';
+  var step=Math.max(14,Math.min(32,2000/Math.max(1,tx.length))),k=0,typeMs=f.dataset.pic?900:tx.length*step;bar(i,id,350+typeMs+450+750+380+3600);
   return wait(350,id).then(function(){if(f.dataset.pic){w.classList.add('in');return wait(900,id)}
       return new Promise(function(ok,no){(function t(){if(id!==run)return no();p.textContent=tx.slice(0,++k);if(k<tx.length)setTimeout(t,step);else ok()})()})})
     .then(function(){return wait(450,id)}).then(function(){w.classList.add('b');return wait(750,id)}).then(function(){w.classList.add('tap');return wait(380,id)})
-    .then(function(){f.classList.remove('w');f.classList.add('r');return wait(3200,id)})}
-var wide=function(){return show.scrollWidth<=show.clientWidth+4};
-function loop(i){play(i).then(function(){if(wide())loop((i+1)%fr.length);else loop(i)},function(){})}
-new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting&&!seen){seen=true;if(wide())loop(0)}else if(!x.isIntersecting&&seen&&wide()){seen=false;run++;fr.forEach(function(q){q.classList.remove('on','w');q.classList.add('r')})}})},{threshold:.25}).observe(show);
-var io=new IntersectionObserver(function(e){if(wide())return;e.forEach(function(x){var i=fr.indexOf(x.target);if(x.isIntersecting&&x.intersectionRatio>=.7&&i!==cur)loop(i)})},{root:show,threshold:[.7]});fr.forEach(function(f){io.observe(f)});
+    .then(function(){f.classList.remove('w');f.classList.add('r');return wait(3600,id)})}
+function loop(i){play(i).then(function(){loop((i+1)%fr.length)},function(){})}
+tabs.forEach(function(t,i){t.onclick=function(){if(still){run++;show(i,true)}else loop(i)}});
+show(0,true);if(still)return;
+new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting&&!seen){seen=true;loop(0)}else if(!x.isIntersecting&&seen){seen=false;var c=fr.findIndex(function(q){return q.classList.contains('on')});run++;show(c<0?0:c,true)}})},{threshold:.3}).observe(st);
 })();</script>
 <script>/* a plain visitor count: no cookie, nothing stored on this device, skipped when the browser asks not to be tracked */
 (function(){try{if(navigator.doNotTrack==='1'||window.chipku||!/chipzett\.com$/.test(location.hostname))return;var U='https://nzgpwwquxqgjcoswythp.supabase.co/functions/v1/hit',P='home',r='',z='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(e){}try{z=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
