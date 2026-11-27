@@ -459,6 +459,25 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 .agmm{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;padding:10px 6px 2px}
 .agmm i{grid-row:1/4;font:700 12px var(--ui);font-style:normal;background:#bda4ff;color:#1b1430;padding:8px 12px;border-radius:99px}
 .agmm span{font:600 11.5px var(--ui);color:#e9e3ff;border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:5px 11px;width:fit-content}
+.agw{display:none;border-radius:16px;background:var(--c,#ffd66b);color:#1b1430;padding:13px 13px 12px;font:500 13px/1.5 var(--ui)}
+.agw b{display:block;font:700 15.5px/1.2 var(--ui);letter-spacing:-.01em;margin-bottom:8px}
+.agw p{margin:0;min-height:4.5em;white-space:pre-wrap}
+.agw p::after{content:"";display:inline-block;width:2px;height:1.05em;background:#1b1430;vertical-align:-2px;margin-left:1px;animation:agcar 1s steps(2) infinite}
+@keyframes agcar{50%{opacity:0}}
+.agw .agtk{opacity:0;transform:translateY(-14px) scale(.96);transition:opacity .35s,transform .45s cubic-bezier(.2,.9,.3,1.2)}
+.agw.in .agtk{opacity:1;transform:none}
+.agw u{display:flex;justify-content:space-between;align-items:center;text-decoration:none;margin-top:12px;padding-top:10px;border-top:1px solid rgba(27,20,48,.14);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+.agw.b u{opacity:1;transform:none}
+.agw u small{font:500 11.5px/1.3 var(--ui);opacity:.7;padding-right:8px}
+.agw u i{white-space:nowrap;flex:none;font:600 12px var(--ui);font-style:normal;background:#1b1430;color:#fff;padding:7px 13px;border-radius:99px;transition:transform .15s,box-shadow .15s}
+.agw.tap u i{transform:scale(.93);box-shadow:0 0 0 7px rgba(27,20,48,.16)}
+.agph.w>.agw{display:block}.agph.w>:not(.agtag):not(.agw){display:none}
+.agph.r>.agn>*,.agph.r>.agsl,.agph.r>.agmm>*{animation:agrv .5s cubic-bezier(.2,.8,.2,1) both}
+.agph.r>.agn>:nth-child(2){animation-delay:.12s}.agph.r>.agn>:nth-child(3){animation-delay:.28s}.agph.r>.agn>:nth-child(4){animation-delay:.44s}.agph.r>.agn>:nth-child(5){animation-delay:.6s}
+.agph.r>.agmm>:nth-child(1){animation-delay:.3s}.agph.r>.agmm>:nth-child(2){animation-delay:.5s}.agph.r>.agmm>:nth-child(3){animation-delay:.65s}.agph.r>.agmm>:nth-child(4){animation-delay:.8s}
+@keyframes agrv{from{opacity:0;transform:translateY(10px)}}
+.agph{transition:box-shadow .3s,transform .3s}.agph.on{box-shadow:0 0 0 2px #1b1430,0 34px 60px -30px rgba(27,20,48,.8);transform:translateY(-4px)}
+@media (prefers-reduced-motion:reduce){.agph.r>.agn>*,.agph.r>.agsl,.agph.r>.agmm>*{animation:none}}
 .agsc figcaption{margin-top:14px;font:500 14.5px/1.45 var(--ui);color:var(--ink-2)}
 .agsc figcaption b{display:block;color:var(--ink);font-weight:700;margin-bottom:3px}
 .aghi{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 28px;margin:0 0 34px;padding-top:28px;border-top:1px solid rgba(27,20,48,.14)}
@@ -598,33 +617,33 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
   <p class="lede">A birthday, a flight, the month's spending, class notes, a meeting. You write it the way you always have, and the note prepares what comes next.</p>
   <div class="agshow" role="list">
 
-    <figure class="agsc" role="listitem"><div class="agph"><span class="agtag">Family</span>
+    <figure class="agsc" role="listitem"><div class="agph" data-t="Mum's birthday" data-x="Mum's birthday on Saturday. Order the cake, call Aunty Rina, buy flowers." data-b="Prepare it"><span class="agtag">Family</span>
       <div class="agn" style="--c:#ffb3c9"><i class="agk">Reminder</i><b>Mum's birthday</b>
         <div class="aghero"><span><small>Reminder set</small>Saturday</span><em>9:00<small>in 2 days</small></em></div>
         <div class="agck"><i></i>Order the cake</div><div class="agck"><i></i>Call Aunty Rina</div><div class="agck d"><i></i>Buy flowers</div>
       </div></div>
       <figcaption><b>Never drop the small things.</b> Write it the way you think it. The note sets the reminder and makes the list.</figcaption></figure>
 
-    <figure class="agsc" role="listitem"><div class="agph"><span class="agtag">Travel</span>
+    <figure class="agsc" role="listitem"><div class="agph" data-t="Flight to Delhi" data-pic="1" data-x="" data-b="Read this picture"><span class="agtag">Travel</span>
       <div class="agn" style="--c:#8fd6ff"><div class="agtk"><i></i><span>SkyLine Air · E-ticket</span><span>KUL → DEL</span></div>
         <b>Flight to Delhi</b>
         <dl><dt>Flight</dt><dd>SL 482</dd><dt>Date</dt><dd>3 Dec, 21:40</dd><dt>Seat</dt><dd>14C · Gate H6</dd><dt>Ref</dt><dd>QX7P2M</dd></dl>
       </div></div>
       <figcaption><b>Screenshot the ticket. Done.</b> Paste the picture and the note keeps the flight, the time and the booking reference.</figcaption></figure>
 
-    <figure class="agsc" role="listitem"><div class="agph"><span class="agtag">Money</span>
+    <figure class="agsc" role="listitem"><div class="agph" data-t="This month" data-x="Rent 1,200&#10;Groceries 450&#10;Petrol 200" data-b="Total and chart"><span class="agtag">Money</span>
       <div class="agn" style="--c:#7df0c6"><b>This month</b><p>Rent 1,200<br>Groceries 450<br>Petrol 200</p>
         <div class="agpie"><i></i><span><small>Total</small>1,850</span></div>
       </div></div>
       <figcaption><b>See where the money goes.</b> List what you spent. Ask for the total or a chart and it is there.</figcaption></figure>
 
-    <figure class="agsc" role="listitem"><div class="agph"><span class="agtag">Study</span>
+    <figure class="agsc" role="listitem"><div class="agph" data-t="Biology · Cell division" data-x="Mitosis has four stages. Prophase, metaphase, anaphase, telophase." data-b="Mind map"><span class="agtag">Study</span>
       <div class="agn" style="--c:#cdbcff"><b>Biology · Cell division</b><p>Mitosis has four stages. Prophase, metaphase, anaphase, telophase…</p></div>
       <div class="agmm"><i>Mitosis</i><span>Prophase</span><span>Metaphase</span><span>Anaphase</span></div>
       </div>
       <figcaption><b>Turn notes into something you can revise.</b> Class notes become a mind map, slides or a one-page summary.</figcaption></figure>
 
-    <figure class="agsc" role="listitem"><div class="agph"><span class="agtag">Work</span>
+    <figure class="agsc" role="listitem"><div class="agph" data-t="Design review" data-x="Dev wants the new photos by Tuesday. Homepage copy is approved. Call him on Friday." data-b="Prepare it"><span class="agtag">Work</span>
       <div class="agn" style="--c:#ffd66b"><i class="agk">Meeting</i><b>Design review · Dev</b>
         <div class="agrow"><u>1</u>Follow-up<s>Ready</s></div>
         <div class="agrow"><u>2</u>Send the photos<s>Tue</s></div>
@@ -812,6 +831,24 @@ function show(i){const[name,,list]=CATS[i];[...chips.children].forEach((b,j)=>b.
 CATS.forEach(([name],i)=>{const b=el('button','',name);b.type='button';b.onclick=()=>show(i);chips.append(b)});
 show(0);
 </script>
+<script>/* the five agentic examples play from scratch: the note is written, one button is pressed, the result arrives */
+(function(){var show=document.querySelector('.agshow');if(!show||matchMedia('(prefers-reduced-motion:reduce)').matches||!('IntersectionObserver' in window))return;
+var fr=[].slice.call(show.querySelectorAll('.agph')),run=0,cur=-1,seen=false,wait=function(ms,id){return new Promise(function(ok,no){setTimeout(function(){id===run?ok():no()},ms)})};
+fr.forEach(function(f){var n=f.querySelector('.agn'),w=document.createElement('div'),b=document.createElement('b'),p=document.createElement('p'),u=document.createElement('u'),sm=document.createElement('small'),bt=document.createElement('i');w.className='agw';if(n)w.style.setProperty('--c',n.style.getPropertyValue('--c'));
+  b.textContent=f.dataset.t||'';sm.textContent=f.dataset.pic?'Picture pasted':'Looks like a note it can help with';bt.textContent=f.dataset.b||'';u.appendChild(sm);u.appendChild(bt);
+  if(f.dataset.pic){var tk=f.querySelector('.agtk');if(tk)w.appendChild(tk.cloneNode(true));p.style.display='none'}else w.appendChild(b);w.appendChild(p);w.appendChild(u);f.appendChild(w);f._w=w;f._p=p});
+function play(i){var id=++run,f=fr[i],w=f._w,p=f._p,tx=f.dataset.x||'';cur=i;fr.forEach(function(x){x.classList.remove('on','w');x.classList.add('r');x._w.className='agw'});
+  f.classList.add('on','w');f.classList.remove('r');p.textContent='';
+  var step=Math.max(14,Math.min(34,1900/Math.max(1,tx.length))),k=0;
+  return wait(350,id).then(function(){if(f.dataset.pic){w.classList.add('in');return wait(900,id)}
+      return new Promise(function(ok,no){(function t(){if(id!==run)return no();p.textContent=tx.slice(0,++k);if(k<tx.length)setTimeout(t,step);else ok()})()})})
+    .then(function(){return wait(450,id)}).then(function(){w.classList.add('b');return wait(750,id)}).then(function(){w.classList.add('tap');return wait(380,id)})
+    .then(function(){f.classList.remove('w');f.classList.add('r');return wait(3200,id)})}
+var wide=function(){return show.scrollWidth<=show.clientWidth+4};
+function loop(i){play(i).then(function(){if(wide())loop((i+1)%fr.length);else loop(i)},function(){})}
+new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting&&!seen){seen=true;if(wide())loop(0)}else if(!x.isIntersecting&&seen&&wide()){seen=false;run++;fr.forEach(function(q){q.classList.remove('on','w');q.classList.add('r')})}})},{threshold:.25}).observe(show);
+var io=new IntersectionObserver(function(e){if(wide())return;e.forEach(function(x){var i=fr.indexOf(x.target);if(x.isIntersecting&&x.intersectionRatio>=.7&&i!==cur)loop(i)})},{root:show,threshold:[.7]});fr.forEach(function(f){io.observe(f)});
+})();</script>
 <script>/* a plain visitor count: no cookie, nothing stored on this device, skipped when the browser asks not to be tracked */
 (function(){try{if(navigator.doNotTrack==='1'||window.chipku||!/chipzett\.com$/.test(location.hostname))return;var U='https://nzgpwwquxqgjcoswythp.supabase.co/functions/v1/hit',P='home',r='',z='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(e){}try{z=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
 var send=function(o){var b=JSON.stringify(o);try{if(navigator.sendBeacon&&navigator.sendBeacon(U,b))return}catch(e){}try{fetch(U,{method:'POST',keepalive:true,body:b}).catch(function(){})}catch(e){}};send({page:P,ref:r,tz:z});
