@@ -734,5 +734,7 @@ function show(i){const[name,,list]=CATS[i];[...chips.children].forEach((b,j)=>b.
 CATS.forEach(([name],i)=>{const b=el('button','',name);b.type='button';b.onclick=()=>show(i);chips.append(b)});
 show(0);
 </script>
+<script>/* a plain visitor count: no cookie, nothing stored on this device, skipped when the browser asks not to be tracked */
+(function(){try{if(navigator.doNotTrack==='1'||window.chipku||!/chipzett\.com$/.test(location.hostname))return;var r='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(e){}fetch('https://nzgpwwquxqgjcoswythp.supabase.co/functions/v1/hit',{method:'POST',keepalive:true,headers:{'content-type':'application/json'},body:JSON.stringify({page:'home',ref:r})}).catch(function(){})}catch(e){}})();</script>
 </body>
 </html>

@@ -171,7 +171,7 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
 
     <h2>What we do not do</h2>
     <ul>
-      <li>We do not run analytics or tracking inside ChipZett.</li>
+      <li>We do not use advertising or any third-party analytics. We count visits in a way that does not identify you; see Counting visits below.</li>
       <li>We do not show ads.</li>
       <li>We do not sync your notes to any server. A note written on one device will not appear on another.</li>
     </ul>
@@ -194,6 +194,13 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
       <li>You can turn AI off at any time from the line under any agentic note.</li>
       <li><b>Search links.</b> After a web search, a note may show links such as Search Google, Google Hotels or Google Flights. Pressing one opens that site with the text of that note as the search. Nothing is sent until you press the link.</li>
       <li><b>Open in another AI app.</b> A note's menu can open ChatGPT, Claude or Perplexity with the text of that one note already typed in. This happens only when you press the button for that app. The text goes straight from your browser to the app you chose, not through ChipZett, and that app handles it under its own terms and your account there. Private and sealed notes do not offer this.</li>
+    </ul>
+
+    <h2>Counting visits</h2>
+    <ul>
+      <li>When a page opens, it sends one small request to ChipZett's server so we can count visits: which page (home, app or privacy), the site you came from if any, and whether it is a phone or a computer.</li>
+      <li>No cookie is set and nothing is stored on your device for this. Your network address is not saved. It is turned into a code that changes every day, so the count cannot follow anyone from one day to the next.</li>
+      <li>If your browser sends "Do Not Track", this request is not made. No advertising or third-party analytics service is used.</li>
     </ul>
 
     <h2>Account and sync (optional)</h2>
@@ -234,5 +241,7 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
     <p>Questions about privacy or ChipZett? Write to <a href="mailto:chipzett.official@gmail.com">chipzett.official@gmail.com</a>.</p>
   </main>
 </div>
+<script>/* a plain visitor count: no cookie, nothing stored on this device, skipped when the browser asks not to be tracked */
+(function(){try{if(navigator.doNotTrack==='1'||window.chipku||!/chipzett\.com$/.test(location.hostname))return;var r='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(e){}fetch('https://nzgpwwquxqgjcoswythp.supabase.co/functions/v1/hit',{method:'POST',keepalive:true,headers:{'content-type':'application/json'},body:JSON.stringify({page:'privacy',ref:r})}).catch(function(){})}catch(e){}})();</script>
 </body>
 </html>
