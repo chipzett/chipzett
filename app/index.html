@@ -849,6 +849,36 @@ body.ws:not(.st-play) .note.is-agent .paper{box-shadow:inset 0 1px 0 rgba(255,25
 
 /* ---------- phone: Today's focus card ---------- */
 .pfocus{display:none}
+.pnew{display:none}
+@media (max-width:640px){
+  body.ph:not(.fullbar) .zbar,body.ph:not(.fullbar) .pquick{display:none!important}
+  body.ph:not(.faces) .note .face{display:none!important}
+  body.ph .pfocus.none{display:none}
+  body.ph .pfocus.pnx{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:end;background:#fff;color:#1b1430;border:0;border-radius:22px;padding:16px 18px;box-shadow:0 22px 44px -26px rgba(0,0,0,.8);cursor:pointer}
+  .pnxa small{display:block;font:700 10.5px var(--ui);letter-spacing:.14em;text-transform:uppercase;opacity:.5}
+  .pnxa b{display:block;font:700 23px/1.1 var(--ui);letter-spacing:-.02em;margin-top:7px;overflow-wrap:anywhere}
+  .pnxr{text-align:right}.pnxr b{display:block;font:700 16px var(--ui)}.pnxr span{font:500 12.5px var(--ui);opacity:.6}
+  .pnxf{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(27,20,48,.1);font:500 12.5px var(--ui);opacity:.65}
+  .ptabs .pplus{padding:0;display:grid;place-items:center}
+  .ptabs .pplus i{width:54px;height:54px;border-radius:19px;background:var(--mango);color:#1b1430;display:grid;place-items:center;margin-top:-22px;box-shadow:0 14px 28px -10px rgba(255,201,60,.65)}
+  .ptabs .pplus svg{width:26px;height:26px;stroke:#1b1430;stroke-width:2.4}
+  .pnew{display:block;position:fixed;inset:0;z-index:60;background:rgba(8,6,18,0);transition:background .2s}
+  .pnew.on{background:rgba(8,6,18,.62)}
+  .pnsh{position:absolute;left:0;right:0;bottom:0;max-height:92vh;overflow:auto;background:#1c1636;border-radius:28px 28px 0 0;border-top:1px solid rgba(255,255,255,.1);padding:12px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .24s cubic-bezier(.2,.8,.2,1);color:#fff}
+  .pnew.on .pnsh{transform:none}
+  .pngr{display:block;width:42px;height:5px;border-radius:3px;background:rgba(255,255,255,.22);margin:0 auto 14px}
+  .pnsh h2{font:700 21px var(--ui);letter-spacing:-.01em;margin:0}
+  .pnsh h4{font:700 11px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:#a79fc4;margin:18px 2px 10px}
+  .pnq{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:13px;border:0;border-radius:19px;background:var(--mango);color:#1b1430;padding:15px 17px;text-align:left}
+  .pnq b{display:block;font:700 18px var(--ui)}.pnq small{font:500 13px var(--ui);opacity:.72}
+  .pnq svg{width:24px;height:24px;fill:none;stroke:#1b1430;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+  .png{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .pnk{display:flex;gap:11px;align-items:center;text-align:left;border-radius:17px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);padding:12px;color:#fff;min-width:0}
+  .pnk i{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex:none}
+  .pnk i svg{width:19px;height:19px;fill:none;stroke:#1b1430;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .pnk b{display:block;font:600 15px var(--ui)}.pnk small{display:block;font:500 11.5px/1.25 var(--ui);color:#a79fc4}
+  .pn2{display:flex;gap:9px;margin-top:9px}.pn2 button{flex:1;border-radius:15px;border:1px solid rgba(255,255,255,.12);background:none;color:#fff;font:600 13.5px var(--ui);padding:12px 6px}
+}
 @media (max-width:640px){
   body.ph .pfocus{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px 14px;margin:12px 0 4px;padding:14px;border-radius:20px;background:linear-gradient(140deg,rgba(255,255,255,.12),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.16);box-shadow:0 20px 40px -26px #000}
   .pring{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--mint) var(--p,0%),rgba(255,255,255,.14) 0);transition:background .4s}
@@ -1704,6 +1734,7 @@ function agKind(n){const T=plainOf(n)||'',low=T.toLowerCase(),lines=T.split('\n'
   else if((lines.length>=4&&lines.slice(1).every(x=>x.length<60))||(/\b(to-?do|tasks?|today)\b/.test(first)&&lines.length>=3))k='tasks';
   else if(/\b(launch|project|plan|goal|roadmap|milestone|steps)\b/.test(low))k='plan';
   else if(whens.length)k='event';
+  if(n.hint&&agK(n.hint)[0]&&(!k||k==='event'))k=n.hint;
   const pack=[];if(k==='meeting')pack.push({w:'mail',s:L('Draft a follow-up','Follow-up draft karo')});whens.slice(0,2).forEach(q=>pack.push({w:'remind',s:q.s,lab:q.lab}));if(items.length)pack.push({w:'list',s:L('Make a checklist','Checklist banao')});
   return {k,name:agK(k)[1],pack,whens,who}}
 let agMk=0;function agMarks(){if(DESK||!window.CSS||!CSS.highlights||typeof Highlight==='undefined')return;clearTimeout(agMk);agMk=setTimeout(()=>{const rs=[];
@@ -1781,7 +1812,7 @@ function agentUI(n,p,d){
     agMarks()};
   const prepare=()=>{const K=agKind(n);if(!K.pack.length)return;let last=null;K.pack.forEach(pk=>{const e=agAct(n,pk.w,pk.s);if(e.id&&pk.lab){const x=notes.find(q=>q.id===e.id);if(x&&x.type==='timer'){x.text=pk.lab;x.lab=1;const dx=dom(x);if(dx)dx.remove();render(x,true)}}delete e.src;e.at=Date.now();n.trail.push(e);if(e.id)last=e});
     n.prep=K.k||'event';if(last)fxMark(n,last);save();applyFilter();drawTrail();drawKids();tvSoon();pal(L('Prepared. Check the details before you rely on them.','Tayyar hai. Bharosa karne se pehle ek baar dekh lo.'),true)};
-  if(AG2){d.classList.add('ag2');{let fb=document.body.classList.contains('fullbar');try{fb=fb||localStorage.getItem('chipzett-fullbar')==='1'||localStorage.getItem('chipzett-agopen')==='1'}catch(e){}if(fb)d.classList.add('ag-ask','ag-txt')}queueMicrotask(()=>{const b=p.querySelector('.body');if(b)b.before(kl)})}
+  if(AG2){d.classList.add('ag2');if(n.hint)p.style.setProperty('--ph',JSON.stringify(AGPH(n.hint)));else if(n.agent&&!DESK)p.style.setProperty('--ph',JSON.stringify(AGPH('')));{let fb=document.body.classList.contains('fullbar');try{fb=fb||localStorage.getItem('chipzett-fullbar')==='1'||localStorage.getItem('chipzett-agopen')==='1'}catch(e){}if(fb)d.classList.add('ag-ask','ag-txt')}queueMicrotask(()=>{const b=p.querySelector('.body');if(b)b.before(kl)})}
   box.append(pb,hero,stl,kd,lk,mv,line,trl,foot);p.append(box);d.addEventListener('cz-kid',ev=>{openKid=ev.detail;drawKids();tvSoon();setTimeout(()=>{const r=kd.querySelector('.agr.on');if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'})},90)});drawMoves();drawTrail();drawFoot();setTimeout(drawKids,0);addEventListener('cz-ai',()=>{if(d.isConnected){drawMoves();drawFoot()}});
 }
 function render(n,fresh){
@@ -2323,6 +2354,23 @@ function tick(){cx.clearRect(0,0,fx.width,fx.height);bits=bits.filter(p=>p.l-->0
 /* wall backgrounds and writing tools */
 const WBG=[['night',L('Night','Raat'),'linear-gradient(140deg,#2a1f55,#0e0b1d 60%)'],['blue',L('Blueprint','Blueprint'),'linear-gradient(140deg,#1f4fc0,#0b1430 70%)'],['sunset',L('Sunset','Shaam'),'linear-gradient(165deg,#241038,#6a2450 52%,#c85a3c)'],['aurora',L('Aurora','Aurora'),'linear-gradient(120deg,#5ef2c0,#bda4ff 50%,#ff6f9c)'],
   ['slate',L('Slate','Slate'),'#1c1f26'],['forest',L('Forest','Jungle'),'linear-gradient(140deg,#1d5a48,#0c1f1a 70%)'],['chalk',L('Chalkboard','Blackboard'),'#1f3b33'],['paper',L('Paper','Kaagaz'),'#f1e8d4']];
+/* ---------- phone: one + button. Quick note, or start with a shape ---------- */
+const AGPH=k=>({meeting:L('Who it was with, what was agreed, what is next and when','Kiske saath, kya tay hua, aage kya aur kab'),trip:L('Flight or hotel, the date and time, the booking reference','Flight ya hotel, tareekh aur samay, booking reference'),money:L('What it is for, the amounts, who pays, when it is due','Kis cheez ka, kitna, kaun dega, kab tak'),plan:L('The goal, then the steps, one per line','Lakshya, phir kadam, har line me ek'),event:L('What, and when. For example: Dentist on Tuesday at 4 pm','Kya aur kab. Jaise: Dentist Tuesday 4 pm'),'':L('Write anything','Kuch bhi likho')})[k||''];
+function openNew(){if(DESK)return;const old=$('.pnew');if(old){old._close();return}const o=el('div','pnew'),sh=el('div','pnsh'),I=d=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+d+'</svg>';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label',L('New note','Naya note'));
+  const close=()=>{o.classList.remove('on');removeEventListener('keydown',key,true);setTimeout(()=>o.remove(),220)},key=e=>{if(e.key==='Escape'){e.stopPropagation();close()}};o._close=close;addEventListener('keydown',key,true);o.addEventListener('pointerdown',e=>{if(e.target===o)close()});
+  const make=(o2,focus)=>{close();if(WS.view==='month')tvGo('day',TODAY());const n=add(Object.assign({day:WS.view==='day'?WS.date:TODAY()},o2),true);n.fresh=1;applyFilter();setTimeout(()=>{const d=dom(n);if(!d)return;noteOpen(d);const t=d.querySelector(focus||'.body');if(t)setTimeout(()=>{try{t.focus()}catch(e){}},60)},40)};
+  sh.append(el('i','pngr'),el('h2','',L('New note','Naya note')));
+  const q=el('button','pnq');q.type='button';const qt=el('span');qt.append(el('b','',L('Quick note','Quick note')),el('small','',L('Just write. It works out the rest.','Bas likho. Baaki ye samajh lega.')));q.append(qt);q.insertAdjacentHTML('beforeend',I('<path d="M5 12h14M13 6l6 6-6 6"/>'));q.onclick=()=>make({text:'',agent:true});sh.append(q);
+  sh.append(el('h4','',L('Or start with a shape','Ya ek roop chuno')));const g=el('div','png');
+  [['meeting','#ffd66b','<circle cx="9" cy="9" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.5 5.5-4.5s4.9 1.500 5.500 4.500M16 6.500a3 3 0 0 1 0 5.500M18 15c1.600.6 2.500 2 2.800 4"/>',L('Meeting','Meeting'),L('Follow-up, tasks','Follow-up, kaam'),()=>make({text:'',agent:true,hint:'meeting'})],
+   ['tasks','#cdbcff','<path d="M5 7l2 2 3.5-4M5 15l2 2 3.500-4M14 7h6M14 15h6"/>',L('Tasks','Kaam'),L('Tick them off','Tick karte jao'),()=>make({type:'todo',text:L('To do','Karna hai'),items:[{t:'',d:false}],color:'#cdbcff'},'li [contenteditable],.addi')],
+   ['trip','#8fd6ff','<path d="M3 14l18-7-7 13-3-5z"/>',L('Trip','Safar'),L('Ticket, hotel, packing','Ticket, hotel, packing'),()=>make({text:'',agent:true,hint:'trip',color:'#8fd6ff'})],
+   ['money','#7df0c6','<rect x="3.5" y="6" width="17" height="12" rx="3"/><circle cx="12" cy="12" r="2.6"/>',L('Money','Paisa'),L('Bills, splits, budget','Bill, batwara, budget'),()=>make({text:'',agent:true,hint:'money',color:'#7df0c6'})],
+   ['plan','#ffb3c9','<path d="M6 5v14M6 6h9l-2 3 2 3H6"/>',L('Plan','Plan'),L('Steps with days','Tareekh wale kadam'),()=>make({text:'',agent:true,hint:'plan',color:'#ffb3c9'})],
+   ['event','#fff6dc','<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2H4.500zM10 20a2 2 0 0 0 4 0"/>',L('Reminder','Reminder'),L('A day and a time','Din aur samay'),()=>make({text:'',agent:true,hint:'event',color:'#fff6dc'})]
+  ].forEach(([k,c,ic,t,d2,fn])=>{const b=el('button','pnk');b.type='button';b.dataset.k=k;const i=el('i');i.style.background=c;i.innerHTML=I(ic);const tx=el('span');tx.append(el('b','',t),el('small','',d2));b.append(i,tx);b.onclick=fn;g.append(b)});sh.append(g);
+  const two=el('div','pn2'),lk=(t,fn)=>{const b=el('button');b.type='button';b['textContent']=t;b.onclick=()=>{close();fn()};two.append(b)};lk(L('From a picture','Picture se'),()=>{const f=$('#file');if(f)f.click()});if(voiceCan())lk(L('Speak it','Bol ke'),()=>voiceGo(false,voiceToNote));lk(L('Templates','Templates'),()=>openGallery());sh.append(two);
+  o.append(sh);document.body.append(o);requestAnimationFrame(()=>o.classList.add('on'))}
 const WTOOLS=[['',L('None','Kuch nahi')],['fountain',L('Fountain','Fountain')],['pencil',L('Pencil','Pencil')],['marker',L('Marker','Marker')],['ball',L('Ballpoint','Ball pen')]];
 const PENSVG={
   fountain:'<svg viewBox="0 0 16 110"><polygon points="8,110 3.500,93 12.500,93" fill="#f3d27a"/><path d="M8 110V99" stroke="#1b1430" stroke-width=".8"/><rect x="3" y="70" width="10" height="23" rx="2" fill="#1b1430"/><rect x="2.500" y="65" width="11" height="5" rx="1" fill="#ffc93c"/><rect x="3" y="12" width="10" height="53" rx="3" fill="#2b2350"/><rect x="11" y="16" width="2.200" height="30" rx="1" fill="#ffc93c"/><rect x="4" y="4" width="8" height="10" rx="3" fill="#ffc93c"/></svg>',
@@ -2456,11 +2504,11 @@ function phFocus(vis,t){
   const open=items.filter(x=>!x[1].d),done=items.length-open.length,closed=closedDays().includes(t),btn=(cls,txt,fn)=>{const b=el('button',cls);b.type='button';b['textContent']=txt;b.onclick=fn;return b};
   if(!items.length){
     if(closed){box.classList.add('closed');box.append(el('b',null,L('Day closed','Din band')),el('span',null,L(`${closeStreak()}-day streak. See you tomorrow.`,`${closeStreak()} din lagataar. Kal milte hain.`)));return box}
-    const f=document.createElement('form'),ins=[1,2,3].map(k=>{const i=document.createElement('input');i.type='text';i.placeholder=k+'.';i.setAttribute('aria-label',L('Thing ','Kaam ')+k);i.autocomplete='off';i.enterKeyHint=k<3?'next':'done';return i});
-    f.className='pplan';f.append(el('b',null,L('What are your top 3 today?','Aaj ke 3 sabse zaroori kaam?')),...ins,btn('pgo',L('Set my day','Din set karo'),null));f.lastChild.type='submit';
-    ins.forEach((i,k)=>i.onkeydown=e=>{if(e.key==='Enter'&&k<2&&i.value.trim()){e.preventDefault();ins[k+1].focus()}});
-    f.onsubmit=e=>{e.preventDefault();const it=ins.map(i=>i.value.trim()).filter(Boolean);if(!it.length){ins[0].focus();return}add({type:'todo',text:L("Today's top 3","Aaj ke top 3"),items:it.map(x=>({t:x,d:false})),day:t,color:'#ffc93c',tex:'lined'},true);buzz(12);pal(L('Your day is set.','Din set ho gaya.'),true)};
-    box.append(f);return box}
+    const now=Date.now();let nx=null;notes.forEach(n=>{if(covered(n))return;const t=n.type==='timer'&&n.end>now?n.end:n.rem&&!n.remFired&&n.rem>now?n.rem:0;if(t&&(!nx||t<nx.t)){const par=n.from&&notes.find(x=>x.id===n.from);nx={t,n,par,lab:n.type==='timer'?(n.lab&&n.text?n.text:agTitle(par||n)):agTitle(n)}}});
+    if(!nx){box.classList.add('none');return box}
+    box.classList.add('pnx');const more=notes.filter(n=>!covered(n)&&((n.type==='timer'&&n.end>now)||(n.rem&&!n.remFired&&n.rem>now))).length-1,a=el('div','pnxa'),r=el('div','pnxr'),f2=el('div','pnxf');
+    a.append(el('small',null,L('Next up','Agla')),el('b',null,stClip(nx.lab,34)));r.append(el('b',null,agLab(new Date(nx.t))),el('span',null,agIn(nx.t)));f2.append(el('span',null,nx.par?L('From ','Yahan se: ')+stClip(agTitle(nx.par),26):''),el('span',null,more>0?L(more+' more coming up',more+' aur aane wale'):''));
+    box.append(a,r,f2);box.onclick=()=>{const tg=nx.par||nx.n,d=dom(tg);if(d&&!d.classList.contains('hid'))noteOpen(d);else{tvGo('all');setTimeout(()=>{const d2=dom(tg);if(d2)noteOpen(d2)},200)}};return box}
   const pct=Math.round(done/items.length*100),ring=el('div','pring'),mid=el('div','pmid');ring.style.setProperty('--p',pct+'%');ring.append(el('span',null,done+'/'+items.length));
   if(open.length){const[n,i]=open[0];mid.append(el('small',null,L('Next up','Agla kaam')));const tx=el('b');tx['textContent']=i.t;mid.append(tx);
     box.append(ring,mid,btn('pdone',L('Done','Ho gaya'),()=>{const d=dom(n),li=d&&d.querySelectorAll('li')[n.items.indexOf(i)];if(li)li.querySelector('b').click();buzz(14);tvSoon()}))}
@@ -2474,10 +2522,10 @@ function phFocus(vis,t){
 function phBuild(){
   if(DESK)return;const B=document.body,tabs=el('nav','ptabs'),quick=el('div','pquick'),I=d=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+d+'</svg>';
   const tab=(k,icon,label,fn)=>{const b=el('button');b.type='button';b.dataset.k=k;b.innerHTML=I(icon);b.append(el('span',null,label));b.onclick=fn;tabs.append(b)};
-  tab('day','<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/>',L('Today','Aaj'),()=>tvGo('day',TODAY()));
-  tab('month','<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4M8 14h2M14 14h2M8 17h2"/>',L('Calendar','Calendar'),()=>tvGo('month',WS.date));
+  tab('day','<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/>',L('Home','Home'),()=>tvGo('day',TODAY()));
   tab('all','<rect x="4" y="4" width="7" height="8" rx="2"/><rect x="13" y="4" width="7" height="5" rx="2"/><rect x="13" y="11" width="7" height="9" rx="2"/><rect x="4" y="14" width="7" height="6" rx="2"/>',L('Wall','Wall'),()=>tvGo('all'));
-  tab('tpl','<rect x="5" y="4" width="14" height="16" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/>',L('Templates','Templates'),()=>openGallery());
+  {const pb=el('button','pplus');pb.type='button';pb.setAttribute('aria-label',L('New note','Naya note'));pb.innerHTML='<i>'+I('<path d="M12 5v14M5 12h14"/>')+'</i>';pb.onclick=()=>openNew();tabs.append(pb)}
+  tab('month','<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4M8 14h2M14 14h2M8 17h2"/>',L('Calendar','Calendar'),()=>tvGo('month',WS.date));
   tab('stu','<circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="6" r="2.2"/><circle cx="18" cy="12" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8.5 11.200C12 10 12 6 15.800 6M8.600 12h7.200M8.500 12.800C12 14 12 18 15.800 18"/>','Studio',()=>openStudio(stWall()));
   tabs.setAttribute('aria-label',L('Views','Views'));
   const chip=(label,fn)=>{const b=el('button');b.type='button';b['textContent']=label;b.onclick=()=>fn(b);quick.append(b);return b},inp=wsEls.inp,start=t=>{inp.value=t;inp.focus();try{inp.setSelectionRange(t.length,t.length)}catch(e){}};
@@ -2810,7 +2858,7 @@ function kbInit(){if(DESK)return;const B=document.body,vv=window.visualViewport,
 
 /* ---------- phone: tap a card to open it, Back (or the phone's back button) to close ---------- */
 let nOpen=null;
-function noteClose(fromPop){if(!nOpen)return;const d=nOpen;nOpen=null;if(document.activeElement&&d.contains(document.activeElement))document.activeElement.blur();d.classList.remove('open');document.body.classList.remove('nopen');const b=d.querySelector(':scope>.nback');if(b)b.remove();{const q=d.querySelector(':scope>.nbar');if(q)q.remove()}if(!fromPop)try{if(history.state&&history.state.cz==='note')history.back()}catch(e){}
+function noteClose(fromPop){if(!nOpen)return;const d=nOpen;nOpen=null;{const fn=notes.find(x=>x.id===d.dataset.id);if(fn&&fn.fresh){delete fn.fresh;const empty=!String(fn.text||'').trim()&&!fn.img&&!(fn.items||[]).some(i=>String(i.t||'').trim())&&!notes.some(x=>x.from===fn.id);if(empty||(fn.type==='todo'&&!(fn.items||[]).some(i=>String(i.t||'').trim()))){setTimeout(()=>{notes=notes.filter(x=>x!==fn);const dx=dom(fn);if(dx)dx.remove();save();applyFilter()},60)}else save()}}if(document.activeElement&&d.contains(document.activeElement))document.activeElement.blur();d.classList.remove('open');document.body.classList.remove('nopen');const b=d.querySelector(':scope>.nback');if(b)b.remove();{const q=d.querySelector(':scope>.nbar');if(q)q.remove()}if(!fromPop)try{if(history.state&&history.state.cz==='note')history.back()}catch(e){}
   try{d.scrollIntoView({block:'center'})}catch(e){}}
 function noteOpen(d){if(nOpen===d)return;if(nOpen)noteClose();nOpen=d;if(document.activeElement&&d.contains(document.activeElement))document.activeElement.blur();d.classList.add('open','opg');setTimeout(()=>d.classList.remove('opg'),380);document.body.classList.add('nopen');d.scrollTop=0;const b=el('button','nback');b.type='button';b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';b.append(el('span',null,L('Back','Wapas')));b.onclick=e=>{e.stopPropagation();noteClose()};d.prepend(b);{const n=notes.find(q=>dom(q)===d),nb=el('div','nbar');if(n&&!covered(n)){const q=(t,fn)=>{const x=el('button');x.type='button';x['textContent']=t;x.onclick=e=>{e.stopPropagation();fn()};nb.append(x)};q('Studio',()=>openStudio([n],'map'));if(!DESK){q(L('Share','Bhejo'),()=>openPass([n]));q(L('Ask AI app','AI app'),()=>openOut(n))}d.append(nb)}}
   try{history.pushState({cz:'note'},'')}catch(e){}}
@@ -3009,7 +3057,7 @@ function openProfile(){if(!PROFILE)return;const old=$('.pfp');if(old&&old._close
   const sec=t=>{const h=el('h3');h['textContent']=t;box.append(h)},go=n=>{close();if(isHid(n))tvGo('all');setTimeout(()=>{const d=dom(n);if(!d)return;if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center',behavior:'smooth'});agFlash(n.id)},120)};
   sec(L('Today','Aaj'));const tl=el('div','pft');if(today.length)today.slice(0,6).forEach(n=>{const b=el('button'),t=el('span'),m=el('em');b.type='button';b.style.setProperty('--c',n.color||'#ffc93c');t['textContent']=stClip(String(n.text||'').split('\n')[0]||L('Note','Note'),60);if(n.type==='todo'){const a=(n.items||[]),dn=a.filter(i=>i.d).length;m['textContent']=dn+'/'+a.length}else if(n.rem&&!n.remFired)m['textContent']=L('reminder','reminder');b.append(t,m);b.onclick=()=>go(n);tl.append(b)});
   else{const e=el('p');e['textContent']=L('Nothing is planned for today yet.','Aaj ke liye abhi kuch plan nahi.');tl.append(e)}box.append(tl);
-  sec(L('Do something','Kuch karo'));const g=el('div','pfg'),act=(t,d,fn)=>{const b=el('button'),bt=el('b'),sp=el('span');b.type='button';bt['textContent']=t;sp['textContent']=d;b.append(bt,sp);b.onclick=()=>{close();fn()};g.append(b)},bar=()=>{const i=wsEls&&wsEls.inp;if(i)i.focus()},mk=o2=>{if(WS.view!=='all'&&WS.view!=='day')tvGo('all');const n=add(Object.assign({day:TODAY()},o2),true);applyFilter();setTimeout(()=>{const d=dom(n);if(d){if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center'})}},120)};
+  sec(L('Do something','Kuch karo'));const g=el('div','pfg'),act=(t,d,fn)=>{const b=el('button'),bt=el('b'),sp=el('span');b.type='button';bt['textContent']=t;sp['textContent']=d;b.append(bt,sp);b.onclick=()=>{close();fn()};g.append(b)},bar=()=>{if(isPhone()&&!DESK){openNew();return}const i=wsEls&&wsEls.inp;if(i)i.focus()},mk=o2=>{if(WS.view!=='all'&&WS.view!=='day')tvGo('all');const n=add(Object.assign({day:TODAY()},o2),true);applyFilter();setTimeout(()=>{const d=dom(n);if(d){if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center'})}},120)};
   act(L('New note','Naya note'),L('Write it in the bar','Bar me likho'),bar);act(L('Checklist','Checklist'),L('A list you tick off','Tick karne wali list'),()=>mk({type:'todo',text:L('To do','Karna hai'),items:[{t:'',d:false}]}));
   act(L('Agentic note','Agentic note'),L('A note you can ask and instruct','Note jisse poochh aur karwa sako'),()=>{wsNext.agent=true;applyFilter();bar();pal(L('Agentic is on. Write the note, then ask it.','Agentic on hai. Note likho, phir usse poochho.'),true)});
   if(!DESK&&typeof voiceCan==='function'&&voiceCan())act(L('Speak a note','Bol ke note'),L('Say it, ChipZett writes it','Bolo, ChipZett likhega'),()=>voiceGo(false,voiceToNote));
@@ -3025,9 +3073,9 @@ function openProfile(){if(!PROFILE)return;const old=$('.pfp');if(old&&old._close
 /* ---------- first visit: an empty wall with three steps, instead of sample notes ---------- */
 function welCheck(){if(DESK)return;const B=document.body;let w=$('.zwel');if(notes.length){if(w)w.remove();B.classList.remove('wel');return}if(w||!board)return;
   w=el('div','zwel');const c=el('div','zwelc'),h=el('h2'),p=el('p'),ol=el('ol'),acts=el('div','zwela'),more=el('div','zwelm');h['textContent']=L('Start with one note.','Ek note se shuru karo.');p['textContent']=L('Your wall is empty. Nothing to set up and no account needed.','Tumhari wall khaali hai. Koi setup nahi, koi account nahi.');
-  [[L('Write','Likho'),L('Type in the bar below and press Enter.','Neeche bar me likho aur Enter dabao.')],[L('Ask','Poochho'),L('Switch on Agentic, then ask the note or tell it what to make.','Agentic on karo, phir note se poochho ya batao kya banana hai.')],[L('Present','Dikhao'),L('Open Studio to see notes as a mind map, slides or one page.','Studio kholo: notes mind map, slides ya ek panne me.')]].forEach(([t,d])=>{const li=el('li'),b=el('b'),s=el('span');b['textContent']=t;s['textContent']=d;li.append(b,s);ol.append(li)});
+  [[L('Write','Likho'),isPhone()&&!DESK?L('Tap + and write. A quick note, or start with a shape.','+ dabao aur likho. Quick note, ya koi roop chuno.'):L('Type in the bar below and press Enter.','Neeche bar me likho aur Enter dabao.')],[L('Prepare','Tayyar karo'),L('The note reads itself. One tap makes the follow-up, the reminders and the tasks.','Note khud ko padhta hai. Ek tap me follow-up, reminder aur kaam.')],[L('Present','Dikhao'),L('Open Studio to see notes as a mind map, slides or one page.','Studio kholo: notes mind map, slides ya ek panne me.')]].forEach(([t,d])=>{const li=el('li'),b=el('b'),s=el('span');b['textContent']=t;s['textContent']=d;li.append(b,s);ol.append(li)});
   const btn=(t,cls,fn)=>{const b=el('button',cls);b.type='button';b['textContent']=t;b.onclick=fn;return b},inp=()=>$('.zbar input[type=text],.zbar input:not([type])')||$('.zbar input');
-  acts.append(btn(L('Write my first note','Pehla note likho'),'go',()=>{const i=inp();if(i)i.focus()}),btn(L('Try an agentic note','Agentic note aazmao'),'',()=>{const n=add({text:L('Client call\nMeera wants the revised quote and a signed timeline by Friday. Budget is fixed. Call her on Thursday at 10 am.','Client call\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai. Kal 10 baje Meera ko call.'),agent:true,day:TODAY(),color:'#5ef2c0'},true);applyFilter();setTimeout(()=>{const d=dom(n);if(d){if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center'});agFlash(n.id)}},120)}));
+  acts.append(btn(L('Write my first note','Pehla note likho'),'go',()=>{if(isPhone()&&!DESK){openNew();return}const i=inp();if(i)i.focus()}),btn(L('Try an agentic note','Agentic note aazmao'),'',()=>{const n=add({text:L('Client call\nMeera wants the revised quote and a signed timeline by Friday. Budget is fixed. Call her on Thursday at 10 am.','Client call\nUnhe Friday tak revised quote aur signed timeline chahiye. Budget fixed hai. Kal 10 baje Meera ko call.'),agent:true,day:TODAY(),color:'#5ef2c0'},true);applyFilter();setTimeout(()=>{const d=dom(n);if(d){if(isPhone()&&typeof noteOpen==='function')noteOpen(d);else d.scrollIntoView({block:'center'});agFlash(n.id)}},120)}));
   more.append(btn(L('Show sample notes','Namoone ke notes dikhao'),'',()=>{seedThree();applyFilter()}),btn(L('Browse templates','Templates dekho'),'',()=>openGallery()));if(!PROFILE)more.append(btn(L('Create a profile','Profile banao'),'',()=>{if(wsEls&&wsEls.me)wsEls.me.click()}));
   c.append(h,p,ol,acts,more);w.append(c);board.append(w);B.classList.add('wel')}
 /* ---------- studio: mind map, slides and infographic built on the device from the note's own lines ---------- */
