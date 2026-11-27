@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ChipZett · Visitors</title>
+<style>
+:root{--bg:#120e22;--card:#1c1633;--line:rgba(255,255,255,.1);--ink:#f3efff;--mut:#a79fc4;--bar:#bda4ff;--bar2:#5ef2c0;--ui:system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:500 15px/1.45 var(--ui)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 60px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:22px}
+h1{font:700 22px var(--ui);margin:0}header small{display:block;color:var(--mut);font-weight:500;margin-top:3px}
+.seg{display:flex;gap:6px}.seg button,.btn{font:600 13px var(--ui);padding:8px 13px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--ink);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:#120e22;border-color:var(--ink)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}@media(max-width:620px){.tiles{grid-template-columns:repeat(2,1fr)}.tile b{font-size:24px}}
+.tile,.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.tile b{display:block;font:700 30px/1.1 var(--ui);font-variant-numeric:tabular-nums}.tile span{color:var(--mut);font-size:13px}
+.card{margin-bottom:14px}.card h2{font:700 15px var(--ui);margin:0 0 4px}.card p.sub{margin:0 0 14px;color:var(--mut);font-size:13px}
+.plot{position:relative;height:210px;display:flex;align-items:flex-end;gap:2px;padding-top:8px;border-bottom:1px solid var(--line)}
+.plot .col{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;position:relative;cursor:default}
+.plot .col i{display:block;width:100%;background:var(--bar);border-radius:4px 4px 0 0;min-height:0}
+.plot .col:hover i,.plot .col:focus i{background:#d9caff}
+.plot .col.zero i{height:2px!important;background:rgba(255,255,255,.14);border-radius:1px}
+.axis{display:flex;justify-content:space-between;color:var(--mut);font-size:12px;margin-top:6px}
+.tip{position:absolute;z-index:5;pointer-events:none;background:#0b0817;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;white-space:nowrap;transform:translate(-50%,-100%);margin-top:-8px;display:none}
+.tip b{display:block;margin-bottom:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:7px 0;border-bottom:1px solid var(--line)}th{color:var(--mut);font-weight:600;font-size:12px}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}.row{display:flex;align-items:center;gap:10px}.row .m{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;min-width:40px}.row .m i{display:block;height:100%;background:var(--bar);border-radius:3px}
+.msg{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;max-width:520px;margin:60px auto;text-align:center}.msg p{color:var(--mut)}.msg a{color:#ffc93c}
+.empty{color:var(--mut);font-size:13.5px;padding:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+(function(){
+const SB='https://nzgpwwquxqgjcoswythp.supabase.co',SBK='sb_publishable_eJVgWBYGVg_a1WPQ9EW_4A_IMQIseIy',root=document.getElementById('app');
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const say=(h,p,link)=>{root.textContent='';const m=el('div','msg');m.append(el('h1','',h),el('p','',p));if(link){const a=el('a','',link[0]);a.href=link[1];m.append(a)}root.append(m)};
+let ACC=null;try{ACC=JSON.parse(localStorage.getItem('chipzett-acc')||'null')}catch(e){}
+async function token(){if(!ACC)return '';if(ACC.exp-60>Date.now()/1000)return ACC.at;try{const r=await fetch(SB+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:SBK,'content-type':'application/json'},body:JSON.stringify({refresh_token:ACC.rt})});if(!r.ok)return '';const j=await r.json();if(!j.access_token)return '';ACC.at=j.access_token;ACC.rt=j.refresh_token;ACC.exp=Math.floor(Date.now()/1000)+(+j.expires_in||3600);localStorage.setItem('chipzett-acc',JSON.stringify(ACC));return ACC.at}catch(e){return ''}}
+const dur=s=>{s=+s||0;if(!s)return '–';if(s<60)return s+' s';const m=Math.floor(s/60);return m<60?m+' min '+(s%60?(s%60)+' s':''):Math.floor(m/60)+' h '+(m%60)+' min'};
+const place=z=>{if(!z||z==='unknown')return 'Unknown';const p=z.split('/');return (p[p.length-1]||z).replace(/_/g,' ')+' ('+p[0]+')'};
+const dname=d=>new Date(d+'T00:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+let DAYS=30;
+async function load(){const tk=await token();if(!tk){say('Sign in first','This page is for the ChipZett owner. Open the app, sign in with the ChipZett Google account, then come back here.',['Open the app','app/']);return}
+  root.textContent='';root.append(el('p','empty','Loading…'));let r,j;try{r=await fetch(SB+'/functions/v1/stats?days='+DAYS,{headers:{authorization:'Bearer '+tk}});j=await r.json()}catch(e){say('Could not load','Check the connection and try again.');return}
+  if(r.status===401){say('Sign in again','Your sign-in has expired. Open the app once, then come back.',['Open the app','app/']);return}
+  if(r.status===403){say('Not available','This page is only for the ChipZett owner account. You are signed in as '+(ACC.email||'another account')+'.');return}
+  if(!r.ok){say('Could not load','The numbers did not come back. Try again in a minute.');return}draw(j)}
+function draw(S){root.textContent='';const hd=el('header'),t=el('div'),seg=el('div','seg');t.append(el('h1','','ChipZett visitors'));t.append(el('small','','Updated '+new Date(S.as_of).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' · days are counted in UTC'));
+  [7,30,90].forEach(d=>{const b=el('button','',d+' days');b.type='button';b.setAttribute('aria-pressed',DAYS===d);b.onclick=()=>{DAYS=d;load()};seg.append(b)});const rf=el('button','btn','Refresh');rf.type='button';rf.onclick=load;seg.append(rf);hd.append(t,seg);root.append(hd);
+  const tiles=el('div','tiles'),tile=(v,l)=>{const d=el('div','tile');d.append(el('b','',String(v)),el('span','',l));tiles.append(d)};
+  tile(S.today.visitors,'visitors today');tile(S.today.opened_app,'opened the app today');tile(dur(S.today.avg_secs),'average time today');tile(S.total.visitors,'visitors, last '+DAYS+' days');tile(dur(S.total.avg_secs),'average time, last '+DAYS+' days');tile(S.accounts,'accounts created');root.append(tiles);
+  const c=el('div','card');c.append(el('h2','','Visitors per day'),el('p','sub','Each person is counted once a day. Hover or tap a bar for the details.'));const plot=el('div','plot'),tip=el('div','tip'),mx=Math.max(1,...S.days.map(d=>d.visitors));
+  S.days.forEach(d=>{const col=el('div','col'+(d.visitors?'':' zero')),bar=el('i');bar.style.height=(d.visitors/mx*100)+'%';col.tabIndex=0;col.setAttribute('aria-label',dname(d.day)+': '+d.visitors+' visitors');col.append(bar);
+    const show=()=>{tip.textContent='';tip.append(el('b','',dname(d.day)),el('div','',d.visitors+' visitors · '+d.views+' page views'),el('div','',d.app+' opened the app · '+dur(d.avg_secs)+' average'));tip.style.display='block';tip.style.left=Math.max(90,Math.min(plot.clientWidth-90,col.offsetLeft+col.offsetWidth/2))+'px';tip.style.top=(plot.clientHeight-bar.offsetHeight)+'px'};
+    col.onmouseenter=col.onfocus=show;col.onmouseleave=col.onblur=()=>{tip.style.display='none'};plot.append(col)});plot.append(tip);c.append(plot);
+  const ax=el('div','axis');ax.append(el('span','',dname(S.days[0].day)),el('span','','most in one day: '+mx),el('span','',dname(S.days[S.days.length-1].day)));c.append(ax);root.append(c);
+  const grid=el('div','grid'),list=(title,sub,rows,lab)=>{const k=el('div','card');k.append(el('h2','',title),el('p','sub',sub));if(!rows.length){k.append(el('p','empty','Nothing yet.'))}else{const tb=el('table'),m=Math.max(...rows.map(r=>r.n));rows.forEach(r=>{const tr=el('tr'),a=el('td'),b=el('td','n',String(r.n)),w=el('div','row'),bar=el('div','m'),f=el('i');f.style.width=(r.n/m*100)+'%';bar.append(f);w.append(el('span','',lab?lab(r.k):r.k),bar);a.append(w);tr.append(a,b);tb.append(tr)});k.append(tb)}grid.append(k)};
+  list('Where they came from','The site that linked to ChipZett. "direct" means typed, bookmarked, or opened from an app that hides the source.',S.refs);
+  list('Where they are','From the time zone set on the visitor’s device. It shows the region, not an exact place.',S.zones,place);
+  list('Devices','',S.devices,k=>k?k[0].toUpperCase()+k.slice(1):'Unknown');
+  {const k=el('div','card');k.append(el('h2','','Pages'),el('p','sub','Visitors, page views and average time on each page.'));if(!S.pages.length)k.append(el('p','empty','Nothing yet.'));else{const tb=el('table'),h=el('tr');['Page','Visitors','Views','Avg time'].forEach((x,i)=>h.append(el('th',i?'n':'',x)));tb.append(h);S.pages.forEach(p=>{const tr=el('tr');tr.append(el('td','',({home:'Homepage',app:'App',privacy:'Privacy page'})[p.k]||p.k),el('td','n',String(p.visitors)),el('td','n',String(p.views)),el('td','n',dur(p.avg_secs)));tb.append(tr)});k.append(tb)}grid.append(k)}
+  {const k=el('div','card');k.append(el('h2','','AI use'),el('p','sub','How many times each AI feature was used per day.'));const rows=S.ai.slice(-10).reverse();if(!rows.length)k.append(el('p','empty','Nothing yet.'));else{const tb=el('table'),h=el('tr');['Day','Asks','Web','Pictures','Voice'].forEach((x,i)=>h.append(el('th',i?'n':'',x)));tb.append(h);rows.forEach(a=>{const tr=el('tr');tr.append(el('td','',dname(a.day)),el('td','n',String(a.ask)),el('td','n',String(a.web)),el('td','n',String(a.see)),el('td','n',String(a.voice)));tb.append(tr)});k.append(tb)}grid.append(k)}
+  {const k=el('div','card');k.append(el('h2','','Accounts'),el('p','sub','People who signed in with Google.'));const tb=el('table');[['Accounts created',S.accounts],['Accounts with synced notes',S.accounts_with_notes]].forEach(([a,b])=>{const tr=el('tr');tr.append(el('td','',a),el('td','n',String(b)));tb.append(tr)});k.append(tb);grid.append(k)}
+  root.append(grid)}
+load();
+})();
+</script>
+</body>
+</html>

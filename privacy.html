@@ -198,7 +198,7 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
 
     <h2>Counting visits</h2>
     <ul>
-      <li>When a page opens, it sends one small request to ChipZett's server so we can count visits: which page (home, app or privacy), the site you came from if any, and whether it is a phone or a computer.</li>
+      <li>When a page opens, it sends one small request to ChipZett's server so we can count visits: which page (home, app or privacy), the site you came from if any, whether it is a phone or a computer, and the time zone your device is set to (for example Asia/Kuala_Lumpur), which tells us roughly which part of the world visitors are in. When you leave the page it sends how many seconds the page was on your screen.</li>
       <li>No cookie is set and nothing is stored on your device for this. Your network address is not saved. It is turned into a code that changes every day, so the count cannot follow anyone from one day to the next.</li>
       <li>If your browser sends "Do Not Track", this request is not made. No advertising or third-party analytics service is used.</li>
     </ul>
@@ -242,6 +242,9 @@ footer{padding:40px 0 50px;color:var(--muted);font-size:14px;display:flex;gap:14
   </main>
 </div>
 <script>/* a plain visitor count: no cookie, nothing stored on this device, skipped when the browser asks not to be tracked */
-(function(){try{if(navigator.doNotTrack==='1'||window.chipku||!/chipzett\.com$/.test(location.hostname))return;var r='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(e){}fetch('https://nzgpwwquxqgjcoswythp.supabase.co/functions/v1/hit',{method:'POST',keepalive:true,headers:{'content-type':'application/json'},body:JSON.stringify({page:'privacy',ref:r})}).catch(function(){})}catch(e){}})();</script>
+(function(){try{if(navigator.doNotTrack==='1'||window.chipku||!/chipzett\.com$/.test(location.hostname))return;var U='https://nzgpwwquxqgjcoswythp.supabase.co/functions/v1/hit',P='privacy',r='',z='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(e){}try{z=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
+var send=function(o){var b=JSON.stringify(o);try{if(navigator.sendBeacon&&navigator.sendBeacon(U,b))return}catch(e){}try{fetch(U,{method:'POST',keepalive:true,body:b}).catch(function(){})}catch(e){}};send({page:P,ref:r,tz:z});
+var on=document.hidden?0:Date.now(),tot=0,sent=0,leave=function(){if(on){tot+=Date.now()-on;on=0}var s=Math.round(tot/1000)-sent;if(s>=3){sent+=s;send({page:P,secs:s})}};
+document.addEventListener('visibilitychange',function(){if(document.hidden)leave();else on=Date.now()});addEventListener('pagehide',leave)}catch(e){}})();</script>
 </body>
 </html>
