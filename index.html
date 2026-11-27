@@ -465,6 +465,37 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 @media (min-width:1101px){.hero .wrap{grid-template-columns:minmax(0,38fr) minmax(0,62fr)!important;gap:clamp(28px,3vw,56px)!important}}
 @media (max-width:1100px){.hwall{margin:0 calc(-1*clamp(18px,5vw,40px));overflow-x:auto;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}.hwall::-webkit-scrollbar{display:none}
 .hrun{display:flex;width:max-content;gap:12px;padding:4px clamp(18px,5vw,40px) 26px}.hcol{flex:0 0 clamp(168px,45vw,230px);gap:12px}.hcol:nth-child(2){margin-top:26px}.hcol:nth-child(4){margin-top:34px}.hn{padding:13px 13px 12px;border-radius:17px;font-size:12.5px}.hn>b{font-size:15px}.hrt b{font-size:22px}}
+/* phone polish: touch feel, carousels, comfortable targets */
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+h1,h2{text-wrap:balance}.lede{text-wrap:pretty}
+.btn,.agtabs button,.tabs button,summary,.navopen{touch-action:manipulation}
+@media (hover:none){.btn{transition:transform .16s cubic-bezier(.3,.7,.3,1),box-shadow .16s,filter .16s}.btn:active{transform:scale(.965);filter:brightness(.94)}.btn.inkbtn:active{box-shadow:2px 2px 0 var(--pink)}.hn:active{transform:scale(.97)}}
+.top{padding-top:env(safe-area-inset-top)}footer{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+@media (max-width:860px){
+  .hsnap{display:flex!important;gap:12px!important;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-inline:-18px;padding:4px 18px 14px;scroll-padding-inline:18px}
+  .hsnap::-webkit-scrollbar{display:none}
+  .hsnap>*{flex:0 0 84%;scroll-snap-align:start;min-width:0}
+  .fxg.hsnap>.fx{padding:22px 20px 20px;border-radius:22px;box-shadow:0 18px 34px -24px rgba(27,20,48,.45)}
+  .fxg.hsnap .fx ul{grid-template-columns:1fr!important;gap:12px}
+  .hdots{display:flex;justify-content:center;gap:7px;margin-top:6px}.hdots i{width:6px;height:6px;border-radius:3px;background:currentColor;opacity:.22;transition:width .25s,opacity .25s}.hdots i.on{width:18px;opacity:.75}
+}
+@media (min-width:861px){.hdots{display:none}}
+@media (max-width:640px){
+  .navopen{min-height:42px}.tabs button,.agtabs button{min-height:42px}
+  .band{padding:56px 0}.band h2{font-size:clamp(30px,8.4vw,36px);line-height:1.08;letter-spacing:-.03em}
+  .band .lede{font-size:17.5px;line-height:1.5;margin-top:14px}
+  .hero h1{letter-spacing:-.035em}.hero .lede{font-size:18px;line-height:1.5;margin-top:18px}
+  .hero .cta{margin-top:26px;gap:10px}.hero .cta .btn{min-height:52px;border-radius:14px;font-size:16.5px}
+  .hero .wrap{gap:30px}
+  .aghi{grid-template-columns:1fr 1fr!important;gap:10px!important;border-top:0!important;padding-top:0!important}
+  .aghi>div{background:rgba(255,255,255,.62);border:1px solid rgba(27,20,48,.08);border-radius:16px;padding:14px 14px 13px}.aghi>div:last-child{grid-column:1/-1}
+  .aghi b{font-size:14.5px;line-height:1.25;margin-bottom:5px}.aghi span{font-size:13px;line-height:1.4}
+  #example .btn.inkbtn{display:flex;justify-content:center;min-height:52px;border-radius:14px}
+  .fxnote{font-size:13px;line-height:1.5;margin-top:10px}
+  details summary{min-height:56px}
+  .get .btn{min-height:54px;border-radius:14px}
+  footer a{display:inline-block;padding:10px 0}
+}
 .agbig{position:relative;display:grid;justify-items:center}
 .agstage.inhero{grid-template-columns:1fr;gap:20px;margin:0}
 .inhero .agtabs{flex-direction:row;flex-wrap:wrap;gap:8px;justify-content:center}
@@ -623,16 +654,6 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
   </div></div>
 </div></header>
 
-<section class="band dark show" id="product"><div class="wrap">
-  <p class="eyebrow">The workspace</p>
-  <h2>Your working day, on one wall.</h2>
-  <p class="lede">Notes, tasks, numbers and plans side by side. Ask any of them a question and the answer arrives as the next note.</p>
-  <div class="showg">
-    <figure class="shot win"><img src="img/app-agent.webp" width="1800" height="1125" alt="The ChipZett wall on a computer: a client meeting note has answered a question and created a checklist beside it." loading="lazy" decoding="async"></figure>
-    <figure class="shot phone p1"><img src="img/phone-wall.webp" width="520" height="1125" alt="The same wall on a phone, as a grid of note cards for today." loading="lazy" decoding="async"></figure>
-  </div>
-</div></section>
-
 <section class="band plilac" id="example"><div class="wrap">
   <p class="eyebrow">Agentic notes</p>
   <h2>Write it down. The note handles what comes next.</h2>
@@ -652,7 +673,7 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
       <div class="agph" data-t="Today" data-x="Finish the proposal&#10;Review Amir's design at 2 pm&#10;Send the invoices&#10;Book Monday's flight" data-b="Prepare it"><span class="agtag">Plan the day</span><div class="agn" style="--c:#cdbcff"><i class="agk">Tasks</i><b>Today</b><div class="aghero"><span><small>Next</small>Review Amir's design</span><em>14:00<small>in 3 h</small></em></div><div class="agck"><i></i>Finish the proposal</div><div class="agck"><i></i>Review Amir's design</div><div class="agck"><i></i>Send the invoices</div><div class="agck"><i></i>Book Monday's flight</div></div></div>
       <div class="agph" data-t="Weekly update" data-x="Pricing page is live. Sign-ups up 18%. Two bugs still open. Next week: test the phone app." data-b="Make slides"><span class="agtag">Weekly update</span><div class="agsl"><small>Slide 1 of 4</small><b>Weekly update</b><ul><li>Pricing page is live</li><li>Sign-ups up 18%</li><li>Two bugs still open</li></ul></div><div class="agmm"><i>This week</i><span>Shipped</span><span>Numbers</span><span>Next</span></div></div>
       <div class="agph" data-t="Flight to Delhi" data-pic="1" data-x="" data-b="Flight status"><span class="agtag">Flight</span><div class="agn" style="--c:#8fd6ff"><div class="agtk"><i></i><span>SkyLine Air · E-ticket</span><span>KUL → DEL</span></div><b>Flight SL 482</b><div class="aghero"><span><small>Status</small>On time</span><em>21:40<small>Gate H6</small></em></div><dl><dt>Date</dt><dd>3 Dec</dd><dt>Seat</dt><dd>14C</dd><dt>Booking ref</dt><dd>QX7P2M</dd></dl></div></div>
-      <div class="agph" data-t="Grocery list" data-x="Dettol handwash&#10;Milo 1kg&#10;Eggs 30" data-b="Find prices"><span class="agtag">Shopping</span><div class="agn" style="--c:#fff6dc"><b>Grocery list</b><div class="agsh"><span>Dettol handwash</span><em>RM 10.00</em><u>Buy</u></div><div class="agsh"><span>Milo 1kg</span><em>RM 25.00</em><u>Buy</u></div><div class="agsh"><span>Eggs 30</span><em>RM 14.80</em><u>Buy</u></div><div class="agtot"><span>Total</span><b>RM 49.80</b></div></div></div></div>
+      <div class="agph" data-t="Grocery list" data-x="Dettol handwash&#10;Milo 1kg&#10;Eggs 30" data-b="Find prices"><span class="agtag">Shopping</span><div class="agn" style="--c:#fff6dc"><b>Grocery list</b><div class="agsh"><span>Dettol handwash</span><em>RM 10.00</em><u>Buy</u></div><div class="agsh"><span>Milo 1kg</span><em>RM 25.00</em><u>Buy</u></div><div class="agsh"><span>Eggs 30</span><em>RM 14.80</em><u>Buy</u></div><div class="agtot"><span>Total</span><b>RM 49.80</b></div></div></div>
     </div>
   </div>
   <div class="aghi">
@@ -669,7 +690,7 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
   <p class="eyebrow">Studio</p>
   <h2>From notes to a presentation.</h2>
   <p class="lede">Turn any note into a mind map, a slide deck or a one-page summary. Generated on your device.</p>
-  <div class="stg">
+  <div class="stg hsnap">
     <figure class="shot"><img src="img/studio-map.webp" width="1200" height="615" alt="A launch plan note shown as a mind map with three branches." loading="lazy" decoding="async"><figcaption>Mind map</figcaption></figure>
     <figure class="shot"><img src="img/studio-deck.webp" width="1200" height="683" alt="The same note as a presentation slide." loading="lazy" decoding="async"><figcaption>Slides</figcaption></figure>
     <figure class="shot"><img src="img/studio-info.webp" width="900" height="1035" alt="The same note as a one-page summary." loading="lazy" decoding="async"><figcaption>Infographic</figcaption></figure>
@@ -679,7 +700,7 @@ h1 .eyes b::after{content:"";position:absolute;width:46%;height:46%;left:27%;top
 <section class="band paper" id="features"><div class="wrap">
   <h2>Everything on one wall</h2>
   <p class="lede">Capture, planning, AI and presentation in a single workspace.</p>
-  <div class="fxg">
+  <div class="fxg hsnap">
     <article class="fx lead" style="--k:#5ef2c0"><h3>Built-in AI</h3><ul><li><b>Agentic notes</b><span>Ask a note a question, or have it draft the checklist, summary or reminder.</span></li><li><b>Ask your wall</b><span>Ask one question across your recent notes. It asks permission first, and answers cite the notes they come from.</span></li><li><b>Web search from a note</b><span>Research from inside a note and get results with source links.</span></li><li><b>Voice</b><span>Dictate a note. Spoken lists are converted to checklists.</span></li><li><b>Your own assistant</b><span>Send any note to the AI assistant you already use.</span></li></ul></article>
     <article class="fx" style="--k:#ffc93c"><h3>Capture</h3><ul><li><b>Notes and checklists</b><span>Free-form notes and editable task lists.</span></li><li><b>Tables</b><span>Structured rows and columns inside a note.</span></li><li><b>Charts and flows</b><span>Turn figures into a chart and steps into a diagram.</span></li><li><b>Photos and sketches</b><span>Add images or sketch by hand.</span></li><li><b>Templates</b><span>More than 100, for work, home and travel.</span></li></ul></article>
     <article class="fx" style="--k:#74ccff"><h3>Plan the day</h3><ul><li><b>Today, Week, Month</b><span>Day, week and month views of the same notes.</span></li><li><b>Reminders</b><span>Set a date and time on any note.</span></li><li><b>Countdowns and goals</b><span>Timers, and progress tracked against a target.</span></li><li><b>Next up</b><span>Your next task, always in view.</span></li><li><b>Close the day</b><span>Complete the day and carry unfinished work forward.</span></li></ul></article>
@@ -843,6 +864,10 @@ const tm=q('#htime'),ring=q('.htmr .r');let left=1499;if(tm&&!calm)setInterval((
 const ty=q('.htype');if(ty){const t=ty.dataset.t;if(calm)ty.textContent=t;else{let i=0;const go=()=>{ty.textContent=t.slice(0,i);if(i<t.length){i++;setTimeout(go,38+Math.random()*50)}else setTimeout(()=>{i=0;go()},6000)};setTimeout(go,900)}}
 const w=q('.hwall');if(w&&!calm){let dir=1,hold=performance.now()+2600,x=0;const stop=()=>{hold=performance.now()+4000};['touchstart','pointerdown','wheel'].forEach(e=>w.addEventListener(e,stop,{passive:true}));
 const step=()=>{const max=w.scrollWidth-w.clientWidth;if(max>4&&performance.now()>hold){if(Math.abs(w.scrollLeft-x)>2)x=w.scrollLeft;x+=dir*.35;if(x>=max){x=max;dir=-1;hold=performance.now()+1400}else if(x<=0){x=0;dir=1;hold=performance.now()+1400}w.scrollLeft=x}else if(max>4)x=w.scrollLeft;requestAnimationFrame(step)};requestAnimationFrame(step)}}
+</script>
+<script>
+document.querySelectorAll('.hsnap').forEach(w=>{const n=w.children.length,d=document.createElement('div');d.className='hdots';d.setAttribute('aria-hidden','true');for(let i=0;i<n;i++)d.appendChild(document.createElement('i'));w.after(d);
+const up=()=>{const c=w.children[0];if(!c)return;const step=c.getBoundingClientRect().width+12,max=w.scrollWidth-w.clientWidth,k=w.scrollLeft>=max-4?n-1:Math.round(w.scrollLeft/step);[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};w.addEventListener('scroll',up,{passive:true});up()});
 </script>
 </body>
 </html>
